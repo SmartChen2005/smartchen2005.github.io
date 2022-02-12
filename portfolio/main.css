@@ -8,12 +8,19 @@
     display: flex;
     flex-direction: column;
     width: 100vw;
-    height: 100hw;
-    background-color: darkgray;
+    height: 100vh;
+    background-color: black;
     align-items: center;
-    justify-content: center;
+    justify-content: center; 
 }
 
 #content-container{
-    background-color: orangered;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    color: white;
+}
+
+header{
+    text-align: center;
 }
