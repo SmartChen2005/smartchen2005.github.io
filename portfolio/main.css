@@ -4,9 +4,16 @@
 
 }
 
-header{
-    text-align: center;
-    margin-bottom: 60px;
+.logo-text{
+    font-family: 'Be Vietnam', sans-serif;
+}
+
+.link-text{
+    font-family: Gudea, sans-serif;
+}
+
+h2{
+    font-size: 15px;
 }
 
 #wrapper{
@@ -17,6 +24,11 @@ header{
     background-color: black;
     align-items: center;
     justify-content: center;
+}
+
+header{
+    text-align: center;
+    margin-bottom: 60px;
 }
 
 #content-container{
