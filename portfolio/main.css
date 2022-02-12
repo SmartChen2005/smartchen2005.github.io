@@ -81,6 +81,10 @@ nav{
 }
 
 a:hover{
+    background-color: darkcyan;
+}
+
+#deep-blue:hover{
     background-color: darkblue;
 }
 
