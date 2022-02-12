@@ -13,3 +13,7 @@
     align-items: center;
     justify-content: center;
 }
+
+#content-container{
+    background-color: orangered;
+}
