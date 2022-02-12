@@ -18,7 +18,8 @@
 }
 
 .link-text{
-    font-family: Gudea, sans-serif;
+    /* font-family: Gudea, sans-serif; */
+    font-family: 'Courier New', Courier, monospace;
     font-size: 15px;
     font-weight: 100;
 }
@@ -39,6 +40,9 @@ header{
     margin-bottom: 60px;
 }
 
+a{
+    color: white;
+}
 #content-container{
     display: flex;
     position: relative;
@@ -52,12 +56,13 @@ nav ul li{
 }
 
 nav{
-    padding-left: 40px;
-    border: 1px dashed lightblue;
+    padding-left: 30px;
+    padding-right: 30px;
     font-family: 'Courier New', Courier, monospace;
 }
 
 #main-nav{
+    border: 1px dashed darkorange;
     margin-bottom: 30px;
 }
 
