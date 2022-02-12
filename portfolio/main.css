@@ -4,8 +4,17 @@
 
 }
 
+#logo-container{
+    height: 45px;
+    width: 220px;
+    /* background-color: darkblue; */
+}
+
 .logo-text{
     font-family: 'Be Vietnam', sans-serif;
+    position:relative;
+    bottom: 3px;
+    font-size: 30px;
 }
 
 .link-text{
