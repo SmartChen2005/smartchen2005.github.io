@@ -4,6 +4,11 @@
 
 }
 
+header{
+    text-align: center;
+    margin-bottom: 60px;
+}
+
 #wrapper{
     display: flex;
     flex-direction: column;
@@ -11,16 +16,41 @@
     height: 100vh;
     background-color: black;
     align-items: center;
-    justify-content: center; 
+    justify-content: center;
 }
 
 #content-container{
     display: flex;
+    position: relative;
     flex-direction: column;
     padding: 20px;
     color: white;
 }
 
-header{
-    text-align: center;
+nav ul li{
+    list-style-type: none;
+}
+
+nav{
+    padding-left: 40px;
+    border: 1px dashed lightblue;
+}
+
+#main-nav{
+    margin-bottom: 30px;
+}
+
+#main-nav ul li{
+    padding: 10px 0;
+}
+
+#social-media-nav ul{
+    display: flex;
+    justify-content: space-around;
+
+}
+
+#social-media-nav ul li{
+    padding-left: 0;
+    padding-right: 10px;
 }
