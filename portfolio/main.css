@@ -10,11 +10,10 @@
 
 .link-text{
     font-family: Gudea, sans-serif;
+    font-size: 15px;
+    font-weight: 100;
 }
 
-h2{
-    font-size: 15px;
-}
 
 #wrapper{
     display: flex;
@@ -46,6 +45,7 @@ nav ul li{
 nav{
     padding-left: 40px;
     border: 1px dashed lightblue;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 #main-nav{
