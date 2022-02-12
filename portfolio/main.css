@@ -57,13 +57,13 @@ nav ul li{
 }
 
 nav{
-    padding-left: 30px;
+    padding-left: 50px;
     padding-right: 30px;
     font-family: 'Courier New', Courier, monospace;
 }
 
 #main-nav{
-    border: 1px dashed darkorange;
+    /* border: 1px dashed darkorange; */
     margin-bottom: 30px;
 }
 
