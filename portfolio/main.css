@@ -1,7 +1,6 @@
 *{
     padding: 0;
     margin: 0;
-
 }
 
 #logo-container{
@@ -17,13 +16,22 @@
     font-size: 30px;
 }
 
+#info{
+    margin-bottom: 50px;
+}
+
+.info-text{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 15px;
+    font-weight: 100;
+}
+
 .link-text{
     /* font-family: Gudea, sans-serif; */
     font-family: 'Courier New', Courier, monospace;
     font-size: 15px;
     font-weight: 100;
 }
-
 
 #wrapper{
     display: flex;
@@ -37,13 +45,14 @@
 
 header{
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 10px;
 }
 
 a{
     color: white;
     text-decoration: none;
 }
+
 #content-container{
     display: flex;
     position: relative;
@@ -57,7 +66,7 @@ nav ul li{
 }
 
 nav{
-    padding-left: 50px;
+    padding-left: 60px;
     padding-right: 30px;
     font-family: 'Courier New', Courier, monospace;
 }
