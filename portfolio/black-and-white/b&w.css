@@ -6,6 +6,11 @@ body{
     color: white;
 }
 
+h2{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 30px;
+}
+
 #wrap{
     display: flex;
     justify-content: center;
