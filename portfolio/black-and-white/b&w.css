@@ -1,0 +1,29 @@
+body{
+    background-color: black;
+}
+
+*{
+    color: white;
+}
+
+#wrap{
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+}
+
+#left{
+    float:left;
+}
+
+#right{
+    float:right;
+    margin-left: 100px;
+}
+
+li{
+    list-style-type: none;
+    font-size: 15px;
+    font-family: 'Courier New', Courier, monospace;
+    padding-bottom: 10px;
+}
