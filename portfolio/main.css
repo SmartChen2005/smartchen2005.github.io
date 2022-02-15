@@ -3,10 +3,18 @@
     margin: 0;
 }
 
+.img{
+    height: 60px;
+    width: 210px;
+    object-fit:cover;
+}
+
 #logo-container{
     height: 45px;
     width: 220px;
     /* background-color: darkblue; */
+    background-image: url(/portfolio/black-and-white/img/IMG_7609.jpg);
+    background-size: fill;
 }
 
 .logo-text{
