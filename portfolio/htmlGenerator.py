@@ -2,7 +2,11 @@ from exif import Image
 from fractions import Fraction
 import os
 
-directory = '/Users/smartchen/Documents/GitHub/smartchen2005.github.io/portfolio/black-and-white/img'
+
+# https://exif.readthedocs.io/en/latest/
+
+projectName =input("Enter Project Name:")
+directory = f'/Users/smartchen/Documents/GitHub/smartchen2005.github.io/portfolio/{projectName}/img'
 
 
 def getEXIF(fileName):
