@@ -1,0 +1,70 @@
+@font-face {
+    font-family: Libian;
+    src: url(Libian.ttc);
+}
+
+body{
+    background-color: black;
+    margin: 20px;
+}
+
+
+h2{
+    font-family: 'Courier New', Courier, monospace, Libian;
+    font-size: 30px;
+    color: white;
+}
+
+#wrap{
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    margin-bottom: 50px;
+}
+
+#left{
+    float:left;
+}
+
+#right{
+    float:right;
+    margin-left: 100px;
+}
+
+li{
+    list-style-type: none;
+    font-size: 15px;
+    font-family: 'Courier New', Courier, monospace;
+    padding-bottom: 10px;
+}
+
+.photo-zone{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+div.polaroid {
+    width: 30%;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 50px;
+
+}
+
+div.polaroid-large {
+    width: 75%;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 50px;
+
+}
+  
+div.description {
+    text-align: center;
+    padding: 10px 20px;
+}
+
+p{
+    font-family: 'Courier New', Courier, monospace;
+}
