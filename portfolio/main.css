@@ -13,7 +13,7 @@
     height: 45px;
     width: 220px;
     /* background-color: darkblue; */
-    background-image: url(/img/logo.jpeg);
+    background-image: url(../img/logo.jpeg);
     background-size: fill;
 }
 
