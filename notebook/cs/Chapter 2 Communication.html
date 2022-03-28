@@ -2,15 +2,7 @@
 <html>
 <head>
 <meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
-<script>
-  var _hmt = _hmt || [];
-  (function() {
-    var hm = document.createElement("script");
-    hm.src = "https://hm.baidu.com/hm.js?261c9dd2946f9ab758132227674dd9ba";
-    var s = document.getElementsByTagName("script")[0]; 
-    s.parentNode.insertBefore(hm, s);
-  })();
-</script>
+
 <style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
 .mac-os-11 { --title-bar-height: 28px; }
 html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
@@ -27,7 +19,7 @@ a:active, a:hover { outline: 0px; }
 body.typora-export { padding-left: 30px; padding-right: 30px; }
 .typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
 .typora-export .task-list-item input { pointer-events: none; }
-@media screen and (max-width: 500px) { 
+@media screen and (max-width: 500px) {
   body.typora-export { padding-left: 0px; padding-right: 0px; }
   #write { padding-left: 20px; padding-right: 20px; }
   .CodeMirror-sizer { margin-left: 0px !important; }
@@ -54,7 +46,7 @@ h6 { font-size: 1rem; }
 .hidden { display: none; }
 .md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
 a { cursor: pointer; }
-sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
 sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
 #write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
 figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
@@ -93,10 +85,10 @@ blockquote > :last-child { margin-bottom: 0px; }
 blockquote > :first-child, li > :first-child { margin-top: 0px; }
 .footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
 #write .footnote-line { white-space: pre-wrap; }
-@media print { 
+@media print {
   body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
   #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
-  .typora-export * { -webkit-print-color-adjust: exact; }
+  .typora-export * { print-color-adjust: exact; }
   .typora-export #write { break-after: avoid; }
   .typora-export #write::after { height: 0px; }
   .is-mac table { break-inside: avoid; }
@@ -117,7 +109,7 @@ p > .md-image:only-child { display: inline-block; width: 100%; }
 .task-list-item.md-task-list-item { padding-left: 0px; }
 .md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
 .math { font-size: 1rem; }
-.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
 .md-toc-content { position: relative; margin-left: 0px; }
 .md-toc-content::after, .md-toc::after { display: none; }
 .md-toc-item { display: block; color: rgb(65, 131, 196); }
@@ -130,7 +122,7 @@ p > .md-image:only-child { display: inline-block; width: 100%; }
 .md-toc-h4 .md-toc-inner { margin-left: 6em; }
 .md-toc-h5 .md-toc-inner { margin-left: 8em; }
 .md-toc-h6 .md-toc-inner { margin-left: 10em; }
-@media screen and (max-width: 48em) { 
+@media screen and (max-width: 48em) {
   .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
   .md-toc-h4 .md-toc-inner { margin-left: 5em; }
   .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
@@ -141,7 +133,7 @@ a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; 
 .md-attr { display: none; }
 .md-fn-count::after { content: "."; }
 code, pre, samp, tt { font-family: var(--monospace); }
-kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background-color: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background-color: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
 .md-comment { color: rgb(162, 127, 3); opacity: 0.6; font-family: var(--monospace); }
 code { text-align: left; }
 a.md-print-anchor { white-space: pre !important; border: none !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; text-shadow: initial !important; background-position: 0px 0px !important; }
@@ -157,7 +149,7 @@ mark { background-color: rgb(255, 255, 0); color: rgb(0, 0, 0); }
 .md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
 .md-expand mark .md-meta { opacity: 0.3 !important; }
 mark .md-meta { color: rgb(0, 0, 0); }
-@media print { 
+@media print {
   .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
 }
 .md-diagram-panel .messageText { stroke: none !important; }
@@ -170,10 +162,10 @@ mark .md-meta { color: rgb(0, 0, 0); }
 .typora-export-sidebar { width: 300px; font-size: 0.8rem; margin-top: 80px; margin-right: 18px; }
 .typora-export-show-outline #write { --webkit-flex: 2; flex: 2 1 0%; }
 .typora-export-sidebar .outline-content { position: fixed; top: 0px; max-height: 100%; overflow: hidden auto; padding-bottom: 30px; padding-top: 60px; width: 300px; }
-@media screen and (max-width: 1024px) { 
+@media screen and (max-width: 1024px) {
   .typora-export-sidebar, .typora-export-sidebar .outline-content { width: 240px; }
 }
-@media screen and (max-width: 800px) { 
+@media screen and (max-width: 800px) {
   .typora-export-sidebar { display: none; }
 }
 .outline-content li, .outline-content ul { margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px; list-style: none; }
@@ -843,9 +835,9 @@ footer.ty-footer {
 </style><title>Chapter 2 Communication</title>
 </head>
 <body class='typora-export'><div class='typora-export-content'>
-<div id='write'  class=''><h1 id='chapter-2-communication'><span>Chapter 2 Communication</span></h1><h2 id='21-networking'><span>2.1 Networking</span></h2><h3 id='networking-devices'><span>Networking devices</span></h3><p><span>LAN - local area network</span></p><p><span>A typical LAN consists of a number of computers and devices (such as printers) connected to hubs or switches. One of the </span><strong><span>hubs</span></strong><span> or </span><strong><span>switches</span></strong><span> is usually connected to a </span><strong><span>router</span></strong><span> and/or </span><strong><span>modem</span></strong><span> to allow the LAN to connect to the internet or become part of a WAN</span></p><p><span>WLAN - wireless LAN</span></p><p><span>Devices connected are known as </span><strong><span>wireless access points (WAPs)</span></strong></p><p><span>WAN - wide area network - formed by a number of LANs connected together; large geo area</span></p><p><span>MAN - Metropolitan area network</span></p><h3 id='client-server-and-peer-to-peer-networking-models'><span>Client-server and peer-to-peer networking models</span></h3><p><strong><span>client-server model</span></strong><span> - network that uses separate dedicated servers and specific client workstations. All client computers are connected to the dedicated servers</span></p><ul><li><p><span>thin clients - heavily dependent on having access to a server</span></p><ul><li><span>pros: more robust (can work offline), clients have more control</span></li><li><span>cons: less secure, data integrity</span></li></ul></li><li><p><span>thick clients - can work offline or online</span></p><ul><li><span>pros: less expensive to expand, server can offer protection against hacking and malware</span></li><li><span>cons: high reliance on server, start-up costs can be high</span></li></ul></li></ul><p><strong><span>peer-to-peer model</span></strong><span> - network in which each node can share its files with all the other nodes. Each node has its own data and there is no central server</span></p><h3 id='network-topologies'><span>Network topologies</span></h3><ul><li><span>bus networks</span>
+<div id='write'  class=''><h1 id='chapter-2-communication'><span>Chapter 2 Communication</span></h1><h2 id='21-networking'><span>2.1 Networking</span></h2><h3 id='networking-devices'><span>Networking devices</span></h3><p><span>LAN - local area network</span></p><p><span>A typical LAN consists of a number of computers and devices (such as printers) connected to hubs or switches. One of the </span><strong><span>hubs</span></strong><span> or </span><strong><span>switches</span></strong><span> is usually connected to a </span><strong><span>router</span></strong><span> and/or </span><strong><span>modem</span></strong><span> to allow the LAN to connect to the internet or become part of a WAN</span></p><p><span>WLAN - wireless LAN</span></p><p><span>Devices connected are known as </span><strong><span>wireless access points (WAPs)</span></strong></p><p><span>WAN - wide area network - formed by a number of LANs connected together; large geo area</span></p><p><span>MAN - Metropolitan area network</span></p><h3 id='client-server-and-peer-to-peer-networking-models'><span>Client-server and peer-to-peer networking models</span></h3><p><strong><span>client-server model</span></strong><span> - network that uses separate dedicated servers and specific client workstations. All client computers are connected to the dedicated servers</span></p><ul><li><p><span>thin clients - heavily dependent on having access to a server</span></p><ul><li><span>pros: less expensive to expand, server can offer protection against hacking and malware</span></li><li><span>cons: high reliance on server, start-up costs can be high</span></li></ul></li><li><p><span>thick clients - can work offline or online</span></p><ul><li><span>pros: more robust (can work offline), clients have more control</span></li><li><span>cons: less secure, data integrity</span></li></ul></li></ul><p><strong><span>peer-to-peer model</span></strong><span> - network in which each node can share its files with all the other nodes. Each node has its own data and there is no central server</span></p><h3 id='network-topologies'><span>Network topologies</span></h3><ul><li><span>bus networks</span>
 <img src="img/截屏2022-03-04 上午11.26.32.png" style="zoom: 33%;" /></li><li><span>star networks</span>
 <img src="img/截屏2022-03-04 上午11.27.08.png" style="zoom: 33%;" /></li><li><span>mesh networks</span>
-<img src="img/截屏2022-03-04 上午11.28.59.png" style="zoom: 25%;" /></li><li><span>hybrid networks</span></li></ul><h3 id='public-and-private-cloud-computing'><span>Public and private cloud computing</span></h3><p><span>Cloud storage</span></p><ul><li><span>public cloud; private cloud; hybird cloud</span></li><li><span>pros: access anywhere; a remote back-up to data; unlimited capacity</span></li><li><span>cons: high cost; slow internet connection; potential failure of cloud storage company</span></li></ul><p><span>Cloud software</span></p><h3 id='wired-and-wireless-networking'><span>Wired and wireless networking</span></h3><p><span>Wireless</span></p><ul><li><span>Bandwidth: infrared &gt; microwaves &gt; radio waves</span></li><li><span>Penetration: radio waves &gt; microwaves &gt; infrared</span></li><li><span>Attenuation: radio waves &gt; microwaves &gt; infrared</span></li></ul><p><span>WIred</span></p><ul><li><span>twisted pair cables</span></li><li><span>coaxial cables</span></li><li><span>fibre optic cables</span></li></ul><h3 id='bit-streaming'><span>Bit Streaming</span></h3><p><span>contiguous sequence of bits, representing a stream of data, transmitted continuously over a communications path, serially (one at a time)</span></p><ul><li><p><span>real-time streaming</span></p><ul><li><span>An event is captured live</span></li><li><span>The video signal is encoded to streaming media files</span></li><li><span>The encoded feed is then uploaded to a file server</span></li><li><span>Streaming servers duplicate the feed and send it to all clients requesting it in real time</span></li></ul></li><li><p><span>on-demand streaming -  Video is stored on a server as streaming media files</span></p></li></ul><h2 id='22-the-internet'><span>2.2 The internet</span></h2><h3 id='difference-between-internet-and-www'><span>Difference between Internet and WWW</span></h3><p><strong><span>Internet (interconnected network)</span></strong><span> - a massive network of networks, uses TCP/IP protocals</span></p><p><strong><span>World Wide Web (WWW)</span></strong><span> - a collection of multimedia web pages and other documents which are stored on websites</span></p><h3 id='hardware-and-software-needed-to-support-the-internet'><span>Hardware and software needed to support the internet</span></h3><ol><li><span>Public switched telephone network (PSTN)</span></li><li><span>Phone calls using the internet</span></li><li><span>Cellular networks and satellites</span></li></ol><h3 id='ip-addresses'><span>IP addresses</span></h3><p><strong><span>IPv4</span></strong><span> - based on 32bits split into four groups of 8bits, each giving a range of 0 to 255</span></p><p><span>e.g. 192.25.0.255</span></p><p><span>network ID: 192.25.0</span></p><p><span>host ID: 255</span></p><p><strong><span>IPv6</span></strong><span> - based on 128-bit split into 8 groups of 16 bits, adopts the hexadecimal notation</span></p><p><span>e.g. A8FB:7A88:FFF0:0FFF:3D21:2085:66FB:F0FA</span></p><p><span>zero compression of IPV6</span></p><p><span>e.g. 900B:3E4A:AE41::AFF7:DD44:F1FF</span></p><h3 id='uniform-resource-locators-url'><span>Uniform resource locators (URL)</span></h3><p><strong><span>protocol://website address/path/filename</span></strong></p><p><a href='http://www.apple.com.cn' target='_blank' class='url'>www.apple.com.cn</a></p><p><span>website address: domain host (www) + domain name (apple) + domain type (.com) + (sometimes) a country code (.cn)</span></p><h3 id='sequence-of-events-when-viewing-a-website'><span>Sequence of Events when Viewing a Website</span></h3><ol start='' ><li><span>User specifies a URL in their client</span></li><li><span>Client sends DNS lookup request to convert URL to an IP address and initiates a TCP connection to server</span></li><li><span>Server acknowledges TCP connection, client sends HTTP requests to retrieve content for the URL.</span></li><li><span>Server replies with content for web page and browser retrieves content from the HTTP packets and renders</span></li></ol><hr /><ul><li><span>Client-side script: code that runs on client written using language supported by browser e.g. Javascript. Enables web pages to be scripted; to have different and changing content depending on user input, or other variables.</span></li><li><span>Server-side script: code that runs on server written using language supported by server e.g. PHP. Used to provide interface for client &amp; to limit client access to databases</span></li></ul></div></div>
+<img src="img/截屏2022-03-04 上午11.28.59.png" style="zoom: 25%;" /></li><li><span>hybrid networks</span></li></ul><h3 id='public-and-private-cloud-computing'><span>Public and private cloud computing</span></h3><p><span>Cloud storage</span></p><ul><li><span>public cloud; private cloud; hybird cloud</span></li><li><span>pros: access anywhere; a remote back-up to data; unlimited capacity</span></li><li><span>cons: high cost; slow internet connection; potential failure of cloud storage company</span></li></ul><p><span>Cloud software</span></p><h3 id='wired-and-wireless-networking'><span>Wired and wireless networking</span></h3><p><span>Wireless</span></p><ul><li><span>Bandwidth: infrared &gt; microwaves &gt; radio waves</span></li><li><span>Penetration: radio waves &gt; microwaves &gt; infrared</span></li><li><span>Attenuation: radio waves &gt; microwaves &gt; infrared</span></li></ul><p><span>WIred</span></p><ul><li><span>twisted pair cables</span></li><li><span>coaxial cables</span></li><li><span>fibre optic cables</span></li></ul><h3 id='bit-streaming'><span>Bit Streaming</span></h3><p><span>contiguous sequence of bits, representing a stream of data, transmitted continuously over a communications path, serially (one at a time)</span></p><ul><li><p><span>real-time streaming</span></p><ul><li><span>An event is captured live</span></li><li><span>The video signal is encoded to streaming media files</span></li><li><span>The encoded feed is then uploaded to a file server</span></li><li><span>Streaming servers duplicate the feed and send it to all clients requesting it in real time</span></li></ul></li><li><p><span>on-demand streaming -  Video is stored on a server as streaming media files</span></p></li></ul><h2 id='22-the-internet'><span>2.2 The internet</span></h2><h3 id='difference-between-internet-and-www'><span>Difference between Internet and WWW</span></h3><p><strong><span>Internet (interconnected network)</span></strong><span> - a massive network of networks, uses TCP/IP protocals</span></p><p><strong><span>World Wide Web (WWW)</span></strong><span> - a collection of multimedia web pages and other documents which are stored on websites</span></p><h3 id='hardware-and-software-needed-to-support-the-internet'><span>Hardware and software needed to support the internet</span></h3><ol start='' ><li><span>Public switched telephone network (PSTN)</span></li><li><span>Phone calls using the internet</span></li><li><span>Cellular networks and satellites</span></li></ol><h3 id='ip-addresses'><span>IP addresses</span></h3><p><strong><span>IPv4</span></strong><span> - based on 32bits split into four groups of 8bits, each giving a range of 0 to 255</span></p><p><span>e.g. 192.25.0.255</span></p><p><span>network ID: 192.25.0</span></p><p><span>host ID: 255</span></p><p><strong><span>IPv6</span></strong><span> - based on 128-bit split into 8 groups of 16 bits, adopts the hexadecimal notation</span></p><p><span>e.g. A8FB:7A88:FFF0:0FFF:3D21:2085:66FB:F0FA</span></p><p><span>zero compression of IPV6</span></p><p><span>e.g. 900B:3E4A:AE41::AFF7:DD44:F1FF</span></p><h3 id='uniform-resource-locators-url'><span>Uniform resource locators (URL)</span></h3><p><strong><span>protocol://website address/path/filename</span></strong></p><p><a href='https://www.apple.com.cn/mac/index.html' target='_blank' class='url'>https://www.apple.com.cn/mac/index.html</a></p><p><span>website address: domain host (www) + domain name (apple) + domain type (.com) + (sometimes) a country code (.cn)</span></p><h3 id='sequence-of-events-when-viewing-a-website'><span>Sequence of Events when Viewing a Website</span></h3><ol start='' ><li><span>User specifies a URL in their client</span></li><li><span>Client sends DNS lookup request to convert URL to an IP address and initiates a TCP connection to server</span></li><li><span>Server acknowledges TCP connection, client sends HTTP requests to retrieve content for the URL.</span></li><li><span>Server replies with content for web page and browser retrieves content from the HTTP packets and renders</span></li></ol><hr /><ul><li><span>Client-side script: code that runs on client written using language supported by browser e.g. Javascript. Enables web pages to be scripted; to have different and changing content depending on user input, or other variables.</span></li><li><span>Server-side script: code that runs on server written using language supported by server e.g. PHP. Used to provide interface for client &amp; to limit client access to databases</span></li></ul></div></div>
 </body>
 </html>
