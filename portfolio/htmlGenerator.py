@@ -5,7 +5,7 @@ import os
 # https://exif.readthedocs.io/en/latest/
 
 projectName = input("Enter Project Name:")
-directory = f'/Users/smartchen/Documents/GitHub/smartchen2005.github.io/portfolio/{projectName}/img'
+directory = f'/Users/smartchen/GitHub/smartchen2005.github.io/portfolio/{projectName}/img'
 
 
 def getEXIF(fileName):
