@@ -88,6 +88,15 @@ nav{
     padding: 10px 0;
 }
 
+#link{
+    color:black;
+}
+
+#link:hover{
+    color: white;
+    background-color: darkcyan;
+}
+
 a:hover{
     background-color: darkcyan;
 }
@@ -98,6 +107,10 @@ a:hover{
 
 #deep-yellow:hover{
     background-color: rgb(180, 180, 26);
+}
+
+#dark-pink:hover{
+    background-color: rgb(193, 53, 132);
 }
 
 #social-media-nav ul{
