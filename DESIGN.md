@@ -51,6 +51,16 @@ Square corners throughout. Rules and image frames echo photographs and the camer
 - Source document: natural-height rendering of the Notion Markdown.
 - Image preview: native accessible dialog using the original-ratio asset, explicit close control, and focus restoration.
 - Reading progress: a three-pixel yellow line at the top of the document.
+- SX-70 pointer: a procedural, articulated 3D camera with chrome, brown leather, black bellows, a red shutter, and rear eyepiece. Geometry is owned by `tools/camera-model.mjs`; interaction by `tools/camera.mjs`; overlay styling by `tools/camera.css`. The renderer copies these into `dist/`.
+- The title remains two lines, capitalized as “Polaroid of Yesterday” / “Game Design Document”.
+
+## Camera interaction
+
+- Desktop mouse only; touch, keyboard reading, and forced-color mode retain native operation. The camera is decorative and never takes focus or intercepts ordinary links, image previews, selection, or scrolling.
+- Left click toggles folding while preserving the target's original click. Hold right mouse while open to rotate into the rear finder (290 ms); release, Escape, blur, pointer cancellation, or resize exits safely. Inside the finder only, left click takes a photo instead of activating content underneath.
+- The finder is a square optical surround with a lower split-circle focus aid, with no invented copy. Camera scale is 34 screen pixels per model unit, approximately 120 pixels overall. A small yellow point marks the precise click position.
+- A photo captures the current page locally using vendored html2canvas 1.4.1 (MIT), flashes once, ejects over 2.1 seconds, drifts for 4.4 seconds, then rests at the document bottom. Keep at most 12 ephemeral photos; refreshing clears them. No network, camera permission, or persistent photo storage is involved.
+- Reduced motion skips zoom, ejection and drifting, and reduces the flash. Capture errors restore interaction and do not create a fake photo. The enhancement adds no document text or image occurrences.
 
 ## Do's and Don'ts
 

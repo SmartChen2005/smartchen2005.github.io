@@ -184,9 +184,11 @@ const css = `
 .notion-content>.document-image+:is(h1,h2,h3,h4),.notion-content>.source-columns+:is(h1,h2,h3,h4){margin-top:3.75rem}
 .document-title h1{max-width:none;font-size:clamp(2.7rem,4.8vw,5.25rem);line-height:.92}
 .document-title h1 span{display:block;white-space:nowrap}
+.document-title h1{font-size:clamp(2.3rem,4.35vw,5rem)}
 @media(max-width:1050px){:root{--rail:0rem}.archive-nav{position:relative;width:100%;height:auto;border-right:0;border-bottom:1px solid var(--rule);padding:1rem 1.25rem}.brand{border:0;padding:0}.toc{display:none}.progress-track{left:0}.document{padding-top:4rem}}
 @media(max-width:700px){.document{padding:3.5rem 1.25rem 6rem}.document-title h1{font-size:clamp(3rem,15vw,5rem)}.notion-content>h1{margin-top:5.5rem}.source-columns{display:grid;grid-template-columns:1fr}.nested-media{margin-left:0;max-width:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.toc-link,.document-image img,.progress-bar{transition:none}}
+@media(max-width:700px){.document-title h1{font-size:clamp(1.35rem,6.4vw,2.8rem)}}
 @media(forced-colors:active){*{border-color:CanvasText}.progress-bar{background:Highlight}.document-title h1{color:Highlight}}
 `;
 
@@ -197,5 +199,12 @@ const bar=document.querySelector('.progress-bar');const links=[...document.query
 const favicon = "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20fill%3D%22%23070707%22%2F%3E%3Crect%20x%3D%227%22%20y%3D%226%22%20width%3D%2218%22%20height%3D%2221%22%20fill%3D%22none%22%20stroke%3D%22%23f6c934%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%2216%22%20cy%3D%2214%22%20r%3D%224%22%20fill%3D%22%23f6c934%22%2F%3E%3C%2Fsvg%3E";
 const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#070707"><meta name="description" content="${pageTitle}"><title>${pageTitle}</title><link rel="icon" type="image/svg+xml" href="${favicon}"><style>${css}</style></head><body><aside class="archive-nav" aria-label="Table of contents"><a class="brand" href="#document-title">${pageTitle}</a><nav class="toc">${toc}</nav></aside><div class="progress-track" aria-hidden="true"><div class="progress-bar"></div></div><main><article class="document"><header class="document-title" id="document-title"><h1><span>polaroid of yesterday</span><span>game design document</span></h1></header><div class="notion-content">${content.join("\n")}</div></article></main><dialog class="lightbox" aria-label="Image preview"><button class="dialog-close" type="button" aria-label="Close image preview">×</button><div class="dialog-inner"><img src="" alt=""></div></dialog><script>${script}</script></body></html>`;
 
-fs.writeFileSync(outputPath, html);
+const enhancedHtml = html
+  .replace('<span>polaroid of yesterday</span><span>game design document</span>', '<span>Polaroid of Yesterday</span><span>Game Design Document</span>')
+  .replace('</head>', '<link rel="stylesheet" href="camera.css"></head>')
+  .replace('</body>', '<script src="vendor/html2canvas.min.js" defer></script><script type="module" src="camera.mjs"></script></body>');
+for (const file of ['camera.mjs', 'camera-model.mjs', 'camera.css']) {
+  fs.copyFileSync(path.join(root, 'tools', file), path.join(root, 'dist', file));
+}
+fs.writeFileSync(outputPath, enhancedHtml);
 console.log(JSON.stringify({headings:headings.length,images:imageIndex,characters:html.length},null,2));

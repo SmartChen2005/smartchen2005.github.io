@@ -8,6 +8,17 @@ const assetMapPath = path.join(root, "tools", "archive-slides-source.txt");
 const html = fs.readFileSync(htmlPath, "utf8");
 const markdown = fs.readFileSync(markdownPath, "utf8").replace(/\r/g, "");
 const failures = [];
+for (const file of ['camera.mjs', 'camera-model.mjs', 'camera.css']) {
+  if (fs.readFileSync(path.join(root, 'dist', file), 'utf8') !== fs.readFileSync(path.join(root, 'tools', file), 'utf8')) {
+    failures.push(`Camera build is stale: ${file}`);
+  }
+}
+for (const file of ['vendor/html2canvas.min.js', 'vendor/html2canvas.LICENSE']) {
+  if (!fs.existsSync(path.join(root, 'dist', file))) failures.push(`Missing camera dependency: ${file}`);
+}
+if (!html.includes('<span>Polaroid of Yesterday</span><span>Game Design Document</span>')) {
+  failures.push('Expected capitalized two-line document title');
+}
 
 const stripMarkup = (value) => value
   .replace(/<[^>]+>/g, "")
