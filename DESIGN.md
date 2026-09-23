@@ -53,6 +53,9 @@ Square corners throughout. Rules and image frames echo photographs and the camer
 - Reading progress: a three-pixel yellow line at the top of the document.
 - SX-70 pointer: a procedural, articulated 3D camera with chrome, brown leather, black bellows, a red shutter, and rear eyepiece. Geometry is owned by `tools/camera-model.mjs`; interaction by `tools/camera.mjs`; overlay styling by `tools/camera.css`. The renderer copies these into `dist/`.
 - The title remains two lines, capitalized as “Polaroid of Yesterday” / “Game Design Document”.
+- The sidebar brand uses the same two-line title split, with “Game Design Document” on the second line.
+- The document title owns the separator before the first source heading; the first source heading does not add a duplicate top rule.
+- The camera instruction uses standard slash spacing: `Click: open / fold / shoot · Hold RMB / F: aim`.
 
 ## Camera interaction
 
