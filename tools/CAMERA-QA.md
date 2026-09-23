@@ -1,5 +1,13 @@
 # SX-70 verification — 2026-09-22
 
+## Follow-up: movable framing and folding correction
+
+- The controller harness now checks Tab hold/release, pointer movement with zero mouse buttons during Tab aiming, distinct crops after moving the frame, and document scroll offsets in the capture request.
+- Browser fixture: two shots at different scene positions produced visibly different photographs (left buildings/street versus right camera/road). Both developed photos were inspected together at the document bottom.
+- Folded-model screenshot confirms the upper leather deck and separate cap, with the lens facing downward. Back-facing mesh surfaces are culled.
+- Entry timing is now 680 ms. Ejection uses a textured 3D paper plane sharing the model's film-slot coordinates; falling uses randomized continuous sway, rotation, wind and duration.
+- Sidebar help is explicitly requested interface copy. Source document parity still passes for all 35 headings and 96 image occurrences.
+
 Commands:
 
 - `node tools/render-notion.mjs`
@@ -17,3 +25,10 @@ Browser checks:
 - Physical right-button hold plus left-button press is covered by the event harness; the browser automation interface does not expose independent mouse-down/mouse-up controls. This distinction is intentional in the verification record.
 
 The test fixture is under `tools/`, outside the deployable `dist/` directory. Photos are session-only decorations and are not uploaded or persisted. No public deployment was performed in this update.
+# Follow-up: optical alignment and paper motion
+
+- Finder center now remains at the pointer even at viewport edges; offscreen photo regions are black instead of capturing unseen document content.
+- Capture-phase context-menu suppression also covers the folded and post-shutter states.
+- Folded upper surfaces use leather materials directly. Open geometry has a short leather shoulder and tapered finder bellows.
+- Zoom uses the model's rear glass center/width. Paper falls about its center with restrained random sway in 2.9–3.6 seconds, without stretching.
+- Verified with `node tools/test-camera.mjs`, `node tools/validate-site.mjs`, `git diff --check`, and strict premium audit. Browser fixture inspected open/folded geometry, finder entry, completed finder and shutter return. Automated tests cover held mouse buttons, edge centering, Tab, cancellation and reduced motion; native held-button timing was not manually exercised.
