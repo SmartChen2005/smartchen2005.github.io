@@ -3,36 +3,31 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#070707">
-  <meta name="description" content="Smart Chen — games and design documents.">
-  <title>Smart Chen — Home</title>
-  <link rel="stylesheet" href="site.css">
+  <meta name="theme-color" content="#f5f5f3">
+  <meta name="description" content="Smart Chen is a game designer, photographer, and car enthusiast.">
+  <title>Smart Chen</title>
+  <link rel="preload" href="assets/fonts/instrument-serif-regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="assets/fonts/instrument-serif-italic.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="home.css">
+  <script src="home.mjs" type="module"></script>
 </head>
 <body>
-  <div class="site-shell">
-    <header class="site-header">
-      <a class="site-brand" href="./">Smart Chen</a>
-      <nav class="site-nav" aria-label="Primary navigation">
-        <a href="./" aria-current="page">Home</a>
-        <a href="games/">Games</a>
-      </nav>
-    </header>
-    <main class="site-main">
-      <p class="eyebrow">Home</p>
-      <h1 id="page-title">Selected projects.</h1>
-      <p class="lead">Games, experiments, and the documents behind them.</p>
-      <section class="directory" aria-labelledby="games-link-title">
-        <a class="directory-link" href="games/">
-          <span class="directory-index">01</span>
-          <span>
-            <span class="directory-title" id="games-link-title">Games</span>
-            <span class="directory-description">Interactive projects and their working materials.</span>
-          </span>
-          <span class="directory-arrow" aria-hidden="true">↗</span>
-        </a>
-      </section>
-    </main>
-    <footer class="site-footer">A working index of ongoing projects.</footer>
+  <div class="world-stage" aria-hidden="true">
+    <canvas class="kinetic-scene"></canvas>
+    <canvas class="motor-scene"></canvas>
+    <div class="photo-scene">
+      <figure class="gallery-print"><img src="photography-preview/c6495aef5fe2fd2016e174644e7e9637.jpg" width="4800" height="3200" decoding="async" alt=""></figure>
+      <figure class="gallery-print"><img src="photography-preview/7791361ef9a438ead7e13223550a212b.jpg" width="6000" height="4000" decoding="async" alt=""></figure>
+      <figure class="gallery-print"><img src="photography-preview/44e0cac7f390dc59a1bdfd25e5930a85.jpg" width="6192" height="4128" decoding="async" alt=""></figure>
+      <figure class="gallery-print"><img src="photography-preview/f85d2017537b65c254e52f035d2aa3ee.jpg" width="5868" height="3912" decoding="async" alt=""></figure>
+    </div>
+    <div class="sentence-mat"></div>
   </div>
+  <main class="homepage">
+    <div class="composition">
+      <h1 class="sentence"><button class="identity identity-name" type="button" data-identity="name" aria-pressed="false"><span>Smart Chen</span></button> is a <a class="identity identity-games" href="games/" data-identity="games"><span>game designer</span></a>, <button class="identity identity-photo" type="button" data-identity="photo" aria-pressed="false"><span>photographer</span></button>, and <button class="identity identity-cars" type="button" data-identity="cars" aria-pressed="false"><span>car enthusiast</span></button>.</h1>
+      <figure class="portrait portrait-full" aria-hidden="true"><img src="assets/selfportrait.jpg" width="6000" height="4000" alt=""></figure>
+    </div>
+  </main>
 </body>
 </html>

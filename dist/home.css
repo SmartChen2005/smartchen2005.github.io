@@ -1,0 +1,143 @@
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('assets/fonts/instrument-serif-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('assets/fonts/instrument-serif-italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: block;
+}
+:root {
+  --paper: #f5f5f3;
+  --ink: #292a27;
+  --focus: #65685e;
+  --mechanical: #1d211f;
+  --scroll-thumb: #b8b9b2;
+  --scroll-hover: #888a81;
+  --scroll-active: #5b5e54;
+  color-scheme: light;
+  scrollbar-color: var(--scroll-thumb) var(--paper);
+  scrollbar-width: thin;
+}
+* { box-sizing: border-box; }
+*::-webkit-scrollbar { width: 9px; height: 9px; }
+*::-webkit-scrollbar-track { background: var(--paper); }
+*::-webkit-scrollbar-thumb { background: var(--scroll-thumb); }
+*::-webkit-scrollbar-thumb:hover { background: var(--scroll-hover); }
+*::-webkit-scrollbar-thumb:active { background: var(--scroll-active); }
+body { margin: 0; background: var(--paper); color: var(--ink); }
+::selection { background: var(--ink); color: var(--paper); }
+.homepage { min-height: 100svh; display: grid; place-items: center; padding: 9vh 5vw; }
+.composition { position: relative; width: max-content; max-width: 100%; }
+.sentence {
+  position: relative;
+  z-index: 3;
+  margin: 0;
+  white-space: nowrap;
+  font: 400 clamp(12px, 3.48vw, 64px)/1.35 'Instrument Serif', 'Times New Roman', serif;
+  letter-spacing: -.012em;
+}
+.identity {
+  position: relative;
+  display: inline-block;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-decoration: none;
+  vertical-align: baseline;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.identity > span { display: inline-block; }
+.identity-name { font-style: italic; }
+.identity:focus-visible { outline: 1px solid currentColor; outline-offset: 6px; }
+.identity:active { opacity: .65; }
+.identity-cars > span { transform-origin: 50% 75%; transition: transform 250ms ease; }
+body[data-world='cars'] .identity-cars > span { transform: skewX(-9deg); }
+
+/* All scenery is temporary, inert, and behind the single sentence. */
+.world-stage { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.kinetic-scene { position: absolute; inset: 0; width: 100%; height: 100%; visibility: hidden; }
+body[data-world='games'] .kinetic-scene { visibility: visible; }
+.motor-scene { position: absolute; inset: 0; width: 100%; height: 100%; visibility: hidden; opacity: 0; }
+.motor-scene.is-active { visibility: visible; opacity: 1; }
+.motor-scene.is-exiting { visibility: visible; opacity: 0; transition: opacity 380ms ease-out; }
+.photo-scene { position: absolute; inset: 0; visibility: hidden; }
+body[data-world='photo'] .photo-scene { visibility: visible; }
+.gallery-print { position: absolute; margin: 0; }
+.gallery-print img { display: block; width: 100%; height: auto; visibility: hidden; }
+body[data-world='photo'] .gallery-print.is-ready img {
+  visibility: visible;
+  animation: develop-print 2600ms cubic-bezier(.22,.45,.32,1) backwards;
+  animation-delay: var(--develop-delay, 0ms);
+}
+.gallery-print:nth-child(2) { --develop-delay: 180ms; }
+.gallery-print:nth-child(3) { --develop-delay: 390ms; }
+.gallery-print:nth-child(4) { --develop-delay: 580ms; }
+/* Temporary tonal development only. Final frame is the unfiltered original. */
+@keyframes develop-print {
+  0% { filter: contrast(0) brightness(2); }
+  14% { filter: contrast(.08) brightness(1.86); }
+  38% { filter: contrast(.35) brightness(1.48); }
+  68% { filter: contrast(.73) brightness(1.14); }
+  88% { filter: contrast(.96) brightness(1.02); }
+  100% { filter: none; }
+}
+.sentence-mat {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: var(--sentence-top, 45%);
+  height: var(--sentence-height, 10%);
+  background: var(--paper);
+  visibility: hidden;
+}
+body[data-car-exit] .sentence-mat { visibility: visible; }
+body[data-world='cars'] .sentence { color: var(--paper); }
+.portrait {
+  position: absolute;
+  z-index: 1;
+  margin: 0;
+  pointer-events: none;
+  visibility: hidden;
+  clip-path: inset(100% 0 0);
+  transition: clip-path 350ms cubic-bezier(.2,.75,.2,1), visibility 350ms;
+}
+.portrait img { display: block; width: 100%; height: auto; }
+.portrait-full {
+  width: clamp(180px, 22vw, 320px);
+  left: var(--name-center, 8%);
+  bottom: calc(100% + 38px);
+  transform: translateX(-42%);
+}
+.composition[data-active='name'] .portrait-full { visibility: visible; clip-path: inset(0); }
+@media (max-width: 700px) and (pointer: coarse) {
+  .homepage { padding: 190px 9vw; }
+  .composition { width: 100%; }
+  .sentence { white-space: normal; text-wrap: pretty; font-size: clamp(31px, 6.2vw, 43px); line-height: 1.55; letter-spacing: -.005em; }
+  .identity { min-height: 44px; }
+  .portrait-full { left: 0; width: 205px; bottom: calc(100% + 28px); transform: none; }
+}
+@media (max-height: 500px) and (min-width: 701px) {
+  .portrait-full { width: 170px; bottom: calc(100% + 18px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  body[data-world='cars'] .identity-cars > span { transform: none; }
+  body[data-world='photo'] .gallery-print.is-ready img { filter: none; }
+}
+@media (forced-colors: active) {
+  :root { scrollbar-color: auto; }
+  .world-stage { display: none; }
+  body[data-world='cars'] .sentence { color: CanvasText; }
+  .identity:focus-visible { outline-color: Highlight; }
+}

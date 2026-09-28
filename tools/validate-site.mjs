@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { createHash } from 'node:crypto';
 
 const root = process.cwd();
 const htmlPath = path.join(root, "dist", "games", "polaroid-of-yesterday", "game-design-document", "index.html");
@@ -8,6 +9,40 @@ const assetMapPath = path.join(root, "tools", "archive-slides-source.txt");
 const html = fs.readFileSync(htmlPath, "utf8");
 const markdown = fs.readFileSync(markdownPath, "utf8").replace(/\r/g, "");
 const failures = [];
+const home = fs.readFileSync(path.join(root, 'dist/index.html'), 'utf8');
+const homeCss = fs.readFileSync(path.join(root, 'dist/home.css'), 'utf8');
+const settledCss = homeCss.replace(/@keyframes develop-print \{[\s\S]*?\n\}/, '');
+if (/mix-blend-mode\s*:/.test(homeCss) || [...settledCss.matchAll(/\bfilter\s*:\s*([^;}]+)/g)].some(match => match[1].trim() !== 'none')) {
+  failures.push('Only temporary exhibition development may alter tonal rendering; settled artwork and the portrait must remain unfiltered');
+}
+const exhibitionImages = [...home.matchAll(/src="photography-preview\/([^"]+)"/g)].map(match => match[1]);
+const suppliedImages = fs.readdirSync(path.join(root, 'dist/photography-preview')).filter(name => /\.jpe?g$/i.test(name));
+if (exhibitionImages.length !== 4 || JSON.stringify([...exhibitionImages].sort()) !== JSON.stringify(suppliedImages.sort())) {
+  failures.push('The exhibition must use each of the four supplied photographs exactly once');
+}
+if (/\.identity::(?:after|before)/.test(homeCss)) failures.push('Persistent identity underline decorations must not return');
+if (!fs.existsSync(path.join(root, 'dist/home-scenes.mjs'))) failures.push('Homepage scenery module is missing');
+const imageDigest = file => createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex');
+if (imageDigest('selfportrait.jpg') !== imageDigest('dist/assets/selfportrait.jpg')) {
+  failures.push('The published portrait must be byte-for-byte identical to the supplied blue monochrome artwork');
+}
+if (!home.includes('Smart Chen is a game designer, photographer, and car enthusiast.')) {
+  failures.push('The homepage identity sentence is missing');
+}
+for (const match of home.matchAll(/(?:src|href)="([^"]+)"/g)) {
+  const ref = match[1];
+  if (/^(?:#|https?:|mailto:)/.test(ref)) continue;
+  if (!fs.existsSync(path.join(root, 'dist', ref))) failures.push(`Missing homepage destination or asset: ${ref}`);
+}
+const sentenceMarkup = home.match(/<h1 class="sentence">([\s\S]*?)<\/h1>/)?.[1] ?? '';
+const sentenceText = sentenceMarkup.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+if (sentenceText !== 'Smart Chen is a game designer, photographer, and car enthusiast.') {
+  failures.push('The visible homepage sentence must remain exact and continuous');
+}
+if (/<br|<section|<dialog|<template/.test(home)) failures.push('The minimal homepage must not contain forced line breaks, sections, or dialogs');
+for (const identity of ['name', 'games', 'photo', 'cars']) {
+  if (!home.includes(`data-identity="${identity}"`)) failures.push(`Missing homepage identity: ${identity}`);
+}
 for (const file of ['camera.mjs', 'camera-model.mjs', 'camera.css']) {
   if (fs.readFileSync(path.join(root, 'dist', file), 'utf8') !== fs.readFileSync(path.join(root, 'tools', file), 'utf8')) {
     failures.push(`Camera build is stale: ${file}`);
