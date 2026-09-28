@@ -4,7 +4,9 @@ import path from "node:path";
 const root = process.cwd();
 const markdownPath = path.join(root, "tools", "notion-source.md");
 const assetMapPath = path.join(root, "tools", "archive-slides-source.txt");
-const outputPath = path.join(root, "dist", "index.html");
+const documentOutputDir = path.join(root, "dist", "games", "polaroid-of-yesterday", "game-design-document");
+const outputPath = path.join(documentOutputDir, "index.html");
+const assetBase = "../../../assets";
 
 const markdown = fs.readFileSync(markdownPath, "utf8").replace(/\r/g, "");
 const previousSource = fs.readFileSync(assetMapPath, "utf8");
@@ -61,7 +63,7 @@ function renderImage(line, nested = false, inColumn = false) {
   if (!match) return "";
   const alt = plainText(match[1]);
   const occurrence = imageIndex + 1;
-  const localSrc = localImages[imageIndex++];
+  const localSrc = `${assetBase}/${path.posix.basename(localImages[imageIndex++])}`;
   const caption = alt ? `<figcaption>${escapeHtml(alt)}</figcaption>` : "";
   const nestedClass = nested ? " nested-media" : "";
   const scaleClass = inColumn ? " column-media" : portraitMedia.has(occurrence) ? " portrait-media" : featureMedia.has(occurrence) ? " feature-media" : compactMedia.has(occurrence) ? " compact-media" : " standard-media";
@@ -203,12 +205,13 @@ const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta n
 
 const enhancedHtml = html
   .replace('<nav class="toc">', '<p class="camera-help" title="Click to open or fold. Hold the right mouse button or F and move to frame; click while aiming to take a photo.">Click: open / fold / shoot · Hold RMB / F: aim</p><nav class="toc">')
-  .replace(`<a class="brand" href="#document-title">${pageTitle}</a>`, '<a class="brand" href="#document-title"><span>Polaroid of Yesterday</span><span>Game Design Document</span></a>')
+  .replace(`<a class="brand" href="#document-title">${pageTitle}</a>`, '<a class="brand" href="../../../"><span>Polaroid of Yesterday</span><span>Game Design Document</span></a>')
   .replace('<span>polaroid of yesterday</span><span>game design document</span>', '<span>Polaroid of Yesterday</span><span>Game Design Document</span>')
-  .replace('</head>', '<link rel="stylesheet" href="camera.css"></head>')
-  .replace('</body>', '<script src="vendor/html2canvas.min.js" defer></script><script type="module" src="camera.mjs"></script></body>');
+  .replace('</head>', '<link rel="stylesheet" href="../../../camera.css"></head>')
+  .replace('</body>', '<script src="../../../vendor/html2canvas.min.js" defer></script><script type="module" src="../../../camera.mjs"></script></body>');
 for (const file of ['camera.mjs', 'camera-model.mjs', 'camera.css']) {
   fs.copyFileSync(path.join(root, 'tools', file), path.join(root, 'dist', file));
 }
+fs.mkdirSync(documentOutputDir, { recursive: true });
 fs.writeFileSync(outputPath, enhancedHtml);
 console.log(JSON.stringify({headings:headings.length,images:imageIndex,characters:html.length},null,2));

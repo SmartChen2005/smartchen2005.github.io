@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const root = process.cwd();
-const htmlPath = path.join(root, "dist", "index.html");
+const htmlPath = path.join(root, "dist", "games", "polaroid-of-yesterday", "game-design-document", "index.html");
 const markdownPath = path.join(root, "tools", "notion-source.md");
 const assetMapPath = path.join(root, "tools", "archive-slides-source.txt");
 const html = fs.readFileSync(htmlPath, "utf8");
@@ -40,7 +40,7 @@ const imageRefs = [...html.matchAll(/<img[^>]+src="([^"]+)"/g)]
   .map((match) => match[1])
   .filter(Boolean);
 for (const ref of new Set(imageRefs)) {
-  const file = path.join(root, "dist", ref);
+  const file = path.resolve(path.dirname(htmlPath), ref);
   if (!fs.existsSync(file) || fs.statSync(file).size === 0) failures.push(`Missing image: ${ref}`);
 }
 
@@ -91,8 +91,9 @@ const tocCount = (html.match(/class="toc-link toc-level-/g) || []).length;
 if (tocCount !== sourceHeadings.length) failures.push(`Expected ${sourceHeadings.length} TOC links, found ${tocCount}`);
 
 const assetSource = fs.readFileSync(assetMapPath, "utf8");
-const sourceImageRefs = [...assetSource.matchAll(/<img[^>]+src="([^"]+)"/g)].map((match) => match[1]).filter(Boolean);
-if (JSON.stringify(sourceImageRefs) !== JSON.stringify(imageRefs)) failures.push("Source image order or references changed");
+const sourceImageRefs = [...assetSource.matchAll(/<img[^>]+src="([^"]+)"/g)].map((match) => path.posix.basename(match[1])).filter(Boolean);
+const renderedImageNames = imageRefs.map((ref) => path.posix.basename(ref));
+if (JSON.stringify(sourceImageRefs) !== JSON.stringify(renderedImageNames)) failures.push("Source image order or references changed");
 
 const scaledImages = (html.match(/<figure class="document-image[^"]*(?:feature|standard|portrait|compact|column)-media[^"]*">/g) || []).length;
 if (scaledImages !== sourceImageRefs.length) failures.push("Responsive image scale classes are missing");

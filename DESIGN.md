@@ -2,7 +2,7 @@
 
 ## Overview
 
-This website is a faithful web edition of the Notion page **Polaroid of Yesterday Game Design Document**. The source document—not an editorial rewrite, slide metaphor, or portfolio narrative—owns the visible copy, content order, heading hierarchy, captions, image sequence, and column relationships.
+This site has a small portfolio shell around a faithful web edition of the Notion page **Polaroid of Yesterday Game Design Document**. The public hierarchy is `/` for the home page, `/games/` for the Games category, `/games/polaroid-of-yesterday/` for the project page, and `/games/polaroid-of-yesterday/game-design-document/` for the source-faithful document. The source document—not an editorial rewrite, slide metaphor, or portfolio narrative—owns the visible copy, content order, heading hierarchy, captions, image sequence, and column relationships on that document route.
 
 The game's visual identity supplies the restrained frame: black surfaces, monochrome imagery, and yellow Futura-style heavy oblique typography. That identity must never introduce new visible prose or compete with the document.
 
@@ -18,7 +18,7 @@ Avoid invented cover copy, chapter labels, thematic slogans, continuation marker
 - Rules: `#2C2C29`
 - Game yellow: `#F6C934` — reserved for the exact document title, navigation state, progress, and focus.
 
-Runtime mapping: these values are defined once as CSS custom properties in `dist/index.html` by `tools/render-notion.mjs`.
+Runtime mapping: the document values are defined once as CSS custom properties in `dist/games/polaroid-of-yesterday/game-design-document/index.html` by `tools/render-notion.mjs`; the lightweight site shell uses the same palette in `dist/site.css`.
 
 ## Typography
 
@@ -46,6 +46,7 @@ Square corners throughout. Rules and image frames echo photographs and the camer
 
 ## Components
 
+- Site hierarchy: the home page links to the Games category, the category links to Polaroid of Yesterday, and the project page links to the Game Design Document.
 - Detailed table of contents: exact source headings, H1–H4 indentation, active state in game yellow.
 - Document title: exact Notion page title; no subtitle, deck label, or added slogan.
 - Source document: natural-height rendering of the Notion Markdown.
