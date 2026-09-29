@@ -54,9 +54,10 @@ function render() {
   composition.dataset.active = active;
   document.body.dataset.world = active;
   scenes.setWorld(active);
-  if (active !== 'name') nameCardOpen = false;
-  if (nameCardOpen) businessCard.show(cardKeyboard);
-  else businessCard.hide();
+  if (active === 'name' && nameCardOpen) {
+    businessCard.show(cardKeyboard);
+    cardKeyboard = false;
+  } else businessCard.hide();
   for (const preview of previews) preview.setAttribute('aria-pressed', String(preview.dataset.identity === pinned));
 }
 for (const identity of identities) {
@@ -86,6 +87,8 @@ for (const identity of identities) {
       render();
       return;
     }
+    nameCardOpen = false;
+    cardKeyboard = false;
     pinned = pinned === identity.dataset.identity ? null : identity.dataset.identity;
     hovered = null;
     focused = null;

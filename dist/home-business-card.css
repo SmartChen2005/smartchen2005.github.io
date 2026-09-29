@@ -1,20 +1,21 @@
 @font-face {
-  font-family: 'Noto Sans SC';
+  font-family: 'Source Han Sans SC';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('assets/fonts/noto-sans-sc-name.ttf') format('truetype');
+  src: url('assets/fonts/source-han-sans-sc-name.otf') format('opentype');
   unicode-range: U+5F18, U+6BC5, U+9648;
 }
-/* The substrate is neutral. Only the moving studio reflection carries color. */
 .business-card-dock {
-  --metal-body: #e6e6e3;
+  --metal-body: #ededeb;
   --metal-light: #ffffff;
-  --metal-ink: #333432;
-  --metal-engraving: #666763;
+  --metal-ink: #30312f;
+  --metal-engraving: #555651;
   --metal-cyan: #d1e3e6;
   --metal-violet: #ded5e8;
   --metal-gold: #e8dfcc;
+  --card-unit: 1px;
+  --card-radius: calc(11 * var(--card-unit));
   position: absolute;
   z-index: 0;
   pointer-events: none;
@@ -22,83 +23,126 @@
   clip-path: inset(-32px -40px -40px 0);
 }
 .business-card-dock[hidden] { display: none; }
-.business-card-slide { width: 100%; height: 100%; }
+.business-card-slide { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; }
+/* Close contact plus a soft studio shadow, following the rounded card. */
+.business-card-slide::before {
+  content: '';
+  position: absolute;
+  inset: 2px -1px -3px 0;
+  border-radius: var(--card-radius);
+  background: linear-gradient(90deg, #34352e18, #34352e07 9%, #34352e03 85%, transparent);
+  filter: blur(1.3px);
+  pointer-events: none;
+}
 .metal-card {
   position: relative;
   width: 100%;
   height: 100%;
   border: 0;
-  border-radius: 1.5px;
-  overflow: hidden;
+  border-radius: var(--card-radius);
   color: var(--metal-ink);
-  background: var(--metal-body);
-  box-shadow: 0 .6px 1px #22221e12, 0 3px 7px -5px #22221e12;
+  background: #b5b5af;
+  box-shadow: 0 1px 2px #25262514, 0 5px 10px -4px #25262518, 0 13px 24px -8px #25262526;
   transform: perspective(1100px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
   transform-origin: 12% 50%;
-  font: 400 11px/1.4 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  transform-style: preserve-3d;
+  font: 400 calc(12 * var(--card-unit))/1.4 'Helvetica Neue', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 .business-card-dock[data-state='settled'] .metal-card { pointer-events: auto; }
-.metal-card::before, .metal-card::after { content: ''; position: absolute; inset: 0; pointer-events: none; }
+/* Two actual side planes receive a different light response from the face. */
+.metal-card::before, .metal-card::after { content: ''; position: absolute; pointer-events: none; }
 .metal-card::before {
-  /* Broad falloff, with a faint return from the opposite studio wall. */
-  background:
-    radial-gradient(ellipse var(--light-spread, 58%) 115% at var(--light-x, -18%) var(--light-y, 35%), #ffffffc2 0%, #ffffff70 23%, #ffffff24 53%, #ffffff00 86%),
-    radial-gradient(ellipse 90% 130% at calc(100% - var(--light-x, -18%)) 110%, #6868640b, transparent 80%);
+  width: 2.5px;
+  right: -2.5px;
+  top: var(--card-radius);
+  bottom: var(--card-radius);
+  transform-origin: left;
+  transform: translateZ(1.25px) rotateY(90deg);
+  background: linear-gradient(90deg, #f5f5f0, hsl(60 2% var(--side-light, 62%)) 28%, #8a8a85);
 }
 .metal-card::after {
-  /* Spectral contamination stays inside the reflection, never in the base. */
+  height: 2.5px;
+  left: var(--card-radius);
+  right: var(--card-radius);
+  bottom: -2.5px;
+  transform-origin: top;
+  transform: translateZ(1.25px) rotateX(-90deg);
+  background: linear-gradient(#f5f5f0, hsl(60 2% var(--bottom-light, 69%)) 30%, #91918a);
+}
+.metal-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  transform: translateZ(1.25px);
+  background: var(--metal-body);
+  /* Micron bevels, confined to the object's edge. */
+  box-shadow: inset 0 .65px 0 #ffffffb0, inset -.65px 0 0 #ffffff78, inset 0 -.85px 0 #77776f75;
+}
+.metal-face::before, .metal-face::after { content: ''; position: absolute; inset: 0; pointer-events: none; }
+.metal-face::before {
+  /* Elongated satin lobe and broad studio fill share one position. */
   background:
-    radial-gradient(ellipse 21% 90% at calc(var(--light-x, -18%) - 16%) var(--light-y, 35%), var(--metal-cyan), transparent 90%),
-    radial-gradient(ellipse 20% 85% at calc(var(--light-x, -18%) + 12%) var(--light-y, 35%), var(--metal-violet), transparent 90%),
-    radial-gradient(ellipse 28% 70% at calc(var(--light-x, -18%) + 36%) 0%, var(--metal-gold), transparent 90%);
-  opacity: var(--spectral-strength, .025);
+    radial-gradient(ellipse 26% 170% at var(--light-x, -12%) var(--light-y, 34%), #ffffff67, #ffffff1b 45%, transparent 80%),
+    radial-gradient(ellipse var(--light-spread, 60%) 130% at var(--light-x, -12%) var(--light-y, 34%), #ffffff79, #ffffff32 38%, transparent 88%),
+    radial-gradient(ellipse 90% 130% at calc(100% - var(--light-x, -12%)) 110%, #5d5d550e, transparent 80%),
+    repeating-linear-gradient(0deg, #ffffff02 0 .5px, #62625c02 .5px 1px);
+}
+.metal-face::after {
+  background:
+    radial-gradient(ellipse 21% 90% at calc(var(--light-x, -12%) - 16%) var(--light-y, 34%), var(--metal-cyan), transparent 90%),
+    radial-gradient(ellipse 20% 85% at calc(var(--light-x, -12%) + 12%) var(--light-y, 34%), var(--metal-violet), transparent 90%),
+    radial-gradient(ellipse 28% 70% at calc(var(--light-x, -12%) + 36%) 0%, var(--metal-gold), transparent 90%);
+  opacity: var(--spectral-strength, .012);
 }
 .card-print {
   position: relative;
   z-index: 1;
   height: 100%;
-  padding: 26px 26px 17px 34px;
+  padding: calc(23 * var(--card-unit)) calc(23 * var(--card-unit)) calc(16 * var(--card-unit)) calc(31 * var(--card-unit));
 }
-/* A subpixel edge catches the same light; there is no drawn perimeter. */
 .card-print::before {
   content: '';
   position: absolute;
   inset: 0 0 auto;
-  height: .6px;
+  height: .75px;
   pointer-events: none;
-  background: radial-gradient(ellipse at var(--light-x, -18%) 50%, var(--metal-light), transparent 70%);
-  opacity: var(--edge-strength, .22);
+  background: radial-gradient(ellipse at var(--light-x, -12%) 50%, var(--metal-light), transparent 70%);
+  opacity: var(--edge-strength, .38);
 }
-.card-name { margin: 0; font-size: 11px; font-weight: 500; letter-spacing: .055em; }
-.card-education { margin: 7px 0 0; font-size: 9px; letter-spacing: .005em; }
+.card-name { margin: 0; font-size: calc(16 * var(--card-unit)); font-weight: 700; letter-spacing: -.015em; line-height: 1.2; }
+.card-education { margin: calc(8 * var(--card-unit)) 0 0; font-size: calc(11.5 * var(--card-unit)); letter-spacing: -.01em; }
 .card-chinese {
   position: absolute;
-  right: 26px;
-  top: 24px;
+  right: calc(23 * var(--card-unit));
+  top: calc(20 * var(--card-unit));
   margin: 0;
-  font: 400 21px/1.25 'Noto Sans SC', 'Source Han Sans SC', 'PingFang SC', sans-serif;
+  font: 400 calc(26 * var(--card-unit))/1.25 'Source Han Sans SC', 'Noto Sans SC', 'PingFang SC', sans-serif;
   letter-spacing: .035em;
   color: var(--metal-engraving);
-  opacity: var(--engrave-strength, .055);
-  text-shadow: 0 .4px .15px var(--metal-light);
+  opacity: var(--engrave-strength, .09);
+  text-shadow: 0 .5px .2px var(--metal-light), 0 -.2px .2px #30302b24;
 }
-.card-contact { position: absolute; left: 34px; right: 26px; bottom: 12px; }
+.card-contact { position: absolute; left: calc(31 * var(--card-unit)); right: calc(23 * var(--card-unit)); bottom: calc(12 * var(--card-unit)); }
 .card-contact a { color: inherit; text-decoration: none; cursor: pointer; }
-.card-email { display: block; width: max-content; max-width: 100%; padding: 5px 0; font-size: 10px; letter-spacing: .005em; }
-.card-links { display: flex; justify-content: space-between; margin-top: 17px; }
-.card-links a { display: inline-flex; align-items: center; min-height: 30px; font-size: 9px; }
+.card-email { display: block; width: max-content; max-width: 100%; padding: calc(5 * var(--card-unit)) 0; font-size: calc(12.5 * var(--card-unit)); letter-spacing: -.015em; }
+.card-links { display: flex; justify-content: space-between; margin-top: calc(13 * var(--card-unit)); }
+.card-links a { display: inline-flex; align-items: center; gap: calc(4 * var(--card-unit)); min-height: calc(30 * var(--card-unit)); font-size: calc(11.5 * var(--card-unit)); }
+.card-arrow { width: clamp(9px, calc(10 * var(--card-unit)), 11px); height: clamp(9px, calc(10 * var(--card-unit)), 11px); flex: none; transform: translateY(-.25px); transition: transform 180ms ease; }
 .card-contact a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.card-contact a:hover .card-arrow { transform: translate(1px, -1.25px); }
 .card-contact a:active { opacity: .65; }
 .card-contact a:focus-visible { outline: 1px solid var(--metal-ink); outline-offset: 3px; }
 .card-contact a[aria-disabled='true'] { opacity: .52; cursor: default; text-decoration: none; }
-.business-card-dock[data-layout='below'] .card-print { padding-left: 26px; }
-.business-card-dock[data-layout='below'] .card-contact { left: 26px; }
+.business-card-dock[data-layout='below'] .card-print { padding-left: calc(26 * var(--card-unit)); }
+.business-card-dock[data-layout='below'] .card-contact { left: calc(26 * var(--card-unit)); }
 body[data-game-transition] .business-card-dock { display: none; }
 @media (prefers-reduced-motion: reduce) { .metal-card { transform: none; } }
 @media (forced-colors: active) {
-  .metal-card { background: Canvas; color: CanvasText; border: 1px solid CanvasText; box-shadow: none; }
-  .metal-card::before, .metal-card::after, .card-print::before { display: none; }
+  .metal-face { background: Canvas; color: CanvasText; border: 1px solid CanvasText; box-shadow: none; }
+  .metal-card { background: Canvas; box-shadow: none; }
+  .metal-card::before, .metal-card::after, .metal-face::before, .metal-face::after, .card-print::before, .business-card-slide::before { display: none; }
   .card-chinese { color: CanvasText; opacity: 1; text-shadow: none; }
   .card-contact a { color: LinkText; }
   .card-contact a:focus-visible { outline-color: Highlight; }

@@ -1,10 +1,12 @@
 const clampCard = (value, low, high) => Math.max(low, Math.min(high, value));
 
 export function businessCardLayout(portrait, sentence, viewport) {
-  const width = Math.min(328, Math.max(296, portrait.width * 1.05), viewport.width - 32);
+  const landscape = viewport.width > viewport.height;
+  const width = landscape ? portrait.width * 1.05 : Math.min(328, Math.max(296, portrait.width * 1.05), viewport.width - 32);
   const height = width / 1.64;
-  const rightSide = portrait.right - 14;
-  const beside = rightSide + width <= viewport.width - 16 && sentence.top >= height + 28;
+  const overlap = landscape ? portrait.width * (14 / 282) : 14;
+  const rightSide = portrait.right - overlap;
+  const beside = landscape && rightSide + width <= viewport.width - 16 && sentence.top >= height + 28;
   return { width, height, layout: beside ? 'beside' : 'below',
     left: beside ? rightSide : Math.max(16, Math.min(viewport.width - width - 16, portrait.left + 20)),
     top: beside ? Math.max(12, Math.min(portrait.top + (portrait.height - height) / 2, sentence.top - height - 16)) : Math.max(portrait.bottom + 16, sentence.bottom + 24),
@@ -23,17 +25,19 @@ export function createBusinessCard(dock, portrait, sentence, trigger) {
   function light() {
     // The micro-etch has a narrower roughness response than the satin substrate.
     // Both finishes receive the same broad studio source, with no idle animation.
-    const x = -18 + current.x * 142, y = 35 + current.y * 35;
+    const x = -12 + current.x * 128, y = 34 + current.y * 42;
     const etch = Math.exp(-(((x - 81) / 32) ** 2 + ((y - 22) / 55) ** 2));
     const grazing = Math.abs(current.x) ** 2;
-    card.style.setProperty('--tilt-x', `${-current.y * .85}deg`);
-    card.style.setProperty('--tilt-y', `${current.x * 1.15}deg`);
+    card.style.setProperty('--tilt-x', `${-current.y * 2}deg`);
+    card.style.setProperty('--tilt-y', `${current.x * 2.8}deg`);
     card.style.setProperty('--light-x', `${x}%`);
     card.style.setProperty('--light-y', `${y}%`);
-    card.style.setProperty('--light-spread', `${58 - grazing * 10}%`);
-    card.style.setProperty('--spectral-strength', `${.025 + grazing * .12}`);
-    card.style.setProperty('--edge-strength', `${.22 + grazing * .26}`);
-    card.style.setProperty('--engrave-strength', `${.055 + etch * .47}`);
+    card.style.setProperty('--light-spread', `${60 - grazing * 12}%`);
+    card.style.setProperty('--spectral-strength', `${.012 + grazing * .065}`);
+    card.style.setProperty('--edge-strength', `${.38 + grazing * .38}`);
+    card.style.setProperty('--side-light', `${62 + current.x * 17 - current.y * 6}%`);
+    card.style.setProperty('--bottom-light', `${69 - current.y * 15 + current.x * 4}%`);
+    card.style.setProperty('--engrave-strength', `${.09 + etch * .51}`);
   }
   function tick(now) {
     frame = 0;
@@ -59,6 +63,7 @@ export function createBusinessCard(dock, portrait, sentence, trigger) {
     dock.style.top = `${geometry.top + scrollY}px`;
     dock.style.width = `${geometry.width}px`;
     dock.style.height = `${geometry.height}px`;
+    dock.style.setProperty('--card-unit', `${geometry.width / 296}px`);
     dock.dataset.layout = geometry.layout;
   }
   function show(keyboard = false) {
@@ -96,10 +101,12 @@ export function createBusinessCard(dock, portrait, sentence, trigger) {
   document.addEventListener('pointermove', event => {
     if (!open || !ready || event.pointerType === 'touch') return;
     const bounds = dock.getBoundingClientRect();
-    target = { x: clampCard((event.clientX - bounds.left - bounds.width / 2) / (bounds.width * .65), -1, 1),
-      y: clampCard((event.clientY - bounds.top - bounds.height / 2) / (bounds.height * .85), -1, 1) };
+    const inside = event.clientX >= bounds.left && event.clientX <= bounds.left + bounds.width && event.clientY >= bounds.top && event.clientY <= bounds.top + bounds.height;
+    target = inside ? { x: clampCard((event.clientX - bounds.left - bounds.width / 2) / (bounds.width * .5), -1, 1),
+      y: clampCard((event.clientY - bounds.top - bounds.height / 2) / (bounds.height * .5), -1, 1) } : { x: 0, y: 0 };
     startLight();
   });
+  document.addEventListener('pointerleave', () => { target = { x: 0, y: 0 }; startLight(); });
   dock.querySelector('[data-resume-placeholder]').addEventListener('click', event => event.preventDefault());
   document.addEventListener('visibilitychange', () => { if (document.hidden) { cancelAnimationFrame(frame); frame = 0; } });
   reduce.addEventListener('change', () => {

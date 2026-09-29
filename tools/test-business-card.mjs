@@ -10,7 +10,16 @@ for (const [width,height] of [[1920,1080],[1280,720],[844,390],[535,673],[390,84
   assert(layout.left >= 0 && layout.left+layout.width <= width-15);
   assert(layout.top >= 0);
   assert(layout.top+layout.height <= sentence.top-15 || layout.top >= sentence.bottom+23);
-  if(layout.layout==='beside') assert.equal(layout.left,photo.right-14,'Card must emerge from behind the right edge');
+  if(layout.layout==='beside') assert.equal(layout.left,photo.right-photo.width*(14/282),'Card must emerge from behind the right edge');
+  if(width>height) assert(Math.abs(layout.width/photo.width-1.05)<1e-9,'Landscape card ratio must remain constant');
+  else assert.equal(layout.layout,'below','Vertical layout must retain the separate readable card');
+}
+for(const photoWidth of [170,180,220,282,320]) {
+  const portrait={left:60,right:60+photoWidth,top:40,bottom:40+photoWidth*2/3,width:photoWidth,height:photoWidth*2/3};
+  const layout=businessCardLayout(portrait,{top:360,bottom:410},{width:1000,height:600});
+  assert.equal(layout.layout,'beside');
+  assert(Math.abs(layout.width/portrait.width-1.05)<1e-9);
+  assert(Math.abs(layout.height/portrait.height-1.05*1.5/1.64)<1e-9);
 }
 
 function harness({reduced=false,forced=false}={}) {
@@ -18,12 +27,10 @@ function harness({reduced=false,forced=false}={}) {
   const frames=new Map(), events={}, mediaEvents=[];
   const style=()=>({values:{},setProperty(key,value){this.values[key]=value;},getPropertyValue(key){return this.values[key]||'';}});
   const card={style:style()}, email={focus:()=>focus++}, placeholder={addEventListener:(name,fn)=>{events.resume=fn;}};
-  const surface=new Proxy({}, {get:()=>()=>{},set:()=>true});
-  const grain={getContext:()=>surface};
   let entry=null;
   const slide={style:{},animate:()=>{animations++;entry={cancel(){this.cancelled=true;},finish(){this.onfinish?.();}};return entry;}};
   const dock={hidden:true,inert:true,style:style(),dataset:{},
-    querySelector:selector=>({'.metal-card':card,'.card-email':email,'.business-card-slide':slide,'.metal-grain':grain,'[data-resume-placeholder]':placeholder})[selector],
+    querySelector:selector=>({'.metal-card':card,'.card-email':email,'.business-card-slide':slide,'[data-resume-placeholder]':placeholder})[selector],
     getBoundingClientRect:()=>({left:400,top:100,width:300,height:183})};
   const portrait={isConnected:true,style:style(),getBoundingClientRect:()=>({height:188,bottom:292,toJSON:()=>({left:130,right:412,top:104,bottom:292,width:282,height:188})})};
   portrait.style.setProperty('--portrait-height','188px');
@@ -50,6 +57,10 @@ const first=app.card.style.values['--tilt-y'];
 for(let i=0;i<100;i++)app.step();
 assert.notEqual(app.card.style.values['--tilt-y'],first,'The material should respond with inertia');
 assert.equal(app.frames.size,0,'The settled card must not run an idle animation loop');
+app.events.pointermove({clientX:850,clientY:350,pointerType:'mouse'});
+for(let i=0;i<100;i++)app.step();
+assert(Math.abs(parseFloat(app.card.style.values['--tilt-y']))<.003,'Leaving the card must smoothly restore its resting orientation');
+assert.equal(app.frames.size,0,'Restoration must stop after convergence');
 app.instance.hide();assert(app.dock.hidden && app.dock.inert);assert.equal(app.trigger.attrs['aria-expanded'],'false');
 app.instance.show(true);app.finish();assert.equal(app.values().focus,1,'Keyboard opening should reach the contact links');
 app.instance.hide();app.instance.show();app.instance.hide();app.finish();assert(app.dock.hidden,'Cancelled entry must not reopen a closed card');
