@@ -10,7 +10,7 @@ export function createScenes(canvas, { motor: motorCanvas, exhibition: galleryRo
   const colors = getComputedStyle(document.documentElement);
   const paper = colors.getPropertyValue('--paper').trim();
   const ink = colors.getPropertyValue('--ink').trim();
-  let world = '', frame = 0, last = 0;
+  let world = '', frame = 0, last = 0, captured = false;
   let width = 0, height = 0, band = { top: 0, bottom: 0 };
   let aim = { x: .5, y: .5 }, tiles = [], balls = [];
 
@@ -133,6 +133,7 @@ export function createScenes(canvas, { motor: motorCanvas, exhibition: galleryRo
   function start() {
     cancelAnimationFrame(frame);
     frame = 0;
+    if (captured) return;
     draw(0);
     if (!reduce.matches && !document.hidden && (world === 'games')) {
       last = performance.now();
@@ -140,6 +141,7 @@ export function createScenes(canvas, { motor: motorCanvas, exhibition: galleryRo
     }
   }
   function setWorld(next) {
+    if (captured) return;
     if (world === next) return;
     motor.setActive(next === 'cars', world === 'cars' && next === '');
     world = next;
@@ -152,5 +154,16 @@ export function createScenes(canvas, { motor: motorCanvas, exhibition: galleryRo
   }
   reduce.addEventListener('change', start);
   document.addEventListener('visibilitychange', start);
-  return { setWorld, resize, point };
+  // The click sequence inherits the live state; the hover simulation is untouched.
+  function captureGame() {
+    setWorld('games');
+    captured = true;
+    cancelAnimationFrame(frame);
+    frame = 0;
+    return { width, height, band: { ...band },
+      tiles: tiles.map(tile => ({ ...tile })),
+      balls: balls.map(ball => ({ ...ball, trail: ball.trail.map(point => ({ ...point })) })) };
+  }
+  function releaseGame() { captured = false; world = ''; start(); }
+  return { setWorld, resize, point, captureGame, releaseGame };
 }

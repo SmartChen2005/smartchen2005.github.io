@@ -1,16 +1,49 @@
 import { createScenes } from './home-scenes.mjs';
+import { installGameTransition } from './home-game-transition.mjs';
 
 const composition = document.querySelector('.composition');
 const identities = [...document.querySelectorAll('[data-identity]')];
 const previews = identities.filter((identity) => identity.tagName === 'BUTTON');
 const hover = matchMedia('(hover: hover) and (pointer: fine)');
+const portrait = document.querySelector('.portrait-full');
+const portraitImage = portrait.querySelector('img');
+const portraitAnchor = document.createComment('Portrait reveal');
+portrait.after(portraitAnchor);
+let portraitActive = false, portraitTimer = 0;
+function retirePortrait() {
+  if (portraitActive) return;
+  portrait.hidden = true;
+  portrait.remove();
+}
+function setPortrait(active) {
+  if (portraitActive === active) return;
+  portraitActive = active;
+  clearTimeout(portraitTimer);
+  if (active) {
+    portrait.hidden = false;
+    portraitAnchor.before(portrait);
+    // Commit the closed geometry before starting the existing reveal.
+    void portrait.offsetHeight;
+  } else if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    retirePortrait();
+  } else {
+    portraitTimer = setTimeout(retirePortrait, 375);
+  }
+}
+portrait.addEventListener('transitionend', event => {
+  if (event.propertyName === 'height' && !portraitActive) retirePortrait();
+});
+retirePortrait();
 const scenes = createScenes(document.querySelector('.kinetic-scene'), {
   motor: document.querySelector('.motor-scene'), exhibition: document.querySelector('.photo-scene'),
 });
 let pinned = null, hovered = null, focused = null;
+const gameTransition = installGameTransition(document.querySelector('.identity-games'), scenes, () => { clear(); measure(); });
 
 function render() {
+  if (gameTransition.active) return;
   const active = hovered ?? focused ?? pinned ?? '';
+  setPortrait(active === 'name');
   composition.dataset.active = active;
   document.body.dataset.world = active;
   scenes.setWorld(active);
@@ -50,9 +83,14 @@ document.addEventListener('pointermove', (event) => {
 window.addEventListener('blur', () => { hovered = null; focused = null; render(); });
 
 function measure() {
+  if (gameTransition.active) return;
   const bounds = composition.getBoundingClientRect();
   const name = document.querySelector('.identity-name').getBoundingClientRect();
-  const portraitWidth = document.querySelector('.portrait-full').getBoundingClientRect().width;
+  // Measure while hidden when detached; the closed reveal has no rendered box.
+  if (!portrait.isConnected) portraitAnchor.before(portrait);
+  const portraitWidth = parseFloat(getComputedStyle(portrait).width);
+  portrait.style.setProperty('--portrait-height', `${portraitWidth * Number(portraitImage.getAttribute('height')) / Number(portraitImage.getAttribute('width'))}px`);
+  if (!portraitActive) portrait.remove();
   const center = Math.max(16 + portraitWidth * .42,
     Math.min(innerWidth - 16 - portraitWidth * .58, name.left + name.width / 2));
   composition.style.setProperty('--name-center', `${center - bounds.left}px`);

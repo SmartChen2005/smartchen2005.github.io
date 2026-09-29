@@ -22,6 +22,7 @@ if (exhibitionImages.length !== 4 || JSON.stringify([...exhibitionImages].sort()
 }
 if (/\.identity::(?:after|before)/.test(homeCss)) failures.push('Persistent identity underline decorations must not return');
 if (!fs.existsSync(path.join(root, 'dist/home-scenes.mjs'))) failures.push('Homepage scenery module is missing');
+if (!fs.existsSync(path.join(root, 'dist/home-game-transition.mjs'))) failures.push('Game click transition module is missing');
 const imageDigest = file => createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex');
 if (imageDigest('selfportrait.jpg') !== imageDigest('dist/assets/selfportrait.jpg')) {
   failures.push('The published portrait must be byte-for-byte identical to the supplied blue monochrome artwork');

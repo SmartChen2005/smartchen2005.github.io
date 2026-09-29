@@ -73,5 +73,12 @@ const before=drawings;scene.setWorld('games');assert(drawings>before);assert.equ
 media.matches=false;mediaHandlers.forEach(fn=>fn());assert.equal(callbacks.size,1);
 document.hidden=true;pageHandlers.forEach(fn=>fn());assert.equal(callbacks.size,0);
 document.hidden=false;pageHandlers.forEach(fn=>fn());assert.equal(callbacks.size,1);
+const captured = scene.captureGame();
+assert.equal(captured.balls.length,6);assert.equal(captured.tiles.length,36);
+assert.equal(callbacks.size,0,'Click must take over the existing animation loop');
+assert(captured.balls.every(ball=>ball.trail.length===14),'Click must inherit the existing trajectories');
+pageHandlers.forEach(fn=>fn());mediaHandlers.forEach(fn=>fn());scene.setWorld('photo');
+assert.equal(callbacks.size,0,'Focus and visibility events must not restart the captured hover simulation');
+scene.releaseGame();scene.setWorld('games');assert.equal(callbacks.size,1);
 scene.setWorld('');assert.equal(callbacks.size,0);
 console.log('Passed: four uncropped non-overlapping prints; 4.6s motorsport phases, shifts, settle and restart; finite canvas geometry; single-loop lifecycle; reduced motion; background suspension.');

@@ -109,17 +109,35 @@ body[data-world='cars'] .sentence { color: var(--paper); }
   margin: 0;
   pointer-events: none;
   visibility: hidden;
-  clip-path: inset(100% 0 0);
-  transition: clip-path 350ms cubic-bezier(.2,.75,.2,1), visibility 350ms;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: height 350ms cubic-bezier(.2,.75,.2,1), visibility 0s 350ms, opacity 0s 350ms;
 }
-.portrait img { display: block; width: 100%; height: auto; }
+.portrait img { position: absolute; bottom: 0; display: block; width: 100%; height: auto; }
 .portrait-full {
   width: clamp(180px, 22vw, 320px);
   left: var(--name-center, 8%);
   bottom: calc(100% + 38px);
   transform: translateX(-42%);
 }
-.composition[data-active='name'] .portrait-full { visibility: visible; clip-path: inset(0); }
+.composition[data-active='name'] .portrait-full {
+  visibility: visible;
+  height: var(--portrait-height);
+  opacity: 1;
+  transition-delay: 0s;
+}
+.portrait[hidden] { display: none; }
+/* Created only for the game link. No resting or hover layout changes. */
+.game-destination, .game-collapse { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; }
+.game-destination { z-index: 4; visibility: hidden; }
+.game-destination.is-revealed { visibility: visible; }
+.game-collapse { z-index: 5; }
+body[data-game-transition] { overflow: hidden; }
+body[data-game-transition] .world-stage, body[data-game-transition] .portrait { display: none; }
+body[data-game-transition] .homepage { clip-path: inset(var(--game-inset-y, 0px) var(--game-inset-x, 0px)); pointer-events: none; }
+body[data-game-transition] .identity:focus-visible { outline: none; }
+body[data-game-transition='point'] .homepage { visibility: hidden; }
 @media (max-width: 700px) and (pointer: coarse) {
   .homepage { padding: 190px 9vw; }
   .composition { width: 100%; }
