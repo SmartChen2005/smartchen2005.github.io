@@ -9,6 +9,7 @@
   <link rel="preload" href="assets/fonts/instrument-serif-regular.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="assets/fonts/instrument-serif-italic.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="home-business-card.css">
   <script src="home.mjs" type="module"></script>
 </head>
 <body>
@@ -29,5 +30,23 @@
       <figure class="portrait portrait-full" aria-hidden="true"><img src="assets/selfportrait.jpg" width="6000" height="4000" alt=""></figure>
     </div>
   </main>
+  <div id="business-card" class="business-card-dock" hidden inert>
+    <div class="business-card-slide">
+      <div class="metal-card" role="group" aria-label="Smart Chen contact card">
+        <div class="card-print">
+          <p class="card-name">SMART CHEN</p>
+          <p class="card-chinese" lang="zh-Hans">陈弘毅</p>
+          <p class="card-education">Emory '27</p>
+          <div class="card-contact">
+            <a class="card-email" href="mailto:smartchen324@gmail.com">smartchen324@gmail.com</a>
+            <div class="card-links">
+              <a href="#" aria-disabled="true" aria-label="Résumé (not yet available)" tabindex="-1" data-resume-placeholder>Résumé ↗</a>
+              <a href="https://www.instagram.com/smartchen324/" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

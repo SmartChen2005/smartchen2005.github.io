@@ -1,5 +1,6 @@
 import { createScenes } from './home-scenes.mjs';
 import { installGameTransition } from './home-game-transition.mjs';
+import { createBusinessCard } from './home-business-card.mjs';
 
 const composition = document.querySelector('.composition');
 const identities = [...document.querySelectorAll('[data-identity]')];
@@ -38,6 +39,12 @@ const scenes = createScenes(document.querySelector('.kinetic-scene'), {
   motor: document.querySelector('.motor-scene'), exhibition: document.querySelector('.photo-scene'),
 });
 let pinned = null, hovered = null, focused = null;
+let nameCardOpen = false, cardKeyboard = false;
+const nameTrigger = document.querySelector('.identity-name');
+const cardDock = document.querySelector('.business-card-dock');
+nameTrigger.setAttribute('aria-controls', 'business-card');
+nameTrigger.setAttribute('aria-expanded', 'false');
+const businessCard = createBusinessCard(cardDock, portrait, document.querySelector('.sentence'), nameTrigger);
 const gameTransition = installGameTransition(document.querySelector('.identity-games'), scenes, () => { clear(); measure(); });
 
 function render() {
@@ -47,6 +54,9 @@ function render() {
   composition.dataset.active = active;
   document.body.dataset.world = active;
   scenes.setWorld(active);
+  if (active !== 'name') nameCardOpen = false;
+  if (nameCardOpen) businessCard.show(cardKeyboard);
+  else businessCard.hide();
   for (const preview of previews) preview.setAttribute('aria-pressed', String(preview.dataset.identity === pinned));
 }
 for (const identity of identities) {
@@ -67,16 +77,29 @@ for (const identity of identities) {
   });
   identity.addEventListener('blur', () => { focused = null; render(); });
   if (identity.tagName !== 'BUTTON') continue;
-  identity.addEventListener('click', () => {
+  identity.addEventListener('click', (event) => {
+    if (identity.dataset.identity === 'name') {
+      nameCardOpen = !nameCardOpen;
+      cardKeyboard = event.detail === 0;
+      pinned = nameCardOpen ? 'name' : null;
+      hovered = null; focused = null;
+      render();
+      return;
+    }
     pinned = pinned === identity.dataset.identity ? null : identity.dataset.identity;
     hovered = null;
     focused = null;
     render();
   });
 }
-function clear() { pinned = null; hovered = null; focused = null; render(); }
-document.addEventListener('keydown', (event) => { if (event.key === 'Escape') clear(); });
-document.addEventListener('pointerdown', (event) => { if (!event.target.closest('.identity')) clear(); });
+function clear() { nameCardOpen = false; pinned = null; hovered = null; focused = null; render(); }
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape') return;
+  const fromCard = cardDock.contains(document.activeElement);
+  clear();
+  if (fromCard) nameTrigger.focus({ preventScroll: true });
+});
+document.addEventListener('pointerdown', (event) => { if (!event.target.closest('.identity, .business-card-dock')) clear(); });
 document.addEventListener('pointermove', (event) => {
   if (pinned && !event.target.closest('.identity')) scenes.point(event.clientX / innerWidth, event.clientY / innerHeight);
 });
@@ -100,6 +123,7 @@ function measure() {
   document.documentElement.style.setProperty('--sentence-top', `${band.top}px`);
   document.documentElement.style.setProperty('--sentence-height', `${band.bottom - band.top}px`);
   scenes.resize(band);
+  businessCard.place();
 }
 new ResizeObserver(measure).observe(composition);
 window.addEventListener('resize', measure);

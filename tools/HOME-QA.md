@@ -1,5 +1,16 @@
 # Homepage verification — exhibition + motorsport
 
+## Smart Chen business card — 2026-09-29
+
+- Material-only refinement: removed scratch canvas, blue-gray base and perimeter border; installed a local three-glyph Noto Sans SC subset with OFL license. Helvetica Neue leads the Latin font stack (Helvetica/Arial fallback where unavailable). Original slide, geometry and homepage controller are unchanged by this refinement.
+- Browser inspection confirmed silver-white resting surface, broad cursor reflection, faint spectral response and Chinese etch opacity changing from 0.055 at rest to 0.515 under the light. Computed photo filter remains `none`, card border is `0px`, local Chinese font loaded, and the 390px viewport has no horizontal overflow. Existing card/home tests, asset validation and strict audit pass. The optional DESIGN.md CLI lint could not run because `npx` is unavailable in this shell; strict audit returned zero findings.
+- Only the name's click behavior is extended. Hover still mounts/reveals the same portrait through the existing controller and unchanged CSS. All game, exhibition and motorsport modules are untouched in this revision. The blue portrait asset is unchanged.
+- `node tools/test-business-card.mjs`: passed. Covers right-edge anchoring, six wide/narrow/short layouts, sentence clearance, hidden/inert entry, post-settle pointer response, inertia, no idle RAF, repeated entry/cancellation, keyboard focus, placeholder prevention, reduced motion and forced colors.
+- Existing `test-home.mjs`, `test-game-transition.mjs`, syntax checks and `validate-site.mjs`: passed. Validator also enforces exact card copy, link destinations and hidden resting state.
+- Browser: inspected the actual photo/card composition and moving material response. Photo geometry and `filter: none` are retained. Name focus alone shows the portrait with the card hidden. Keyboard click reaches email; Tab reaches Instagram; Escape restores name focus. All contact values and destinations were inspected without sending email or posting to Instagram.
+- Browser: at 390px width the readable card falls below the unchanged sentence, with no horizontal overflow. Viewport override reset afterward. Reduced-motion/forced-color behavior is covered by controller tests; physical touch is untested.
+- No warnings or errors appeared in the browser console during card verification. Résumé remains the user-authorized placeholder; no deployment was performed.
+
 ## Latest revision — portrait cleanup + game click
 
 - Scope: only the portrait retraction cleanup and Games click transition. The original game seed, hover physics/drawing and pointer response remain intact; exhibition/motorsport modules, all image assets and destination page are untouched.

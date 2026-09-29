@@ -23,6 +23,10 @@ if (exhibitionImages.length !== 4 || JSON.stringify([...exhibitionImages].sort()
 if (/\.identity::(?:after|before)/.test(homeCss)) failures.push('Persistent identity underline decorations must not return');
 if (!fs.existsSync(path.join(root, 'dist/home-scenes.mjs'))) failures.push('Homepage scenery module is missing');
 if (!fs.existsSync(path.join(root, 'dist/home-game-transition.mjs'))) failures.push('Game click transition module is missing');
+const cardText = home.match(/<div class="card-print">([\s\S]*?)\n        <\/div>/)?.[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+if (cardText !== "SMART CHEN 陈弘毅 Emory '27 smartchen324@gmail.com Résumé ↗ Instagram ↗") failures.push('Business card copy must match the supplied content exactly');
+if (!home.includes('href="mailto:smartchen324@gmail.com"') || !home.includes('href="https://www.instagram.com/smartchen324/"')) failures.push('Business card contact destinations are incorrect');
+if (!home.includes('class="business-card-dock" hidden inert')) failures.push('The business card must start hidden and inert');
 const imageDigest = file => createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex');
 if (imageDigest('selfportrait.jpg') !== imageDigest('dist/assets/selfportrait.jpg')) {
   failures.push('The published portrait must be byte-for-byte identical to the supplied blue monochrome artwork');
