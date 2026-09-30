@@ -205,7 +205,7 @@ const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta n
 
 const enhancedHtml = html
   .replace('<nav class="toc">', '<p class="camera-help" title="Click to open or fold. Hold the right mouse button or F and move to frame; click while aiming to take a photo.">Click: open / fold / shoot · Hold RMB / F: aim</p><nav class="toc">')
-  .replace(`<a class="brand" href="#document-title">${pageTitle}</a>`, '<a class="brand" href="../../../"><span>Polaroid of Yesterday</span><span>Game Design Document</span></a>')
+  .replace(`<a class="brand" href="#document-title">${pageTitle}</a>`, '<a class="brand" href="../" aria-label="Back to Polaroid of Yesterday"><span>Polaroid of Yesterday</span><span>Game Design Document</span></a>')
   .replace('<span>polaroid of yesterday</span><span>game design document</span>', '<span>Polaroid of Yesterday</span><span>Game Design Document</span>')
   .replace('</head>', '<link rel="stylesheet" href="../../../camera.css"></head>')
   .replace('</body>', '<script src="../../../vendor/html2canvas.min.js" defer></script><script type="module" src="../../../camera.mjs"></script></body>');

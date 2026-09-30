@@ -1,0 +1,26 @@
+html { scrollbar-color: var(--muted) var(--black); scrollbar-width: thin; }
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--muted); border: 2px solid var(--black); }
+::-webkit-scrollbar-thumb:hover { background: var(--body); }
+::-webkit-scrollbar-thumb:active { background: var(--yellow); }
+.photography-main { width: min(100% - 4rem, 88rem); margin: 0 auto; padding: 2.5rem 0 3rem; }
+.photography-header { padding: 3.5rem 0 4.5rem; }
+.photography-header h1 { margin: 0; color: var(--yellow); font: 900 italic clamp(3rem, 8vw, 7rem)/.95 var(--display); letter-spacing: -.055em; }
+.photography-intro { max-width: 31rem; margin: 1.5rem 0; color: var(--body); font-size: 1rem; }
+.return-room { font-size: .85rem; text-underline-offset: .3em; }
+.photography-main a { cursor: pointer; }
+.photography-main a:hover { color: var(--yellow); }
+.photography-main a:active { opacity: .7; }
+.photography-section { margin: 0 0 5rem; }
+.photography-section h2 { margin: 0 0 1.5rem; border-top: 1px solid var(--rule); padding-top: 1rem; color: var(--white); font-size: 1.2rem; font-weight: 400; }
+.contact-sheet { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.photography-main figure { margin: 0; min-width: 0; }
+.photography-main img { display: block; width: 100%; height: auto; }
+.photography-main figcaption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem 1rem; padding: .8rem 0; font-size: .8rem; color: var(--white); }
+.photography-main figcaption span { color: var(--muted); }
+.room-study { max-width: 66rem; }
+.photography-empty { margin: 1rem 0; color: var(--body); font-size: .9rem; }
+.photography-footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); font-size: .85rem; text-underline-offset: .3em; }
+@media (max-width: 640px) { .photography-main { width: calc(100% - 2rem); padding-top: 1.5rem; } .contact-sheet { grid-template-columns: 1fr; } .photography-header { padding: 2rem 0 3rem; } }
+@media (forced-colors: active) { html { scrollbar-color: auto; } }

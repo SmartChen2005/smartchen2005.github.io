@@ -3,32 +3,45 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#070707">
-  <meta name="description" content="Polaroid of Yesterday — a first-person narrative puzzle game.">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Enter Polaroid of Yesterday: watch the trailer, read the Game Design Document, and explore the project's photography.">
   <title>Polaroid of Yesterday — Smart Chen</title>
-  <link rel="stylesheet" href="../../site.css">
+  <link rel="preload" as="image" href="assets/room.jpg">
+  <link rel="preload" as="font" href="../../assets/fonts/great-vibes-regular.ttf" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="room.css">
+  <script type="module" src="room.mjs"></script>
 </head>
 <body>
-  <div class="site-shell">
-    <header class="site-header">
-      <a class="site-brand" href="../../">Smart Chen</a>
-      <nav class="site-nav" aria-label="Primary navigation">
-        <a href="../../">Home</a>
-        <a href="../" aria-current="page">Games</a>
-      </nav>
-    </header>
-    <main class="site-main project-main">
-      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../">Home</a><span aria-hidden="true">/</span><a href="../">Games</a><span aria-hidden="true">/</span><span>Polaroid of Yesterday</span></nav>
-      <p class="eyebrow">Game</p>
-      <h1 id="page-title">Polaroid of Yesterday</h1>
-      <span class="project-meta">First-person narrative puzzle game / PC</span>
-      <div class="project-copy">
-        <p>A first-person narrative puzzle game for PC.</p>
-        <p>Photography becomes a way to reconstruct perception and get closer to the truth.</p>
+  <main class="room" aria-labelledby="project-title">
+    <nav class="room-breadcrumb" aria-label="Breadcrumb">
+      <a href="../"><span aria-hidden="true">←</span> Game Designer</a>
+    </nav>
+    <h1 class="wall-title" id="project-title">Polaroid of Yesterday</h1>
+    <img class="room-photograph" src="assets/room.jpg" width="3840" height="2160" alt="A photographed living room: a camera in the foreground, a television on a cabinet, and a person sitting in a red chair beside an open window." fetchpriority="high">
+    <a class="gdd-sheet" href="game-design-document/">
+      <span class="sheet-pin" aria-hidden="true"></span>
+      <span class="sheet-title">Game Design<br>Document</span>
+      <span class="sheet-action">Inside the Game <span aria-hidden="true">↗</span></span>
+    </a>
+    <a class="camera-entrance" href="photography/" target="_blank" rel="noopener noreferrer" aria-label="Stills: screenshots and concept photography (opens in a new tab)">
+      <span class="camera-frame" aria-hidden="true"></span>
+      <span class="camera-tag">
+        <span class="camera-tag-title">Stills <span aria-hidden="true">↗</span></span>
+        <span class="camera-tag-caption">Screenshots · Concept Photography</span>
+      </span>
+    </a>
+    <div class="wall-download">
+      <button class="download-entrance" type="button" aria-expanded="false" aria-controls="download-note">Download Game <span aria-hidden="true">↓</span></button>
+      <span class="download-availability">PC build</span>
+      <p class="download-note" id="download-note" hidden role="status">The game download is not available yet.</p>
+    </div>
+    <section class="tv-anchor" aria-label="Project trailer">
+      <div class="tv-projection">
+        <div class="tv-screen">
+          <iframe class="tv-player" title="Polaroid of Yesterday trailer — placeholder YouTube video" src="https://www.youtube-nocookie.com/embed/aqz-KE-bpKQ?autoplay=1&amp;mute=1&amp;controls=1&amp;fs=1&amp;rel=0&amp;playsinline=1" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
       </div>
-      <a class="document-link" href="game-design-document/">Open Game Design Document <span aria-hidden="true">→</span></a>
-    </main>
-    <footer class="site-footer">Games / Polaroid of Yesterday / Game Design Document</footer>
-  </div>
+    </section>
+  </main>
 </body>
 </html>

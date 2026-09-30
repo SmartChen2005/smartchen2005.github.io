@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <rect width="1600" height="900" fill="#111714"/>
+  <g fill="none" stroke="#58615a" stroke-width="2"><path d="M0 760 460 600 1140 600 1600 760M460 600V100M1140 600V100M0 0 460 100 1140 100 1600 0"/><path d="M650 600V260H900V600M675 600V282H875V600"/><circle cx="847" cy="446" r="5"/></g>
+  <path d="M675 600 875 600 1230 900 280 900" fill="#f6c934" opacity=".025"/>
+  <g fill="#b8beb7" font-family="Arial,sans-serif" font-size="20" letter-spacing="3"><text x="48" y="66">GAME SCREENSHOT</text><text x="48" y="850" font-size="17">PLACEHOLDER / IMAGE TO COME</text></g>
+  <path d="M1495 815h48v-48M105 120H57v48" fill="none" stroke="#f6c934" stroke-width="2"/>
+</svg>
