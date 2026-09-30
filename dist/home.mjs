@@ -38,8 +38,8 @@ retirePortrait();
 const scenes = createScenes(document.querySelector('.kinetic-scene'), {
   motor: document.querySelector('.motor-scene'), exhibition: document.querySelector('.photo-scene'),
 });
-let pinned = null, hovered = null, focused = null;
-let nameCardOpen = false, cardKeyboard = false;
+let pinned = 'name', hovered = null, focused = null;
+let nameCardOpen = true, cardKeyboard = false;
 const nameTrigger = document.querySelector('.identity-name');
 const cardDock = document.querySelector('.business-card-dock');
 nameTrigger.setAttribute('aria-controls', 'business-card');
@@ -132,3 +132,5 @@ new ResizeObserver(measure).observe(composition);
 window.addEventListener('resize', measure);
 document.fonts.ready.then(measure);
 measure();
+// The initial composition is also the remembered selection after a preview.
+render();

@@ -37,7 +37,10 @@ export function createBusinessCard(dock, portrait, sentence, trigger) {
     card.style.setProperty('--edge-strength', `${.38 + grazing * .38}`);
     card.style.setProperty('--side-light', `${62 + current.x * 17 - current.y * 6}%`);
     card.style.setProperty('--bottom-light', `${69 - current.y * 15 + current.x * 4}%`);
-    card.style.setProperty('--engrave-strength', `${.09 + etch * .51}`);
+    card.style.setProperty('--engrave-strength', `${.16 + etch * .58}`);
+    // Recessed walls and the polished lower lip share the studio light direction.
+    card.style.setProperty('--etch-x', `${current.x * .35}px`);
+    card.style.setProperty('--etch-y', `${.75 - current.y * .25}px`);
   }
   function tick(now) {
     frame = 0;

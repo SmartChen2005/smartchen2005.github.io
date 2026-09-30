@@ -46,6 +46,12 @@ vm.runInContext(fs.readFileSync(new URL('../dist/home.mjs', import.meta.url), 'u
 const dispatch = (element, type, detail = 1) => element.handlers[type]({ detail });
 const world = () => composition.dataset.active;
 
+assert.equal(world(), 'name'); assert(!dock.hidden, 'Arrival must show both portrait and card');
+assert(portrait.isConnected); assert.equal(name.attributes['aria-pressed'], 'true');
+dispatch(games, 'pointerenter'); assert(dock.hidden);
+dispatch(games, 'pointerleave'); assert(!dock.hidden, 'The initial expanded selection must survive a temporary preview');
+dispatch(name, 'click'); assert(dock.hidden); assert.equal(world(), '', 'The first click closes the initial composition');
+
 dispatch(name, 'pointerenter');
 assert.equal(world(), 'name'); assert(dock.hidden, 'Hover alone must only reveal the portrait');
 dispatch(name, 'pointerleave'); assert.equal(world(), '');
@@ -66,4 +72,4 @@ dispatch(name, 'click'); assert(dock.hidden); assert.equal(world(), '');
 dispatch(name, 'click'); events.get('keydown')({ key: 'Escape' }); assert(dock.hidden); assert.equal(world(), '');
 dispatch(name, 'click'); events.get('pointerdown')({ target: { closest: () => null } }); assert(dock.hidden);
 dispatch(name, 'click'); navigate(); assert(dock.hidden); assert.equal(world(), '');
-console.log('Passed: portrait-only hover; click pins portrait and card; all temporary previews restore both; explicit selection/dismissal clears both; keyboard restoration preserves focus.');
+console.log('Passed: expanded arrival; first click closes; portrait-only hover; click pins portrait and card; all temporary previews restore both; explicit selection/dismissal clears both; keyboard restoration preserves focus.');
