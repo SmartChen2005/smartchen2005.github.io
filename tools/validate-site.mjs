@@ -139,7 +139,7 @@ if (JSON.stringify(sourceImageRefs) !== JSON.stringify(renderedImageNames)) fail
 const scaledImages = (html.match(/<figure class="document-image[^"]*(?:feature|standard|portrait|compact|column)-media[^"]*">/g) || []).length;
 if (scaledImages !== sourceImageRefs.length) failures.push("Responsive image scale classes are missing");
 
-const firstImagePath = path.join(root, "dist", "assets", "asset-001.png");
+const firstImagePath = path.join(root, "dist", "games", "polaroid-of-yesterday", "game-design-document", "assets", "asset-001.png");
 if (fs.statSync(firstImagePath).size < 3_000_000) failures.push("The updated high-resolution first image is missing");
 
 const inventedCopy = [
@@ -173,5 +173,6 @@ console.log(JSON.stringify({
   imageReferences: imageRefs.length,
   uniqueAssets: new Set(imageRefs).size,
   firstImageBytes: fs.statSync(firstImagePath).size,
-  localAssets: fs.readdirSync(path.join(root, "dist", "assets")).length
+  sharedAssets: fs.readdirSync(path.join(root, "dist", "assets")).length,
+  documentAssets: fs.readdirSync(path.dirname(firstImagePath)).length
 }, null, 2));

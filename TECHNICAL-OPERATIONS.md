@@ -12,7 +12,8 @@ This repository is the source of truth for the **Polaroid of Yesterday** web arc
 - `tools/render-notion.mjs` — renderer that generates the static document.
 - `tools/validate-site.mjs` — local integrity and source/render parity checks.
 - `dist/index.html` — deployable website entry point.
-- `dist/assets/` — local image assets used by the website.
+- `dist/assets/` — shared site assets such as the portrait and fonts.
+- `dist/games/polaroid-of-yesterday/game-design-document/assets/` — image assets owned by the Polaroid of Yesterday document.
 - `DESIGN.md` — visual and content-preservation constraints.
 - `.github/workflows/pages.yml` — GitHub Pages deployment workflow.
 
@@ -72,7 +73,7 @@ Git history is the primary archive. Each meaningful update must retain:
 - the validation or rendering tool needed to check the output;
 - the commit summary explaining the change.
 
-If an asset is replaced, keep the replacement in `dist/assets/`, update the source reference or renderer mapping, and verify that no expiring external asset URL remains. Do not delete a prior asset unless it is unused and the removal is explicitly documented in the commit summary.
+If an asset is replaced, keep it beside the document or page that owns it, update the source reference or renderer mapping, and verify that no expiring external asset URL remains. Do not delete a prior asset unless it is unused and the removal is explicitly documented in the commit summary.
 
 ## GitHub Pages standard
 

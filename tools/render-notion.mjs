@@ -6,7 +6,7 @@ const markdownPath = path.join(root, "tools", "notion-source.md");
 const assetMapPath = path.join(root, "tools", "archive-slides-source.txt");
 const documentOutputDir = path.join(root, "dist", "games", "polaroid-of-yesterday", "game-design-document");
 const outputPath = path.join(documentOutputDir, "index.html");
-const assetBase = "../../../assets";
+const assetBase = "assets";
 
 const markdown = fs.readFileSync(markdownPath, "utf8").replace(/\r/g, "");
 const previousSource = fs.readFileSync(assetMapPath, "utf8");
