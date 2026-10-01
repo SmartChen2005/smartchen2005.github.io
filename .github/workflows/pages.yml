@@ -25,7 +25,9 @@ jobs:
         with:
           node-version: 20
       - name: Validate static site
-        run: node tools/validate-site.mjs
+        run: |
+          node tools/validate-site.mjs
+          node tools/test-music-station.mjs
 
   deploy:
     needs: validate

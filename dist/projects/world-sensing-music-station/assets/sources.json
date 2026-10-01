@@ -1,0 +1,117 @@
+{
+  "origin": "User-supplied files in Downloads; imported 2026-10-01",
+  "files": [
+    {
+      "file": "Final Project.docx",
+      "sha256": "aa2ded74e859bf977acb3740e536d9f758f6842c3142466df9818791f1078de4"
+    },
+    {
+      "file": "Final Project.pdf",
+      "sha256": "eb0219d30dac52dbec2c5933f703d3f64ce4720991f5efc5b1a322335188586c"
+    },
+    {
+      "file": "World Sensing Music Station Design Document.docx",
+      "sha256": "34a4aaaf4154d611ebb4a6a37921bfc39803ffea0dec961759dff245c031a145"
+    }
+  ],
+  "photos": [
+    {
+      "file": "IMG_7460.jpeg",
+      "displaySize": [
+        3024,
+        4032
+      ],
+      "sha256": "644a83802188df7ff6f0859e43223d66f03d5456be0335010e030db260f5dabb"
+    },
+    {
+      "file": "IMG_7466.jpeg",
+      "displaySize": [
+        4032,
+        3024
+      ],
+      "sha256": "8b67fc0375e8ff22eec2eaf71e8c3a198f798b7a9e45e2183f06a20281244ff5"
+    },
+    {
+      "file": "IMG_7464.jpeg",
+      "displaySize": [
+        4032,
+        3024
+      ],
+      "sha256": "def506c2fc64b964f0b6b8f6b3ac72fe4d04386ee096109789e032405d7b6b94"
+    },
+    {
+      "file": "IMG_7469.jpeg",
+      "displaySize": [
+        4032,
+        3024
+      ],
+      "sha256": "1c7ad4787f02b835d4f9ce21c7e3c4e545c37be4e1a3ba816e3edcc2bac9cd74"
+    },
+    {
+      "file": "IMG_7467.jpeg",
+      "displaySize": [
+        4032,
+        3024
+      ],
+      "sha256": "16d5e9a63418aedfccbdc317474f71b2ccb318a5f49db9b65eb672f9f0165d06"
+    }
+  ],
+  "sketches": [
+    {
+      "pdfPage": 2,
+      "file": "sketch-page-2.webp",
+      "size": [
+        1300,
+        1733
+      ]
+    },
+    {
+      "pdfPage": 3,
+      "file": "sketch-page-3.webp",
+      "size": [
+        1300,
+        1733
+      ]
+    },
+    {
+      "pdfPage": 4,
+      "file": "sketch-page-4.webp",
+      "size": [
+        1300,
+        1733
+      ]
+    },
+    {
+      "pdfPage": 5,
+      "file": "sketch-page-5.webp",
+      "size": [
+        1300,
+        1733
+      ]
+    },
+    {
+      "pdfPage": 9,
+      "file": "sketch-page-9.webp",
+      "size": [
+        1300,
+        1733
+      ]
+    },
+    {
+      "pdfPage": 10,
+      "file": "sketch-page-10.webp",
+      "size": [
+        1300,
+        1733
+      ]
+    },
+    {
+      "pdfPage": 11,
+      "file": "sketch-page-11.webp",
+      "size": [
+        1300,
+        1733
+      ]
+    }
+  ]
+}

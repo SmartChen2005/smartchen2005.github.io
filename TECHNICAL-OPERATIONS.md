@@ -91,6 +91,14 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-01 — World Sensing Music Station
+
+- Added the portfolio project route and Projects entrance, preserving the existing home and Polaroid surfaces.
+- Built a source-grounded SVG instrument reconstruction with pointer/touch sensing, three deterministic eight-step loops, replace-one-layer recording, musical modes, optional sound and reduced-motion behavior.
+- Archived the five original photographs and all supplied project files. Added original PDF sketch sheets, an editorial prototype sequence, a click-to-load demonstration video and real downloads.
+- Added source hashes, reconstruction/asset tools, engine regression tests, browser verification and `tools/MUSIC-STATION-QA.md`. Pages CI now validates the new music engine before deployment.
+- Verified existing site, home and project-room checks, original-source integrity, desktop/phone browser states and the strict design audit.
+
 ### 2026-09-22
 
 - Added the operations standard for 存档, summary, validation, commit, upload, and deployment confirmation.
