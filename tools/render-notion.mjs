@@ -4,7 +4,7 @@ import path from "node:path";
 const root = process.cwd();
 const markdownPath = path.join(root, "tools", "notion-source.md");
 const assetMapPath = path.join(root, "tools", "archive-slides-source.txt");
-const documentOutputDir = path.join(root, "dist", "games", "polaroid-of-yesterday", "game-design-document");
+const documentOutputDir = path.join(root, "dist", "projects", "polaroid-of-yesterday", "game-design-document");
 const outputPath = path.join(documentOutputDir, "index.html");
 const assetBase = "assets";
 

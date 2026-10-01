@@ -154,7 +154,7 @@ export function installGameTransition(link, scenes, resetHome) {
     if (preview || reduce.matches || forced.matches || destination.origin !== location.origin) return;
     preview = document.createElement('iframe');
     preview.className = 'game-destination';
-    preview.title = 'Game Designer page preview';
+    preview.title = 'Projects page preview';
     preview.tabIndex = -1;
     preview.setAttribute('aria-hidden', 'true');
     preview.setAttribute('inert', '');

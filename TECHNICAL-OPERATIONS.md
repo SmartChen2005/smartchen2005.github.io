@@ -13,7 +13,7 @@ This repository is the source of truth for the **Polaroid of Yesterday** web arc
 - `tools/validate-site.mjs` — local integrity and source/render parity checks.
 - `dist/index.html` — deployable website entry point.
 - `dist/assets/` — shared site assets such as the portrait and fonts.
-- `dist/games/polaroid-of-yesterday/game-design-document/assets/` — image assets owned by the Polaroid of Yesterday document.
+- `dist/projects/polaroid-of-yesterday/game-design-document/assets/` — image assets owned by the Polaroid of Yesterday document.
 - `DESIGN.md` — visual and content-preservation constraints.
 - `.github/workflows/pages.yml` — GitHub Pages deployment workflow.
 

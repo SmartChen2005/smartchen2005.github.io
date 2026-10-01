@@ -7,7 +7,7 @@ Verified on 2026-09-29 using the static `dist/` site, served at `http://127.0.0.
 - `node tools/render-notion.mjs`: regenerated the GDD with its corrected parent link.
 - `node tools/validate-site.mjs`: passed. All 35 source headings, 96 image occurrences, document text and source order remain intact; all existing asset checks pass.
 - `node tools/test-project-room.mjs`: passed. Original photograph SHA-256, all four screen projection corners, eight mathematical viewport fits, local assets/destinations, new-tab link semantics, and iframe fullscreen permission.
-- `node --check dist/games/polaroid-of-yesterday/room.mjs`: passed.
+- `node --check dist/projects/polaroid-of-yesterday/room.mjs`: passed.
 - `audit_project.py . --mode strict --output tools/premium-audit.json`: zero findings.
 - `git diff --check`: passed.
 
@@ -47,7 +47,7 @@ The site is ready in the local workspace. This task does not publish or push it.
 
 ## Follow-up layout revision
 
-- Great Vibes is locally hosted and licensed under the bundled SIL Open Font License. The title is one line; Game Designer is the only breadcrumb entry. The title, GDD and download entrance are higher on the wall. Photography styling and coordinates were preserved.
+- Great Vibes is locally hosted and licensed under the bundled SIL Open Font License. The title is one line; Projects is the only breadcrumb entry. The title, GDD and download entrance are higher on the wall. Photography styling and coordinates were preserved.
 - Rechecked 320 × 568, 390 × 844, 844 × 390, 1440 × 900 and 2560 × 1080: full photograph, no overflow, positive spacing between title/GDD/download/camera, and identical six-pixel video insets on every side.
 - GDD-to-download clearances range from 0.82px at 320px to 5.58px in the 1920px scene. Download-to-camera target clearances range from 3.73px to 44.90px.
 - The YouTube player advanced to 0:41 on muted autoplay before any playback activation; its native Unmute control was observed. Its native fullscreen was separately exercised.

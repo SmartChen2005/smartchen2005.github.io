@@ -3,7 +3,7 @@ import path from "node:path";
 import { createHash } from 'node:crypto';
 
 const root = process.cwd();
-const htmlPath = path.join(root, "dist", "games", "polaroid-of-yesterday", "game-design-document", "index.html");
+const htmlPath = path.join(root, "dist", "projects", "polaroid-of-yesterday", "game-design-document", "index.html");
 const markdownPath = path.join(root, "tools", "notion-source.md");
 const assetMapPath = path.join(root, "tools", "archive-slides-source.txt");
 const html = fs.readFileSync(htmlPath, "utf8");
@@ -32,7 +32,7 @@ const imageDigest = file => createHash('sha256').update(fs.readFileSync(path.joi
 if (imageDigest('selfportrait.jpg') !== imageDigest('dist/assets/selfportrait.jpg')) {
   failures.push('The published portrait must be byte-for-byte identical to the supplied blue monochrome artwork');
 }
-if (!home.includes('Smart Chen is a game designer, photographer, and car enthusiast.')) {
+if (!home.includes('Smart Chen is a (game) designer, photographer, and car enthusiast.')) {
   failures.push('The homepage identity sentence is missing');
 }
 for (const match of home.matchAll(/(?:src|href)="([^"]+)"/g)) {
@@ -42,7 +42,7 @@ for (const match of home.matchAll(/(?:src|href)="([^"]+)"/g)) {
 }
 const sentenceMarkup = home.match(/<h1 class="sentence">([\s\S]*?)<\/h1>/)?.[1] ?? '';
 const sentenceText = sentenceMarkup.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-if (sentenceText !== 'Smart Chen is a game designer, photographer, and car enthusiast.') {
+if (sentenceText !== 'Smart Chen is a (game) designer, photographer, and car enthusiast.') {
   failures.push('The visible homepage sentence must remain exact and continuous');
 }
 if (/<br|<section|<dialog|<template/.test(home)) failures.push('The minimal homepage must not contain forced line breaks, sections, or dialogs');
@@ -139,7 +139,7 @@ if (JSON.stringify(sourceImageRefs) !== JSON.stringify(renderedImageNames)) fail
 const scaledImages = (html.match(/<figure class="document-image[^"]*(?:feature|standard|portrait|compact|column)-media[^"]*">/g) || []).length;
 if (scaledImages !== sourceImageRefs.length) failures.push("Responsive image scale classes are missing");
 
-const firstImagePath = path.join(root, "dist", "games", "polaroid-of-yesterday", "game-design-document", "assets", "asset-001.png");
+const firstImagePath = path.join(root, "dist", "projects", "polaroid-of-yesterday", "game-design-document", "assets", "asset-001.png");
 if (fs.statSync(firstImagePath).size < 3_000_000) failures.push("The updated high-resolution first image is missing");
 
 const inventedCopy = [

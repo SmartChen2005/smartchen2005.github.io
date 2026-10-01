@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
-import { PHOTO, TV, fitPhoto, screenMatrix } from '../dist/games/polaroid-of-yesterday/room-geometry.mjs';
+import { PHOTO, TV, fitPhoto, screenMatrix } from '../dist/projects/polaroid-of-yesterday/room-geometry.mjs';
 
-const root = new URL('../dist/games/polaroid-of-yesterday/', import.meta.url);
+const root = new URL('../dist/projects/polaroid-of-yesterday/', import.meta.url);
 const matrix = screenMatrix();
 const sourceCorners = [[0, 0], [TV.width, 0], [TV.width, TV.height], [0, TV.height]];
 for (const [index, [x, y]] of sourceCorners.entries()) {

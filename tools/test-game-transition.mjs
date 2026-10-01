@@ -99,7 +99,7 @@ function harness({ ready = true, reduced = false, forced = false } = {}) {
   globalThis.setTimeout = callback=>{timers.set(++id,callback);return id;};
   globalThis.clearTimeout = key=>timers.delete(key);
   const link = element('a');
-  Object.assign(link,{href:'https://example.test/games/',target:'',hasAttribute:()=>false});
+  Object.assign(link,{href:'https://example.test/projects/',target:'',hasAttribute:()=>false});
   const controller = installGameTransition(link, {captureGame:()=>{captures++; return snapshot(1440,900);},releaseGame:()=>releases++},()=>resets++);
   return {controller, elements, callbacks, windowHandlers, documentHandlers,
     click(options={}) { const event = {button:0,preventDefault(){this.prevented=true;},...options}; link.handlers.click(event);return event; },
