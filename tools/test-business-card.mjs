@@ -22,29 +22,35 @@ for(const photoWidth of [170,180,220,282,320]) {
   assert(Math.abs(layout.height/portrait.height-1.05*1.5/1.64)<1e-9);
 }
 
-function harness({reduced=false,forced=false}={}) {
+function harness({reduced=false,forced=false,sensor=false,texture=false}={}) {
   let id=0, now=0, focus=0, animations=0;
-  const frames=new Map(), events={}, mediaEvents=[];
+  const frames=new Map(), events={}, mediaEvents=[], windowEvents={};
+  let pixels;
+  const canvas = texture ? { getContext:()=>({createImageData:(w,h)=>({data:new Uint8ClampedArray(w*h*4)}),putImageData:image=>{pixels=image.data;}}) } : null;
   const style=()=>({values:{},setProperty(key,value){this.values[key]=value;},getPropertyValue(key){return this.values[key]||'';}});
   const card={style:style()}, email={focus:()=>focus++}, placeholder={addEventListener:(name,fn)=>{events.resume=fn;}};
   let entry=null;
   const slide={style:{},animate:()=>{animations++;entry={cancel(){this.cancelled=true;},finish(){this.onfinish?.();}};return entry;}};
-  const dock={hidden:true,inert:true,style:style(),dataset:{},
-    querySelector:selector=>({'.metal-card':card,'.card-email':email,'.business-card-slide':slide,'[data-resume-placeholder]':placeholder})[selector],
+  const dock={hidden:true,inert:true,style:style(),dataset:{},addEventListener:(name,fn)=>{events[`dock-${name}`]=fn;},
+    querySelector:selector=>({'.metal-card':card,'.metal-perlage':canvas,'.card-email':email,'.business-card-slide':slide,'[data-resume-placeholder]':placeholder})[selector],
     getBoundingClientRect:()=>({left:400,top:100,width:300,height:183})};
   const portrait={isConnected:true,style:style(),getBoundingClientRect:()=>({height:188,bottom:292,toJSON:()=>({left:130,right:412,top:104,bottom:292,width:282,height:188})})};
   portrait.style.setProperty('--portrait-height','188px');
   const trigger={attrs:{},setAttribute(key,value){this.attrs[key]=value;}};
   const media={matches:reduced,addEventListener:(_,fn)=>mediaEvents.push(fn)};
-  globalThis.matchMedia=q=>q.includes('forced')?{matches:forced}:media;
+  globalThis.matchMedia=q=>q.includes('forced')?{matches:forced,addEventListener(){}}:q.includes('coarse')?{matches:sensor,addEventListener(){}}:media;
+  globalThis.window={isSecureContext:true,DeviceOrientationEvent:sensor?{}:undefined,
+    addEventListener:(event,handler)=>{windowEvents[event]=handler;},removeEventListener:event=>{delete windowEvents[event];}};
   globalThis.document={hidden:false,addEventListener:(name,fn)=>{events[name]=fn;}};
   globalThis.innerWidth=1280;globalThis.innerHeight=720;globalThis.scrollX=0;globalThis.scrollY=0;
   globalThis.performance={now:()=>now};
+  globalThis.devicePixelRatio=1;
   globalThis.requestAnimationFrame=fn=>{frames.set(++id,fn);return id;};
   globalThis.cancelAnimationFrame=key=>frames.delete(key);
   const instance=createBusinessCard(dock,portrait,{getBoundingClientRect:()=>({top:330,bottom:390})},trigger);
-  return {instance,dock,card,trigger,events,media,mediaEvents,
+  return {instance,dock,card,trigger,events,media,mediaEvents,windowEvents,
     finish:()=>entry?.finish(), values:()=>({focus,animations}),frames,
+    pixels:()=>pixels.slice(),
     step(){now+=16;const work=[...frames.values()];frames.clear();work.forEach(fn=>fn(now));assert(frames.size<=1);}};
 }
 let app=harness();
@@ -69,4 +75,30 @@ for(const options of [{reduced:true},{forced:true}]){
   app=harness(options);app.instance.show(true);assert.equal(app.values().animations,0);assert.equal(app.dock.dataset.state,'settled');
   app.events.pointermove({clientX:700,clientY:100,pointerType:'mouse'});assert.equal(app.frames.size,0);
 }
+
+// Exercise both actual input adapters through the real controller and grain
+// renderer. Equal inspection angles must produce the same physical object.
+app=harness({texture:true}); app.instance.show(); app.finish();
+const restingPixels=app.pixels();
+app.events.pointermove({clientX:625,clientY:154.9,pointerType:'mouse'});
+for(let i=0;i<100;i++)app.step();
+const mouseProperties={...app.card.style.values}, mousePixels=app.pixels();
+assert.notDeepEqual(mousePixels,restingPixels,'Desktop pointer movement must reveal the permanent Perlage finish');
+app.instance.hide();
+app=harness({sensor:true,texture:true}); app.instance.show(); app.finish();
+for(let i=0;i<20;i++){app.windowEvents.deviceorientation({beta:60,gamma:0});app.step();}
+for(let i=0;i<100;i++){app.windowEvents.deviceorientation({beta:50,gamma:10.3});app.step();}
+for(const [key,value] of Object.entries(mouseProperties)) {
+  assert(Math.abs(parseFloat(value)-parseFloat(app.card.style.values[key]))<.15,`${key} must use the same normalized material state for mouse and orientation`);
+}
+const sensorPixels=app.pixels();
+const appearance=(data,i)=>243+(data[i]-243)*data[i-i%4+3]/255;
+let maximumDelta=0,totalDelta=0;
+for(let i=0;i<mousePixels.length;i++) if(i%4!==3) {
+  const delta=Math.abs(appearance(mousePixels,i)-appearance(sensorPixels,i));
+  maximumDelta=Math.max(maximumDelta,delta); totalDelta+=delta;
+}
+app.instance.hide(); assert(!app.windowEvents.deviceorientation);
+assert(maximumDelta<.8 && totalDelta/(mousePixels.length*.75)<.01,'Mouse and gyro must yield the same Perlage reflection within one alpha quantization step and sensor settling precision');
 console.log('Passed: right-edge anchoring, narrow/short-screen containment and sentence clearance; entry/settle/close/reopen; inert links during entry; keyboard focus; delayed light response and idle RAF cleanup; placeholder handling; reduced motion and forced colors.');
+console.log('Passed: real mouse and orientation adapters drive equivalent transform, light, engraving, spectral variables and Perlage pixels through one controller.');

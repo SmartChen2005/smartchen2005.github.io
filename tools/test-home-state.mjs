@@ -38,7 +38,7 @@ const sandbox = {
   createBusinessCard: () => ({ show(keyboard) {
     if (!cardOpen && keyboard) keyboardEntries++;
     cardOpen = true; dock.hidden = false;
-  }, hide() { cardOpen = false; dock.hidden = true; }, place() {} }),
+  }, hide() { cardOpen = false; dock.hidden = true; }, place() {}, activateMotion() {} }),
   installGameTransition: (_, __, clear) => { navigate = clear; return { active: false }; },
 };
 vm.createContext(sandbox);

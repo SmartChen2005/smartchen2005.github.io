@@ -85,6 +85,7 @@ for (const identity of identities) {
       pinned = nameCardOpen ? 'name' : null;
       hovered = null; focused = null;
       render();
+      if (nameCardOpen) businessCard.activateMotion();
       return;
     }
     nameCardOpen = false;

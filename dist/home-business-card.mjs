@@ -1,4 +1,22 @@
+import { createPerlage } from './home-card-perlage.mjs';
+import { createCardOrientation } from './home-card-orientation.mjs';
+
 const clampCard = (value, low, high) => Math.max(low, Math.min(high, value));
+
+// One physical material state; neither the renderer nor its finishes know
+// whether inspection came from a cursor, a finger or a device sensor.
+export function cardMaterialState(view) {
+  const x = clampCard(view.x, -1, 1), y = clampCard(view.y, -1, 1);
+  const light = { x: -12 + x * 128, y: 34 + y * 42, spread: 60 - x ** 2 * 12 };
+  const etch = Math.exp(-(((light.x - 81) / 32) ** 2 + ((light.y - 22) / 55) ** 2));
+  return { view: { x, y }, light, properties: {
+    '--tilt-x': `${-y * 2}deg`, '--tilt-y': `${x * 2.8}deg`,
+    '--light-x': `${light.x}%`, '--light-y': `${light.y}%`, '--light-spread': `${light.spread}%`,
+    '--spectral-strength': `${.012 + x ** 2 * .065}`, '--edge-strength': `${.38 + x ** 2 * .38}`,
+    '--side-light': `${62 + x * 17 - y * 6}%`, '--bottom-light': `${69 - y * 15 + x * 4}%`,
+    '--engrave-strength': `${.16 + etch * .58}`, '--etch-x': `${x * .35}px`, '--etch-y': `${.75 - y * .25}px`,
+  } };
+}
 
 export function businessCardLayout(portrait, sentence, viewport) {
   const landscape = viewport.width > viewport.height;
@@ -19,28 +37,25 @@ export function createBusinessCard(dock, portrait, sentence, trigger) {
   const email = dock.querySelector('.card-email');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const forced = matchMedia('(forced-colors: active)');
+  const handheld = matchMedia('(any-pointer: coarse)');
   let open = false, ready = false, animation = null, frame = 0, last = 0, generation = 0;
   let current = { x: 0, y: 0 }, target = { x: 0, y: 0 }, geometry = null;
+  let suspended = false;
+  const perlage = createPerlage(dock.querySelector('.metal-perlage'));
+  const motionAllowed = () => open && ready && !suspended && !document.hidden && !reduce.matches && !forced.matches;
+  const orientation = createCardOrientation({ allowed: motionAllowed,
+    canRequest: () => open && !suspended && !document.hidden && !reduce.matches && !forced.matches,
+    change: inspect });
+  const syncMotion = () => orientation.setActive(motionAllowed());
 
+  function inspect(next) {
+    target = { x: clampCard(next.x, -1, 1), y: clampCard(next.y, -1, 1) };
+    if (Math.hypot(target.x - current.x, target.y - current.y) > .001) startLight();
+  }
   function light() {
-    // The micro-etch has a narrower roughness response than the satin substrate.
-    // Both finishes receive the same broad studio source, with no idle animation.
-    const x = -12 + current.x * 128, y = 34 + current.y * 42;
-    const etch = Math.exp(-(((x - 81) / 32) ** 2 + ((y - 22) / 55) ** 2));
-    const grazing = Math.abs(current.x) ** 2;
-    card.style.setProperty('--tilt-x', `${-current.y * 2}deg`);
-    card.style.setProperty('--tilt-y', `${current.x * 2.8}deg`);
-    card.style.setProperty('--light-x', `${x}%`);
-    card.style.setProperty('--light-y', `${y}%`);
-    card.style.setProperty('--light-spread', `${60 - grazing * 12}%`);
-    card.style.setProperty('--spectral-strength', `${.012 + grazing * .065}`);
-    card.style.setProperty('--edge-strength', `${.38 + grazing * .38}`);
-    card.style.setProperty('--side-light', `${62 + current.x * 17 - current.y * 6}%`);
-    card.style.setProperty('--bottom-light', `${69 - current.y * 15 + current.x * 4}%`);
-    card.style.setProperty('--engrave-strength', `${.16 + etch * .58}`);
-    // Recessed walls and the polished lower lip share the studio light direction.
-    card.style.setProperty('--etch-x', `${current.x * .35}px`);
-    card.style.setProperty('--etch-y', `${.75 - current.y * .25}px`);
+    const material = cardMaterialState(current);
+    for (const [property, value] of Object.entries(material.properties)) card.style.setProperty(property, value);
+    perlage.draw(material);
   }
   function tick(now) {
     frame = 0;
@@ -68,6 +83,7 @@ export function createBusinessCard(dock, portrait, sentence, trigger) {
     dock.style.height = `${geometry.height}px`;
     dock.style.setProperty('--card-unit', `${geometry.width / 296}px`);
     dock.dataset.layout = geometry.layout;
+    perlage.resize(geometry.width, geometry.height); perlage.draw(cardMaterialState(current));
   }
   function show(keyboard = false) {
     if (open) { place(); return; }
@@ -82,6 +98,7 @@ export function createBusinessCard(dock, portrait, sentence, trigger) {
     const settle = () => {
       if (!open || entry !== generation) return;
       ready = true; dock.inert = false; dock.dataset.state = 'settled';
+      syncMotion();
       if (keyboard) email.focus({ preventScroll: true });
     };
     if (reduce.matches || forced.matches) { slide.style.transform = 'none'; settle(); return; }
@@ -96,27 +113,53 @@ export function createBusinessCard(dock, portrait, sentence, trigger) {
     if (!open) return;
     generation++;
     open = ready = false;
+    syncMotion();
     animation?.cancel(); animation = null;
     cancelAnimationFrame(frame); frame = 0;
     dock.hidden = true; dock.inert = true; dock.dataset.state = 'closed';
     trigger.setAttribute('aria-expanded', 'false');
   }
-  document.addEventListener('pointermove', event => {
-    if (!open || !ready || event.pointerType === 'touch') return;
+  function pointerMaterial(event) {
+    if (!motionAllowed() || orientation.receiving) return;
     const bounds = dock.getBoundingClientRect();
     const inside = event.clientX >= bounds.left && event.clientX <= bounds.left + bounds.width && event.clientY >= bounds.top && event.clientY <= bounds.top + bounds.height;
-    target = inside ? { x: clampCard((event.clientX - bounds.left - bounds.width / 2) / (bounds.width * .5), -1, 1),
+    const next = inside ? { x: clampCard((event.clientX - bounds.left - bounds.width / 2) / (bounds.width * .5), -1, 1),
       y: clampCard((event.clientY - bounds.top - bounds.height / 2) / (bounds.height * .5), -1, 1) } : { x: 0, y: 0 };
-    startLight();
+    // Without a sensor, touch can inspect the finish without suppressing scroll.
+    if (event.pointerType === 'touch') { next.x *= .28; next.y *= .28; }
+    inspect(next);
+  }
+  document.addEventListener('pointermove', pointerMaterial);
+  document.addEventListener('pointerdown', event => { if (event.pointerType === 'touch') pointerMaterial(event); });
+  document.addEventListener('pointerleave', () => { if (!orientation.receiving) { target = { x: 0, y: 0 }; startLight(); } });
+  document.addEventListener('pointerup', event => {
+    if (event.pointerType !== 'touch' || orientation.receiving) return;
+    target = { x: 0, y: 0 }; startLight();
   });
-  document.addEventListener('pointerleave', () => { target = { x: 0, y: 0 }; startLight(); });
+  dock.addEventListener('pointerup', event => {
+    if (event.pointerType === 'touch' && !event.target.closest('a')) orientation.activate();
+  });
   dock.querySelector('[data-resume-placeholder]').addEventListener('click', event => event.preventDefault());
-  document.addEventListener('visibilitychange', () => { if (document.hidden) { cancelAnimationFrame(frame); frame = 0; } });
+  document.addEventListener('visibilitychange', () => {
+    syncMotion();
+    if (document.hidden) { cancelAnimationFrame(frame); frame = 0; target = { x: 0, y: 0 }; }
+    else { current = { x: 0, y: 0 }; light(); }
+  });
+  window.addEventListener('blur', () => {
+    if (!handheld.matches) return;
+    suspended = true; syncMotion(); target = { x: 0, y: 0 }; startLight();
+  });
+  window.addEventListener('focus', () => { suspended = false; syncMotion(); });
   reduce.addEventListener('change', () => {
+    syncMotion();
     if (reduce.matches && open) {
       animation?.finish(); cancelAnimationFrame(frame); frame = 0;
       current = { x: 0, y: 0 }; light();
     }
   });
-  return { show, hide, place, get open() { return open; } };
+  forced.addEventListener('change', () => {
+    syncMotion();
+    if (forced.matches) { target = current = { x: 0, y: 0 }; cancelAnimationFrame(frame); frame = 0; light(); }
+  });
+  return { show, hide, place, activateMotion: orientation.activate, get open() { return open; } };
 }

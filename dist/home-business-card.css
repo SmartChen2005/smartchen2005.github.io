@@ -111,6 +111,7 @@
     radial-gradient(ellipse 28% 70% at calc(var(--light-x, -12%) + 36%) 0%, var(--metal-gold), transparent 90%);
   opacity: var(--spectral-strength, .012);
 }
+.metal-perlage { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .card-print {
   position: relative;
   z-index: 1;
@@ -161,7 +162,7 @@ body[data-game-transition] .business-card-dock { display: none; }
 @media (forced-colors: active) {
   .metal-face { background: Canvas; color: CanvasText; border: 1px solid CanvasText; box-shadow: none; }
   .metal-card { background: Canvas; box-shadow: none; }
-  .metal-card::before, .metal-card::after, .metal-left-edge, .metal-face::before, .metal-face::after, .card-print::before, .business-card-slide::before { display: none; }
+  .metal-card::before, .metal-card::after, .metal-left-edge, .metal-face::before, .metal-face::after, .metal-perlage, .card-print::before, .business-card-slide::before { display: none; }
   .card-chinese { color: CanvasText; opacity: 1; text-shadow: none; }
   .card-contact a { color: LinkText; }
   .card-contact a:focus-visible { outline-color: Highlight; }
