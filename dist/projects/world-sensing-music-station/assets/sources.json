@@ -12,6 +12,14 @@
     {
       "file": "World Sensing Music Station Design Document.docx",
       "sha256": "34a4aaaf4154d611ebb4a6a37921bfc39803ffea0dec961759dff245c031a145"
+    },
+    {
+      "file": "Control.ino",
+      "sha256": "abf8fd4318a891a081c9cb3aa955ac87b06424d89c1cccc7570756ac27412222"
+    },
+    {
+      "file": "Display.ino",
+      "sha256": "05a5d33c0180886f7d995bf887a63df6badf8c5eb17cce95f50817d3b05967e2"
     }
   ],
   "photos": [

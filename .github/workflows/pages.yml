@@ -28,6 +28,7 @@ jobs:
         run: |
           node tools/validate-site.mjs
           node tools/test-music-station.mjs
+          node tools/test-music-firmware.mjs
 
   deploy:
     needs: validate

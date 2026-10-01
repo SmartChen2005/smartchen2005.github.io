@@ -12,10 +12,10 @@ const wires = [
 const paths = wires.map(([x,y,a,b,c],i)=>`<path d="M${x} ${y} C${c} ${y-100} ${c} ${b+70} ${a} ${b}" stroke="${i%5===0?'#232326':i%7===0?'#c18b35':'#bd3938'}"/>`).join('');
 const pins = (x,y,n,vertical=false)=>Array.from({length:n},(_,i)=>`<rect x="${x+(vertical?0:i*8)}" y="${y+(vertical?i*8:0)}" width="4" height="7" fill="#c9c6ad"/>`).join('');
 const matrix = Array.from({length:64},(_,i)=>`<circle class="matrix-pixel" data-pixel="${i}" cx="${226+i%8*10}" cy="${242+Math.floor(i/8)*10}" r="3.8" fill="${[2,3,4,5,9,14,16,23,24,31,32,39,40,47,49,54,58,59,60,61].includes(i)?'#f4f4ee':'#535846'}"/>`).join('');
-const led = Array.from({length:32},(_,i)=>{
- const t=i/32*Math.PI*2, x=268+222*Math.cos(t), y=238+222*Math.sin(t);
+const led = Array.from({length:30},(_,i)=>{
+ const t=i/30*Math.PI*2, x=268+222*Math.cos(t), y=238+222*Math.sin(t);
  const color=['#86e8cf','#cf80c3','#85bade','#eddb91'][Math.floor(i/8)];
- return `<g class="loop-led" data-led="${i}" style="--led-color:${color}"><circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="17" fill="${color}" opacity=".5" filter="url(#led-glow)"/><rect x="${(x-4).toFixed(2)}" y="${(y-5).toFixed(2)}" width="8" height="10" rx="2" fill="${color}"/><circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="3" fill="#fafff8"/></g>`;
+ return `<g class="loop-led" data-led="${i}" style="--led-color:${color}"><circle class="led-glow" cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="17" fill="${color}" opacity=".5" filter="url(#led-glow)"/><rect class="led-chip" x="${(x-4).toFixed(2)}" y="${(y-5).toFixed(2)}" width="8" height="10" rx="2" fill="${color}"/><circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="3" fill="#fafff8"/></g>`;
 }).join('');
 const buttons = [[128,352],[106,378],[150,378],[128,404],[373,205],[404,205],[435,205]].map(([x,y])=>`<g transform="translate(${x} ${y})"><rect x="-10" y="-10" width="20" height="20" fill="#a9a997" stroke="#727567"/><rect x="-8" y="-8" width="16" height="16" fill="#333632"/><circle r="5" fill="#1b1e1b" stroke="#626559"/>${pins(-11,-8,2,true)}</g>`).join('');
 const svg = `<svg class="device-svg" viewBox="0 0 1000 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="device-svg-title device-svg-desc">
@@ -80,7 +80,7 @@ const svg = `<svg class="device-svg" viewBox="0 0 1000 800" xmlns="http://www.w3
    <circle cx="268" cy="254" r="222" stroke="#050908" stroke-width="31" opacity=".25"/>
    <circle cx="268" cy="240" r="222" stroke="url(#strip)" stroke-width="23"/>
    <circle cx="268" cy="219" r="222" stroke="url(#strip)" stroke-width="23"/>
-   ${['#86e8cf','#cf80c3','#85bade','#eddb91'].map((color,i)=>`<circle cx="268" cy="238" r="222" stroke="${color}" stroke-width="9" stroke-dasharray="335 1060" stroke-dashoffset="${-i*349}" opacity=".28" filter="url(#led-glow)"/>`).join('')}
+   ${['#86e8cf','#cf80c3','#85bade','#eddb91'].map((color,i)=>`<circle class="loop-wash" cx="268" cy="238" r="222" stroke="${color}" stroke-width="9" stroke-dasharray="335 1060" stroke-dashoffset="${-i*349}" opacity=".08" filter="url(#led-glow)"/>`).join('')}
    <circle cx="268" cy="238" r="222" stroke="#d4e1d6" stroke-width="1.7" opacity=".8"/>
    <circle cx="268" cy="206" r="222" stroke="#d7e4dd" stroke-width="1.5" opacity=".65"/>
    <path d="M66 326Q49 309 41 287" stroke="#181e19" stroke-width="12"/>

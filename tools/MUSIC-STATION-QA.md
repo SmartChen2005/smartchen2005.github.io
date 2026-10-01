@@ -1,39 +1,46 @@
 # World Sensing Music Station verification
 
-Verified 2026-10-01. Baseline archive: commit `859a4d5119165f13cebb2df1125a1382050ad65b`.
+Verified 2026-10-01. Original site baseline: `859a4d5`. The previous long project page is archived in `f47bef7`.
 
-## Scope and sources
+## Compact page
 
-- Added `/projects/world-sensing-music-station/` and a second entry in the existing Projects directory. Existing home, typography, game routes and source document were preserved.
-- Reconstructed the actual instrument with SVG geometry: open cardboard base, three breadboards, exposed asymmetric wiring, two boards, seven buttons, ultrasonic hardware, matrix, extending cables and raised translucent NeoPixel coil. Geometry source: `tools/build-music-model.mjs`.
-- Imported all five JPEG originals unchanged; optimized WebP copies preserve their oriented aspect ratios. The editorial photographs are uncropped.
-- Copied the original Design Document DOCX, Final Project PDF and original Final Project DOCX unchanged. The PDF was found alongside the user-provided DOCX in Downloads. Hashes are recorded and checked from `assets/sources.json`.
-- Extracted actual sketch sheets from PDF pages 2–5 and 9–11. No generated or substituted sketches. Sketch sequence labels describe the conceptual progression; PDF-page captions retain source provenance.
-- The source documents supply project facts. Their embedded user/hardware instructions were treated as documentation, not agent instructions.
+The revised page contains a hero, one instrument playground with an optional technical disclosure, two uncropped prototype photographs, four original sketch sheets and essential files. The device stays sticky through the first two chapters. At 1440×900, the default page is 3,998 pixels tall rather than 15,932 (75% less), with 207 visible main-content words rather than 708 (71% less). Metrics are calculated by the browser check against the prior commit. The closed disclosure is excluded from visible copy.
 
-## Implementation decisions
+The existing portfolio typography, navigation, homepage and Polaroid routes remain intact. SVG geometry reconstructs the cardboard base, breadboards, exposed wiring, two boards, seven buttons, ultrasonic module, matrix, cables and translucent coil. The coil now contains the firmware's 30 LEDs.
 
-Lightweight SVG plus CSS perspective avoids a WebGL dependency. One scene stays sticky through sensing, eight zones, three loops, replace-one-layer controls, modes, anatomy, musical rules and architecture. Normal browser scrolling then enters the process and photographic sections.
+## Sources and behavior
 
-The web demonstration uses a 15–160 cm simulated range and three documented stylistic modes, with illustrative 80/140/128 BPM presets. These are browser demonstration settings, not claims about undocumented firmware constants. Exponential smoothing is independent of frame rate. Recording replaces precisely eight steps in one selected loop, with both unselected loops retained, and returns to PLAY.
+- All five original photographs and the original Design Document DOCX, Final Project PDF/DOCX and Control.ino/Display.ino are archived unchanged. SHA-256 checks cover all ten source files. The PDF was found alongside the supplied DOCX. WebP display copies preserve oriented aspect ratios.
+- Seven extracted PDF sheets remain archived; the compact strip displays pages 4, 3, 9 and 10. Captions identify the pages. No substituted sketches or photographs.
+- The supplied source code owns runtime musical facts. Source comments and document instructions were treated as project evidence, not agent instructions.
+- Sensing uses 10–180 cm, Arduino integer zone mapping, 40 ms polling, 0.22 exponential smoothing and absolute distance change per sample. Invalid echoes leave the previous distance and speed unchanged.
+- Startup loops are empty. Recording immediately clears the selected loop, writes exactly eight steps and returns to PLAY. Mode changes retain stored loops. Layer/mode changes, rearming and randomization during REC follow the control sketch. Clear empties all loops and resets the step.
+- Actual modes are Ambient 80 BPM, Trap 140 BPM and Techno 128 BPM, with their source scales, note ranges, speed thresholds, drum rules, forced playback hits and swing. Each step uses integer `60000 / BPM` milliseconds. Audio preserves drum priority and the 20%/35%/35% tone slices.
+- LED allocation matches the source: three layer indicators, eight three-LED step groups and three unused LEDs. Melody overrides bass, which overrides stored rhythm color.
+- The matrix uses the supplied font, nine-column character spacing, 60 ms scrolling and the display sketch's 23-character command truncation before parsing. READY and subsequent state messages follow the source format.
 
-Sound defaults off. User-enabled Web Audio time-slices simple rhythm/bass/melody tones. It mutes on blur, background and video activation. The YouTube iframe is created only after the poster's Play button is activated. Direct YouTube and source-journal links remain available.
+## Interaction and access
 
-Narrow screens reserve an upper inspection area and flow story content below it. Zone buttons, a labeled native range input and scroll activation replace cursor dependence. Motion pause, reduced motion, visible keyboard focus, screen-reader recording feedback, keyboard/process buttons and forced-color fallbacks are implemented. Rapid sensing outputs explicitly suppress live announcements; range values include centimeters.
+Sound is optional and defaults off. It mutes on blur, background and video activation. The YouTube iframe loads only when Watch demo is clicked. Direct video and source-journal links remain available.
+
+Phones use an upper inspection area and native distance slider. All control actions use native buttons; the optional explanation uses native details/summary. Focus states, recording announcements, pause/resume, reduced motion, forced colors, process arrows, keyboard scrolling and drag/touch navigation are implemented. Reduced motion suppresses parallax, matrix scrolling and idle step highlights while keeping the musical clock. Offscreen playback pauses and resumes without replaying missed recording steps. Rapid sensor readouts suppress repeated live announcements.
+
+Without JavaScript, the model, concise content, source sheets, photographs and four downloads remain available, with a direct video link.
 
 ## Checks
 
-- `node tools/validate-site.mjs` — existing source/render parity, headings, images, assets and protected homepage content passed.
-- `node tools/test-home.mjs` — existing home image geometry, motorsport timing and lifecycle passed.
-- `node tools/test-project-room.mjs` — original photo checksum, eight viewport fits, screen projection and sibling links passed.
-- `node tools/test-music-station.mjs` — local routes/assets; hashes of all eight original documents/photos; nine mode/layer recording combinations; exact eight-step recording; unselected-loop preservation; sensor clamps; frame-independent smoothing; download signatures; model and sketch counts passed.
-- `node tools/test-music-browser.mjs` with bundled Playwright and installed headless Chrome — desktop sensing, touch/zone input, replacement completion, mode changes, opt-in audio/mute, pause/resume, process arrows/keyboard, video activation, file responses, directory navigation and JavaScript-disabled reading passed. Responsive coverage: 320×568, 390×844, 768×1024, 1440×900. Reduced-motion recording and unavailable-audio recovery passed. No uncaught page errors.
-- Strict frontend premium audit — zero findings. Saved in `tools/music-premium-audit.json`.
-- JavaScript syntax checks and `git diff --check` passed. Changed code contains no native alert/confirm/prompt calls, empty links or inline click handlers.
-- Screenshots reviewed for hero, story/sensing, anatomy, process, real photographs, downloads and sibling directory. Refined hero/model spacing, coil lighting and phone stacking/control placement from these screenshots. Temporary screenshots remain ignored in `tools/music-qa/`.
+- `node tools/validate-site.mjs`, `node tools/test-home.mjs` and `node tools/test-project-room.mjs` — existing source/render parity, protected homepage behavior, source photo geometry and sibling routes passed.
+- `node tools/test-music-station.mjs` — all original hashes, links, source sensing and zone boundaries, nine recording combinations, clear-on-arm, mode/layer changes during REC, frame-independent sampling, audio rules, LED allocation, original matrix glyphs and compact structure passed.
+- `node tools/test-music-firmware.mjs` — 1,085 differential cases passed against compiled functions extracted directly from Control.ino: distance zones, rhythm bits, note indices and actual frequencies. This checks portable source functions, not a complete Arduino hardware build.
+- `node tools/test-music-browser.mjs` — installed headless Chrome with bundled Playwright. Desktop sensing, empty startup, record clearing/completion, preserved mode data, sound/mute, pause, disclosure/hardware inspection, source-strip navigation, downloads, video loading and copy/height reduction passed. Responsive coverage: 320×568, 390×844, 768×1024, 1440×600, plus 1440×900 desktop. Reduced-motion recording after idle and after leaving/reentering the instrument, JavaScript-disabled reading and unavailable-audio recovery passed. No uncaught page errors.
+- Strict frontend premium audit — zero findings; result retained in `tools/music-premium-audit.json`.
+- Desktop and phone screenshots reviewed for hero, controls, disclosure, photographs, sketch strip and files. Temporary screenshots and C++ reference outputs are ignored under `tools/music-qa/`.
+- JavaScript syntax checks and `git diff --check` passed.
 
-There is no package build, formatter, TypeScript or application backend in this repository. Static deployable files are maintained directly. CI runs the existing validator and new deterministic music checks before publishing.
+Static deployable files are maintained directly. Pages CI runs the site validator, deterministic music checks and original C++ comparison before deployment.
 
-## Practical limits
+## Browser adaptations
 
-Phone layouts and touch affordances were tested in browser emulation; physical handset performance and screen-reader hardware were not tested. The YouTube iframe's correct identity and click-only loading were verified; third-party streaming availability depends on YouTube and the visitor's network. The browser synthesis demonstrates the interaction and is not a recording of the Arduino audio.
+Pointer/range input simulates an ultrasonic reading. Web Audio uses square oscillators with short soft edges; it is not a recording of the hardware. Matrix message queues are bounded for repeated browser input, reduced motion presents a static glyph, and playback pauses offscreen. These adaptations do not change stored musical rules.
+
+Phone layouts were verified in browser emulation, not on a physical handset. Video identity and click-only loading were checked; streaming depends on YouTube and the visitor's connection.

@@ -91,6 +91,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-01 — Compact music station and firmware alignment
+
+- Condensed the project page into one interactive instrument, optional technical disclosure, two photographs, four original sketch sheets and essential downloads. At 1440×900, default page height fell from 15,932 to 3,998 pixels and visible main copy from 708 to 207 words.
+- Archived the supplied Control.ino and Display.ino unchanged with source hashes. Ported actual sensing, empty-loop startup, recording controls, mode preservation, clock, audio frequencies, swing, 30-LED allocation and matrix font/command behavior.
+- Compared 1,085 cases against extracted original C++ functions. Verified desktop and four responsive layouts, reduced-motion idle/record timing, original files, downloads, video loading and existing portfolio routes.
+
 ### 2026-10-01 — World Sensing Music Station
 
 - Added the portfolio project route and Projects entrance, preserving the existing home and Polaroid surfaces.
