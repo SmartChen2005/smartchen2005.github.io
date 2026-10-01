@@ -49,7 +49,7 @@
   background: #b5b5af;
   box-shadow: 0 1px 2px #25262514, 0 5px 10px -4px #25262518, 0 13px 24px -8px #25262526;
   transform: perspective(1100px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
-  transform-origin: 12% 50%;
+  transform-origin: var(--card-pivot, 12% 50%);
   transform-style: preserve-3d;
   font: 400 calc(12 * var(--card-unit))/1.4 'Helvetica Neue', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -106,10 +106,10 @@
 }
 .metal-face::after {
   background:
-    radial-gradient(ellipse 21% 90% at calc(var(--light-x, -12%) - 16%) var(--light-y, 34%), var(--metal-cyan), transparent 90%),
-    radial-gradient(ellipse 20% 85% at calc(var(--light-x, -12%) + 12%) var(--light-y, 34%), var(--metal-violet), transparent 90%),
-    radial-gradient(ellipse 28% 70% at calc(var(--light-x, -12%) + 36%) 0%, var(--metal-gold), transparent 90%);
-  opacity: var(--spectral-strength, .012);
+    radial-gradient(ellipse 21% 90% at calc(var(--light-x, -12%) - 16%) var(--light-y, 34%), var(--reflection-a, var(--metal-cyan)), transparent 90%),
+    radial-gradient(ellipse 20% 85% at calc(var(--light-x, -12%) + 12%) var(--light-y, 34%), var(--reflection-b, var(--metal-violet)), transparent 90%),
+    radial-gradient(ellipse 28% 70% at calc(var(--light-x, -12%) + 36%) var(--light-y, 34%), var(--reflection-c, var(--metal-gold)), transparent 90%);
+  opacity: var(--spectral-strength, .008);
 }
 .metal-perlage { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .card-print {

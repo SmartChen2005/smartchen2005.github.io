@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { createPerlage } from '../dist/home-card-perlage.mjs';
+import { createPerlage, perlageSurface } from '../dist/home-card-perlage.mjs';
 import { cardMaterialState } from '../dist/home-business-card.mjs';
 let image, writes = 0;
 const context = { createImageData: (w, h) => ({ data: new Uint8ClampedArray(w * h * 4) }), putImageData: data => { image = data; writes++; } };
@@ -9,7 +9,7 @@ const finish = createPerlage(canvas); finish.resize(296, 296 / 1.64);
 const draw = view => finish.draw(cardMaterialState(view));
 draw({ x: 0, y: 0 }); const rest = [...image.data];
 const alpha = data => data.filter((_, i) => i % 4 === 3);
-assert(Math.max(...alpha(rest)) <= 4, 'Rest must be almost invisible');
+assert(Math.max(...alpha(rest)) <= 8, 'Rest must be faint but physically present');
 assert(alpha(rest).some(value=>value>0),'Perlage must remain a permanent, faintly visible finish at rest');
 draw({ x: .7, y: -.45 }); const reflected = [...image.data];
 assert.notDeepEqual(reflected, rest, 'Inspection must change local reflections');
@@ -21,9 +21,21 @@ const contrast = data => {
 };
 assert(contrast(reflected)>3 && contrast(reflected)>contrast(rest)*5,'Inspection must reveal visibly stronger roughness reflections than rest');
 assert(contrast(reflected)<12,'The finish must not become a high-contrast circle pattern');
-const unworked = alpha(reflected).filter(value => value === 0).length;
-assert(unworked > canvas.width * canvas.height * .3, 'Large areas must remain smooth');
-draw({ x: -.65, y: .5 }); assert.notDeepEqual([...image.data], reflected, 'Different viewing angles must reveal different grains');
+const surface=perlageSurface(296,180,1/1.64), fixedSurface=surface.slice();
+let left=0,right=0;
+for(let y=0;y<180;y++)for(let x=0;x<296;x++){
+  const coverage=surface[(y*296+x)*4];
+  assert(coverage>.6,'Every part of the metal, including the edges, must have Perlage');
+  if(x<148)left+=coverage;else right+=coverage;
+}
+assert(Math.abs(left-right)/left<.03,'Both halves must have roughly the same physical grain density');
+const colored=data=>data.filter((_,i)=>i%4===3 && data[i]>4 && Math.max(data[i-3],data[i-2],data[i-1])-Math.min(data[i-3],data[i-2],data[i-1])>6).length;
+assert(colored(reflected)>500,'Muted spectral color must appear in the strongest Perlage reflections');
+draw({ x: -.65, y: .5 });
+const leftReflection=[...image.data];
+assert.notDeepEqual(leftReflection, reflected, 'Different viewing angles must reveal different grains');
+assert(contrast(leftReflection)>3,'The studio light must also reach the left-side Perlage');
+assert.deepEqual(surface,fixedSurface,'Lighting must not move or modify the physical grain field');
 draw({ x: 0, y: 0 }); assert.deepEqual([...image.data], rest, 'Leaving must return to exactly quiet titanium');
 assert.equal(writes, 4, 'No independent animation should paint between input updates');
 finish.resize(178.5, 178.5 / 1.64); assert(canvas.width < 296);
@@ -31,4 +43,4 @@ const validWidth = canvas.width, validHeight = canvas.height;
 for (const [w, h] of [[0,0],[-32,-20],[NaN,100],[100,Infinity]]) finish.resize(w,h);
 assert.equal(canvas.width,validWidth); assert.equal(canvas.height,validHeight,'Transient empty viewport measurements must keep the valid texture');
 createPerlage(null).draw(cardMaterialState({ x: 1, y: 1 }));
-console.log('Passed: near-invisible rest, low-contrast directional reflections, variable density/smooth areas, exact resting return, responsive sampling and missing-canvas fallback.');
+console.log('Passed: faint permanent rest, full-surface coverage with equal left/right density, fixed grain field, two-sided light response, muted spectral highlights, contrast ceiling, exact resting return and responsive sampling.');

@@ -36,9 +36,9 @@ export function createCardOrientation({ change, allowed, canRequest = allowed })
     const radians = angle * Math.PI / 180;
     const x = gamma * Math.cos(radians) + beta * Math.sin(radians);
     const y = beta * Math.cos(radians) - gamma * Math.sin(radians);
-    const deadband = v => Math.sign(v) * Math.max(0, Math.abs(v) - .8);
-    const next = { x: clamp(deadband(x) / 19), y: clamp(deadband(y) / 23) };
-    const ease = 1 - Math.exp(-Math.min(80, Math.max(1, now - previousAt)) / 125);
+    const deadband = v => Math.sign(v) * Math.max(0, Math.abs(v) - .55);
+    const next = { x: clamp(deadband(x) / 16), y: clamp(deadband(y) / 18) };
+    const ease = 1 - Math.exp(-Math.min(80, Math.max(1, now - previousAt)) / 55);
     previousAt = now;
     filtered.x += (next.x - filtered.x) * ease;
     filtered.y += (next.y - filtered.y) * ease;

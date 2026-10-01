@@ -1,18 +1,24 @@
-import { createPerlage } from './home-card-perlage.mjs';
+import { createPerlage, titaniumReflection } from './home-card-perlage.mjs';
 import { createCardOrientation } from './home-card-orientation.mjs';
 
 const clampCard = (value, low, high) => Math.max(low, Math.min(high, value));
 
 // One physical material state; neither the renderer nor its finishes know
 // whether inspection came from a cursor, a finger or a device sensor.
-export function cardMaterialState(view) {
+export function cardMaterialState(view, { free = false } = {}) {
   const x = clampCard(view.x, -1, 1), y = clampCard(view.y, -1, 1);
-  const light = { x: -12 + x * 128, y: 34 + y * 42, spread: 60 - x ** 2 * 12 };
+  // Keep the studio source within reach of both halves of the metal face.
+  const light = { x: 35 + x * (x < 0 ? 48 : 80), y: 34 + y * 42, spread: 60 - x ** 2 * 12 };
   const etch = Math.exp(-(((light.x - 81) / 32) ** 2 + ((light.y - 22) / 55) ** 2));
-  return { view: { x, y }, light, properties: {
-    '--tilt-x': `${-y * 2}deg`, '--tilt-y': `${x * 2.8}deg`,
+  const inspection = Math.min(1, Math.hypot(x, y));
+  const spectral = { phase: .19 + x * .20 + y * .15, strength: .008 + inspection * .26 };
+  const reflection = offset => `rgb(${titaniumReflection(spectral.phase + offset).join(' ')})`;
+  return { view: { x, y }, light, spectral, properties: {
+    '--tilt-x': `${-y * (free ? 7 : 2)}deg`, '--tilt-y': `${x * (free ? 8 : 2.8)}deg`,
+    '--card-pivot': free ? '50% 50%' : '12% 50%',
     '--light-x': `${light.x}%`, '--light-y': `${light.y}%`, '--light-spread': `${light.spread}%`,
-    '--spectral-strength': `${.012 + x ** 2 * .065}`, '--edge-strength': `${.38 + x ** 2 * .38}`,
+    '--spectral-strength': `${spectral.strength}`, '--edge-strength': `${.38 + x ** 2 * .38}`,
+    '--reflection-a': reflection(-.12), '--reflection-b': reflection(.12), '--reflection-c': reflection(.30),
     '--side-light': `${62 + x * 17 - y * 6}%`, '--bottom-light': `${69 - y * 15 + x * 4}%`,
     '--engrave-strength': `${.16 + etch * .58}`, '--etch-x': `${x * .35}px`, '--etch-y': `${.75 - y * .25}px`,
   } };
@@ -53,7 +59,7 @@ export function createBusinessCard(dock, portrait, sentence, trigger) {
     if (Math.hypot(target.x - current.x, target.y - current.y) > .001) startLight();
   }
   function light() {
-    const material = cardMaterialState(current);
+    const material = cardMaterialState(current, { free: handheld.matches });
     for (const [property, value] of Object.entries(material.properties)) card.style.setProperty(property, value);
     perlage.draw(material);
   }
@@ -62,7 +68,7 @@ export function createBusinessCard(dock, portrait, sentence, trigger) {
     if (!open || !ready || document.hidden || reduce.matches || forced.matches) return;
     const dt = Math.min((now - last) / 1000 || 1 / 60, .05);
     last = now;
-    const ease = 1 - Math.exp(-dt / .105);
+    const ease = 1 - Math.exp(-dt / (handheld.matches ? .065 : .105));
     current.x += (target.x - current.x) * ease;
     current.y += (target.y - current.y) * ease;
     light();
@@ -83,7 +89,7 @@ export function createBusinessCard(dock, portrait, sentence, trigger) {
     dock.style.height = `${geometry.height}px`;
     dock.style.setProperty('--card-unit', `${geometry.width / 296}px`);
     dock.dataset.layout = geometry.layout;
-    perlage.resize(geometry.width, geometry.height); perlage.draw(cardMaterialState(current));
+    perlage.resize(geometry.width, geometry.height); perlage.draw(cardMaterialState(current, { free: handheld.matches }));
   }
   function show(keyboard = false) {
     if (open) { place(); return; }

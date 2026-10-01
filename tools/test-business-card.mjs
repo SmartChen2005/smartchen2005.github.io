@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { businessCardLayout, createBusinessCard } from '../dist/home-business-card.mjs';
+import { businessCardLayout, createBusinessCard, cardMaterialState } from '../dist/home-business-card.mjs';
 
 for (const [width,height] of [[1920,1080],[1280,720],[844,390],[535,673],[390,844],[320,568]]) {
   const photoWidth = width < 500 ? 205 : Math.max(180,Math.min(320,width*.22));
@@ -77,7 +77,8 @@ for(const options of [{reduced:true},{forced:true}]){
 }
 
 // Exercise both actual input adapters through the real controller and grain
-// renderer. Equal inspection angles must produce the same physical object.
+// renderer. Equal inspection angles share the material, with different pivots
+// and rotation limits for the two explicitly requested physical constraints.
 app=harness({texture:true}); app.instance.show(); app.finish();
 const restingPixels=app.pixels();
 app.events.pointermove({clientX:625,clientY:154.9,pointerType:'mouse'});
@@ -87,10 +88,22 @@ assert.notDeepEqual(mousePixels,restingPixels,'Desktop pointer movement must rev
 app.instance.hide();
 app=harness({sensor:true,texture:true}); app.instance.show(); app.finish();
 for(let i=0;i<20;i++){app.windowEvents.deviceorientation({beta:60,gamma:0});app.step();}
-for(let i=0;i<100;i++){app.windowEvents.deviceorientation({beta:50,gamma:10.3});app.step();}
+for(let i=0;i<100;i++){
+  app.windowEvents.deviceorientation({beta:52.25,gamma:8.55});app.step();
+  if(i===5){
+    const response=parseFloat(app.card.style.values['--tilt-y']);
+    assert(response>1.3 && response<3.6,'Within 96ms the handheld card must respond clearly while retaining smooth inertia');
+  }
+}
 for(const [key,value] of Object.entries(mouseProperties)) {
+  if(['--tilt-x','--tilt-y','--card-pivot'].includes(key))continue;
+  if(key.startsWith('--reflection-')){assert.equal(value,app.card.style.values[key]);continue;}
   assert(Math.abs(parseFloat(value)-parseFloat(app.card.style.values[key]))<.15,`${key} must use the same normalized material state for mouse and orientation`);
 }
+assert.equal(mouseProperties['--card-pivot'],'12% 50%');
+assert.equal(app.card.style.values['--card-pivot'],'50% 50%','Handheld inspection must pivot about the entire card center');
+assert(Math.abs(parseFloat(app.card.style.values['--tilt-y'])-4)<.01);
+assert(Math.abs(parseFloat(app.card.style.values['--tilt-x'])-2.8)<.01);
 const sensorPixels=app.pixels();
 const appearance=(data,i)=>243+(data[i]-243)*data[i-i%4+3]/255;
 let maximumDelta=0,totalDelta=0;
@@ -100,5 +113,10 @@ for(let i=0;i<mousePixels.length;i++) if(i%4!==3) {
 }
 app.instance.hide(); assert(!app.windowEvents.deviceorientation);
 assert(maximumDelta<.8 && totalDelta/(mousePixels.length*.75)<.01,'Mouse and gyro must yield the same Perlage reflection within one alpha quantization step and sensor settling precision');
+for(const view of [{x:-2,y:2},{x:2,y:-2}]) {
+  const state=cardMaterialState(view,{free:true});
+  assert.equal(Math.abs(parseFloat(state.properties['--tilt-x'])),7);
+  assert.equal(Math.abs(parseFloat(state.properties['--tilt-y'])),8);
+}
 console.log('Passed: right-edge anchoring, narrow/short-screen containment and sentence clearance; entry/settle/close/reopen; inert links during entry; keyboard focus; delayed light response and idle RAF cleanup; placeholder handling; reduced motion and forced colors.');
-console.log('Passed: real mouse and orientation adapters drive equivalent transform, light, engraving, spectral variables and Perlage pixels through one controller.');
+console.log('Passed: desktop constrained pivot; free centered handheld motion bounded to 7°/8°; both real input adapters share light, engraving, spectral colors and Perlage pixels.');
