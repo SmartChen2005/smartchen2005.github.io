@@ -1,5 +1,10 @@
 # Homepage verification — exhibition + motorsport
 
+## Carbon-fiber experiment removed — 2026-10-02
+
+- Removed the carbon surface module, its dedicated test and all pointer-light state/listeners from the motorsport controller. Restored a plain `--mechanical: #080808` canvas fill. The motorsport timeline, geometry, original pointer response, exit and all card/Perlage code are unchanged.
+- Passed `node tools/test-home.mjs`, `node tools/validate-site.mjs`, strict premium audit (zero findings) and `git diff --check`. Browser verified plain black at desktop and 390×844, no light-state attributes, no horizontal overflow, Escape dismissal and no captured warnings/errors. Viewport override reset. Proof: `car-plain-black.png` in the task's visualization directory. No deployment performed. Earlier carbon entries below document the superseded experiment.
+
 ## Restored Perlage + black carbon-fiber light response — 2026-10-02
 
 - Restored the previous twenty-four larger, softly overlapping Perlage passes. Retained the stronger ambient and interactive reflection from the preceding refinement. Card typography, geometry, shared mouse/sensor material state, pivots, inertia, responsive layout and slide remain unchanged.

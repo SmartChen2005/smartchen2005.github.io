@@ -70,7 +70,6 @@ body[data-world='cars'] .identity-cars > span { transform: skewX(-9deg); }
 body[data-world='games'] .kinetic-scene { visibility: visible; }
 .motor-scene {
   position: absolute; inset: 0; width: 100%; height: 100%; visibility: hidden; opacity: 0;
-  /* The canvas owns the fixed carbon weave and pointer-lit resin finish. */
   background-color: var(--mechanical);
 }
 .motor-scene.is-active { visibility: visible; opacity: 1; }

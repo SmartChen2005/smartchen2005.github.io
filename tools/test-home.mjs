@@ -24,12 +24,11 @@ assert.deepEqual([0,.8,1.3,2.3,2.9,3.8,4.3,4.7].map(t => motorsportFrame(t).phas
 assert(motorsportFrame(2.06).rpm < motorsportFrame(2.04).rpm, 'A gear change must unload RPM');
 assert(motorsportFrame(100).idle, 'The main sequence must not loop');
 
-const callbacks = new Map(), mediaHandlers = [], pageHandlers = [], pointerHandlers = [], timers = new Map();
+const callbacks = new Map(), mediaHandlers = [], pageHandlers = [], timers = new Map();
 let id = 0, now = 0, drawings = 0;
 const media = { matches: false, addEventListener: (_, fn) => mediaHandlers.push(fn) };
 const document = { hidden: false, body: { dataset: {} }, documentElement: {}, addEventListener: (type, fn) => {
   if(type==='visibilitychange')pageHandlers.push(fn);
-  if(type==='pointermove')pointerHandlers.push(fn);
 } };
 const context = new Proxy({}, {
   get: (_, key) => (...args) => {
@@ -49,7 +48,7 @@ const sandbox = {
   setTimeout:fn=>{timers.set(++id,fn);return id;},clearTimeout:key=>timers.delete(key),performance:{now:()=>now},
 };
 vm.createContext(sandbox);
-for (const file of ['home-carbon-fiber.mjs','home-motorsport.mjs','home-exhibition.mjs','home-scenes.mjs']) {
+for (const file of ['home-motorsport.mjs','home-exhibition.mjs','home-scenes.mjs']) {
   const source=fs.readFileSync(new URL(`../dist/${file}`,import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,'');
   vm.runInContext(source,sandbox);
 }
@@ -62,10 +61,6 @@ function step(count=1) {
 scene.setWorld('games');step(240);scene.point(1,0);step(120);assert.equal(callbacks.size,1);
 scene.setWorld('cars');step(75);assert.equal(motorCanvas.dataset.phase,'launch');
 step(230);assert.equal(motorCanvas.dataset.phase,'idle');
-pointerHandlers.forEach(fn=>fn({clientX:144,clientY:675}));step(8);
-assert(Number(motorCanvas.dataset.lightX)>.1 && Number(motorCanvas.dataset.lightX)<.4,'The viewport light must follow the pointer with smooth inertia');
-step(60);
-assert(Math.abs(Number(motorCanvas.dataset.lightX)-.1)<.002 && Math.abs(Number(motorCanvas.dataset.lightY)-.75)<.002,'The light must converge on the actual pointer position');
 scene.setWorld('');assert.equal(callbacks.size,0);assert.equal(document.body.dataset.carExit,'true');
 for(const fn of timers.values())fn();timers.clear();assert.equal(document.body.dataset.carExit,undefined);
 scene.setWorld('cars');assert.equal(motorCanvas.dataset.phase,'ignition','Re-entry restarts the sequence');
