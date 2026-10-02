@@ -91,6 +91,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-01 — Move the music station through space
+
+- Hid loose power leads and increased the model's cardboard thickness, translucent strip height, perspective and shadows.
+- Connected the scrolling hero to a smaller draggable station in a schematic isometric room. A wall-distance ray and outgoing/returning ultrasound make sensing visible; drag, cursor following, touch, arrow keys and the slider share one projection.
+- Added direct live audition using source-mode pitches and a waveform sampled from actual audio output. Sound defaults on, resumes on ordinary interaction when autoplay is blocked, and uses a speaker icon for persistent mute.
+- Verified real non-silent audio under strict browser autoplay restrictions, note changes with distance, mute behavior, desktop/mobile interaction, reduced motion, source rules, original files and existing portfolio checks.
+
 ### 2026-10-01 — Compact music station and firmware alignment
 
 - Condensed the project page into one interactive instrument, optional technical disclosure, two photographs, four original sketch sheets and essential downloads. At 1440×900, default page height fell from 15,932 to 3,998 pixels and visible main copy from 708 to 207 words.

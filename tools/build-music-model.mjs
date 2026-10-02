@@ -20,7 +20,7 @@ const led = Array.from({length:30},(_,i)=>{
 const buttons = [[128,352],[106,378],[150,378],[128,404],[373,205],[404,205],[435,205]].map(([x,y])=>`<g transform="translate(${x} ${y})"><rect x="-10" y="-10" width="20" height="20" fill="#a9a997" stroke="#727567"/><rect x="-8" y="-8" width="16" height="16" fill="#333632"/><circle r="5" fill="#1b1e1b" stroke="#626559"/>${pins(-11,-8,2,true)}</g>`).join('');
 const svg = `<svg class="device-svg" viewBox="0 0 1000 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="device-svg-title device-svg-desc">
 <title id="device-svg-title">World Sensing Music Station — reconstructed prototype</title>
-<desc id="device-svg-desc">An open cardboard base, three visible breadboards, exposed red and black jumper wires, two control boards, seven buttons, an ultrasonic sensor and a central LED matrix, surrounded by a raised translucent coiled NeoPixel strip.</desc>
+<desc id="device-svg-desc">A raised cardboard base, three visible breadboards, internal red and black jumper wires, two control boards, seven buttons, an ultrasonic sensor and a central LED matrix, surrounded by a translucent coiled NeoPixel strip. Power leads are tucked underneath.</desc>
 <defs>
  <linearGradient id="cardboard" x2="0.4" y2="1"><stop stop-color="#625243"/><stop offset="1" stop-color="#30291f"/></linearGradient>
  <linearGradient id="board-plastic" x2="0" y2="1"><stop stop-color="#dfded1"/><stop offset="1" stop-color="#9e9f94"/></linearGradient>
@@ -32,18 +32,13 @@ const svg = `<svg class="device-svg" viewBox="0 0 1000 800" xmlns="http://www.w3
  <filter id="led-glow" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="5"/></filter>
  <filter id="device-shadow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="20"/></filter>
 </defs>
-<ellipse cx="512" cy="633" rx="298" ry="49" fill="#000" opacity=".7" filter="url(#device-shadow)"/>
+<ellipse cx="512" cy="665" rx="305" ry="62" fill="#000" opacity=".85" filter="url(#device-shadow)"/>
 <g id="device-body">
- <g fill="none" stroke-linecap="round">
-  <path d="M731 458C916 400 948 509 872 562C841 581 795 559 791 520" stroke="#1c3a46" stroke-width="13"/>
-  <path d="M731 458C916 400 948 509 872 562C841 581 795 559 791 520" stroke="#457181" stroke-width="2"/>
-  <path d="M606 597C606 721 735 665 801 713C836 739 781 778 726 731" stroke="#141918" stroke-width="11"/>
-  <path d="M606 597C606 721 735 665 801 713C836 739 781 778 726 731" stroke="#464b45" stroke-width="2"/>
-  <path d="M377 628C384 731 308 691 318 781" stroke="#b5b6ad" stroke-width="7"/>
- </g>
- <path d="M164 297L701 163L864 537L326 687Z" fill="#171913"/>
- <path d="M164 297L326 687L326 666L164 277Z" fill="#433426"/>
- <path d="M326 666L864 516L864 537L326 687Z" fill="url(#corrugation)" stroke="#6a5844"/>
+ <path d="M164 319L701 185L864 559L326 709Z" fill="#11150e"/>
+ <path d="M164 277L326 666L326 709L164 319Z" fill="#483726" stroke="#746044"/>
+ <path d="M326 666L864 516L864 559L326 709Z" fill="url(#corrugation)" stroke="#796246"/>
+ <path d="M326 669L864 519" fill="none" stroke="#b5a283" stroke-width="3"/>
+ <path d="M326 701L864 551" fill="none" stroke="#241e16" stroke-width="4"/>
  <g transform="matrix(1 -.25 .32 .68 175 287)">
   <path d="M-14 -10L526 -16L531 531L-10 535Z" fill="url(#cardboard)" stroke="#8a755f" stroke-width="2"/>
   <path d="M-14 -10L-14 -35L526 -40L526 -16Z" fill="#453b30" stroke="#6c5a48"/>
@@ -78,11 +73,12 @@ const svg = `<svg class="device-svg" viewBox="0 0 1000 800" xmlns="http://www.w3
   ${matrix}
   <g fill="none" stroke-linecap="round">
    <circle cx="268" cy="254" r="222" stroke="#050908" stroke-width="31" opacity=".25"/>
-   <circle cx="268" cy="240" r="222" stroke="url(#strip)" stroke-width="23"/>
-   <circle cx="268" cy="219" r="222" stroke="url(#strip)" stroke-width="23"/>
+   <circle cx="268" cy="243" r="222" stroke="url(#strip)" stroke-width="27"/>
+   <circle cx="268" cy="210" r="222" stroke="url(#strip)" stroke-width="27"/>
+   <path d="M46 210V243M490 210V243" stroke="#ccdfd7" stroke-width="3" opacity=".6"/>
    ${['#86e8cf','#cf80c3','#85bade','#eddb91'].map((color,i)=>`<circle class="loop-wash" cx="268" cy="238" r="222" stroke="${color}" stroke-width="9" stroke-dasharray="335 1060" stroke-dashoffset="${-i*349}" opacity=".08" filter="url(#led-glow)"/>`).join('')}
    <circle cx="268" cy="238" r="222" stroke="#d4e1d6" stroke-width="1.7" opacity=".8"/>
-   <circle cx="268" cy="206" r="222" stroke="#d7e4dd" stroke-width="1.5" opacity=".65"/>
+   <circle cx="268" cy="196" r="222" stroke="#e8f3ed" stroke-width="2" opacity=".75"/>
    <path d="M66 326Q49 309 41 287" stroke="#181e19" stroke-width="12"/>
   </g>
   ${led}

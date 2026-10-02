@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {MusicEngine,MODES,distanceToZone,rhythmHit,noteIndex,noteColor} from '../dist/projects/world-sensing-music-station/music-engine.mjs';
 import {displayText,matrixFrame} from '../dist/projects/world-sensing-music-station/display-engine.mjs';
+import {floorPoint,floorCoordinates,distanceAt,roomPose,sonarArc} from '../dist/projects/world-sensing-music-station/space-engine.mjs';
 const root=new URL('../dist/projects/world-sensing-music-station/',import.meta.url);
 const html=fs.readFileSync(new URL('index.html',root),'utf8');
 const manifest=JSON.parse(fs.readFileSync(new URL('assets/sources.json',root),'utf8'));
@@ -52,4 +53,13 @@ assert.equal((html.match(/class="matrix-pixel"/g)||[]).length,64);
 assert.equal((html.match(/class="process-sheet"/g)||[]).length,4);
 assert.equal((html.match(/data-scene=/g)||[]).length,2);
 assert(!html.includes('autoplay=1'));
+for(const u of [.12,.4,.88])for(const v of [0,.3,1]){
+  const point=floorPoint(u,v),inverse=floorCoordinates(point.x,point.y);
+  assert(Math.abs(inverse.u-u)<1e-12&&Math.abs(inverse.v-v)<1e-12,'Room projection inverse');
+  const pose=roomPose(u,distanceAt(v));
+  assert(Math.abs(pose.sensor.x-pose.wall.x-130*v)<1e-10&&Math.abs(pose.sensor.y-pose.wall.y-250*v)<1e-10,'Ray reaches the reflecting wall');
+  assert(!sonarArc(pose.sensor,pose.wall,.5).includes('NaN'),'Finite sonar even at zero separation');
+}
+assert(!html.includes('M731 458C916'),'No loose external power lead geometry');
+assert(html.includes('aria-label="Mute sound"'),'Default sound intent with accessible speaker icon');
 console.log('Passed: original files/photos/firmware hashes; 40ms sensing and source zone boundaries; exact note/rhythm/swing rules; empty startup; nine recording combinations; clear-on-arm and eight-step return; retained loops on mode changes; live controls during REC; 30-LED layout; original matrix glyphs; compact content and all local links.');
