@@ -86,9 +86,9 @@ export function createPerlage(canvas) {
       const i = (y * width + x) * 4;
       const source = horizontal[x] * vertical[y];
       const satin = field[i + 1] * a + field[i + 2] * b;
-      const strength = (.042 + inspection * .28 * source) * field[i] * field[i + 3];
+      const strength = (.115 + inspection * .38 * source) * field[i] * field[i + 3];
       const highlight = Math.max(0, satin) ** 2;
-      const shade = Math.max(0, -satin) * .23;
+      const shade = Math.max(0, -satin) * .25;
       // Color belongs to the moving, directional highlights, not the substrate.
       const phase = spectral.phase + field[i + 1] * .12 + field[i + 2] * .08;
       const color = spectrumLookup[Math.floor(((phase % 1 + 1) % 1) * 256)];

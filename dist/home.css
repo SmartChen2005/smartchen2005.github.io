@@ -16,7 +16,7 @@
   --paper: #f5f5f3;
   --ink: #292a27;
   --focus: #65685e;
-  --mechanical: #1d211f;
+  --mechanical: #080808;
   --scroll-thumb: #b8b9b2;
   --scroll-hover: #888a81;
   --scroll-active: #5b5e54;
@@ -68,7 +68,11 @@ body[data-world='cars'] .identity-cars > span { transform: skewX(-9deg); }
 .world-stage { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .kinetic-scene { position: absolute; inset: 0; width: 100%; height: 100%; visibility: hidden; }
 body[data-world='games'] .kinetic-scene { visibility: visible; }
-.motor-scene { position: absolute; inset: 0; width: 100%; height: 100%; visibility: hidden; opacity: 0; }
+.motor-scene {
+  position: absolute; inset: 0; width: 100%; height: 100%; visibility: hidden; opacity: 0;
+  /* The canvas owns the fixed carbon weave and pointer-lit resin finish. */
+  background-color: var(--mechanical);
+}
 .motor-scene.is-active { visibility: visible; opacity: 1; }
 .motor-scene.is-exiting { visibility: visible; opacity: 0; transition: opacity 380ms ease-out; }
 .photo-scene { position: absolute; inset: 0; visibility: hidden; }

@@ -9,18 +9,24 @@ const finish = createPerlage(canvas); finish.resize(296, 296 / 1.64);
 const draw = view => finish.draw(cardMaterialState(view));
 draw({ x: 0, y: 0 }); const rest = [...image.data];
 const alpha = data => data.filter((_, i) => i % 4 === 3);
-assert(Math.max(...alpha(rest)) <= 8, 'Rest must be faint but physically present');
+assert(Math.max(...alpha(rest)) <= 25, 'Rest must remain a low-contrast metal finish');
 assert(alpha(rest).some(value=>value>0),'Perlage must remain a permanent, faintly visible finish at rest');
 draw({ x: .7, y: -.45 }); const reflected = [...image.data];
 assert.notDeepEqual(reflected, rest, 'Inspection must change local reflections');
-assert(Math.max(...alpha(reflected)) < 65, 'Highlights must remain restrained');
+assert(Math.max(...alpha(reflected)) < 100, 'Highlights must remain restrained');
 const contrast = data => {
   let max=0;
   for(let i=0;i<data.length;i+=4) max=Math.max(max,Math.abs((data[i]+data[i+1]+data[i+2])/3-243)*data[i+3]/255);
   return max;
 };
-assert(contrast(reflected)>3 && contrast(reflected)>contrast(rest)*5,'Inspection must reveal visibly stronger roughness reflections than rest');
-assert(contrast(reflected)<12,'The finish must not become a high-contrast circle pattern');
+assert(contrast(rest)>2 && contrast(rest)<5,'The flat card must have readable but quiet circular graining');
+const visibleRest=alpha(rest).filter((_,index)=>{
+  const i=index*4;
+  return Math.abs((rest[i]+rest[i+1]+rest[i+2])/3-243)*rest[i+3]/255>1;
+}).length;
+assert(visibleRest>rest.length/4*.2,'Resting graining must be visible across the face, not just one isolated highlight');
+assert(contrast(reflected)>6 && contrast(reflected)>contrast(rest)*2.5,'Inspection must reveal stronger roughness reflections than rest');
+assert(contrast(reflected)<18,'The finish must not become a high-contrast circle pattern');
 const surface=perlageSurface(296,180,1/1.64), fixedSurface=surface.slice();
 let left=0,right=0;
 for(let y=0;y<180;y++)for(let x=0;x<296;x++){
@@ -43,4 +49,4 @@ const validWidth = canvas.width, validHeight = canvas.height;
 for (const [w, h] of [[0,0],[-32,-20],[NaN,100],[100,Infinity]]) finish.resize(w,h);
 assert.equal(canvas.width,validWidth); assert.equal(canvas.height,validHeight,'Transient empty viewport measurements must keep the valid texture');
 createPerlage(null).draw(cardMaterialState({ x: 1, y: 1 }));
-console.log('Passed: faint permanent rest, full-surface coverage with equal left/right density, fixed grain field, two-sided light response, muted spectral highlights, contrast ceiling, exact resting return and responsive sampling.');
+console.log('Passed: readable low-contrast flat finish, full-surface coverage with equal left/right density, fixed grain field, stronger two-sided reflections, muted spectral highlights, contrast ceiling, exact resting return and responsive sampling.');

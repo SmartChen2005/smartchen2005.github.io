@@ -1,3 +1,5 @@
+import { createCarbonFiber } from './home-carbon-fiber.mjs';
+
 const TAU = Math.PI * 2;
 const clamp = value => Math.max(0, Math.min(1, value));
 const smooth = value => { const x = clamp(value); return x * x * (3 - 2 * x); };
@@ -22,11 +24,18 @@ export function createMotorsport(canvas) {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const styles = getComputedStyle(document.documentElement);
   const paper = styles.getPropertyValue('--paper').trim();
-  const black = styles.getPropertyValue('--mechanical').trim();
   const red = '#f04432';
+  const carbon = createCarbonFiber(ctx);
   let width = 0, height = 0, band = { top: 0, bottom: 0 };
   let active = false, raf = 0, last = 0, time = 0, angle = 0, travel = 0, exitTimer = 0;
   let input = .5;
+  let materialLight = { x: .68, y: .25 }, lightTarget = { ...materialLight };
+  let pixelRatio = 1;
+  document.addEventListener('pointermove', event => {
+    if (!width || !height) return;
+    lightTarget = { x: clamp(event.clientX / width), y: clamp(event.clientY / height) };
+  });
+  document.addEventListener('pointerleave', () => { lightTarget = { x: .68, y: .25 }; });
 
   function line(x1, y1, x2, y2, color = paper, weight = 1) {
     ctx.strokeStyle = color; ctx.lineWidth = weight;
@@ -172,7 +181,12 @@ export function createMotorsport(canvas) {
     travel += dt * (frame.idle ? .32 : frame.rotationSpeed * .21);
     canvas.dataset.phase = frame.phase;
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = black; ctx.fillRect(0, 0, width, height);
+    const inertia = reduced.matches ? 0 : 1 - Math.exp(-dt / .085);
+    materialLight.x += (lightTarget.x - materialLight.x) * inertia;
+    materialLight.y += (lightTarget.y - materialLight.y) * inertia;
+    canvas.dataset.lightX = materialLight.x.toFixed(3);
+    canvas.dataset.lightY = materialLight.y.toFixed(3);
+    carbon.draw(width, height, materialLight, pixelRatio);
     ctx.save();
     ctx.beginPath(); ctx.rect(0, 0, width, Math.max(0, band.top));
     ctx.rect(0, band.bottom, width, Math.max(0, height - band.bottom)); ctx.clip();
@@ -199,6 +213,7 @@ export function createMotorsport(canvas) {
     resize(w, h, measuredBand) {
       width = w; height = h; band = measuredBand;
       const ratio = Math.min(devicePixelRatio || 1, 2);
+      pixelRatio = ratio;
       canvas.width = Math.round(w * ratio); canvas.height = Math.round(h * ratio);
       ctx?.setTransform(ratio, 0, 0, ratio, 0, 0);
       if (active) paint();
