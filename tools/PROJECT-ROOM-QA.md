@@ -38,7 +38,11 @@ The GDD sheet and Download Game never intersect at these sizes. The GDD, camera,
 
 ## Placeholder ownership
 
-- Replace the main iframe's `src` for the project trailer.
+- The main iframe uses the project video supplied on 2026-10-03: YouTube ID `-wh1L6NE_BY`.
+- Initial checks on 2026-10-03 at `http://127.0.0.1:4173/`: both the privacy-enhanced player and YouTube's suggested standard embed reported “This video is unavailable”, including in Chrome. The user's exact `youtube.com/embed/-wh1L6NE_BY?si=rFFAzSROkLFqIoHE` URL without extra playback parameters also failed. A temporary official IFrame API diagnostic returned error 150 and was removed after checking. These observations alone did not establish that the video's embedding setting was disabled.
+- Resolved on 2026-10-03: the same page and embed work at `http://localhost:4173/projects/polaroid-of-yesterday/`. Muted autoplay advanced to 0:55 before playback activation. An immediate comparison still failed at the numeric `127.0.0.1` origin. The public Google player demo also played the video to 1:23 without errors. Read-only inspection of Studio confirmed Allow embedding checked, public visibility, all resolutions processed, and a copyright claim that Studio says does not affect reach. Use the `localhost` preview URL; the numeric-origin failure is not a global prohibition on embedding this video.
+- The page keeps the user's standard embed URL and permissions, plus the existing muted-autoplay/fullscreen settings. No YouTube account settings were changed.
+- The real project video's native fullscreen expanded from the photographed TV to 1280 × 720 and returned correctly. The working `localhost` project tab is the deliverable.
 - Replace the clearly labelled screenshot/reference SVGs and add project photographs to the Photography page.
 - No game archive or download URL was supplied. Download Game is explicitly marked coming soon and opens a status note; it does not download a fake file.
 - Reduced-motion and forced-color CSS are provided. System-level accessibility preferences were not changed for testing.

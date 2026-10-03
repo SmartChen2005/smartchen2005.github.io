@@ -1,5 +1,10 @@
 # Homepage verification — exhibition + motorsport
 
+## Irregular Perlage placement, unchanged density — 2026-10-02
+
+- Varied the positions and diameters of the same twenty-four fixed passes, with less aligned centers and unequal local overlap. Compared with the approved layout, weighted tool area changes by +0.06% and average surface coverage by -0.21%; count, roughly consistent full-face density and edge treatment remain. Reflection strength, palette, mouse/sensor response, typography, geometry and slide are untouched.
+- Passed `test-card-perlage.mjs`, `test-business-card.mjs`, site validation, strict premium audit and `git diff --check`. Browser inspected rest and pointer-lit finish, the unchanged 336px desktop card and complete 296px card at 390×844 with no horizontal overflow and portrait `filter: none`. No captured console errors/warnings. Viewport override reset. Proof: `perlage-irregular.png` in the task visualization directory. No deployment performed.
+
 ## Carbon-fiber experiment removed — 2026-10-02
 
 - Removed the carbon surface module, its dedicated test and all pointer-light state/listeners from the motorsport controller. Restored a plain `--mechanical: #080808` canvas fill. The motorsport timeline, geometry, original pointer response, exit and all card/Perlage code are unchanged.
