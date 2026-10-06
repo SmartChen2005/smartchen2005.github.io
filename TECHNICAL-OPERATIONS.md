@@ -91,6 +91,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-05 — Multiverse All-Star Battlefront
+
+- Added the project to Projects with a Swiss poster layout based on the supplied typography, color and grid references.
+- Archived the original Google Sites page, embedded technical document, all six characters, ten exhibition photographs and three system diagrams. The complete source copy and individual contributions are rendered inline.
+- Added native image previews, responsive reading navigation, lossless display copies, repeatable import/render tooling and source-integrity checks in Pages CI.
+- Verified source order, image hashes and decoded display pixels, desktop and two phone widths, dialog keyboard/focus behavior, project navigation, existing site/project checks and the strict static audit. See `tools/MASB-QA.md` for evidence and tooling limitations. This update is prepared locally.
+
 ### 2026-10-01 — Move the music station through space
 
 - Hid loose power leads and increased the model's cardboard thickness, translucent strip height, perspective and shadows.

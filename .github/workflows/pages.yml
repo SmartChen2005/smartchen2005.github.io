@@ -29,6 +29,7 @@ jobs:
           node tools/validate-site.mjs
           node tools/test-music-station.mjs
           node tools/test-music-firmware.mjs
+          node tools/test-masb.mjs
 
   deploy:
     needs: validate

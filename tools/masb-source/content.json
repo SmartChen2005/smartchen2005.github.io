@@ -1,0 +1,335 @@
+{
+  "source": "https://sites.google.com/view/vegshark/game/multiverse-all-star-battlefront",
+  "document": "https://docs.google.com/document/d/e/2PACX-1vSvdWc_fM8-JNhXYQImOG3Us_UvJHnobgDF9NHJ6WXhd2HMml4cmfRdVkVicPolj4_bionlM4_6waLG/pub",
+  "retrieved": "2026-10-05",
+  "intro": [
+    "Welcome to the Multiverse All-Star Battlefront!",
+    "Imagine a game where the hero you dream up from just a few lines of description comes to life as a pixelated champion. In Multiverse All-Star Battlefront, you simply describe a character in your own words, and our system—powered by large language models—transforms that description into a fully realized, unique fighter.",
+    "Once your character is ready, they face off against another AI-generated opponent in turn-based battles. Every turn is brought to life with AI-crafted visuals, blending a retro pixel art style with modern creativity. Behind the scenes, we use language models to interpret your words and turn them into stats like health, attack power, speed, and more. This way, each character feels truly one-of-a-kind, and every battle is a fresh, visually stunning experience.",
+    "In short, we’ve combined the magic of language models with a love for retro game art to let you create and battle your own heroes. Welcome to the arena—we can’t wait to see who you’ll bring to life!"
+  ],
+  "blocks": [
+    {
+      "kind": "p",
+      "text": "The Game Company - Technical Document"
+    },
+    {
+      "kind": "p",
+      "text": "Multiverse All-Star Battlefront"
+    },
+    {
+      "kind": "p",
+      "text": "1.0 Introduction"
+    },
+    {
+      "kind": "p",
+      "text": "This technical document details the core architectures of Multiverse All-Star Battlefront (MASB), a battle simulation game driven by generative AI. MASB is designed as a highly adaptable simulation where the user simply describes their character. Our backend architectures then generate a corresponding opponent character and a complete battle simulation, which is then presented to the user in a comic book format. We created this particular game because we think that users want to experience the randomness and the joy of seeing their characters come to life. We believe the future of gaming is where imagination collides with reality, and we hope MASB can demonstrate what is possible when generative AI is integrated into games and create a truly boundless narrative experience."
+    },
+    {
+      "kind": "p",
+      "text": "2.0 General Architecture"
+    },
+    {
+      "kind": "image",
+      "url": "https://docs.google.com/docs-images-rt/ALKuztagyhZY9pDoWXrLXqKFSnylXSEfxebCQm2I0puyVmfWBvHLWV6PCY6f3vgKFKtAbHBvkuv-PYHpq8H3jmkzI98BRcM7KStkBngQUsLGS6I6M7f5ZQUKdGFF9DjeciCB12W9IcMusDHoekGx3lo7L0D8Eaea3Z1939AabE50Yw=s2048",
+      "file": "image-17.png",
+      "width": 2012,
+      "height": 1064,
+      "sha256": "355b0ca78a44206119ac05d5a7f6b76ca6032db38d438d6772f7c356dba35512"
+    },
+    {
+      "kind": "p",
+      "text": "The above diagram demonstrates the high-level workflow pipeline of our backend and frontend systems, as well as their communication channels. In the backend, we utilize a Large Language Model and a generative image model to power the game. Specifically, we apply the OpenAI GPT model to power the character creation pipeline, while utilizing the Google Gemini 2.5 Flash Image model as the main visual effect generation pipeline. Section 2.0 will outline the detailed architecture of our backend system. For the frontend system, we chose Flask. Flask is a versatile, lightweight Python-based web interface. Its lightweight design allows us to run HTML directly and display the highly visual comic book presentation on the web interface. We design the frontend to receive the user description. Upon receiving the user’s instruction, the backend will first process the character traits and then produce image queries for the image generation model. The frontend will then display both the text description of the character and the visual presentation of the battle. This carefully designed workflow allows users to imagine freely and enjoy the randomness and versatility of the game."
+    },
+    {
+      "kind": "p",
+      "text": "2.1 Backend"
+    },
+    {
+      "kind": "image",
+      "url": "https://docs.google.com/docs-images-rt/ALKuztYRBceai-D8RE1Nj68ZuYCAHcDhuZ1q2h-x-LRCx-lo5qCcRd0pYWrQS_LQ2WF-lo1Iavsf55-c5J749HQwbmWtAo6HotvIRJ4T0SEExWxTpfMZzG5V-PVst-DQ7_rhu03vN6ibiYmE1UEjDCLYLHj_nRtD1vcpW6wZIcY=s2048",
+      "file": "image-18.png",
+      "width": 922,
+      "height": 610,
+      "sha256": "fc11fad071f26566ede239a1b5bb69f09c35f55edd9e2d76e4bcaf653494be82"
+    },
+    {
+      "kind": "p",
+      "text": "The backend team designed the Recurrent Generation Workflow to power the visual generation pipeline. The idea is similar to a Recurrent Neural Network (RNN). In an RNN, every current state would preserve the prior states' information. This principle effectively gives the RNN a form of internal memory crucial for processing sequences. In our image generation layer, we want to provide the image generation model with some sort of memory that preserves the prior image traits to enable a consistent visual effect. Derived from our experimental results, we discovered that by passing the prior image into the image model, it can integrate the visual data of the prior, already-generated images in order to create the next image. This recurrent pipeline design of visual context allows the system to successfully maintain critical elements like character appearance, lighting, environment, and even hairstyle and color code (similar to what you can see in the diagram above). This design enables a coherent visual effect across all generated images."
+    },
+    {
+      "kind": "p",
+      "text": "2.2 Frontend"
+    },
+    {
+      "kind": "image",
+      "url": "https://docs.google.com/docs-images-rt/ALKuztYBhgIO7E8hsApxFyh7LsNN1_mgetfZBVf1JIuoeAsGjmxfWmH6JH5ww_0X1CKF2YKlZAiGsu4XOsXimlKZmDhlhT5NTeHHMm7Jd0SjGRG_LOQ1Vle_SvRizlLf9HcQvRrAP52un2W9afoHwrpHg6JTcyEnDSr3iDszqocdbw=s2048",
+      "file": "image-19.png",
+      "width": 2048,
+      "height": 1117,
+      "sha256": "1b9f61680edb82c7dea9c51ed6f3aa55ccaf5712da7b1b046a8d7de2d9fbdb6f"
+    },
+    {
+      "kind": "p",
+      "text": "The frontend team chose Flask as the primary frontend server-side framework for MASB. It is engineered to be lightweight but very visually appealing and immersive. The core functionality of the frontend is to bridge the gap between the user’s input text and the backend generation outputs (both images and texts). We utilize HTML as the primary framework to dynamically read and showcase data, such as characters’ statistics, the battle logs, as well as the generated sequential images. To manage the dynamics of the generated outputs, both images and texts, we utilized a client-side layer within the CharacterStats.html interface. This interface uses raw and standardized JSON data directly updated from the backend, which can map different keys and variables of the game for efficient interpretation from the frontend. The primary comic book style interface is the simulation.html interface. It is designed to render the battle narrative (generated text) and its corresponding battle visualizations (generated images) in a sequential way. Since the image generation pipeline is heavy in its computation and takes some time to process everything, we also designed a loading page and a mini-game to play while the users are waiting for their creativity to come to life. While the users are waiting for their generated outputs, we designed a specialized polling architecture for loading phrases that actively queries the backend status and actively reads the generated files from the backend. Once every generation is complete, the frontend will organize the results and battle visualizations. Finally, the users would be able to view their battle statistics on the very last page. This frontend architecture ensures that the dynamic assets from the backend can be successfully loaded while providing a fun and interactive way for users to be creative."
+    },
+    {
+      "kind": "p",
+      "text": "2.3 Game Mechanism"
+    },
+    {
+      "kind": "p",
+      "text": "The core game mechanism of Multiverse All-Star Battlefront (MASB) is a turn-based battle simulation driven entirely by AI-generated characters and rules. Unlike traditional games that rely on pre-authored characters, stats, and combat logic, MASB dynamically constructs its gameplay logic at runtime based on the user’s character description."
+    },
+    {
+      "kind": "p",
+      "text": "Once the user submits a character description through the frontend, the backend’s language model interprets the text and extracts high-level character traits such as personality, combat style, strengths, weaknesses, and thematic identity. Rather than assigning attributes in isolation, the system grounds this interpretation by comparing the described character against a reference space of existing or archetypal characters. Through this comparative process, the model estimates relative power levels and behavioral tendencies, which are then translated into structured game attributes such as health, attack power, defense, speed, and special abilities."
+    },
+    {
+      "kind": "p",
+      "text": "This comparison-based mapping step helps normalize character strength, preserve balance, and reduce extreme or incoherent stat assignments. By anchoring free-form natural language input to known character patterns, the system effectively bridges imaginative descriptions and deterministic game logic, allowing creative character concepts to be transformed into playable and mechanically consistent fighters."
+    },
+    {
+      "kind": "p",
+      "text": "After the player character is generated, the system procedurally creates an opponent using the same pipeline to ensure balance and narrative contrast. The battle itself is executed as a deterministic turn-based simulation, where each turn follows a predefined resolution order (e.g., initiative calculation, action selection, damage resolution, and state updates). Randomness is intentionally introduced in controlled areas—such as attack variance or critical outcomes—to preserve replayability while maintaining fairness and interpretability."
+    },
+    {
+      "kind": "p",
+      "text": "Each turn of the battle produces two parallel outputs:"
+    },
+    {
+      "kind": "li",
+      "text": "Structured battle state data, including character health changes, action outcomes, and turn summaries."
+    },
+    {
+      "kind": "li",
+      "text": "Narrative and visual prompts, which are passed into the recurrent image generation workflow to produce a corresponding comic-style panel for that turn."
+    },
+    {
+      "kind": "p",
+      "text": "By synchronizing the simulation logic with the visual generation pipeline, MASB ensures that every gameplay event has a clear narrative and visual representation. The battle concludes when a terminal condition is reached (e.g., one character’s health reaches zero), at which point the system generates a final summary panel and outcome narration."
+    },
+    {
+      "kind": "p",
+      "text": "Overall, the game mechanism is designed to be modular and extensible. Because character creation, battle resolution, narration, and visualization are decoupled components, the system can easily support new rule sets, combat styles, or game modes in future iterations without redesigning the entire architecture. This approach allows MASB to function not only as a game prototype but also as an experimental framework for AI-driven gameplay systems."
+    },
+    {
+      "kind": "p",
+      "text": "3.0 Sustainability"
+    },
+    {
+      "kind": "p",
+      "text": "The MASB prototype demonstrates what is capable of integrating GenAI in a gaming environment - imagine what it can achieve at the point where we can simply describe our characters, deploy them in any game you can imagine, and allow the gaming environment to dynamically generate content, narratives, and beyond. The sustainability aspect of this project is to investigate the prolonged impact of the GenAI technology in the gaming industry. Specifically, we want to focus on how this technology can reduce cost and accelerate development cycles, which creates a truly dynamic and more personalized gaming experience. However, with the rapid expansion of this technology, we also want to assess the environmental and ethical concerns surrounding this technology and provide high-level guidance and recommendations for the industry and beyond. Now the question is: is it time for this technology to create yet another wave of revolution in the gaming industry? We don’t have the answer, but we’re sure that we can all create a more responsible gaming environment by using it, understanding its capabilities, and interpreting its limitations."
+    },
+    {
+      "kind": "p",
+      "text": "4.0 Individual Contributions"
+    },
+    {
+      "kind": "p",
+      "text": "Smart Chen"
+    },
+    {
+      "kind": "p",
+      "text": "I served as the group leader and primary designer, and engineer for Multiverse All-Star Battlefront. At the beginning of the semester, I defined the overall creative and technical vision of the project and communicated this vision to the team, framing MASB as a generative-AI–driven battle simulation where free-form imagination could be translated into a playable and visually coherent game experience."
+    },
+    {
+      "kind": "p",
+      "text": "I was responsible for the high-level system design across all major components, including the overall game mechanism, backend workflow, frontend structure, and visual style direction for image generation. This included defining how natural-language character descriptions would be transformed into structured game attributes, how the turn-based battle simulation would operate, and what constraints and stylistic rules the image generation pipeline should follow to achieve a consistent comic-book presentation."
+    },
+    {
+      "kind": "p",
+      "text": "Based on this architecture, I divided responsibilities across the team. I assigned the frontend UI design and layout implementation to Nate and Gabe, and the image generation and AI pipeline development to Sam and Neko. Throughout development, I coordinated communication between teams to ensure that design decisions remained aligned with the original vision and that all components could integrate cleanly."
+    },
+    {
+      "kind": "p",
+      "text": "In addition to design leadership, I completed the engineering of the core game system. This included implementing the character generation logic, battle simulation workflow, file and data management across the game lifecycle, and the orchestration layer that connects user input, AI model outputs, and frontend presentation. I also integrated all team contributions into a single working system, including deploying the Flask-based web application using the HTML frontend designed by Nate, managing file creation and storage for generated assets, and wiring together the input and output flows across the backend and frontend, with support from Sam and Nate during integration."
+    },
+    {
+      "kind": "p",
+      "text": "After the core gameplay was functional, I focused on improving the stability and usability of the system. This involved refining error handling, improving session management, reducing failure cases in the generation pipeline, and polishing the overall user experience to make the game more reliable and accessible."
+    },
+    {
+      "kind": "p",
+      "text": "Through this project, I learned not only how to design and engineer a generative-AI–driven game from the ground up, but also how to manage a multidisciplinary team effectively. I gained practical experience in coordinating work across frontend, backend, and AI-focused subgroups, communicating design intent clearly, and fostering a collaborative and supportive team environment. These lessons in leadership, communication, and teamwork were just as valuable as the technical skills developed during the project."
+    },
+    {
+      "kind": "p",
+      "text": "Sam Liu"
+    },
+    {
+      "kind": "p",
+      "text": "I was originally assigned to the game mechanism team at the beginning of the semester. I joined Smart and discussed the game mechanism, but realized that my understanding of the game design is limited, because I did not have much exposure to games."
+    },
+    {
+      "kind": "p",
+      "text": "In the third sprint or so, Smart reassigned me to the AI image generation team, where I primarily designed the backend’s recurrent image generation pipeline. I designed the backend so that it can robustly generate consistent images. Specifically, Neko and I discussed several different methods to enable consistent image generation. Our goal was quite simple: we wanted to design this architecture such that every hairstyle, every color theme, and every little detail would remain largely the same across the images. These characteristics must remain the same so that our users wouldn’t be confused by the inconsistency. Imagine how bad the experience will be when the first image shows Superman fighting Batman, but in the second image, Superman disappears. We simply don’t want to provide that kind of experience for our users. The AI Team has already tried different methods, specifically, using different Prompt variations to test whether the image model (Gemini 2.5 Flash) can output something consistent, meaning that we feed the prompt where we only change the second part of the prompt, and the environmental description remains unchanged. However, this method only uses text description, and most of the time, the images will not remain consistent throughout the sequence. After these thoughtful experiments, I proposed the recurrent image generation pipeline, where we both sent the prior frame (image) along with the new variation of the prompt to generate the next frame. Surprisingly, and as we expected, the image output quality remains largely the same, and even the color theme remains the same across the frames within one battle simulation. The future path of the image generation would be to figure out whether we can attach an image as a system prompt and ask the model to only adjust one single detail (for instance, the character’s gesture) so that it can save more cost (don’t need to attach the prior frame each time) and the generation loading time can be shortened."
+    },
+    {
+      "kind": "p",
+      "text": "Near the end of the sprint (around sprint 7), I asked Smart whether I could work on the frontend-backend integration. The reason behind this request was that I wanted to get to understand the frontend architecture more. I heard that Nathan was using Flask, but I did not have a concrete idea of how the Flask framework works. Specifically, we gathered as a group together, and I enabled the Flask-based frontend to read and display the images generated by the backend image pipeline. I also contributed to the integration of the character description page, where it can read the text output from the GPT-based text model. The biggest thing I learned from this frontend-backend integration is how we can store everything in a JSON file and rearrange and reformat everything correspondingly on the frontend."
+    },
+    {
+      "kind": "p",
+      "text": "To reflect back on this journey to design and develop this game with Smart and other team members, I am very confident that, after working on this game prototype for a semester, GenAI is going to play a big part in games. It was astonishing to see how GenAI can create a character from scratch within just a few minutes, not to mention how it can create visually consistent and appealing characters. On a more individual level, I have learned and have good and solid exposure to AI image generation, and how to make it more stable and consistent, which is an important skill for the upcoming wave of AI-generated media. I am grateful to have this opportunity to learn and build together with the whole team."
+    },
+    {
+      "kind": "p",
+      "text": "Neko Jin"
+    },
+    {
+      "kind": "p",
+      "text": "I was assigned to the Artificial Intelligence team and worked with Sam on the image generation component of the project. In the first few sprints, I primarily led the development and rollout of the API integration and backend forwarding layer, with the goal of providing a stable and consistent interface for the game frontend while ensuring that third-party model service keys were never exposed on the client side or over public network paths. To accomplish this, I implemented a Rust (Axum)-based gateway service that forwards the frontend’s /api/chat and /api/image requests to Azure OpenAI’s chat and image generation endpoints, respectively. I also isolated the two pipelines via configurable deployment names and API versions, so that even when the text and image backends had different capabilities and version requirements, we could still maintain a stable interface and keep frontend integration costs manageable."
+    },
+    {
+      "kind": "p",
+      "text": "From a security and risk-control perspective, I used end-to-end encrypted communication and consolidated external access at the gateway layer. All secrets are kept exclusively on the server (via environment variables), avoiding any possibility of frontend exposure. I also added a second layer of authentication in the gateway (e.g., x-api-key) to impose an additional access barrier and prevent the gateway from being abused as an open proxy. On the network side, I deployed necessary protective measures, including access restrictions, anti-bot rules, and rate limiting, to reduce abnormal traffic and control cost risk. To improve production observability and troubleshooting efficiency, I integrated request tracing and logging (Trace/Log) and returned clear, actionable error responses when upstream failures occurred, making it easier for the frontend to display errors and for the team to diagnose issues."
+    },
+    {
+      "kind": "p",
+      "text": "In the final sprint, I was responsible for deploying the locally deliverable game to the cloud and securely publishing it to the public internet. I used a reverse proxy and SSL certificates to map local service ports to a public domain, ensuring secure transport and consistent access. I also used Supervisor to keep the service process alive, maintain active sessions, and reduce unexpected downtime. To address the “single session occupancy” issue that can arise with multiple users, I implemented a heartbeat mechanism and session-occupancy detection: when the system detects that a user is entering a session that is already in use, it automatically redirects them to an instruction page that explains the current occupancy state and provides alternative access methods, reducing user friction caused by blocking or incorrect actions."
+    },
+    {
+      "kind": "p",
+      "text": "Reviewing this semester’s learning, I learned a lot about how to “put generative AI into production” in real applications. Beyond simply getting model calls to function, I learned to approach AI integration as a distributed systems challenge: API stability and failure mode design are just as critical as the quality of the model itself. I also gained hands-on experience in secure design—specifically, keeping sensitive data server-side, implementing layered authentication, and applying rate limiting to prevent abuse and unexpected cost spikes. Finally, working closely with image processing pipelines helped me understand why generative models struggle to maintain visual consistency automatically, and why iterative or looping context strategies are essential in practice."
+    },
+    {
+      "kind": "p",
+      "text": "Nathan Ren"
+    },
+    {
+      "kind": "p",
+      "text": "So my personal contribution to this project was mainly in the form of the User Interface design of the web app and character/enemy development for creating characters in the game with varying degrees of difficulty. The first thing that I mainly worked on for this project was the User Interface and learning how to work with HTML, JavaScript, and CSS to create the web page for our game. Initially, I had little to no previous experience working with HTML, JavaScript, and CSS. So for this project, I had to completely learn from scratch how to work with HTML, JavaScript, and CSS, and create something that would reasonably work with the rough paper design that Smart came up with. Then, nearing the end of the project, as the UI got more integrated with the backend, I was tasked with creating character descriptions for the pool of enemies and sending them over to Smart to allow our program to generate those characters and save their stats in the backend to be used at random. Through this, I learned about how to keep things balanced, specifically, this is something that I learned as I watched people play the game and noticed characters that were much stronger than I thought they would be. Additionally, something else I learned is that when creating characters in bulk, I often overturned characters or misbalanced them. As an example, I might create a character, then make the next one slightly stronger, and that slight increase in strength would build until the final character would be much stronger than the first character in the list. If I were to redo the process, I would make a more conscious effort to ensure that all the characters are evenly strong with one another. Now reflecting back on my work on the user interface work, I think one thing I learned about working on the UI with zero background experience is how many resources are available for learning. This is something that was very helpful in developing the UI from scratch, as there were many good guides to help my UI journey. If I were to go back through the process again, I would spend more of the early sprints learning more about HTML, JavaScript, and CSS, just so that things got busier in the school year and the features for the program became more complex, I would be better equipped to handle it. Additionally, I would communicate more with others in the team and learn more about what other members in the group are doing in general, just to have a better grasp on the actual work that everyone is contributing towards the project, and how my UI design could’ve better assisted them in the final integration."
+    }
+  ],
+  "media": [
+    {
+      "kind": "character",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72uvr9V9LeMyusjIIXmE0OJM2yd1FddmWoC2xRKQnW-HVh2FSM25rLQqGMV7hg221Eb_UD8vU-zkgcamO69yT4jEtMFvwUPGPSi0TaVe5SIcDGWvpZNAFcUnPuM34CpYpPgM8s9c4So1tunXhx3MR84H0DARn-WDPcLLerddYTcsMrkK39-Qmch9LjuDlc-mzbQmPYz5DEBxHB0zpqcgPwm94Lw-uI7xX2TO108vgaI=w1280",
+      "file": "character-01.png",
+      "width": 1024,
+      "height": 919,
+      "sha256": "a42251354182dd1aadf81071224b5c2c690754c2414429589c9f924be3624da5"
+    },
+    {
+      "kind": "character",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72t3Qqc3qOZ9pWBf7W6ZcNZ8QIv4YlLzJ5sQkOAm-Ionq5f4fYvhBHyDoqxNJn092z6uLH2l0hHQAt_iNSHRTVu16eiro2RY-t6aEN5eNudjfVt4DFyWBwZziqAs6yHUcTvJHny3TV0-BrIQfLnfRfUNjowGjJJ36QMzUc1QUeOvzz-OLrtCB6t3P8W74cI=w1280",
+      "file": "character-02.png",
+      "width": 1024,
+      "height": 1024,
+      "sha256": "603db528e0e86a4036abb6aa8e5ab2b59fba51a37596a69891187529bd7f2f3a"
+    },
+    {
+      "kind": "character",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72te2orsVQy1UGOV0X0anBTmpcVVIHjOXcuDsIEfsHRD2Z0Xi5HmktjIqTgTvPNuP3gKt0l4_a1wYeHk5CdCLMPQfkRUD7R6fm8AML35C_NHKleGV7KREVNFq5LxKDDqLhlpls2u6Jsl0Z8fOR6Uq6xXH5QjRmmuoZgP7SiFLrfCBFRtcQsXDAC6rcxRnGs=w1280",
+      "file": "character-03.png",
+      "width": 1024,
+      "height": 1024,
+      "sha256": "b5dfd7aca81c289ef18e10cb7bad4ed1869d070df6c045ded68c8ef281255dd9"
+    },
+    {
+      "kind": "character",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72vYXoUry3acbww8ZidoRI-GfxGlaahZliA-oZF62tRVlr9bF4avfp1Qi4_Ka-Y-eICfhYWxG6c8hPj1fobVZ-sv0CRcXO8iGcL1L5Is5dNX1sPO_JSWBgxpYWOPZPZLgofqoPMFDemXRRSNptIowF2ivmvh8wN5Lyi7g4GESkLrNit4N3D4kxXsB2aL=w1280",
+      "file": "character-04.png",
+      "width": 1024,
+      "height": 1024,
+      "sha256": "45f286524585e06b9d9a20023206f75b90898287a91dc2d4eb70585b872622c3"
+    },
+    {
+      "kind": "character",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72vxapC16diwtmMuONE2mL1cew_EE5mCmyM-tXXOF9KgjQuPY_gkXr1FTaMaj3kC2WBsQQg5v2ncpbOv-_CSiRSF7FILREeAGHwAXKlj1k_nnwsUG93dfu02fLm9jsvYEMmTIyx8goZWSXL5MXUd5FhDbCMJ-S6ua5_3J4R7HvSDl1piCDGuEqZMHT2kpyyvpoNRXNVNTiCLfFjfgNgDmi9nh6DjQFR6VJXrhsmbwNg=w1280",
+      "file": "character-05.png",
+      "width": 794,
+      "height": 794,
+      "sha256": "1c8261d439cc9a3b1d199aef68bd8b4e7d5db396267135329943fac1318d093d"
+    },
+    {
+      "kind": "character",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72vi5S8Ci1LPSvnhyIn1Aa_feubvcVyKVfmY09fCVM5gimq5EP1GS698RBD_GFG7MryiEz_TbZLAT3ljIa7nVYYYOOEHTjmLCIhMEPY9ZPf4nlbwg-kQCrq5LkDTZe9DsgZ6FiCBV0epfAroqNlfqAix5g9DqheOxzPWYoyyF7XMdiKoXEe_pXSzUnfC9V3VR727_elXKpKPUJLyM5tuvK_z4bXkfKDiAvAmfZA226E=w1280",
+      "file": "character-06.png",
+      "width": 731,
+      "height": 731,
+      "sha256": "e609cac8cf44541dd34a5b35dd1ccce7c349be0190c5fe2be1766f6a2beb03c1"
+    },
+    {
+      "kind": "battle",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72ucy5zaRqJ0UukOgF9RmxRpvpDJ6Q4TmeLMYdJiFZIkzSLiEsThTF1uAh2ACn18r6zw9q6iqLOT3Lazj1vwntAG9MvgBSSsDANzHUrSHr4h5mnKaPsWOSDmBEm-uiLQDj3ZkNyCQgV8RYAl9bHJ7TOO2TBes8eQa87ZY2NxyGbsmbtrJKF6xWmg1suphzs=w16383",
+      "file": "battle-07.jpg",
+      "width": 1536,
+      "height": 2048,
+      "sha256": "197c7ea61382dd51927a32f38ca11ae5180a9a11fe116456001143ddb1908474"
+    },
+    {
+      "kind": "battle",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72sHaW9EYJD-aBW0AJ0uGptReAheS4zQZgODSsr4nR-s0CyojefvtZNGEoBih-7wERgBvALkEXhHFs8OSMjxX2an6oQSXkg7nRZPgI_5DVtTGS2o6ICmpiAqytkB9yvdeoeZGoEN8l5VIQy3X0D8iTIkUCA9hmpj0KYaTS8eZYbeDcjhrFzuGMbRSSGD9vA=w16383",
+      "file": "battle-08.jpg",
+      "width": 1536,
+      "height": 2048,
+      "sha256": "16175ce71e95246a257cfe09b1fb5f818f568137ece1c0a13cafedb8f84f74c9"
+    },
+    {
+      "kind": "battle",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72vARMmY8wAzdwDgD_81IDjpuET9kDnawGhMEVsfO5i1LT_TVVWMLXueHWsifzpJpywPrIWybZlCgfxHhid4ejAXTPxuOrirQErzskCT1HfZu5vIVnSOQcYEOwF-hmdofj1JtnDFgs8qZoNFIkWgOGAHMcCmBG0bmKvI4BfcczbPkl8D33LNtzU89YzX=w16383",
+      "file": "battle-09.jpg",
+      "width": 2048,
+      "height": 1536,
+      "sha256": "93bc53bd2f6c33006032379fb692dc495d416493e26a37d728e15e074273099e"
+    },
+    {
+      "kind": "battle",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72tL6_M3xUCltDns2ou2O8mUxn5-y5TLQ10PsjUh2WLwlM14Kzib-fqr8H62QSuxSQYdwfcKVPMXx3FMqduJloGlI7_1Ty15Bh_CMMCT4N9rMtWzJv0BXMWIgS7BMwHuK8P_SG-1AdM3bxBmkbDPrT_512A_uGahLbbI6_3bGrlJwhx9TMQPB3JVM3JI=w16383",
+      "file": "battle-10.jpg",
+      "width": 2048,
+      "height": 1536,
+      "sha256": "43044762a2ce1a5a78a63159462e02faa6e9ea73f339d751575225c60d1d8094"
+    },
+    {
+      "kind": "battle",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72uXQFmM11nTzddngjmDOendC4VGhmmFQhS77jdI0ypVfabAAbLrWIN5CqBFp_kG_ZrrNZtDKFKOSFxekOtKNRR1X8zcSSUUU8Ynpw3OPIv7bav8m0Fqv30KPYxewv5ecjw5RaeI3oB6F77Bdmj6p0v_iurU5WgJlHRtl9_oQeDop0hvg3eBc2MtdLzR=w16383",
+      "file": "battle-11.jpg",
+      "width": 2048,
+      "height": 1536,
+      "sha256": "1fbf57c77a89bf53b76bb197f29c50b1583a4f5e0422bb7ce812be60838673f8"
+    },
+    {
+      "kind": "battle",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72siPCG4yYTlmXTar00tWHdkPCNTnuEMZ518kFN4ngr1qNOIVqmxmIRZGARb3TgfL7j-sdsoBzEF-uO6HmWtZvsbeSor4rjslp3WhxkNX9HVrrHzNfi5fqol6yX5z2iw-0OGrI7JSDAyby7g0BJXlHMDKNYOyn-VLyMgQp-UquPjXCmrg_e9rB4_q2dACR8=w16383",
+      "file": "battle-12.jpg",
+      "width": 2048,
+      "height": 1536,
+      "sha256": "d2f35d55b80cc7a6a502f7814aa8c1df6efbd656988becb8e0e8e980b70314e9"
+    },
+    {
+      "kind": "battle",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72vv2xe-INPKkkim2lwnbco8xUUkZ4S71p5zoYOhN-c3jFBYqjyPf875pjjrwcuACTxMKkV_nn7IV75qUxKfnU6zl_P2v84Rp76COehZgypfZ3nHaJPB3gYCaoI9FiLVItWsnjywHcL-jBNP8kIN3hg2SEGtpqS36RmGrnySwKDTQAShXSlbSlDpdcbj_sY=w16383",
+      "file": "battle-13.jpg",
+      "width": 2048,
+      "height": 1536,
+      "sha256": "aa9b9b526bb553121733166b8aa3dc8b6d4741ef1e949513ff6c13b01aca49ce"
+    },
+    {
+      "kind": "battle",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72v1oruiQn6EijsXvNxioq1sjWWAeofOoer8thmY0iac1chAdffh7i53tF746zgruNXcJUp4ett6jlQiffSsqY60z8ttYwf_terY9JIMvNLnaxk6OVaROIcqQY_AwwWpLOlurH1uQvEOt-EHR_C27Y1T6sU-75piS4YUzRPmEeTG_aw0qlva4R4TQ3Rse_0=w16383",
+      "file": "battle-14.jpg",
+      "width": 2048,
+      "height": 1536,
+      "sha256": "d7306dea42914bfe597bd225168657e1ffcf8c3004ab05e1361d9caa9d6a8dd8"
+    },
+    {
+      "kind": "battle",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72tgt2hjj4hV_CrpMUJF_Fha-sqV0vDDmckE-oaeK8QAh_ypEO_lOEfNIyBxpBzcUM0NQN5MXdevwv-5B_b0s-2vEYgdxBrRqaR0KYH-zbKDHiWKRAOqvU5x6pL4Bx-12GXIPO89LyGqgxI3rgTq0iGAEKMQzmiUhCrGGEhGSxtmN9oPb7sWhyBCLIkjv3A=w16383",
+      "file": "battle-15.jpg",
+      "width": 2048,
+      "height": 1536,
+      "sha256": "fbfbd34d4aecd5efc2a11da3bd9cb4e33df14f2aa37caa6ce2a8dfca1224ec3b"
+    },
+    {
+      "kind": "battle",
+      "url": "https://sites.google.com/sitesv-images-rt/AMxu72voHEd82ZY1jYTBnh3T4YgL9L013SfdEEgi3KR5XsECtTcTM-SlMg5_mFedEq6tYnSF36bUbkBuGGtz69ZijvthnLCh2sX3rfukDMLpODY9jCEL013AlRxZXgyWpYxjIAK5F95hteoDilOrBNoWkty5L4HR_7aqt1YH5O0ieG1j1mNmz8X3rfunQVYK=w16383",
+      "file": "battle-16.jpg",
+      "width": 2048,
+      "height": 1536,
+      "sha256": "973c1c8d42bd67e58f865f5b5c435665f0d74b9d6be2170371e0f87d6030a495"
+    }
+  ]
+}
