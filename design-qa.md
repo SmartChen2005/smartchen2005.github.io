@@ -1,64 +1,55 @@
-# Interactive 404 design QA
+# Interactive 404 — preserved-scene refinement QA
 
 Verified 2026-10-09. final result: passed
 
-## Source and comparison evidence
+## Authoritative brief and preservation
 
-Visual truth: `tools/404-source/reference.jpg` and the supplied complete specification in `brief.md`. The brief requires an interactive, perspective-correct maintenance scene and changes the sign copy to 404 / SITE UNDER / CONSTRUCTION. The photograph supplies the material, atmosphere and perspective reference.
+The complete latest request is archived unchanged as `tools/404-source/revision-preserve-objects.md`. It requires keeping the restored room and all prop forms/materials, removing the sink, updating only prop wording, applying modernist treatment only to UI, clicking existing props to spawn one object, wheel rotation during dragging, and stable physical pushing.
 
-Source stored pixels: 4032×3024, EXIF-oriented 3024×4032. Full-view comparison normalizes the oriented source to 768×1024, preserving 3:4. Implementation: 768×1024 CSS viewport, deviceScaleFactor 1, resting initial sign, local `/404.html`. No browser chrome or device frame is included. Focused crops preserve their aspect ratios.
+The restored source was captured before edits. Direct comparison confirms that `roundedRect`, `bevelBox`, `signGeometry`, `aFrame`, `cone`, `barrier`, `marker` and `resize` are identical. The entire `buildRoom` function is identical after removing its sink call. This includes every floor tile, wall, skirting tile, material, bump/albedo setup, light, shadow configuration, camera and responsive framing. `buildSink` and its collision obstacle are completely removed. The report and matching function hashes are archived in `tools/404-source/model-preservation.json`.
 
-Evidence directory: `C:/Users/15811/.codex/visualizations/2026/10/09/01a12109-d49f-7861-b561-b7cc77e8cf2a/`.
+Sign wear, original Anton type, warning triangles, centered layouts, panel/hinge/handle/brace geometry, original orange/yellow cones and reflector stripes, silver/striped barriers and triangle post markers remain intact. Only sign copy changes: NO CONTENT, CONTENT MISSING, 404 / UNDER / MAINTENANCE, and small unavailable-area text on the existing hero.
 
-- `construction-comparison.png`: source and browser render in the same comparison input.
-- `construction-sign-comparison.png`: exterior lettering, handle opening, panel thickness, triangular opening, wear and floor contact.
-- `construction-desktop-final.png`: 1440×1000 initial state.
-- `construction-dense.png`: many collision-separated props.
-- `construction-390x844.png`, `construction-320x568.png`, `construction-700x390.png`: responsive states.
-- `construction-touch-selected.png`: native touch drag and contextual positioning controls.
-- `construction-forced-colors.png`: system colors and focused controls.
+## Visual evidence
 
-## Findings and iteration history
+`tools/404-source/preserve-comparison.webp` combines the restored before capture and the revised browser capture in one review image. Both use 1440×1000 CSS viewports, scale factor 1, uniformly resized to 936×650 with no browser frame. The same floor, room, lighting, sign and camera remain clearly visible. The changes are sink removal, text and interface treatment. The original photograph and original QA remain archived in `reference.jpg` and `qa-original.md`.
 
-1. Initial 3D pass: [P2] camera too wide; [P2] coarse repeated ceramic marks; [P2] inward faces showed reversed printed text. Moved the camera closer, replaced procedural albedo with generated photographic material maps, normalized tile UVs, and assigned lettering only to exterior face groups. The latest full-view and sign comparisons confirm the fixes.
-2. Material/perspective pass: [P2] plastic too bright and the floor direction opposed the reference. Reduced exposure/fill lighting, turned the camera to align the receding rows and wall base with the photograph, and adjusted the sign orientation to reveal its left triangular opening. Added collision boundaries for the visible wall column. Repeated the browser and collision checks.
-3. Responsive pass: [P2] a 420px minimum scene height could put Home below a 390px landscape viewport. Lowered the minimum to 320px, allowed controls to wrap, and added explicit browser assertions that persistent actions fit vertically as well as horizontally. All requested viewports now pass.
+Repeatable browser screenshots are in the ignored `tools/construction-qa/` folder:
 
-No actionable P0/P1/P2 findings remain. The room is an original real-time 3D environment implementing the supplied brief; fixtures and layout are reconstructed, and the source photo's exact camera capture and cleaning text are intentionally not reproduced pixel-for-pixel.
+- `construction-desktop-final.png`: resting initial scene, original worn hero and refined footer.
+- `construction-pushed.png`: a spawned prop has physically displaced the hero through a real mouse drag.
+- `construction-dense.png`: forty original-family props without intersections.
+- `construction-reference-size.png`: 768×1024 framing.
+- `construction-390x844.png`, `construction-320x568.png`, `construction-700x390.png`: preserved responsive camera and reachable controls.
+- `construction-touch-selected.png`: touch-dragged original sign, original orange cone and explicitly opened movement toolbar.
+- `construction-forced-colors.png`: system colors and operable native controls.
 
-## Required fidelity surfaces
+## Findings and polish
 
-- **Typography:** local Anton supplies heavy condensed industrial lettering baked into the sign surface texture. The exact three requested lines remain readable under perspective. Ordinary UI uses restrained 11px Helvetica Neue / Arial; wrapping and native keyboard controls remain usable on phones.
-- **Spacing/layout:** the scene fills the viewport, the main sign stands near its center, square tiles recede in one world coordinate system, and native links/actions occupy the edges. The contextual object controls appear on selection. No landing-page sections or decorative cards were introduced.
-- **Colors:** warm, dim olive plaster, dirty off-white/dark ceramic and worn ochre plastic follow the photo. Physical lighting, room reflections, ceramic bump, soft shadow sampling and local contact shadows supply depth. UI/focus tokens are documented in DESIGN.md.
-- **Image/material quality:** generated albedo textures contain fine ceramic grain and plastic wear. WebP copies retain 1254×1254 resolution; original PNGs and exact prompts are archived. The floor, handle cutout, panel thickness, cones, barriers and warning markers are actual 3D meshes. The photograph is not a background.
-- **Copy/content:** primary exterior print is exactly 404 / SITE UNDER / CONSTRUCTION. The small unavailable-area caption, Add Objects, Shuffle, Clear and Back to Home match the supplied brief. Secondary props have real caution/maintenance wording. No added portfolio story or slogans.
+1. [P2, fixed] Every object click must add exactly one, while release after dragging/rotation/cancellation must not add. Mouse/touch thresholds distinguish the gestures; spawning occurs on qualifying pointer-up, so touch does not depend on a compatibility click. Enter/Space provides equivalent access and key auto-repeat does not produce a burst. If a chosen type cannot fit, the other original types are tried; no valid position means a full-floor message and no overlap.
+2. [P2, fixed] Contact must displace nearby props rather than only blocking the driver. Swept transactional contact propagation pushes neighbouring objects and chains; blocked substeps roll back every affected body. Tangential motion can slide along walls. Pushed props cancel their previous animations, remain upright/grounded, and have no residual velocity to jitter at rest.
+3. [P2, fixed] Moving after a wheel input initially cancelled the driver's easing target. Movement now preserves that rotation target while cancelling unrelated pushed-object animations. Wheel delta modes are normalized, each impulse is bounded, and browser zoom shortcuts retain their behavior.
+4. [P3, fixed] A prior keyboard outline could remain during mouse interaction. Keyboard-only focus state now gives clear keyboard feedback and removes the outline on pointer interaction. Selecting a falling prop immediately synchronizes its grounded mesh/contact shadow.
 
-## Functional and engineering verification
+No actionable P0/P1/P2 findings remain. Bauhaus/Swiss influence is limited to Archivo UI, square paper/ink buttons, spacing and alignment; none of it changes the 3D object family or environment.
 
-The final browser run used Chrome because the in-app browser runtime exited before initialization. It passed with zero console/page errors. The nested missing-path test expects the legitimate HTTP 404 document response.
+## Functional verification
 
-- Raycast mouse drag and native CDP touch events change floor coordinates while keeping objects upright.
-- Arrow keys, R, native object selection and directional/rotation buttons provide non-drag alternatives.
-- Final portable browser test placed 26 objects including all eight categories, within the forty-object cap. Placement counts vary with random prop footprints. No prop intersections occurred during drag or forty samples of animated Shuffle.
-- Shuffle preserves the main sign; Clear removes secondary meshes/textures and restores its exact starting position/orientation. Correct disabled states follow an empty secondary collection.
-- Resting desktop, 768×1024, 390×844, 320×568 and 700×390 layouts: no horizontal overflow, persistent controls within the visible viewport, at least 44px action height.
-- Reduced motion skips entrance/drop animation and maintains collision-safe shuffle; forced colors keeps controls operable.
-- Root-relative imports/assets load under a nested missing path. Home navigation works. No-JavaScript and unavailable-WebGL fallbacks expose the correct error message and a real Home link.
-- `node tools/validate-site.mjs`, `node tools/test-construction-space.mjs`, scene/addon syntax checks, and `git diff --check` pass.
-- Strict premium audit: zero findings, saved in `tools/404-source/audit.json`. Its exclusion of `dist/` is explicitly accounted for by browser QA.
-- No framework build, TypeScript typecheck or formatter is configured for this static repository. The implementation uses maintained static modules with locally vendored Three.js.
+Chrome/Playwright is used because the in-app browser trusted runtime failed in this session's earlier work. The final browser run passed with zero console/page errors, excluding expected HTTP 404 responses at the missing-path check.
 
-## Follow-up polish and test limits
+- Slight pointer jitter still counts as a click and adds exactly one without moving the clicked object. Dragging, wheel rotation and Escape cancellation do not spawn. Tapping after a native touch drag adds one.
+- A real mouse drag of a spawned prop toward the hero moves the hero by physical contact; all affected objects stay grounded and separated. Read-only projection/picking diagnostics permit repeatable pointer gestures without mutating scene state.
+- Wheel input while dragging eases smoothly around the vertical axis; continuing to move preserves the rotation target. Wheel input outside a drag does not rotate objects.
+- Enter/Space spawning, arrow-key pushing, R rotation, bracket cycling and the explicitly opened directional/rotation toolbar preserve non-drag access. Escape closes the toolbar and restores Move focus. No standalone Add button or physical plus object exists.
+- The final deterministic dense run reaches forty objects and all eight original categories. Every footprint stays inside bounds and clear of other props and the architectural column.
+- Forty samples of animated Shuffle retain pairwise/column separation and preserve the hero. Clear removes secondary props and restores its original position and orientation. Correct disabled states follow.
+- 1440×1000, 768×1024, 390×844, 320×568 and 700×390 layouts have no horizontal overflow, with persistent action targets at least 44×44px and inside the viewport.
+- Reduced motion skips drops and retains collision-safe shuffle. Forced colors retains native actions. Root-relative dependencies work at nested missing paths; Home navigation, no-JavaScript and unavailable-WebGL fallbacks work.
 
-- [P3] The reconstructed fixtures and surface lighting remain more regular than the original photograph. Further photographic detail can be refined without changing the working spatial system.
-- Touch coverage uses Chrome device emulation with native touch events; physical iOS/Safari GPU performance has not been measured.
-- No deployment was requested or verified. The local preview is kept running.
+`node tools/test-construction-space.mjs` passes: 38 initial footprints, 1,000 long swept moves, 350 dense randomized pushes, a four-object chain, wall-pinned rollback, column exclusion, tangential wall sliding and impossible placement. The conservative original footprints and all-angle volume remain unchanged. The new solver is quasi-static floor displacement rather than a free inertial simulation.
 
-## Implementation checklist
+Other checks: `node tools/validate-site.mjs`, `node --check dist/construction.mjs`, `node --check dist/construction-space.mjs`, `git diff --check`, and the strict premium audit saved in `tools/404-source/audit.json`. The audit excludes `dist/`, so runtime browser evidence remains essential. No framework build, TypeScript typecheck or formatter is configured in this static repository.
 
-- Supplied design implemented; discarded serif 404 page and CSS removed.
-- Original brief/photo and generated material originals preserved.
-- Dependency/font licenses included; runtime assets served locally.
-- Collision regression included in Pages CI; packaging checks added to site validation.
-- Full and focused visual comparisons inspected after fixes; primary interactions and fallbacks verified.
+## Limits
+
+Touch coverage uses Chrome emulation with native events; physical iOS/Safari GPU behavior was not measured. Sign fine print remains small at a distance, preserving the physical-sign appearance. No remote deployment was requested or verified; the local preview remains running.

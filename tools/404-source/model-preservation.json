@@ -1,0 +1,43 @@
+{
+  "verified": "2026-10-09",
+  "reference": "Restored source captured before this revision",
+  "result": "passed",
+  "functions": {
+    "roundedRect": {
+      "unchanged": true,
+      "sha256": "78433a984fdb87856969358c1c768e4983e2ec4868b54ce8b124277580297fcf"
+    },
+    "bevelBox": {
+      "unchanged": true,
+      "sha256": "c1f2d15f42da8e71b89922decb9659b2c4ca9e035046f42b3e9901e908f7c9cf"
+    },
+    "signGeometry": {
+      "unchanged": true,
+      "sha256": "9c85bce7c21bb92848f5825e32f58f0b36d26d447db16bc8676e295c4e17b040"
+    },
+    "aFrame": {
+      "unchanged": true,
+      "sha256": "fb36b7190ded41b573d136d6097f54678b344d60d9ff18daa235fa719a2d0e6d"
+    },
+    "cone": {
+      "unchanged": true,
+      "sha256": "f8dd3c4545838dd69848323dd9bec80ae125760cb446d8f54a2d4aebba7ff227"
+    },
+    "barrier": {
+      "unchanged": true,
+      "sha256": "45aafd68f25ee8344b4f573e2eb5cf3d312adf5a6ca5b3a34c7abd5fc43b0670"
+    },
+    "marker": {
+      "unchanged": true,
+      "sha256": "bcc2ef8a1aed34c833d09684344768494eb1310a0b77d3359ea1902b0a63d4f2"
+    },
+    "resize": {
+      "unchanged": true,
+      "sha256": "da77299857b08f066b76b038250c2274a3aa71ccb8be8bb52ad9791817634439"
+    },
+    "buildRoom": {
+      "unchangedExceptRemovingSink": true,
+      "sha256": "08ff09881d3e98b5b657ebc20121b295ac076af1c4bdbf3915a25187e8ff124c"
+    }
+  }
+}

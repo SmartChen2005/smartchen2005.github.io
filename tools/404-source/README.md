@@ -7,6 +7,16 @@ User brief and photograph supplied on 2026-10-09. Both are preserved unchanged:
 
 Three.js r180 / npm 0.180.0 is vendored in `dist/vendor/three/`. Source: https://github.com/mrdoob/three.js/tree/r180. MIT license is included. `RoomEnvironment.mjs` has one integration change: its bare `three` import points to the adjacent local module. Anton is from https://github.com/google/fonts/tree/main/ofl/anton, with its SIL OFL license in `dist/assets/fonts/Anton-OFL.txt`.
 
+## Preserve-objects revision (2026-10-09)
+
+The complete latest user brief is archived unchanged in `revision-preserve-objects.md`, SHA-256 `70133c891468a37c9ad75c828cb50193c293df0ade2890493b0dc68cbdf9070d`. It requires preserving the restored scene and every prop model/material, removing only the sink, updating sign copy, refining UI alone, clicking props to spawn one object, wheel rotation while dragging, and stable object pushing.
+
+`model-preservation.json` records a direct source comparison: all prop model/material builders and the original camera remain identical; the entire room builder differs only by removing its sink call. Existing triangles, wear, cones, reflective bands, striped barriers, tiles, walls, skirting and lighting remain unchanged. Only sign text is revised. Raw restored source and screenshots are in the ignored `tools/construction-qa/` output folder; Git history retains the original implementation.
+
+UI alone uses Archivo by Omnibus-Type from the official https://github.com/google/fonts/tree/main/ofl/archivo directory. `dist/assets/fonts/archivo-variable.ttf`: 658,596 bytes, SHA-256 `0e094a7d3c7c4c25cf1310c4b30014f1dae9332220b1c2c88f4fa996f0b05053`; SIL OFL in `Archivo-OFL.txt`. Anton remains the physical sign font. No new generated materials or 3D models were introduced.
+
+`preserve-comparison.webp` combines matching before/after desktop captures. `qa-original.md` preserves the initial QA report; project-root `design-qa.md` owns current revision verification. The physics uses transactional contact displacement with swept substeps and chain propagation, retaining the original conservative footprints. It has no inertial motion to drift or jitter while idle.
+
 ## Generated material assets
 
 Generated with the built-in ImageGen tool and visually inspected. Both are 1254×1254 PNG originals retained in `materials/`. `tools/prepare-construction-assets.py` creates quality-92 WebP runtime maps at their original dimensions, 462,548 and 300,824 bytes. No scene images or sprites replace the 3D geometry.
@@ -39,7 +49,7 @@ Constraints: no lettering or symbols, no handle, no edges or borders, no objects
 ## Repeatable checks
 
 - `node tools/validate-site.mjs`: source/document integrity and all 404 packaging dependencies.
-- `node tools/test-construction-space.mjs`: 38 conservative footprints, 1,000 long randomized drags, pairwise collision separation, world bounds, wall exclusion and impossible-placement fallback. Included in Pages CI.
+- `node tools/test-construction-space.mjs`: 38 conservative footprints, 1,000 swept moves, 350 dense randomized pushes, four-object chain displacement, wall-pinned rollback, tangential sliding, world/column boundaries and impossible placement. Included in Pages CI.
 - `node --check dist/construction.mjs`: scene syntax.
 - `node tools/test-construction-browser.cjs`: requires Playwright with Chrome and a static preview server serving `dist/`, returning `404.html` for missing requests. Defaults to port 4173. `PLAYWRIGHT_MODULE`, `CONSTRUCTION_PREVIEW_URL` and `CONSTRUCTION_QA_DIR` can override tooling, origin and screenshot directory.
 - `audit.json`: strict static audit, zero findings. The auditor excludes deployed `dist/`; browser checks own runtime verification.

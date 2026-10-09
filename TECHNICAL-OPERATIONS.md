@@ -91,6 +91,14 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-09 — Preserve-model 404 interaction refinement
+
+- Followed the latest archived brief: preserved every existing prop builder/material, floor, walls, trim, lighting and camera; removed the sink and updated only sign copy.
+- Refined UI alone with Archivo and square paper/ink footer actions; removed the global Add control and used prop click/tap to spawn exactly one object. Kept accessible keyboard equivalents and an explicitly opened movement toolbar.
+- Added smooth mouse-wheel rotation during dragging, click/drag/cancellation discrimination, and transactional contact pushing with stable chain displacement and wall/boundary rollback.
+- Verified exact model/room preservation, Chrome mouse/touch/keyboard interactions, real prop-to-prop displacement, dense placement/Shuffle/Clear, responsive controls and error/navigation fallbacks. Spatial tests include 350 dense pushes and pinned-chain cases. See `design-qa.md`.
+- Prepared locally for review; no remote publication was requested.
+
 ### 2026-10-09 — Interactive maintenance 404
 
 - Implemented the supplied photographic 3D maintenance brief with a tiled room, worn folding 404 sign and multiple draggable prop types.
