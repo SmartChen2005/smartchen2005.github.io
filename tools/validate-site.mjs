@@ -9,6 +9,20 @@ const assetMapPath = path.join(root, "tools", "archive-slides-source.txt");
 const html = fs.readFileSync(htmlPath, "utf8");
 const markdown = fs.readFileSync(markdownPath, "utf8").replace(/\r/g, "");
 const failures = [];
+// GitHub Pages serves this file at arbitrary missing-path depths.
+const missingPage = path.join(root, 'dist/404.html');
+if (!fs.existsSync(missingPage)) failures.push('The custom GitHub Pages 404 page is missing');
+else {
+  const page = fs.readFileSync(missingPage, 'utf8');
+  for (const [, ref] of page.matchAll(/(?:src|href)="([^"]+)"/g)) {
+    if (/^(?:data:|https?:|#)/.test(ref)) continue;
+    if (!ref.startsWith('/')) failures.push(`404 references must be root-relative at missing-path depths: ${ref}`);
+    if (!fs.existsSync(path.join(root, 'dist', ref.replace(/^\//, '')))) failures.push(`Missing 404 dependency: ${ref}`);
+  }
+  for (const ref of ['construction-space.mjs', 'vendor/three/three.module.min.js', 'vendor/three/three.core.min.js', 'vendor/three/RoomEnvironment.mjs', 'assets/fonts/anton-regular.ttf', 'assets/maintenance/ceramic-albedo.webp', 'assets/maintenance/yellow-plastic.webp']) {
+    if (!fs.existsSync(path.join(root, 'dist', ref))) failures.push(`Missing construction scene dependency: ${ref}`);
+  }
+}
 const home = fs.readFileSync(path.join(root, 'dist/index.html'), 'utf8');
 const homeCss = fs.readFileSync(path.join(root, 'dist/home.css'), 'utf8');
 const settledCss = homeCss.replace(/@keyframes develop-print \{[\s\S]*?\n\}/, '');

@@ -91,6 +91,14 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-09 — Interactive maintenance 404
+
+- Implemented the supplied photographic 3D maintenance brief with a tiled room, worn folding 404 sign and multiple draggable prop types.
+- Added floor raycasts, collision-aware placement/dragging, Shuffle/Clear, touch/keyboard controls and no-JavaScript/WebGL fallbacks.
+- Archived the user's brief/photo, generated material originals and prompts; vendored Three.js and Anton with their licenses. Runtime material textures total 763,372 bytes.
+- Verified real Chrome desktop/mobile states, touch events, dense layouts, shuffle collision sampling, navigation, reduced motion and fallbacks. Source/packaging validation and 1,000 randomized collision drags pass. See `design-qa.md`.
+- This update is prepared locally; no remote publication was performed.
+
 ### 2026-10-05 — Multiverse All-Star Battlefront
 
 - Added the project to Projects with a Swiss poster layout based on the supplied typography, color and grid references.

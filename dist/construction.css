@@ -1,0 +1,69 @@
+@font-face { font-family: Anton; src: url('/assets/fonts/anton-regular.ttf') format('truetype'); font-style: normal; font-weight: 400; font-display: block; }
+:root {
+  color-scheme: dark;
+  --room: #454537;
+  --ui: #eeeee3;
+  --ui-shade: #25271f;
+  --ui-focus: #f5d561;
+  scrollbar-color: #989785 var(--room);
+  scrollbar-width: thin;
+}
+* { box-sizing: border-box; }
+*::-webkit-scrollbar { width: 9px; height: 9px; }
+*::-webkit-scrollbar-track { background: var(--room); }
+*::-webkit-scrollbar-thumb { background: #989785; }
+*::-webkit-scrollbar-thumb:hover { background: #c1bfab; }
+*::-webkit-scrollbar-thumb:active { background: var(--ui); }
+body { margin: 0; background: var(--room); color: var(--ui); font: 11px/1.4 'Helvetica Neue', Arial, sans-serif; }
+.maintenance { position: relative; width: 100%; height: 100svh; min-height: 320px; isolation: isolate; }
+#maintenance-scene { display: block; width: 100%; height: 100%; touch-action: none; cursor: default; }
+#maintenance-scene[data-hover] { cursor: grab; }
+#maintenance-scene[data-dragging] { cursor: grabbing; }
+#maintenance-scene:focus-visible { outline: 2px solid var(--ui-focus); outline-offset: -5px; }
+.scene-caption, .scene-controls, .scene-footer { position: absolute; z-index: 1; letter-spacing: .1em; }
+.scene-caption { top: max(26px, env(safe-area-inset-top)); left: 28px; text-shadow: 0 1px 4px var(--ui-shade); pointer-events: none; }
+.scene-controls { right: 22px; top: max(14px, env(safe-area-inset-top)); display: flex; flex-wrap: wrap; max-width: calc(100% - 32px); gap: 2px; }
+button, select, a { -webkit-tap-highlight-color: transparent; }
+.scene-controls button, .object-tools button {
+  min-height: 44px; border: 0; border-radius: 0; padding: 10px 13px;
+  color: var(--ui); background: var(--ui-shade); font: inherit; letter-spacing: inherit; cursor: pointer;
+}
+.scene-controls button { background: transparent; text-shadow: 0 1px 4px var(--ui-shade); }
+.scene-controls button:hover, .object-tools button:hover { background: var(--ui); color: var(--ui-shade); text-shadow: none; }
+button:active, a:active { opacity: .7; }
+button:disabled { opacity: .4; cursor: default; }
+button:disabled:hover { background: transparent; color: var(--ui); }
+button:focus-visible, a:focus-visible, select:focus-visible { outline: 2px solid var(--ui-focus); outline-offset: 3px; }
+.scene-footer { bottom: max(20px, env(safe-area-inset-bottom)); left: 28px; right: 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.scene-footer a { color: var(--ui-shade); background: var(--ui); padding: 14px 15px; min-height: 44px; display: inline-flex; align-items: center; text-decoration: none; cursor: pointer; }
+.scene-footer a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.scene-footer p { margin: 0; padding: 8px 0; text-shadow: 0 1px 4px var(--ui-shade); }
+.object-tools { position: absolute; left: 28px; bottom: 82px; z-index: 2; background: var(--ui-shade); padding: 8px; max-width: calc(100% - 32px); letter-spacing: .08em; }
+.object-tools[hidden] { display: none; }
+.object-tools label { padding: 0 6px; }
+.object-tools select { border: 0; border-radius: 0; background: var(--ui-shade); color: var(--ui); min-height: 44px; font: inherit; max-width: 205px; cursor: pointer; }
+.object-tools div { display: flex; flex-wrap: wrap; }
+.object-tools button { min-width: 44px; }
+.scene-fallback { position: absolute; inset: 0; display: grid; align-content: center; justify-items: center; gap: 18px; padding: 24px; background: var(--room); text-align: center; }
+.scene-fallback[hidden] { display: none; }
+.scene-fallback h1 { font: 400 clamp(24px, 5vw, 48px)/1.25 Anton, Impact, sans-serif; text-transform: uppercase; margin: 0; }
+.scene-fallback p { margin: 0; }
+.scene-fallback p:first-child { font: 400 100px/1 Anton, Impact, sans-serif; color: var(--ui-focus); }
+.scene-fallback a { color: var(--ui); min-height: 44px; padding: 12px; }
+body[data-fallback] .scene-controls, body[data-fallback] .scene-caption, body[data-fallback] .scene-footer { display: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; clip-path: inset(50%); overflow: hidden; white-space: nowrap; }
+@media (max-width: 700px) {
+  .scene-caption { top: max(17px, env(safe-area-inset-top)); left: 16px; font-size: 9px; }
+  .scene-controls { top: max(38px, env(safe-area-inset-top)); left: 4px; right: auto; }
+  .scene-controls button { padding-inline: 12px; }
+  .scene-footer { left: 16px; right: 16px; bottom: max(14px, env(safe-area-inset-bottom)); gap: 10px; font-size: 10px; }
+  .scene-footer p { max-width: 130px; text-align: right; }
+  .object-tools { left: 16px; bottom: 78px; }
+}
+@media (max-height: 500px) and (min-width: 701px) { .maintenance { min-height: 320px; } }
+@media (forced-colors: active) {
+  :root { scrollbar-color: auto; }
+  button, select, .scene-footer a, .object-tools { background: Canvas; color: CanvasText; text-shadow: none; }
+  button:focus-visible, a:focus-visible, select:focus-visible { outline-color: Highlight; }
+  .scene-caption, .scene-footer p { background: Canvas; color: CanvasText; text-shadow: none; }
+}

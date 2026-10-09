@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#454537">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:,">
+  <title>404 — Site under construction · Smart Chen</title>
+  <link rel="preload" href="/assets/fonts/anton-regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="/construction.css">
+  <script type="module" src="/construction.mjs"></script>
+</head>
+<body>
+  <main class="maintenance" aria-label="404 — Site under construction">
+    <canvas id="maintenance-scene" aria-label="Interactive maintenance area. Select an object, then use arrow keys to move it and R to rotate." tabindex="0"></canvas>
+    <div id="scene-fallback" class="scene-fallback" hidden>
+      <p>404</p><h1>Site under construction</h1>
+      <p>This area is temporarily unavailable.</p>
+      <a href="/">Back to home</a>
+    </div>
+    <noscript><div class="scene-fallback"><p>404</p><h1>Site under construction</h1><p>This area is temporarily unavailable.</p><a href="/">Back to home</a></div></noscript>
+    <div class="scene-caption" aria-hidden="true">THIS AREA IS TEMPORARILY UNAVAILABLE.</div>
+    <div class="scene-controls" role="group" aria-label="Arrange the maintenance area">
+      <button id="add-objects" type="button" disabled>+ ADD OBJECTS</button>
+      <button id="shuffle-objects" type="button" disabled>SHUFFLE</button>
+      <button id="clear-objects" type="button" disabled>CLEAR</button>
+    </div>
+    <div class="scene-footer">
+      <a href="/">BACK TO HOME</a>
+      <p id="scene-help">DRAG TO MOVE · R TO ROTATE</p>
+    </div>
+    <div class="object-tools" id="object-tools" hidden>
+      <label for="selected-object">OBJECT</label>
+      <select id="selected-object" aria-label="Select an object to move"></select>
+      <div role="group" aria-label="Move selected object">
+        <button type="button" data-move="left" aria-label="Move left">←</button>
+        <button type="button" data-move="far" aria-label="Move away">↑</button>
+        <button type="button" data-move="near" aria-label="Move closer">↓</button>
+        <button type="button" data-move="right" aria-label="Move right">→</button>
+        <button type="button" id="rotate-object">ROTATE</button>
+      </div>
+    </div>
+    <p id="scene-status" class="sr-only" role="status" aria-live="polite"></p>
+  </main>
+</body>
+</html>

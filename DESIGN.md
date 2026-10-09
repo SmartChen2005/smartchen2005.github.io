@@ -1,5 +1,15 @@
 # Polaroid of Yesterday — Design Context
 
+## Interactive 404 — site under construction (2026-10-09)
+
+The user's supplied photograph and complete brief, archived in `tools/404-source/`, own this route's independent visual direction. `dist/404.html` is the GitHub Pages fallback. The viewport is a real Three.js perspective room: individually beveled ceramic tiles with grout, warm dim light, aged plaster, a sink and pipes, and a worn yellow folding sign. Its exterior texture prints exactly “404 / SITE UNDER / CONSTRUCTION”; inner panels are unprinted plastic. The handle is a geometry cutout. The photo is a reference, never a scene background. All runtime dependencies and textures are local.
+
+Runtime geometry, material colors, camera, physical lighting and textures are owned by `dist/construction.mjs`; UI tokens by `dist/construction.css`: room `#454537`, light UI `#eeeee3`, dark UI `#25271f`, focus `#f5d561`. Anton (locally hosted, SIL OFL) supplies the condensed industrial lettering rendered into physical sign textures. Helvetica Neue / Arial supplies the small corner controls. No homepage tokens or interactions are changed.
+
+`dist/construction-space.mjs` owns the world bounds, conservative circular prop footprints, rectangular wall collision, spacing, placement and swept dragging. The scene has one primary sign, several caution/maintenance sign variants, orange/yellow cones, portable barriers and small warning markers. Add spawns up to four valid randomized props; the scene is capped at forty objects and skips impossible placements. Shuffle moves secondary objects through the same collision constraints; Clear removes them and restores the original sign. Mouse/touch raycasts intersect the floor. Arrow keys, R, and a contextual native object selector plus directional buttons provide equivalent movement and rotation without dragging. The native selector deliberately uses the platform popup.
+
+The initial composition is camera-dependent; resizing can pull the camera back to keep the arranged objects visible. Reduced motion skips entrance and shuffle animation. Rendering sleeps when idle and when the document is hidden. Forced colors retain system-operable controls. No-JavaScript and unavailable/lost-WebGL states provide an honest text fallback with Home navigation. Root-relative asset/module URLs support missing addresses at any depth. Material-generation prompts, source hashes, licensing and verification are recorded in `tools/404-source/README.md` and `design-qa.md`.
+
 ## Multiverse All-Star Battlefront — Swiss project page (2026-10-05)
 
 User-supplied project metadata: developed September to November 2025; explicitly not a vibe-coding project. Both details appear together in the hero metadata. These are additions from the user, independent of the preserved source-document copy.
