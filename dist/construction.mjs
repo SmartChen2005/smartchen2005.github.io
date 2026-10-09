@@ -426,7 +426,7 @@ canvas.addEventListener('wheel', event => {
   if (!dragging || event.ctrlKey || event.metaKey) return;
   event.preventDefault(); dragging.didRotate = true;
   const pixels = (event.deltaY || event.deltaX) * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? canvas.clientHeight : 1);
-  const angle = Math.max(-120, Math.min(120, pixels)) * .0025;
+  const angle = Math.max(-120, Math.min(120, pixels)) * -.0025;
   const body = dragging.body; body.targetAngle = (body.targetAngle ?? body.angle) + angle;
   requestRender();
 }, { passive: false });
