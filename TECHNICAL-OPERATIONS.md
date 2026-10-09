@@ -91,6 +91,21 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-09 — Preserve the 404 hero when clearing
+
+- Removed the detached arrow from Back to Home.
+- Clear now preserves the original 404 sign's current position and orientation, removing only other props with a quick procedural cloud puff and fade.
+- Added bounded cloud/resource cleanup, safe repeated Clear/Add, hidden/fallback cleanup and immediate removal under reduced motion.
+- Verified Chrome desktop/mobile Clear, exact hero-pose retention, cloud lifecycle, rapid actions and the existing interaction suite. Prepared locally for review.
+
+### 2026-10-09 — Lively 404 motion and orange roadblocks
+
+- Added spring dragging, release inertia, mass-dependent collision impulses, glancing rotation and small wall rebounds over the existing transactional contact solver. Damping settles motion without jitter; Clear restores the lone hero too.
+- Made all cones, striped barriers and warning posts orange, removing the yellow-cone variant. Retained folding-sign finishes, all model geometry, room, lighting and camera.
+- Replaced Move/Shuffle and the movement toolbar with a native Add button; preserved Clear, Home and keyboard movement/rotation.
+- Verified mouse/touch gestures, release glide and exact rest, chain momentum, dense contact stability, reduced motion, responsive targets and navigation/fallbacks. See `design-qa.md` and `tools/404-source/fluid-preservation.json`.
+- Prepared locally for review; no remote publication was requested.
+
 ### 2026-10-09 — Preserve-model 404 interaction refinement
 
 - Followed the latest archived brief: preserved every existing prop builder/material, floor, walls, trim, lighting and camera; removed the sink and updated only sign copy.

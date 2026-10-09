@@ -9,7 +9,7 @@
   <title>404 — Site under construction · Smart Chen</title>
   <link rel="preload" href="/assets/fonts/anton-regular.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="/assets/fonts/archivo-variable.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="/construction.css">
+  <link rel="stylesheet" href="/construction.css?v=corner-controls">
   <script type="module" src="/construction.mjs"></script>
 </head>
 <body>
@@ -21,27 +21,12 @@
       <a href="/">Back to home</a>
     </div>
     <noscript><div class="scene-fallback"><p>404</p><h1>Site under construction</h1><p>This area is temporarily unavailable.</p><a href="/">Back to home</a></div></noscript>
-    <p id="scene-help" class="scene-help" aria-hidden="true">CLICK TO ADD · DRAG TO MOVE</p>
+    <a class="scene-home" href="/"><span class="footer-label">BACK TO HOME</span></a>
     <div class="scene-footer">
-      <a href="/"><span aria-hidden="true">↖</span> BACK TO HOME</a>
+      <p id="scene-help" class="scene-help" aria-hidden="true">DRAG TO MOVE</p>
       <div class="scene-controls" role="group" aria-label="Arrange the maintenance area">
-        <button id="adjust-object" type="button" aria-controls="object-tools" aria-expanded="false" disabled>MOVE</button>
-        <button id="shuffle-objects" type="button" disabled>SHUFFLE</button>
-        <button id="clear-objects" type="button" disabled>CLEAR</button>
-      </div>
-    </div>
-    <div class="object-tools" id="object-tools" hidden>
-      <div class="object-heading">
-        <button id="previous-object" type="button" aria-label="Select previous object">‹</button>
-        <p id="selected-object" aria-live="polite">404 sign</p>
-        <button id="next-object" type="button" aria-label="Select next object">›</button>
-      </div>
-      <div role="group" aria-label="Move selected object">
-        <button type="button" data-move="left" aria-label="Move left">←</button>
-        <button type="button" data-move="far" aria-label="Move away">↑</button>
-        <button type="button" data-move="near" aria-label="Move closer">↓</button>
-        <button type="button" data-move="right" aria-label="Move right">→</button>
-        <button type="button" id="rotate-object" aria-label="Rotate selected object">↻</button>
+        <button id="add-objects" type="button" aria-label="Add one object" disabled><span class="footer-label">+ ADD</span></button>
+        <button id="clear-objects" type="button" disabled><span class="footer-label">CLEAR</span></button>
       </div>
     </div>
     <p id="scene-status" class="sr-only" role="status" aria-live="polite"></p>

@@ -16,45 +16,40 @@ body { margin: 0; background: var(--room); color: var(--ink); font: 600 12px/1.4
 #maintenance-scene[data-keyboard]:focus { outline: 2px solid var(--yellow); outline-offset: -5px; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { border: 0; border-radius: 0; color: inherit; font: inherit; cursor: pointer; }
-.scene-footer { position: absolute; z-index: 2; bottom: max(24px, env(safe-area-inset-bottom)); left: 28px; right: 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; letter-spacing: .045em; }
-.scene-footer a { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; color: var(--ink); background: var(--paper); padding: 12px 16px; text-decoration: none; }
-.scene-footer a span { font-size: 21px; line-height: 1; }
-.scene-footer a:hover { text-decoration: underline; text-underline-offset: 4px; }
-.scene-controls { display: flex; align-items: center; background: var(--paper); }
-.scene-controls button { min-height: 44px; min-width: 44px; padding: 12px 17px; background: transparent; letter-spacing: inherit; }
+.scene-home { position: absolute; z-index: 2; top: max(24px, env(safe-area-inset-top)); left: 28px; letter-spacing: .045em; }
+.scene-footer { position: absolute; z-index: 2; bottom: max(24px, env(safe-area-inset-bottom)); right: 28px; max-width: calc(100% - 56px); display: flex; flex-direction: column; align-items: flex-end; gap: 14px; letter-spacing: .045em; }
+.scene-home, .scene-controls button { appearance: none; display: grid; place-items: center; box-sizing: border-box; height: 44px; min-height: 44px; margin: 0; border: 0; padding: 0 16px; font: inherit; line-height: 1; letter-spacing: .045em; white-space: nowrap; }
+.footer-label { display: block; margin: 0; padding: 0; font: inherit; line-height: 1; }
+.scene-home { color: var(--ink); background: var(--paper); text-decoration: none; }
+.scene-home:hover { text-decoration: underline; text-underline-offset: 4px; }
+.scene-controls { display: grid; grid-auto-flow: column; grid-template-rows: 44px; align-items: stretch; background: var(--paper); }
+.scene-controls button { min-width: 44px; padding-inline: 17px; background: transparent; }
 .scene-controls button + button { border-left: 1px solid #c6c5b9; }
-.scene-controls button:hover, .scene-controls button[aria-expanded="true"], .object-tools button:hover { background: var(--ink); color: var(--paper); }
+.scene-controls button:hover { background: var(--ink); color: var(--paper); }
 button:active, a:active { opacity: .75; }
 .scene-controls button:disabled { color: #787a70; cursor: default; }
 .scene-controls button:disabled:hover { background: transparent; color: #787a70; }
 button:focus-visible, a:focus-visible { outline: 2px solid var(--yellow); outline-offset: 4px; }
-.scene-help { position: absolute; z-index: 1; left: 28px; bottom: 82px; margin: 0; padding: 6px 9px; background: var(--paper); color: var(--ink); font-size: 10px; letter-spacing: .045em; pointer-events: none; }
+.scene-help { width: fit-content; max-width: 100%; margin: 0; padding: 6px 9px; background: var(--paper); color: var(--ink); font-size: 10px; line-height: 1.4; letter-spacing: .045em; text-align: right; pointer-events: none; }
 .scene-help[hidden] { display: none; }
-.object-tools { position: absolute; right: 28px; bottom: 82px; z-index: 2; background: var(--paper); padding: 6px; width: 236px; max-width: calc(100% - 32px); }
-.object-tools[hidden] { display: none; }
-.object-tools button { min-height: 44px; min-width: 44px; background: transparent; font-size: 22px; }
-.object-heading { display: flex; align-items: center; border-bottom: 1px solid #c6c5b9; }
-.object-heading p { flex: 1; margin: 0; text-align: center; font-size: 12px; }
-.object-tools div[role="group"] { display: flex; justify-content: space-between; }
 .scene-fallback { position: absolute; inset: 0; display: grid; align-content: center; justify-items: center; gap: 18px; padding: 24px; background: var(--room); color: var(--paper); text-align: center; }
 .scene-fallback[hidden] { display: none; }
 .scene-fallback h1 { font: 800 clamp(24px, 5vw, 48px)/1.15 Archivo, Arial, sans-serif; text-transform: uppercase; margin: 0; }
 .scene-fallback p { margin: 0; }
 .scene-fallback p:first-child { font: 900 100px/1 Archivo, Arial, sans-serif; color: var(--yellow); }
 .scene-fallback a { color: var(--ink); background: var(--paper); min-height: 44px; padding: 12px; }
-body[data-fallback] .scene-help, body[data-fallback] .scene-footer { display: none; }
+body[data-fallback] .scene-home, body[data-fallback] .scene-footer { display: none; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; clip-path: inset(50%); overflow: hidden; white-space: nowrap; }
 @media (max-width: 700px) {
-  .scene-footer { left: 16px; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); gap: 8px; font-size: 10px; }
-  .scene-footer a { gap: 8px; padding-inline: 12px; }
+  .scene-home { top: max(16px, env(safe-area-inset-top)); left: 16px; padding-inline: 12px; font-size: 10px; }
+  .scene-footer { right: 16px; max-width: calc(100% - 32px); bottom: max(16px, env(safe-area-inset-bottom)); font-size: 10px; }
   .scene-controls button { padding-inline: 12px; }
-  .scene-help { left: 16px; bottom: 74px; font-size: 9px; }
-  .object-tools { right: 16px; bottom: 74px; }
+  .scene-help { font-size: 9px; }
 }
-@media (max-width: 359px) { .scene-footer { left: 10px; right: 10px; font-size: 9px; gap: 6px; } .scene-controls button { padding-inline: 9px; } .scene-footer a { padding-inline: 10px; gap: 5px; } .scene-help { left: 10px; } }
+@media (max-width: 359px) { .scene-home { left: 10px; padding-inline: 10px; font-size: 9px; } .scene-footer { right: 10px; max-width: calc(100% - 20px); font-size: 9px; } .scene-controls button { padding-inline: 9px; } }
 @media (forced-colors: active) {
   :root { scrollbar-color: auto; }
-  .scene-controls, .scene-footer a, .scene-help, .object-tools { background: Canvas; color: CanvasText; }
+  .scene-controls, .scene-home, .scene-help { background: Canvas; color: CanvasText; }
   button:focus-visible, a:focus-visible { outline-color: Highlight; }
   #maintenance-scene[data-keyboard]:focus { outline-color: Highlight; }
 }

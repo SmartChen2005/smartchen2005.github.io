@@ -1,55 +1,41 @@
-# Interactive 404 — preserved-scene refinement QA
+# Interactive 404 — fluid motion and Clear cloud puffs QA
 
-Verified 2026-10-09. final result: passed
+Verified 2026-10-09. Final result: passed.
 
-## Authoritative brief and preservation
+## Scope and preservation
 
-The complete latest request is archived unchanged as `tools/404-source/revision-preserve-objects.md`. It requires keeping the restored room and all prop forms/materials, removing the sink, updating only prop wording, applying modernist treatment only to UI, clicking existing props to spawn one object, wheel rotation during dragging, and stable physical pushing.
+`tools/404-source/revision-fluid-motion.md` authorizes livelier dragging/collisions, orange roadblocks, removal of Move/Shuffle and addition of Add. The latest request, `revision-clear-puff.md`, removes the Home arrow, preserves the hero's current pose during Clear and adds departing-prop cloud puffs. The prior preserve-objects brief remains the scene baseline. Cone plastic, striped barrier rails and warning posts use orange `#cf752b`; the yellow-cone variant is removed. Folding signs retain their yellow finish.
 
-The restored source was captured before edits. Direct comparison confirms that `roundedRect`, `bevelBox`, `signGeometry`, `aFrame`, `cone`, `barrier`, `marker` and `resize` are identical. The entire `buildRoom` function is identical after removing its sink call. This includes every floor tile, wall, skirting tile, material, bump/albedo setup, light, shadow configuration, camera and responsive framing. `buildSink` and its collision obstacle are completely removed. The report and matching function hashes are archived in `tools/404-source/model-preservation.json`.
+`tools/404-source/fluid-preservation.json` compares the committed scene before this follow-up with the implementation. Room, responsive camera, sign builders and shared geometry builders compare exactly. Cone/barrier/marker builders compare exactly after only the authorized orange substitutions and removal of the cone's obsolete color argument. Existing worn materials, reflective bands, black stripes, silver supports, lighting, checkerboard floor, walls and tiled skirting retain their appearance. No new dependencies or image assets were needed. Previous QA is archived in `qa-preserved-motion.md`; older preservation evidence remains historical.
 
-Sign wear, original Anton type, warning triangles, centered layouts, panel/hinge/handle/brace geometry, original orange/yellow cones and reflector stripes, silver/striped barriers and triangle post markers remain intact. Only sign copy changes: NO CONTENT, CONTENT MISSING, 404 / UNDER / MAINTENANCE, and small unavailable-area text on the existing hero.
+## Visual review
 
-## Visual evidence
+Reviewed the prior preserved-scene comparison and the resting desktop, dense orange-roadblock scene and phone screenshots together. `tools/404-source/fluid-comparison.webp` archives the prior preserved-scene capture and motion revision, before Home-arrow removal; both were originally 1440×1000 CSS pixels and uniformly displayed at 936×650. The room, hero, camera and lighting match; the footer has Add/Clear and Home. Current captures show the text-only Home button. The dense screenshot confirms orange cones, barriers and posts with the retained worn folding signs. No editor panel opens during dragging.
 
-`tools/404-source/preserve-comparison.webp` combines the restored before capture and the revised browser capture in one review image. Both use 1440×1000 CSS viewports, scale factor 1, uniformly resized to 936×650 with no browser frame. The same floor, room, lighting, sign and camera remain clearly visible. The changes are sink removal, text and interface treatment. The original photograph and original QA remain archived in `reference.jpg` and `qa-original.md`.
+Current repeatable captures live in ignored `tools/construction-qa/`: `construction-desktop-final.png`, `construction-pushed.png`, `construction-dense.png`, `construction-reference-size.png`, `construction-390x844.png`, `construction-320x568.png`, `construction-700x390.png`, `construction-touch-selected.png` and `construction-forced-colors.png`. Phone controls remain clear of the sign and fit within the viewport.
 
-Repeatable browser screenshots are in the ignored `tools/construction-qa/` folder:
+## Physics and interactions
 
-- `construction-desktop-final.png`: resting initial scene, original worn hero and refined footer.
-- `construction-pushed.png`: a spawned prop has physically displaced the hero through a real mouse drag.
-- `construction-dense.png`: forty original-family props without intersections.
-- `construction-reference-size.png`: 768×1024 framing.
-- `construction-390x844.png`, `construction-320x568.png`, `construction-700x390.png`: preserved responsive camera and reachable controls.
-- `construction-touch-selected.png`: touch-dragged original sign, original orange cone and explicitly opened movement toolbar.
-- `construction-forced-colors.png`: system colors and operable native controls.
+The fixed 120 Hz solver adds spring following, short release glide, mass-dependent collision impulses, glancing yaw and small wall rebounds. The existing transactional swept contact solver still controls collision-safe positions. Failed wall-pinned chains roll back before applying impulses; damping settles exact rest. This is a floor-plane simulation with conservative circular footprints and a column volume; props rotate vertically and remain upright.
 
-## Findings and polish
+`node tools/test-construction-space.mjs` passes original placement/contact cases and new motion cases: 38 footprints, 1,000 swept moves, 350 dense pushes, four-object chain displacement, pinned-chain rollback, column exclusion, wall sliding and impossible spawning; spring convergence, release glide, contact-chain momentum, glancing yaw, soft wall rebound, stable exact rest, and 38 dynamic props over 1,600 fixed steps.
 
-1. [P2, fixed] Every object click must add exactly one, while release after dragging/rotation/cancellation must not add. Mouse/touch thresholds distinguish the gestures; spawning occurs on qualifying pointer-up, so touch does not depend on a compatibility click. Enter/Space provides equivalent access and key auto-repeat does not produce a burst. If a chosen type cannot fit, the other original types are tried; no valid position means a full-floor message and no overlap.
-2. [P2, fixed] Contact must displace nearby props rather than only blocking the driver. Swept transactional contact propagation pushes neighbouring objects and chains; blocked substeps roll back every affected body. Tangential motion can slide along walls. Pushed props cancel their previous animations, remain upright/grounded, and have no residual velocity to jitter at rest.
-3. [P2, fixed] Moving after a wheel input initially cancelled the driver's easing target. Movement now preserves that rotation target while cancelling unrelated pushed-object animations. Wheel delta modes are normalized, each impulse is bounded, and browser zoom shortcuts retain their behavior.
-4. [P3, fixed] A prior keyboard outline could remain during mouse interaction. Keyboard-only focus state now gives clear keyboard feedback and removes the outline on pointer interaction. Selecting a falling prop immediately synchronizes its grounded mesh/contact shadow.
+`node tools/test-construction-browser.cjs` passes real Chrome mouse, keyboard and native emulated touch with no console/page errors beyond expected missing-path HTTP 404 responses:
 
-No actionable P0/P1/P2 findings remain. Bauhaus/Swiss influence is limited to Archivo UI, square paper/ink buttons, spacing and alignment; none of it changes the 3D object family or environment.
+- Slight pointer jitter adds exactly one; dragging, rotation and cancellation never spawn. Native Add click/tap and Enter/Space each add one.
+- A real drag pushes the hero through prop contact. Wheel rotation eases smoothly during dragging and survives continued movement. Outside a drag the wheel does not rotate a prop.
+- Mouse release retains velocity and advances the object, then reaches exact stationary position. Dense dragging and subsequent inertial contact samples remain grounded, separated and inside bounds.
+- The latest run populates a dense scene across all seven retained categories. Placement caps at forty and gracefully stops when visible space is full; no yellow cone is spawned.
+- Clear stops motion, preserves the hero's exact current position/angle and removes only secondary props. Native mouse and touch Clear preserve the moved hero. A lone-hero Clear creates no cloud. Move, Shuffle and the movement toolbar are absent; Home has no detached arrow.
+- Each departing prop shrinks behind seven sprites using one shared procedural cloud texture. Clouds bloom, rise and fade over 720 ms; smoke cleanup completes, repeated Clear releases outstanding clouds and props added during an earlier puff remain alive. `construction-clear-puff.png`, `construction-clear-dense.png` and `construction-clear-mobile.png` capture the live effect. Desktop single/dense and phone captures were visually reviewed.
+- Arrow movement, R rotation and bracket selection retain keyboard access. Native touch dragging moves without spawning; the next tap adds one.
+- 1440×1000, 768×1024, 390×844, 320×568 and 700×390 layouts retain viewport-contained native action targets of at least 44×44px and no horizontal overflow.
+- Reduced motion skips entrance animation, directly moves collision-safe props and has no release glide. Forced colors, nested missing-path dependencies, Home navigation, no-JavaScript and unavailable-WebGL fallbacks work.
 
-## Functional verification
+## Other checks and limits
 
-Chrome/Playwright is used because the in-app browser trusted runtime failed in this session's earlier work. The final browser run passed with zero console/page errors, excluding expected HTTP 404 responses at the missing-path check.
+Latest placement request supersedes the previous footer alignment: Home is in the top-left corner, and the original small operation hint sits above Add/Clear at bottom-right, aligned with Clear's right edge. Browser measurements at 1440, 616, 390 and 320 CSS pixels, including 1.5 device pixel ratio, confirm Home's top-left position, exact hint/Clear right alignment, 10px desktop / 9px phone hint text, 44px actions and viewport-contained regions. `tools/construction-qa/corner-controls-*.png` captures the resulting layouts. A stylesheet revision parameter prevents reuse of older cached styles; packaging validation resolves local URL pathnames before checking files.
 
-- Slight pointer jitter still counts as a click and adds exactly one without moving the clicked object. Dragging, wheel rotation and Escape cancellation do not spawn. Tapping after a native touch drag adds one.
-- A real mouse drag of a spawned prop toward the hero moves the hero by physical contact; all affected objects stay grounded and separated. Read-only projection/picking diagnostics permit repeatable pointer gestures without mutating scene state.
-- Wheel input while dragging eases smoothly around the vertical axis; continuing to move preserves the rotation target. Wheel input outside a drag does not rotate objects.
-- Enter/Space spawning, arrow-key pushing, R rotation, bracket cycling and the explicitly opened directional/rotation toolbar preserve non-drag access. Escape closes the toolbar and restores Move focus. No standalone Add button or physical plus object exists.
-- The final deterministic dense run reaches forty objects and all eight original categories. Every footprint stays inside bounds and clear of other props and the architectural column.
-- Forty samples of animated Shuffle retain pairwise/column separation and preserve the hero. Clear removes secondary props and restores its original position and orientation. Correct disabled states follow.
-- 1440×1000, 768×1024, 390×844, 320×568 and 700×390 layouts have no horizontal overflow, with persistent action targets at least 44×44px and inside the viewport.
-- Reduced motion skips drops and retains collision-safe shuffle. Forced colors retains native actions. Root-relative dependencies work at nested missing paths; Home navigation, no-JavaScript and unavailable-WebGL fallbacks work.
+`node tools/validate-site.mjs`, scene/space syntax checks, `git diff --check` and the strict premium audit pass. The auditor excludes deployed `dist/`, so browser verification supplies runtime evidence. No framework build, TypeScript configuration or formatter is configured in this static repository.
 
-`node tools/test-construction-space.mjs` passes: 38 initial footprints, 1,000 long swept moves, 350 dense randomized pushes, a four-object chain, wall-pinned rollback, column exclusion, tangential wall sliding and impossible placement. The conservative original footprints and all-angle volume remain unchanged. The new solver is quasi-static floor displacement rather than a free inertial simulation.
-
-Other checks: `node tools/validate-site.mjs`, `node --check dist/construction.mjs`, `node --check dist/construction-space.mjs`, `git diff --check`, and the strict premium audit saved in `tools/404-source/audit.json`. The audit excludes `dist/`, so runtime browser evidence remains essential. No framework build, TypeScript typecheck or formatter is configured in this static repository.
-
-## Limits
-
-Touch coverage uses Chrome emulation with native events; physical iOS/Safari GPU behavior was not measured. Sign fine print remains small at a distance, preserving the physical-sign appearance. No remote deployment was requested or verified; the local preview remains running.
+Native touch coverage uses Chrome emulation; physical Safari/iOS GPU behavior was not measured. Fine print retains its small physical-sign scale. No remote deployment was requested or verified; the local preview remains running.

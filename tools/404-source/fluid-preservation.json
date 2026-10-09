@@ -1,0 +1,53 @@
+{
+  "verified": "2026-10-09",
+  "baselineCommit": "81a3861e698fe8bf8e4f47f4c64dbc429c0dfa54",
+  "result": "passed",
+  "roadblockOrange": "#cf752b",
+  "functions": {
+    "roundedRect": {
+      "unchanged": true,
+      "onlyAuthorizedOrangeSubstitutions": false,
+      "sha256": "78433a984fdb87856969358c1c768e4983e2ec4868b54ce8b124277580297fcf"
+    },
+    "bevelBox": {
+      "unchanged": true,
+      "onlyAuthorizedOrangeSubstitutions": false,
+      "sha256": "c1f2d15f42da8e71b89922decb9659b2c4ca9e035046f42b3e9901e908f7c9cf"
+    },
+    "signGeometry": {
+      "unchanged": true,
+      "onlyAuthorizedOrangeSubstitutions": false,
+      "sha256": "9c85bce7c21bb92848f5825e32f58f0b36d26d447db16bc8676e295c4e17b040"
+    },
+    "aFrame": {
+      "unchanged": true,
+      "onlyAuthorizedOrangeSubstitutions": false,
+      "sha256": "fb36b7190ded41b573d136d6097f54678b344d60d9ff18daa235fa719a2d0e6d"
+    },
+    "buildRoom": {
+      "unchanged": true,
+      "onlyAuthorizedOrangeSubstitutions": false,
+      "sha256": "08ff09881d3e98b5b657ebc20121b295ac076af1c4bdbf3915a25187e8ff124c"
+    },
+    "resize": {
+      "unchanged": true,
+      "onlyAuthorizedOrangeSubstitutions": false,
+      "sha256": "da77299857b08f066b76b038250c2274a3aa71ccb8be8bb52ad9791817634439"
+    },
+    "cone": {
+      "unchanged": false,
+      "onlyAuthorizedOrangeSubstitutions": true,
+      "sha256": "ff29a33b247a0a19496a1adf4e079e7c065e9d886e3840e9bc1439a5dac3ca9a"
+    },
+    "barrier": {
+      "unchanged": false,
+      "onlyAuthorizedOrangeSubstitutions": true,
+      "sha256": "c9b731cb6dee10eac3b9d3b931f7a29921c51c02e36eafc5b4f11fa713ffad91"
+    },
+    "marker": {
+      "unchanged": false,
+      "onlyAuthorizedOrangeSubstitutions": true,
+      "sha256": "8194f86d2173e22c4115b1a424a6a84b9177ef2281b05954260e8a6c0b837127"
+    }
+  }
+}

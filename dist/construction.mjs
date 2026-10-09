@@ -1,13 +1,10 @@
 import * as THREE from '/vendor/three/three.module.min.js';
 import { RoomEnvironment } from '/vendor/three/RoomEnvironment.mjs';
-import { BOUNDS, LIMIT, fits, place, move, push } from '/construction-space.mjs';
+import { BOUNDS, LIMIT, fits, place, push, PHYSICS_STEP, stepPhysics, stopMotion, hasMotion } from '/construction-space.mjs';
 
 const canvas = document.querySelector('#maintenance-scene');
-const shuffleButton = document.querySelector('#shuffle-objects');
+const addButton = document.querySelector('#add-objects');
 const clearButton = document.querySelector('#clear-objects');
-const tools = document.querySelector('#object-tools');
-const objectName = document.querySelector('#selected-object');
-const adjustButton = document.querySelector('#adjust-object');
 const hint = document.querySelector('#scene-help');
 const status = document.querySelector('#scene-status');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
@@ -20,9 +17,12 @@ const pointer = new THREE.Vector2();
 const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -.012);
 const floorHit = new THREE.Vector3();
 const objects = [];
+const clearing = [];
+const CLEAR_DURATION = 720;
+let puffTexture;
 const obstacles = [{ id: -2, x: 2.55, z: -1.6, halfWidth: .6, halfDepth: 1.8 }];
 const MAIN_ANGLE = .25;
-let renderer, frame = 0, dirty = true, nextId = 1, selected = null, dragging = null, dragOffset = null, lastTime = 0, keyboardMode = false, spawnBlocked = false;
+let renderer, frame = 0, dirty = true, nextId = 1, selected = null, dragging = null, dragOffset = null, lastTime = 0, accumulator = 0, keyboardMode = false, spawnBlocked = false;
 const randomSeed = seed => () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
 const random = randomSeed(404);
 const allBodies = () => [...objects, ...obstacles];
@@ -176,8 +176,8 @@ function aFrame(kind, seed) {
   }
   return group;
 }
-function cone(seed, orange = true) {
-  const group = new THREE.Group(); const surface = material(orange ? '#cf752b' : '#cfac29', { roughness: .66, bumpMap: plasticBump, bumpScale: .0015 });
+function cone(seed) {
+  const group = new THREE.Group(); const surface = material('#cf752b', { roughness: .66, bumpMap: plasticBump, bumpScale: .0015 });
   const base = mesh(bevelBox(.48, .48, .045, .025), material('#35372c', { roughness: .85 }), group, [0, .035, 0]); base.rotation.x = -Math.PI / 2;
   mesh(new THREE.CylinderGeometry(.037, .181, .67, 40, 1, false), surface, group, [0, .393, 0]);
   const stripe = material('#c7c6ac', { roughness: .55 });
@@ -193,43 +193,42 @@ function barrier(seed) {
     mesh(bevelBox(.07, .045, .5, .009), steel, group, [side * .56, .035, 0]);
   }
   const stripMap = texture(768, 160, (ctx, w, h) => {
-    ctx.fillStyle = '#d3ad30'; ctx.fillRect(0, 0, w, h); ctx.fillStyle = '#252b23';
+    ctx.fillStyle = '#cf752b'; ctx.fillRect(0, 0, w, h); ctx.fillStyle = '#252b23';
     for (let x = -100; x < w + 100; x += 150) { ctx.beginPath(); ctx.moveTo(x, h); ctx.lineTo(x + 62, h); ctx.lineTo(x + 145, 0); ctx.lineTo(x + 83, 0); ctx.closePath(); ctx.fill(); }
     wear(ctx, w, h, seed, 1.6);
   });
   for (const height of [.74, .4]) {
-    mesh(bevelBox(1.3, .19, .043, .009), material('#d6aa27', { roughness: .65 }), group, [0, height, 0]);
+    mesh(bevelBox(1.3, .19, .043, .009), material('#cf752b', { roughness: .65 }), group, [0, height, 0]);
     for (const direction of [1, -1]) { const face = mesh(new THREE.PlaneGeometry(1.26, .17), material('#ffffff', { map: stripMap, roughness: .64 }), group, [0, height, direction * .025]); if (direction < 0) face.rotation.y = Math.PI; }
     for (const x of [-.56, .56]) { const bolt = mesh(new THREE.CylinderGeometry(.013, .013, .008, 8), steel, group, [x, height, .033]); bolt.rotation.x = Math.PI / 2; }
   }
   return group;
 }
 function marker(seed) {
-  const group = new THREE.Group(); const plastic = material('#c3a32b', { roughness: .66, bumpMap: plasticBump, bumpScale: .001 });
+  const group = new THREE.Group(); const plastic = material('#cf752b', { roughness: .66, bumpMap: plasticBump, bumpScale: .001 });
   const base = mesh(bevelBox(.39, .34, .045, .012), material('#3e4032', { roughness: .88 }), group, [0, .034, 0]); base.rotation.x = -Math.PI / 2;
   mesh(new THREE.CylinderGeometry(.027, .034, .49, 16), plastic, group, [0, .291, 0]);
   const head = mesh(new THREE.CylinderGeometry(.145, .145, .024, 40), plastic, group, [0, .635, 0]); head.rotation.x = Math.PI / 2;
-  const map = texture(256, 256, (ctx, w, h) => { ctx.fillStyle = '#d8b22c'; ctx.fillRect(0, 0, w, h); triangle(ctx, 128, 117, 76); wear(ctx, w, h, seed); });
+  const map = texture(256, 256, (ctx, w, h) => { ctx.fillStyle = '#cf752b'; ctx.fillRect(0, 0, w, h); triangle(ctx, 128, 117, 76); wear(ctx, w, h, seed); });
   for (const direction of [1, -1]) { const face = mesh(new THREE.CircleGeometry(.133, 40), material('#ffffff', { map, roughness: .68 }), group, [0, .635, direction * .014]); if (direction < 0) face.rotation.y = Math.PI; }
   return group;
 }
 
 const definitions = {
-  main: { label: '404 sign', radius: .46, build: (seed) => aFrame('main', seed) },
-  caution: { label: 'Content missing sign', radius: .46, build: (seed) => aFrame('caution', seed) },
-  wet: { label: 'No content sign', radius: .46, build: (seed) => aFrame('wet', seed) },
-  maintenance: { label: 'Maintenance sign', radius: .46, build: (seed) => aFrame('maintenance', seed) },
-  cone: { label: 'Traffic cone', radius: .35, build: (seed) => cone(seed) },
-  yellowCone: { label: 'Yellow cone', radius: .35, build: (seed) => cone(seed, false) },
-  barrier: { label: 'Portable barrier', radius: .72, build: barrier },
-  marker: { label: 'Warning marker', radius: .27, build: marker }
+  main: { label: '404 sign', radius: .46, mass: 1.8, build: (seed) => aFrame('main', seed) },
+  caution: { label: 'Content missing sign', radius: .46, mass: 1.8, build: (seed) => aFrame('caution', seed) },
+  wet: { label: 'No content sign', radius: .46, mass: 1.8, build: (seed) => aFrame('wet', seed) },
+  maintenance: { label: 'Maintenance sign', radius: .46, mass: 1.8, build: (seed) => aFrame('maintenance', seed) },
+  cone: { label: 'Orange traffic cone', radius: .35, mass: .65, build: cone },
+  barrier: { label: 'Orange portable barrier', radius: .72, mass: 2.6, build: barrier },
+  marker: { label: 'Orange warning marker', radius: .27, mass: .6, build: marker }
 };
 function newObject(type, scale = 1) {
   const definition = definitions[type], id = nextId++;
   const group = definition.build(id * 37); group.scale.setScalar(scale); scene.add(group);
   const contact = mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: contactTexture, transparent: true, depthWrite: false, opacity: .9 }), scene);
   contact.rotation.x = -Math.PI / 2; contact.castShadow = false; contact.receiveShadow = false;
-  const body = { id, type, label: definition.label, x: 0, z: 0, angle: 0, scale, radius: definition.radius * scale, group, contact, height: 0, bounceStart: 0, targetAngle: null };
+  const body = { id, type, label: definition.label, x: 0, z: 0, angle: 0, scale, radius: definition.radius * scale, mass: definition.mass * scale ** 2, vx: 0, vz: 0, spin: 0, group, contact, height: 0, bounceStart: 0, targetAngle: null };
   group.traverse(child => { child.userData.body = body; }); return body;
 }
 function sync(body) {
@@ -242,32 +241,82 @@ function remove(body) {
   body.group.traverse(child => { if (!child.isMesh) return; if (child.geometry !== panelGeometry) geometries.add(child.geometry); for (const m of Array.isArray(child.material) ? child.material : [child.material]) { materials.add(m); if (m.map) maps.add(m.map); } });
   maps.forEach(map => map.dispose()); materials.forEach(m => m.dispose()); geometries.forEach(g => g.dispose()); body.contact.geometry.dispose(); body.contact.material.dispose();
 }
+function smokeMap() {
+  return texture(256, 256, ctx => {
+    // One shared, softly shaded cloud silhouette; no image download or asset.
+    for (const [x, y, r] of [[83, 135, 53], [130, 95, 61], [177, 135, 53], [132, 163, 55], [123, 129, 65]]) {
+      const shade = ctx.createRadialGradient(x - r * .2, y - r * .25, r * .12, x, y, r);
+      shade.addColorStop(0, 'rgba(246,243,230,1)'); shade.addColorStop(.65, 'rgba(230,229,216,.96)');
+      shade.addColorStop(.86, 'rgba(211,212,201,.72)'); shade.addColorStop(1, 'rgba(211,212,201,0)');
+      ctx.fillStyle = shade; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+    }
+  });
+}
+function finishCloud(effect) {
+  if (!effect.removed) remove(effect.body);
+  for (const { sprite } of effect.particles) { scene.remove(sprite); sprite.material.dispose(); }
+}
+function finishClearing() {
+  for (const effect of clearing.splice(0)) finishCloud(effect);
+  dirty = true;
+}
+function puffAway(body, started) {
+  puffTexture ||= smokeMap();
+  const rng = randomSeed(body.id * 971), particles = [];
+  const size = Math.max(.7, body.radius * 2.25);
+  for (let i = 0; i < 7; i++) {
+    const angle = i * Math.PI * 2 / 6 + rng() * .3;
+    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: puffTexture, transparent: true, depthWrite: false, opacity: 0, toneMapped: false }));
+    const origin = new THREE.Vector3(body.x, (i === 0 ? .55 : .28 + rng() * .65) * body.scale, body.z);
+    const drift = new THREE.Vector3(i === 0 ? 0 : Math.cos(angle) * size * .45, .2 + rng() * .25, i === 0 ? 0 : Math.sin(angle) * size * .45);
+    sprite.position.copy(origin); sprite.scale.setScalar(.01); scene.add(sprite);
+    particles.push({ sprite, origin, drift, size: size * (i === 0 ? 1.65 : .8 + rng() * .4), twist: (rng() - .5) * .55 });
+  }
+  body.contact.visible = false;
+  clearing.push({ body, started, particles, removed: false });
+}
+function animateClearing(time) {
+  for (let i = clearing.length - 1; i >= 0; i--) {
+    const effect = clearing[i], t = Math.max(0, (time - effect.started) / CLEAR_DURATION);
+    if (t >= 1 || reducedMotion.matches) { finishCloud(effect); clearing.splice(i, 1); continue; }
+    // The puff blooms before the prop shrinks out behind it.
+    if (!effect.removed) {
+      const shrink = Math.max(0, 1 - Math.max(0, t - .06) / .16);
+      effect.body.group.scale.setScalar(effect.body.scale * shrink);
+      if (t >= .22) { remove(effect.body); effect.removed = true; }
+    }
+    const burst = 1 - (1 - Math.min(1, t / .27)) ** 3;
+    const fade = 1 - Math.max(0, (t - .25) / .75);
+    for (const p of effect.particles) {
+      p.sprite.position.copy(p.origin).addScaledVector(p.drift, burst * .65 + t * .65);
+      p.sprite.scale.setScalar(p.size * (.12 + burst * .88 + t * .35));
+      p.sprite.material.opacity = Math.min(1, t / .065) * fade ** 1.5 * .9;
+      p.sprite.material.rotation = p.twist * t;
+    }
+  }
+  dirty = true;
+}
 function announce(message) { status.textContent = message; }
 function updateHint() {
-  hint.textContent = dragging?.didDrag && dragging.pointerType === 'mouse' ? 'SCROLL TO ROTATE' : spawnBlocked ? 'FLOOR FULL · CLEAR TO MAKE ROOM' : matchMedia('(pointer: coarse)').matches ? 'TAP TO ADD · DRAG TO MOVE' : 'CLICK TO ADD · DRAG TO MOVE';
+  hint.textContent = dragging?.didDrag && dragging.pointerType === 'mouse' ? 'SCROLL TO ROTATE' : spawnBlocked ? 'FLOOR FULL · CLEAR TO MAKE ROOM' : 'DRAG TO MOVE';
 }
 function updateControls() {
-  shuffleButton.disabled = clearButton.disabled = objects.length <= 1;
-  adjustButton.disabled = objects.length === 0;
-  if (selected) objectName.textContent = selected.label;
-  hint.hidden = !tools.hidden;
+  clearButton.disabled = !objects.length;
+  addButton.disabled = !objects.length || objects.length >= LIMIT || spawnBlocked;
   updateHint();
 }
-function select(body, reveal = false) {
+function select(body) {
   if (selected) selected.group.traverse(child => { if (child.isMesh) for (const m of Array.isArray(child.material) ? child.material : [child.material]) if (m.emissive) m.emissive.setHex(0); });
-  selected = body || null; if (body) objectName.textContent = body.label;
+  selected = body || null;
   if (body) body.group.traverse(child => { if (child.isMesh) for (const m of Array.isArray(child.material) ? child.material : [child.material]) if (m.emissive) m.emissive.setRGB(.015, .012, .002); });
-  tools.hidden = !reveal || !body;
-  hint.hidden = !tools.hidden;
-  adjustButton.setAttribute('aria-expanded', String(!tools.hidden));
-  if (body) announce(`${body.label} selected. Enter or Space adds one object. Arrow keys move; R rotates; bracket keys select another object. Move opens the movement controls.`);
+  if (body) announce(`${body.label} selected. Enter or Space adds one object. Arrow keys move; R rotates; bracket keys select another object.`);
   requestRender();
 }
 function visible(body) {
   const p = new THREE.Vector3(body.x, .5 * body.scale, body.z).project(camera);
   return p.x > -.84 && p.x < .84 && p.y > -.67 && p.y < .68;
 }
-function moveOnFloor(body, target) {
+function constrainTarget(body, target) {
   let destination = target;
   if (visible(body) && !visible({ ...body, ...target })) {
     let low = 0, high = 1;
@@ -278,17 +327,21 @@ function moveOnFloor(body, target) {
     }
     destination = { x: body.x + (target.x - body.x) * low, z: body.z + (target.z - body.z) * low };
   }
-  const changed = push(body, destination, allBodies());
+  return destination;
+}
+function moveOnFloor(body, target) {
+  stopMotion([body]);
+  const changed = push(body, constrainTarget(body, target), allBodies());
   for (const prop of changed) {
-    prop.destination = null; if (prop !== body) prop.targetAngle = null;
+    if (prop !== body) prop.targetAngle = null;
     prop.bounceStart = 0; prop.height = 0; sync(prop);
   }
-  if (changed.size) { spawnBlocked = false; updateHint(); }
+  if (changed.size) { spawnBlocked = false; updateControls(); }
   return changed;
 }
 function addObject() {
   if (!objects.length) return;
-  const types = ['caution', 'wet', 'cone', 'yellowCone', 'barrier', 'maintenance', 'marker'];
+  const types = ['caution', 'wet', 'cone', 'barrier', 'maintenance', 'marker'];
   let body = null;
   if (objects.length < LIMIT) {
     const first = Math.floor(Math.random() * types.length);
@@ -305,27 +358,21 @@ function addObject() {
   spawnBlocked = !body;
   updateControls(); announce(body ? `One object added. ${objects.length} objects in the scene.` : 'The visible floor is full. Clear objects to make room.'); requestRender();
 }
-function shuffle() {
-  endDrag(); spawnBlocked = false; updateHint(); let changed = 0;
-  for (const body of objects.slice(1).sort(() => Math.random() - .5)) {
-    const target = place(body, allBodies(), Math.random, visible);
-    if (!target) continue;
-    body.destination = { x: target.x, z: target.z }; body.targetAngle = body.angle + (Math.random() - .5) * 1.8;
-    if (reducedMotion.matches) { move(body, target, allBodies()); body.angle = body.targetAngle; body.destination = body.targetAngle = null; sync(body); }
-    changed++;
-  }
-  announce(`${changed} objects are being rearranged.`); requestRender();
-}
 function clear() {
-  endDrag(); spawnBlocked = false; for (const body of objects.splice(1)) remove(body);
-  const main = objects[0]; main.x = 0; main.z = -.15; main.angle = MAIN_ANGLE; main.destination = null; main.targetAngle = null; main.height = 0; main.bounceStart = 0; sync(main);
-  select(null); updateControls(); announce('Scene cleared. The original 404 sign is back in place.'); requestRender();
+  endDrag(); select(null); finishClearing(); spawnBlocked = false;
+  const removed = objects.splice(1), started = performance.now();
+  for (const body of removed) {
+    if (reducedMotion.matches) remove(body); else puffAway(body, started);
+  }
+  const main = objects[0]; stopMotion(objects); main.targetAngle = null; accumulator = 0;
+  updateControls(); announce('Other objects cleared. The original 404 sign stays where you left it.'); requestRender();
 }
 function setRay(event) {
   const bounds = canvas.getBoundingClientRect(); pointer.set(((event.clientX - bounds.left) / bounds.width) * 2 - 1, -((event.clientY - bounds.top) / bounds.height) * 2 + 1); raycaster.setFromCamera(pointer, camera);
 }
 function hitObject(event) { setRay(event); return raycaster.intersectObjects(objects.map(body => body.group), true)[0]?.object.userData.body || null; }
-function endDrag() {
+function endDrag(release = false) {
+  if (dragging && (!release || !dragging.didDrag || reducedMotion.matches || performance.now() - dragging.lastInput > 120)) stopMotion([dragging.body]);
   if (dragging && canvas.hasPointerCapture(dragging.pointerId)) canvas.releasePointerCapture(dragging.pointerId);
   dragging = null; delete canvas.dataset.dragging; updateHint();
 }
@@ -333,10 +380,10 @@ canvas.addEventListener('pointerdown', event => {
   if (event.button !== 0 || dragging) return;
   const body = hitObject(event); if (!body) { select(null); return; }
   if (!raycaster.ray.intersectPlane(floorPlane, floorHit)) return;
-  body.destination = null; body.targetAngle = null; body.height = 0; body.bounceStart = 0;
+  stopMotion([body]); body.targetAngle = null; body.height = 0; body.bounceStart = 0;
   sync(body);
-  select(body, false); dragOffset = { x: body.x - floorHit.x, z: body.z - floorHit.z };
-  dragging = { body, pointerId: event.pointerId, pointerType: event.pointerType, startX: event.clientX, startY: event.clientY, didDrag: false, didRotate: false }; canvas.setPointerCapture(event.pointerId); canvas.dataset.dragging = '';
+  select(body); dragOffset = { x: body.x - floorHit.x, z: body.z - floorHit.z };
+  dragging = { body, target: { x: body.x, z: body.z }, lastInput: performance.now(), pointerId: event.pointerId, pointerType: event.pointerType, startX: event.clientX, startY: event.clientY, didDrag: false, didRotate: false }; canvas.setPointerCapture(event.pointerId); canvas.dataset.dragging = '';
   canvas.focus({ preventScroll: true }); event.preventDefault(); requestRender();
 });
 canvas.addEventListener('pointermove', event => {
@@ -345,7 +392,12 @@ canvas.addEventListener('pointermove', event => {
     if (Math.hypot(event.clientX - dragging.startX, event.clientY - dragging.startY) > (dragging.pointerType === 'touch' ? 8 : 5)) dragging.didDrag = true;
     if (!dragging.didDrag) return;
     updateHint(); setRay(event);
-    if (raycaster.ray.intersectPlane(floorPlane, floorHit)) { moveOnFloor(dragging.body, { x: floorHit.x + dragOffset.x, z: floorHit.z + dragOffset.z }); sync(dragging.body); requestRender(); }
+    if (raycaster.ray.intersectPlane(floorPlane, floorHit)) {
+      dragging.target = constrainTarget(dragging.body, { x: floorHit.x + dragOffset.x, z: floorHit.z + dragOffset.z });
+      dragging.lastInput = performance.now();
+      if (reducedMotion.matches) moveOnFloor(dragging.body, dragging.target);
+      requestRender();
+    }
   } else { if (hitObject(event)) canvas.dataset.hover = ''; else delete canvas.dataset.hover; }
 });
 canvas.addEventListener('pointerup', event => {
@@ -353,22 +405,22 @@ canvas.addEventListener('pointerup', event => {
   const gesture = dragging;
   const distance = Math.hypot(event.clientX - gesture.startX, event.clientY - gesture.startY);
   const clicked = !gesture.didDrag && !gesture.didRotate && distance <= (gesture.pointerType === 'touch' ? 8 : 5);
-  endDrag();
+  endDrag(true);
   if (clicked) addObject();
   requestRender();
 });
-canvas.addEventListener('pointercancel', endDrag);
+canvas.addEventListener('pointercancel', () => endDrag());
 canvas.addEventListener('lostpointercapture', () => { dragging = null; delete canvas.dataset.dragging; updateHint(); });
 canvas.addEventListener('pointerleave', () => { delete canvas.dataset.hover; });
 function moveSelected(dx, dz) {
-  if (!selected) select(objects[0]); if (!selected) return; selected.destination = null;
+  if (!selected) select(objects[0]); if (!selected) return;
   moveOnFloor(selected, { x: selected.x + dx, z: selected.z + dz }); sync(selected); requestRender();
 }
 function rotateSelected() { if (!selected) select(objects[0]); if (!selected) return; selected.targetAngle = null; selected.angle += Math.PI / 12; sync(selected); requestRender(); announce(`${selected.label} rotated.`); }
 function cycleSelected(direction) {
   if (!objects.length) return;
   const index = selected ? objects.indexOf(selected) : 0;
-  select(objects[(index + direction + objects.length) % objects.length], !tools.hidden);
+  select(objects[(index + direction + objects.length) % objects.length]);
 }
 canvas.addEventListener('wheel', event => {
   if (!dragging || event.ctrlKey || event.metaKey) return;
@@ -391,16 +443,11 @@ canvas.addEventListener('keydown', event => {
 document.addEventListener('keydown', event => {
   if (event.key === 'Tab') keyboardMode = true;
   if (document.activeElement === canvas) canvas.dataset.keyboard = '';
-  if (event.key === 'Escape') { if (tools.contains(document.activeElement)) adjustButton.focus(); endDrag(); select(null); }
+  if (event.key === 'Escape') { endDrag(); select(null); }
 });
 document.addEventListener('pointerdown', () => { keyboardMode = false; delete canvas.dataset.keyboard; }, { capture: true });
 canvas.addEventListener('focus', () => { if (keyboardMode) { canvas.dataset.keyboard = ''; select(selected || objects[0]); } });
-adjustButton.addEventListener('click', () => select(selected || objects[0], tools.hidden));
-document.querySelector('#previous-object').addEventListener('click', () => cycleSelected(-1));
-document.querySelector('#next-object').addEventListener('click', () => cycleSelected(1));
-document.querySelectorAll('[data-move]').forEach(button => button.addEventListener('click', () => { const moves = { left: [-.12, 0], right: [.12, 0], far: [0, -.12], near: [0, .12] }; moveSelected(...moves[button.dataset.move]); }));
-document.querySelector('#rotate-object').addEventListener('click', rotateSelected);
-shuffleButton.addEventListener('click', shuffle); clearButton.addEventListener('click', clear);
+addButton.addEventListener('click', () => { endDrag(); addObject(); }); clearButton.addEventListener('click', clear);
 
 function resize() {
   endDrag(); const width = canvas.clientWidth, height = canvas.clientHeight;
@@ -416,19 +463,27 @@ function resize() {
 }
 function requestRender() { dirty = true; if (!frame && renderer && !document.hidden) frame = requestAnimationFrame(render); }
 function render(time) {
-  frame = 0; const dt = Math.min(.04, (time - (lastTime || time)) / 1000); lastTime = time; let animating = false;
+  frame = 0; const dt = Math.min(.066, (time - (lastTime || time)) / 1000); lastTime = time; let animating = false;
+  if (reducedMotion.matches) { stopMotion(objects); accumulator = 0; }
+  else {
+    accumulator += dt;
+    const drag = dragging?.didDrag ? { body: dragging.body, ...dragging.target } : null;
+    let moved = false, budget = 8;
+    while (accumulator >= PHYSICS_STEP && budget-- > 0) {
+      const changed = stepPhysics(objects, obstacles, PHYSICS_STEP, drag);
+      for (const prop of changed) { prop.bounceStart = 0; prop.height = 0; sync(prop); }
+      if (changed.size) { dirty = true; moved = true; }
+      accumulator -= PHYSICS_STEP;
+    }
+    if (moved && spawnBlocked) { spawnBlocked = false; updateControls(); }
+    animating = hasMotion(objects) || !!(drag && Math.hypot(drag.x - drag.body.x, drag.z - drag.body.z) > .001);
+    if (!animating) accumulator = 0;
+  }
   for (const body of objects) {
     if (body.bounceStart) {
       const t = (time - body.bounceStart) / 450;
       body.height = reducedMotion.matches || t >= 1 ? 0 : t < .62 ? .11 * (1 - (t / .62) ** 2) : .014 * Math.sin((t - .62) / .38 * Math.PI);
       if (t >= 1 || reducedMotion.matches) body.bounceStart = 0; else animating = true;
-      sync(body); dirty = true;
-    }
-    if (body.destination) {
-      const before = { x: body.x, z: body.z }, ease = reducedMotion.matches ? 1 : 1 - Math.exp(-5.5 * dt);
-      move(body, { x: body.x + (body.destination.x - body.x) * ease, z: body.z + (body.destination.z - body.z) * ease }, allBodies());
-      const remainder = Math.hypot(body.x - body.destination.x, body.z - body.destination.z);
-      if (remainder < .012 || Math.hypot(body.x - before.x, body.z - before.z) < .00005) body.destination = null; else animating = true;
       sync(body); dirty = true;
     }
     if (body.targetAngle !== null) {
@@ -437,13 +492,14 @@ function render(time) {
       sync(body); dirty = true;
     }
   }
+  if (clearing.length) { animateClearing(time); animating ||= clearing.length > 0; }
   if (dirty) { renderer.render(scene, camera); dirty = false; }
   if (animating && !document.hidden) frame = requestAnimationFrame(render);
 }
-document.addEventListener('visibilitychange', () => { endDrag(); if (document.hidden) { cancelAnimationFrame(frame); frame = 0; } else { lastTime = 0; requestRender(); } });
-window.addEventListener('blur', endDrag);
+document.addEventListener('visibilitychange', () => { endDrag(); stopMotion(objects); accumulator = 0; if (document.hidden) { finishClearing(); cancelAnimationFrame(frame); frame = 0; } else { lastTime = 0; requestRender(); } });
+window.addEventListener('blur', () => { endDrag(); stopMotion(objects); });
 reducedMotion.addEventListener('change', requestRender);
-function fallback() { document.body.dataset.fallback = ''; document.querySelector('#scene-fallback').hidden = false; canvas.hidden = true; adjustButton.disabled = shuffleButton.disabled = clearButton.disabled = true; tools.hidden = true; adjustButton.setAttribute('aria-expanded', 'false'); }
+function fallback() { stopMotion(objects); finishClearing(); document.body.dataset.fallback = ''; document.querySelector('#scene-fallback').hidden = false; canvas.hidden = true; addButton.disabled = clearButton.disabled = true; }
 canvas.addEventListener('webglcontextlost', event => { event.preventDefault(); endDrag(); cancelAnimationFrame(frame); frame = 0; fallback(); });
 canvas.addEventListener('webglcontextrestored', () => { document.querySelector('#scene-fallback').hidden = true; delete document.body.dataset.fallback; canvas.hidden = false; updateControls(); resize(); });
 
@@ -467,13 +523,15 @@ async function start() {
     announce('404. Site under construction. Click or tap an object to add one. Drag to move; scroll while dragging to rotate. Enter adds an object, arrow keys move, R rotates, and bracket keys select another object.');
     // Read-only diagnostics for reproducible spatial QA; no persistent state.
     window.maintenanceScene = Object.freeze({
-      snapshot: () => objects.map(({ id, type, x, z, angle, radius, height }) => ({ id, type, x, z, angle, radius, height })),
+      snapshot: () => objects.map(({ id, type, x, z, angle, radius, height, vx, vz, spin }) => ({ id, type, x, z, angle, radius, height, vx, vz, spin })),
       project: id => { const body = objects.find(item => item.id === id); if (!body) return null; const p = new THREE.Vector3(body.x, .5 * body.scale, body.z).project(camera); const r = canvas.getBoundingClientRect(); return { x: r.left + (p.x + 1) * r.width / 2, y: r.top + (1 - p.y) * r.height / 2 }; },
       projectFloor: (x, z) => { const p = new THREE.Vector3(x, .012, z).project(camera); const r = canvas.getBoundingClientRect(); return { x: r.left + (p.x + 1) * r.width / 2, y: r.top + (1 - p.y) * r.height / 2 }; },
       floorAt: (x, y) => { setRay({ clientX: x, clientY: y }); return raycaster.ray.intersectPlane(floorPlane, floorHit) ? { x: floorHit.x, z: floorHit.z } : null; },
       pick: (x, y) => hitObject({ clientX: x, clientY: y })?.id ?? null,
       selection: () => selected?.id ?? null,
       grounded: () => objects.every(body => body.height === 0 && fits(body, allBodies())),
+      resting: () => !clearing.length && !hasMotion(objects) && !dragging && objects.every(body => !body.bounceStart && body.targetAngle === null),
+      clearing: () => ({ objects: clearing.length, particles: clearing.reduce((sum, effect) => sum + effect.particles.length, 0) }),
       rendererInfo: () => ({ calls: renderer.info.render.calls, triangles: renderer.info.render.triangles, textures: renderer.info.memory.textures })
     });
     requestRender();

@@ -17,7 +17,8 @@ else {
   for (const [, ref] of page.matchAll(/(?:src|href)="([^"]+)"/g)) {
     if (/^(?:data:|https?:|#)/.test(ref)) continue;
     if (!ref.startsWith('/')) failures.push(`404 references must be root-relative at missing-path depths: ${ref}`);
-    if (!fs.existsSync(path.join(root, 'dist', ref.replace(/^\//, '')))) failures.push(`Missing 404 dependency: ${ref}`);
+    const localPath = new URL(ref, 'https://local.invalid').pathname;
+    if (!fs.existsSync(path.join(root, 'dist', localPath.replace(/^\//, '')))) failures.push(`Missing 404 dependency: ${ref}`);
   }
   for (const ref of ['construction-space.mjs', 'vendor/three/three.module.min.js', 'vendor/three/three.core.min.js', 'vendor/three/RoomEnvironment.mjs', 'assets/fonts/anton-regular.ttf', 'assets/fonts/archivo-variable.ttf', 'assets/fonts/Archivo-OFL.txt', 'assets/maintenance/ceramic-albedo.webp', 'assets/maintenance/yellow-plastic.webp']) {
     if (!fs.existsSync(path.join(root, 'dist', ref))) failures.push(`Missing construction scene dependency: ${ref}`);
