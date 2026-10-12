@@ -10,7 +10,7 @@ const ready = p => p.waitForFunction(() => document.body.classList.contains('is-
 const settle = async p => {await pause(p); await p.evaluate(()=>document.fonts.ready);};
 const galleryClear = async p => {
   const bounds = await p.locator('.print').evaluateAll(es=>es.map(e=>{
-    const image=e.querySelector('img').getBoundingClientRect(),caption=e.querySelector('figcaption').getBoundingClientRect();
+    const image=e.querySelector('img').getBoundingClientRect(),caption=e.querySelector('.print-caption').getBoundingClientRect();
     return {left:image.left,right:image.right,top:image.top,bottom:Math.max(image.bottom,caption.bottom)};
   }));
   for(let i=0;i<bounds.length;i++)for(let j=i+1;j<bounds.length;j++){
@@ -71,13 +71,16 @@ const galleryClear = async p => {
     const lastBox=await page.locator('#what-remains img').boundingBox();
     assert(lastBox.y>100&&lastBox.y+lastBox.height<940,'Keyboard brings a distant photograph into view');
     await page.evaluate(()=>window.scrollTo(0,0));await settle(page);
-    for (const [w,h] of [[390,844],[320,568],[844,390]]) {
+    for (const [w,h] of [[390,844],[320,568],[768,1024],[1024,768],[844,390]]) {
       await page.setViewportSize({width:w,height:h});await settle(page);
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),true,'No horizontal overflow');
       await page.screenshot({path:path.join(output,`spiral-${w}.png`)});
       await page.locator('button[data-view=gallery]').click();await pause(page);
       await page.evaluate(()=>window.scrollTo(0,0));await settle(page);
       await galleryClear(page);
+      const columns=await page.locator('.print-link').evaluateAll(es=>new Set(es.map(e=>Math.round(e.getBoundingClientRect().left))).size);
+      assert.equal(columns,w>=1440?4:w>=1024?3:2,'Catalog uses the documented responsive columns');
+      assert(await page.locator('.print-caption').evaluateAll(es=>es.every(e=>parseFloat(getComputedStyle(e).fontSize)>=12)),'Captions remain readable');
       await page.screenshot({path:path.join(output,`gallery-${w}.png`)});
       await page.locator('#the-room .print-link').click();await page.waitForTimeout(750);
       const box=await page.locator('.viewer-image').boundingBox();
@@ -95,6 +98,57 @@ const galleryClear = async p => {
     await context.setOffline(true);await page.locator('button[data-view=gallery]').click();await page.waitForTimeout(50);
     assert.equal(await page.locator('button[data-view=gallery]').getAttribute('aria-pressed'),'true','Loaded exhibition works offline');
     await context.setOffline(false);
+    // Style-guide states: hover is stationary; controls are touchable; zoom and
+    // high-contrast presentation retain readable, reachable content.
+    await page.setViewportSize({width:1440,height:1000});await page.emulateMedia({reducedMotion:'no-preference'});
+    await page.locator('button[data-view=gallery]').click();await settle(page);
+    await page.evaluate(()=>window.scrollTo(0,0));await settle(page);
+    const startBox=await page.locator('#the-room img').boundingBox();
+    await page.locator('#the-room .print-link').hover();await page.waitForTimeout(250);
+    assert.deepEqual(await page.locator('#the-room img').boundingBox(),startBox,'Hover does not move or enlarge the photograph');
+    assert(await page.locator('.print img').evaluateAll(es=>es.every(e=>getComputedStyle(e).filter==='none'&&getComputedStyle(e.parentElement).boxShadow==='none'&&getComputedStyle(e.closest('.print')).opacity==='1')),'Original tones and undecorated surfaces');
+    assert(await page.locator('button[data-view]').evaluateAll(es=>es.every(e=>{const r=e.getBoundingClientRect();return r.width>=44&&r.height>=44;})),'Mode controls meet 44px touch targets');
+    assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--photo-canvas').trim()),'#ffffff');
+    await page.emulateMedia({forcedColors:'active'});await page.screenshot({path:path.join(output,'ssense-forced-colors.png')});
+    await page.locator('#the-room .print-link').click();assert(await page.locator('.photo-viewer').evaluate(e=>e.open));await page.keyboard.press('Escape');
+    await page.emulateMedia({forcedColors:'none'});
+    const session=await context.newCDPSession(page);
+    await session.send('Emulation.setDeviceMetricsOverride',{width:720,height:500,deviceScaleFactor:2,mobile:false,scale:2});await settle(page);
+    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),'200% zoom fits');
+    await galleryClear(page);await page.screenshot({path:path.join(output,'ssense-zoom-200.png')});
+    await session.send('Emulation.clearDeviceMetricsOverride');
+    const touchContext=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
+    const touch=await touchContext.newPage();await touch.goto(url);await ready(touch);
+    const touchSession=await touchContext.newCDPSession(touch);
+    await touchSession.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:370,y:710}]});
+    for(const y of [660,580,490,400,300]){
+      await touchSession.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:370,y}]});await touch.waitForTimeout(35);
+    }
+    await touchSession.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await touch.waitForTimeout(350);
+    assert(await touch.evaluate(()=>window.scrollY)>100,'Touch gestures retain native scrolling');
+    await touch.locator('button[data-view=gallery]').tap();await touch.waitForTimeout(300);
+    await touch.evaluate(()=>window.scrollTo(0,0));await touch.waitForTimeout(100);
+    await touch.locator('#the-room .print-link').tap();assert(await touch.locator('.photo-viewer').evaluate(e=>e.open));
+    await touch.locator('#next-photo').tap();assert.equal(await touch.locator('#viewer-title').textContent(),'After dark');
+    await touch.locator('.viewer-close').tap();assert(!(await touch.locator('.photo-viewer').evaluate(e=>e.open)));
+    const longPage=await touchContext.newPage();
+    await longPage.route('**/photography/**',async route=>{
+      if(route.request().resourceType()!=='document')return route.continue();
+      const response=await route.fetch();let html=await response.text();
+      html=html.replace('<span>The room</span>','<span>A photographed room with a camera in the foreground and daylight entering through the open window, shown as a longer description to check the gallery caption layout.</span>');
+      await route.fulfill({response,body:html});
+    });
+    await longPage.setViewportSize({width:320,height:568});await longPage.goto(url+'?view=gallery&qa=long');await ready(longPage);await settle(longPage);
+    await galleryClear(longPage);
+    assert(await longPage.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),'Long captions do not overflow on phones');
+    await longPage.screenshot({path:path.join(output,'ssense-long-title.png')});
+    const slow=await touchContext.newPage();
+    await slow.route('**/assets/the-room.webp',async route=>{await new Promise(resolve=>setTimeout(resolve,1500));await route.continue();});
+    await slow.goto(url+'?view=gallery',{waitUntil:'domcontentloaded'});await ready(slow);
+    const reserved=await slow.locator('#the-room .print-paper').boundingBox();
+    await slow.waitForFunction(()=>document.querySelector('#the-room img').naturalWidth>0);
+    const complete=await slow.locator('#the-room .print-paper').boundingBox();
+    assert.deepEqual(complete,reserved,'Delayed images retain reserved layout geometry');
     const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
     const fallback=await nojs.newPage();await fallback.goto(url);await fallback.screenshot({path:path.join(output,'no-javascript.png')});
     assert.equal(await fallback.locator('.print').count(),20);
@@ -104,6 +158,6 @@ const galleryClear = async p => {
     const broken=await context.newPage();await broken.route('**/assets/the-room.webp',r=>r.abort());await broken.goto(url);await ready(broken);
     assert(await broken.locator('#the-room .print-error').isVisible());
     assert.equal(errors.length,0,errors.join('\n'));
-    console.log('Passed: native scrolling and 3D depth; continuous mode changes; original ratios; shared viewer; focus, Escape and arrows; modal scroll lock; distant keyboard focus; mobile and landscape; reduced motion; offline; no-JS; image error fallback.');
+    console.log('Passed: native scroll and 3D depth; responsive catalog columns; original tones and stationary hover; readable captions and 44px controls; shared viewer/focus/arrows; phone/tablet/laptop/landscape; reduced motion; forced colors; simulated 200% zoom; touch scrolling and tapping; long titles; delayed image geometry; offline/no-JS/error fallback.');
   }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exit(1)});

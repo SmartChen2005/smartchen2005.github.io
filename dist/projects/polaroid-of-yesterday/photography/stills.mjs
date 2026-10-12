@@ -5,8 +5,8 @@ const figures = [...document.querySelectorAll('.print')];
 // needed to enter the exhibition, and the static gallery survives JS failure.
 const photos = figures.map(figure => {
   const image = figure.querySelector('img');
-  return { id: figure.id, title: figure.querySelector('figcaption span').textContent,
-    kind: figure.querySelector('figcaption span:last-child').textContent,
+  return { id: figure.id, title: figure.querySelector('.print-caption span').textContent,
+    kind: figure.querySelector('.print-caption span:last-child').textContent,
     source: figure.querySelector('a').href, preview: image.src, alt: image.alt,
     width: Number(image.getAttribute('width')), height: Number(image.getAttribute('height')) };
 });
@@ -20,23 +20,24 @@ const footer = document.querySelector('.exhibition-footer');
 const count = document.querySelector('#current-photo');
 let mode = new URL(location.href).searchParams.get('view') === 'gallery' ? 'gallery' : 'spiral';
 let width = 0, height = 0, gallery, metrics, scroll = window.scrollY;
-let poses = [], transition = null, frame = 0, lastFrame = 0;
+let poses = [], transition = null, frame = 0;
 let selected = 0, returnFocus = null, scrollBeforeViewer = 0, imageGeneration = 0;
-let viewerAnimation = null, dismissedFromPointer = false, pointerDown = false;
+let dismissedFromPointer = false, pointerDown = false;
 const pad = value => String(value).padStart(2, '0');
 
 function updateViewport() {
   width = document.documentElement.clientWidth;
   height = window.innerHeight;
   metrics = spiralMetrics(width, height, photos.length);
-  gallery = galleryLayout(width, height, photos);
+  gallery = galleryLayout(width, height, photos, window.innerWidth);
   stage.style.perspective = `${metrics.perspective}px`;
-  spacer.style.height = `${mode === 'spiral' ? metrics.distance + height : gallery.height}px`;
+  const introHeight = document.querySelector('.exhibition-intro').offsetHeight;
+  spacer.style.height = `${Math.max(height, (mode === 'spiral' ? metrics.distance + height : gallery.height) - introHeight)}px`;
 }
 
 function poseAt(index, scrollPosition) {
   return mode === 'spiral'
-    ? spiralPose(index, clamp(scrollPosition / metrics.distance), width, height, photos.length, motionPreference.matches)
+    ? spiralPose(index, clamp(scrollPosition / metrics.distance), width, height, photos.length)
     : { ...gallery.items[index], y: gallery.items[index].y - scrollPosition - height / 2 };
 }
 
@@ -46,27 +47,24 @@ function paint(pose, index) {
   figure.style.transform = `translate3d(${pose.x.toFixed(3)}px,${pose.y.toFixed(3)}px,${pose.z.toFixed(3)}px) rotateX(${pose.rx.toFixed(3)}deg) rotateY(${pose.ry.toFixed(3)}deg) rotateZ(${pose.rz.toFixed(3)}deg)`;
   const projection = metrics.perspective / (metrics.perspective - pose.z);
   const screenY = height / 2 + pose.y * projection;
-  // An empty white perimeter protects the quiet interface as prints pass it.
-  const opacity = mode === 'gallery' && !transition ? 1 : clamp((screenY - 75) / 90) * clamp((height - 45 - screenY) / 85);
-  figure.style.opacity = opacity.toFixed(3);
-  figure.style.pointerEvents = opacity > .1 ? 'auto' : 'none';
-  figure.dataset.visible = String(opacity > .1);
+  // Keep photographs at their original tone; depth comes from perspective.
+  const visible = screenY > 40 && screenY < height + 100;
+  figure.style.opacity = '1';
+  figure.style.pointerEvents = visible ? 'auto' : 'none';
+  figure.dataset.visible = String(visible);
   if (Math.abs(pose.y) < height * 1.2) figure.querySelector('img').loading = 'eager';
 }
 
 function render(time) {
   frame = 0;
   if (document.hidden || viewer.open) return;
-  const delta = Math.min(64, lastFrame ? time - lastFrame : 16.7);
-  lastFrame = time;
   const rawScroll = window.scrollY;
-  // Keep native wheel/touch/keyboard/scrollbar ownership. Only the camera settles.
-  if (motionPreference.matches || mode === 'gallery' || transition) scroll = rawScroll;
-  else scroll += (rawScroll - scroll) * (1 - Math.exp(-delta / 90));
-  if (Math.abs(rawScroll - scroll) < .1) scroll = rawScroll;
+  scroll = rawScroll;
+  const introBottom = document.querySelector('.exhibition-intro').getBoundingClientRect().bottom;
+  stage.style.setProperty('--stage-top', `${Math.max(height < 500 ? 60 : 72, introBottom + 24)}px`);
   let amount = 1;
   if (transition) {
-    amount = clamp((time - transition.start) / 1050);
+    amount = clamp((time - transition.start) / 240);
     amount = 1 - (1 - amount) ** 4;
   }
   poses = photos.map((_, index) => {
@@ -80,10 +78,9 @@ function render(time) {
   if (transition && amount >= 1) {
     transition = null;
     document.body.dataset.transitioning = 'false';
-    schedule(); // Paint settled gallery tones once after the depth transition.
+    schedule();
   }
-  if (transition || scroll !== rawScroll) schedule();
-  else lastFrame = 0;
+  if (transition) schedule();
 }
 function schedule() { if (!frame && !document.hidden && !viewer.open) frame = requestAnimationFrame(render); }
 function nearestPhoto() {
@@ -102,7 +99,7 @@ function reflectMode() {
   document.body.dataset.view = mode;
   switches.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === mode)));
   document.querySelector('#view-hint').textContent = mode === 'spiral'
-    ? 'Scroll through the memories. Select a photograph to pause.' : 'In-game screenshots & concept photography';
+    ? 'Memory spiral. Select a photograph to view.' : 'Photograph index. Select a photograph to view.';
 }
 function switchMode(next) {
   if (mode === next) return;
@@ -123,10 +120,9 @@ function switchMode(next) {
   schedule();
 }
 
-function setViewerPhoto(index, entrance = null) {
+function setViewerPhoto(index) {
   selected = clamp(index, 0, photos.length - 1);
   const photo = photos[selected], generation = ++imageGeneration;
-  viewerAnimation?.cancel();
   viewerImage.hidden = false;
   viewerImage.alt = photo.alt;
   viewerImage.width = photo.width;
@@ -140,16 +136,6 @@ function setViewerPhoto(index, entrance = null) {
   document.querySelector('#error-original').href = photo.source;
   document.querySelector('#previous-photo').disabled = selected === 0;
   document.querySelector('#next-photo').disabled = selected === photos.length - 1;
-  if (!motionPreference.matches) {
-    requestAnimationFrame(() => {
-      if (generation !== imageGeneration || !viewer.open) return;
-      const target = viewerImage.getBoundingClientRect();
-      const initial = entrance ? {
-        transform: `translate(${entrance.left + entrance.width / 2 - target.left - target.width / 2}px,${entrance.top + entrance.height / 2 - target.top - target.height / 2}px) scale(${entrance.width / target.width})`, opacity: .5
-      } : { opacity: .2, transform: 'translateY(8px)' };
-      viewerAnimation = viewerImage.animate([initial, { opacity: 1, transform: 'translate(0,0) scale(1)' }], { duration: entrance ? 650 : 240, easing: 'cubic-bezier(.2,.7,.2,1)' });
-    });
-  }
   // Upgrade after entry; only the current load may change the displayed image.
   const original = new Image();
   original.onload = () => { if (viewer.open && generation === imageGeneration) viewerImage.src = photo.source; };
@@ -159,15 +145,14 @@ function openViewer(index, trigger) {
   if (typeof viewer.showModal !== 'function') return false;
   returnFocus = trigger;
   scrollBeforeViewer = window.scrollY;
-  const entrance = trigger.querySelector('img').getBoundingClientRect();
   transition = null;
   document.body.dataset.transitioning = 'false';
   viewer.showModal();
   document.documentElement.style.overflow = 'hidden';
-  setViewerPhoto(index, entrance);
+  setViewerPhoto(index);
   return true;
 }
-function closeViewer() { viewerAnimation?.cancel(); viewer.close(); }
+function closeViewer() { viewer.close(); }
 
 figures.forEach((figure, index) => {
   const image = figure.querySelector('img'), link = figure.querySelector('a');
@@ -231,7 +216,7 @@ window.addEventListener('resize', () => {
 });
 motionPreference.addEventListener('change', () => { transition = null; document.body.dataset.transitioning = 'false'; scroll = window.scrollY; schedule(); });
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) { cancelAnimationFrame(frame); frame = 0; lastFrame = 0; }
+  if (document.hidden) { cancelAnimationFrame(frame); frame = 0; }
   else { scroll = window.scrollY; schedule(); }
 });
 if (figures.length && CSS.supports('transform-style', 'preserve-3d')) {

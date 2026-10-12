@@ -91,6 +91,14 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-12 — Apply the SSENSE photography guide to Stills
+
+- Applied the user-selected `style/ssense-photography-style-guide.md`: pure white, neutral ink, Helvetica navigation/headlines, an editorial serif introduction and readable 12–13px captions.
+- Replaced decorative print borders, shadows, fading and hover motion with original-tone photographs. The catalog now uses uncropped 3:4 contain slots, four/three/two responsive columns and shared image/title links.
+- Retained the explicitly specified 3D spiral while removing roll, angular drift and camera inertia; shortened the continuous mode change to 240ms and simplified focused viewing.
+- Verified responsive columns, caption geometry, keyboard/modal behavior, reduced motion, stationary hover, touch targets, simulated 200% zoom, forced colors and image fallbacks, plus existing site/project validation. See `tools/STILLS-QA.md`.
+- Prepared locally for review; no remote publication was requested.
+
 ### 2026-10-12 — Stills photographic exhibition
 
 - Replaced the Stills placeholders with twenty images from the local Polaroid archive, using uncropped optimized display copies and direct full-resolution originals.

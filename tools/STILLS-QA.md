@@ -27,6 +27,14 @@ The preparation script needs Pillow. It verifies original dimensions and creates
 - `python <frontend-design-premium>/scripts/audit_project.py . --mode strict --output tools/stills-premium-audit.json`: static premium audit.
 - `node tools/test-stills-browser.cjs`: real Chrome interaction checks, saved screenshots in ignored `tools/stills-qa/`. Set `PLAYWRIGHT_MODULE` to the available Playwright package and serve `dist/` on port 4173 first.
 
-Browser coverage includes desktop, 390px/320px phones and 844px landscape; scroll-driven depth; gallery morphing and rapid switching; full-ratio viewer; Close/Escape/arrows; focus restoration; modal background scroll lock; distant keyboard focus; reduced motion; offline interactions; no-JavaScript navigation; and failed image recovery. Screenshots cover the installation, scrolled spiral, editorial gallery and open viewer.
+Browser coverage includes 1440px desktop, 1024px laptop, 768px tablet, 390px/320px phones and 844px landscape; scroll-driven depth; gallery morphing and rapid switching; full-ratio viewer; Close/Escape/arrows; focus restoration; modal background scroll lock; distant keyboard focus; reduced motion; offline interactions; no-JavaScript navigation; and failed image recovery. Screenshots cover the installation, scrolled spiral, gallery and open viewer.
+
+## SSENSE guide revision
+
+The user's latest request applies `style/ssense-photography-style-guide.md`. The guide's explicit Stills exception retains the default spatial spiral; its neutral surfaces, typography, image behavior, caption readability and catalog layout apply to the whole page. Original photos and collection order are unchanged.
+
+CSS tokens match the guide's white/ink/body/secondary/rule/placeholder palette. Static images have no shadows, border material, filters, transparency or hover movement. The catalog uses contain within 3:4 slots: four columns at 1440px, three at 1024px, two on smaller screens. Caption and photograph share one original-file link. Captions remain at least 12px; mode controls have 44px touch targets. The mode rearrangement is 240ms; camera inertia, roll, angular drift and the large viewer entrance are removed.
+
+Additional checks cover stationary image hover, original tones, exact white canvas, responsive column count, rendered caption collisions, forced colors and a simulated 200% desktop CSS viewport using Chrome device metrics. A real touch context, delayed image load and long-title fixture verify the guide's relevant resilience states. The archived `ssense-before.png` documents the prior design.
 
 Prepared for local review. Remote publication is outside this request.

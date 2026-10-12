@@ -9,18 +9,17 @@ const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '
 const figures = collection.map((photo, index) => `      <figure class="print" data-index="${index}" id="${photo.id}">
         <a class="print-link" href="${escape(photo.source)}" aria-label="View ${escape(photo.title)}; ${escape(photo.kind)}">
           <span class="print-paper"><img src="assets/${photo.id}.webp" width="${photo.width}" height="${photo.height}" alt="${escape(photo.alt)}" ${index < 3 ? 'fetchpriority="high"' : index < 9 ? '' : 'loading="lazy"'} decoding="async"><span class="print-error" hidden>Image unavailable<span>Open original photograph</span></span></span>
+          <span class="print-caption"><span>${escape(photo.title)}</span><span>${escape(photo.kind)}</span></span>
         </a>
-        <figcaption><span>${escape(photo.title)}</span><span>${escape(photo.kind)}</span></figcaption>
       </figure>`).join('\n');
 const html = `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#faf9f6">
+  <meta name="theme-color" content="#ffffff">
   <meta name="description" content="An exhibition of in-game screenshots and concept photography from Polaroid of Yesterday. Explore a memory spiral or an editorial gallery.">
   <title>Stills | Polaroid of Yesterday</title>
-  <link rel="preload" as="font" href="../../../assets/fonts/archivo-variable.ttf" type="font/ttf" crossorigin>
   <link rel="preload" as="image" href="assets/the-room.webp">
   <link rel="stylesheet" href="stills.css">
   <script type="module" src="stills.mjs"></script>
@@ -28,12 +27,12 @@ const html = `<!doctype html>
 <body>
   <a class="skip-link" href="#installation">Skip to photographs</a>
   <header class="exhibition-header">
-    <div class="exhibition-identity"><h1>Stills</h1><a href="../">Polaroid of Yesterday</a></div>
-    <p class="exhibition-description">Screenshots &amp; concept photography</p>
+    <a class="project-return" href="../">Polaroid of Yesterday</a>
     <div class="view-switch" role="group" aria-label="Exhibition view" hidden>
       <button type="button" data-view="spiral" aria-pressed="true">Spiral</button><span aria-hidden="true">/</span><button type="button" data-view="gallery" aria-pressed="false">Gallery</button>
     </div>
   </header>
+  <div class="exhibition-intro"><h1>Stills</h1><p>In-game screenshots and concept photography.</p></div>
   <main id="installation" class="installation" aria-label="Photographic exhibition" tabindex="-1">
     <div class="photographs">
 ${figures}
@@ -42,7 +41,7 @@ ${figures}
   <div class="exhibition-space" aria-hidden="true"></div>
   <footer class="exhibition-footer" hidden>
     <span class="exhibition-count"><span id="current-photo">01</span><span class="count-divider">/</span>${String(collection.length).padStart(2, '0')}</span>
-    <p id="view-hint">Scroll through the memories. Select a photograph to pause.</p><a href="../">Back to the room</a>
+    <p class="sr-only" id="view-hint">Memory spiral. Select a photograph to view.</p>
   </footer>
   <p class="sr-only" id="view-status" role="status" aria-live="polite"></p>
   <dialog class="photo-viewer" aria-labelledby="viewer-title">

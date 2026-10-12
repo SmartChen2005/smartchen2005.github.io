@@ -24,12 +24,13 @@ for (const [w,h] of [[1440,1000],[1920,1080],[1024,768],[768,1024],[390,844],[32
     assert.deepEqual(interpolatePose(pose,target,1),target);
   }
   const gallery=galleryLayout(w,h,photos);
+  assert.equal(gallery.columns,w>=1440?4:w>=1024?3:2);
   for (const [i,p] of gallery.items.entries()) {
-    const half=p.width/2, ph=p.width*photos[i].height/photos[i].width;
+    const half=p.width/2, ph=p.width*4/3;
     assert(p.x+w/2-half>=0 && p.x+w/2+half<=w,'Gallery fits horizontally');
-    assert(p.y-ph/2>=120 && p.y+ph/2+45<gallery.height,'Gallery preserves caption and image space');
+    assert(p.y-ph/2>=90 && p.y+ph/2+45<gallery.height,'Gallery preserves caption and image space');
     for(let j=i+1;j<gallery.items.length;j++) {
-      const q=gallery.items[j],qh=q.width*photos[j].height/photos[j].width;
+      const q=gallery.items[j],qh=q.width*4/3;
       assert(Math.abs(p.x-q.x)>=(p.width+q.width)/2 || p.y+ph/2+40<=q.y-qh/2 || q.y+qh/2+40<=p.y-ph/2,'Images and captions never overlap in gallery');
     }
   }
