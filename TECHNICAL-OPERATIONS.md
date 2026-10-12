@@ -91,6 +91,14 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-12 — Stills photographic exhibition
+
+- Replaced the Stills placeholders with twenty images from the local Polaroid archive, using uncropped optimized display copies and direct full-resolution originals.
+- Added a genuine CSS 3D vertical helix, native scroll camera movement, continuous rearrangement into an asymmetric gallery, and a shared accessible focused viewer.
+- Added an editable collection manifest, deterministic page/asset preparation tools, responsive and reduced-motion behavior, offline/no-JavaScript fallbacks, and image-load recovery.
+- Verified spatial geometry and original ratios across seven viewport shapes; Chrome desktop/mobile/landscape interaction and visual checks; source/document validation; original room checksum; strict design audit. Details are in `tools/STILLS-QA.md`.
+- Prepared locally for review; no remote publication was requested.
+
 ### 2026-10-09 — Preserve the 404 hero when clearing
 
 - Removed the detached arrow from Back to Home.
