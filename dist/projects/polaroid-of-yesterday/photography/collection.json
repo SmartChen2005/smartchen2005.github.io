@@ -2,7 +2,7 @@
   {
     "id": "the-room",
     "title": "The room",
-    "kind": "Concept photography",
+    "kind": "In-game screenshot",
     "source": "../assets/room.jpg",
     "width": 3840,
     "height": 2160,
@@ -20,7 +20,7 @@
   {
     "id": "in-the-hallway",
     "title": "In the hallway",
-    "kind": "Concept photography",
+    "kind": "In-game screenshot",
     "source": "../game-design-document/assets/asset-044.jpg",
     "width": 3840,
     "height": 2160,
@@ -29,11 +29,11 @@
   {
     "id": "in-the-details",
     "title": "In the details",
-    "kind": "Concept photography",
+    "kind": "In-game screenshot",
     "source": "../game-design-document/assets/asset-046.jpg",
     "width": 3840,
     "height": 2160,
-    "alt": "A close photograph of a woman's eyes, with a soft reflection passing across her face."
+    "alt": "A close image of a woman's eyes, with a soft reflection passing across her face."
   },
   {
     "id": "the-red-chair",
@@ -47,7 +47,7 @@
   {
     "id": "double-exposure",
     "title": "Double exposure",
-    "kind": "Concept photography",
+    "kind": "In-game screenshot",
     "source": "../game-design-document/assets/asset-042.jpg",
     "width": 3840,
     "height": 2160,
@@ -65,7 +65,7 @@
   {
     "id": "into-the-woods",
     "title": "Into the woods",
-    "kind": "Concept photography",
+    "kind": "In-game screenshot",
     "source": "../game-design-document/assets/asset-047.jpg",
     "width": 3840,
     "height": 2160,
@@ -74,7 +74,7 @@
   {
     "id": "the-camera-remembers",
     "title": "The camera remembers",
-    "kind": "Concept photography",
+    "kind": "In-game screenshot",
     "source": "../game-design-document/assets/asset-051.jpg",
     "width": 3840,
     "height": 2160,
@@ -92,7 +92,7 @@
   {
     "id": "in-the-distance",
     "title": "In the distance",
-    "kind": "Concept photography",
+    "kind": "In-game screenshot",
     "source": "../game-design-document/assets/asset-041.jpg",
     "width": 3840,
     "height": 2160,
@@ -110,11 +110,11 @@
   {
     "id": "a-gesture",
     "title": "A gesture",
-    "kind": "Concept photography",
+    "kind": "In-game screenshot",
     "source": "../game-design-document/assets/asset-043.jpg",
     "width": 3840,
     "height": 2160,
-    "alt": "Two figures caught in a dim, softly blurred interior photograph."
+    "alt": "Two figures caught in a dim, softly blurred interior image."
   },
   {
     "id": "empty-street",
@@ -137,7 +137,7 @@
   {
     "id": "an-open-window",
     "title": "An open window",
-    "kind": "Concept photography",
+    "kind": "In-game screenshot",
     "source": "../game-design-document/assets/asset-010.jpg",
     "width": 3840,
     "height": 2160,

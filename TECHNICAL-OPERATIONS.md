@@ -91,6 +91,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-12 — Correct Stills image classification
+
+- Applied the user's clarification: every current Stills image is a game screenshot; concept photography will be supplied separately.
+- Corrected all twenty media labels, the current page introduction, metadata, original-image wording and the project-room Stills caption. The renderer now derives its category description from the actual collection.
+- Preserved image files, order, dimensions and viewing modes. Verified generated labels, original links and existing site/project integrity checks.
+
 ### 2026-10-12 — Apply the SSENSE photography guide to Stills
 
 - Applied the user-selected `style/ssense-photography-style-guide.md`: pure white, neutral ink, Helvetica navigation/headlines, an editorial serif introduction and readable 12–13px captions.

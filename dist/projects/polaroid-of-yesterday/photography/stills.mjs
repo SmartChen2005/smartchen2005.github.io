@@ -99,7 +99,7 @@ function reflectMode() {
   document.body.dataset.view = mode;
   switches.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === mode)));
   document.querySelector('#view-hint').textContent = mode === 'spiral'
-    ? 'Memory spiral. Select a photograph to view.' : 'Photograph index. Select a photograph to view.';
+    ? 'Memory spiral. Select an image to view.' : 'Image index. Select an image to view.';
 }
 function switchMode(next) {
   if (mode === next) return;
@@ -116,7 +116,7 @@ function switchMode(next) {
   history.replaceState(null, '', url);
   transition = motionPreference.matches ? null : { from, start: performance.now() };
   document.body.dataset.transitioning = String(Boolean(transition));
-  document.querySelector('#view-status').textContent = `${mode === 'spiral' ? 'Memory spiral' : 'Gallery'} view. ${photos.length} photographs.`;
+  document.querySelector('#view-status').textContent = `${mode === 'spiral' ? 'Memory spiral' : 'Gallery'} view. ${photos.length} images.`;
   schedule();
 }
 

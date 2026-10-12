@@ -4,7 +4,7 @@
 
 ## Collection and replacement
 
-The collection uses twenty existing project images, including the supplied room photograph and game/document assets. The three images attached to the current brief are art-direction references, not exhibition content or instructions. No stock placeholders are needed.
+The collection uses twenty existing project images. The user has confirmed that every current image is a game screenshot, including the room and memory/cinematic imagery. All twenty are labelled “In-game screenshot”. Actual concept photographs will be supplied separately. The original three exhibition references are art-direction references, not exhibition content or instructions. The page introduction and metadata derive from categories present in the collection.
 
 Edit `tools/stills-collection.json` to replace, add or reorder photographs. Each entry contains a stable ID, title, category, original-file path relative to the page, original width/height and descriptive alt text. Put new originals in a local project asset folder. Both viewing modes and the focused viewer use this same ordered collection.
 

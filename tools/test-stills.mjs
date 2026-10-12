@@ -4,7 +4,7 @@ import { spiralMetrics, spiralPose, galleryLayout, interpolatePose } from '../di
 const route = new URL('../dist/projects/polaroid-of-yesterday/photography/', import.meta.url);
 const photos = JSON.parse(fs.readFileSync(new URL('../tools/stills-collection.json', import.meta.url), 'utf8'));
 assert.equal(new Set(photos.map(p => p.id)).size, photos.length);
-assert(photos.some(p => p.kind === 'Concept photography') && photos.some(p => p.kind === 'In-game screenshot'));
+assert(photos.every(p => ['In-game screenshot', 'Concept photography'].includes(p.kind)), 'Each image uses a supported, factual media label');
 for (const photo of photos) {
   assert(fs.statSync(new URL(photo.source, route)).size > 0);
   assert(fs.statSync(new URL(`assets/${photo.id}.webp`, route)).size > 0);
@@ -40,4 +40,4 @@ for (const [,ref] of html.matchAll(/(?:src|href)="([^"]+)"/g)) {
   if (/^(?:#|https?:|data:)/.test(ref)) continue;
   assert(fs.existsSync(new URL(ref,route)),`Missing local dependency: ${ref}`);
 }
-console.log('Passed: local assets and original links; both image categories; true helix geometry; camera safety; continuous pose interpolation; uncropped, non-overlapping galleries across seven viewports.');
+console.log('Passed: local assets and original links; media labels; true helix geometry; camera safety; continuous pose interpolation; uncropped, non-overlapping galleries across seven viewports.');
