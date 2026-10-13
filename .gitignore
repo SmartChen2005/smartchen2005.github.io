@@ -1,3 +1,7 @@
 tools/music-qa/
 tools/construction-qa/
 tools/stills-qa/
+.env.gallery.local
+tools/gallery-source/bundles/
+tools/gallery-source/fresh-skater.json
+tools/gallery-source/skater-bundle.json

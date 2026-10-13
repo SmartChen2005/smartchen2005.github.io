@@ -1,0 +1,62 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { parseNotionMarkdown, adaptNotionBlocks, renderDocument, allImages, canonicalMediaUrl, mediaIdentity } from './gallery-document.mjs';
+import { NotionGalleryClient, galleryPageSnapshot } from './gallery-notion-client.mjs';
+import { imageDimensions } from './gallery-image.mjs';
+
+const document=parseNotionMarkdown('An **editorial** paragraph.<br>Second line.\n<columns>\n\t<column ratio="65">\n\t\t![A portrait](https://images.unsplash.com/portrait.jpg)\n\t</column>\n\t<column ratio="35">\n\t\t![A landscape](https://images.unsplash.com/landscape.jpg)\n\t</column>\n</columns>\n<video src="https://www.youtube.com/watch?v=oOozEVsR1Ps">Film</video>');
+assert.equal(allImages(document).length,2);
+const html=renderDocument(document,{title:'Test series',resolveMedia:()=>({display:'assets/test.webp',original:'assets/test.jpg',displayWidth:800,displayHeight:1200})});
+assert.match(html,/<strong>editorial<\/strong>/);assert.match(html,/65fr 35fr/);assert.match(html,/width="800" height="1200"/);assert.match(html,/youtube-nocookie.com/);
+assert(!html.includes('autoplay=1'));
+assert.throws(()=>parseNotionMarkdown('<columns>\n<column ratio="50">\nMissing end'),/Unclosed/);
+assert.throws(()=>adaptNotionBlocks([{id:'unsupported',type:'unsupported'}]),/Unsupported/);
+const malicious=renderDocument([{type:'paragraph',text:'**<img src=x onerror=alert(1)>** [Unsafe](javascript:alert)' }],{title:'Safe'});
+assert(!malicious.includes('<img'));assert(!malicious.includes('href="javascript:'));assert(malicious.includes('&lt;img'));
+const native='notion-file-block://aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb?name=image.jpg';
+assert.equal(mediaIdentity(native),'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb');
+const original='https://prod-files-secure.s3.us-west-2.amazonaws.com/space/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/image.jpg?X-Amz-Signature=temporary';
+assert.equal(mediaIdentity(original),mediaIdentity(native));
+assert(!canonicalMediaUrl(original).includes('Signature'));
+assert.notEqual(mediaIdentity(original),mediaIdentity(original.replaceAll('bbbbbbbb','cccccccc')),'Replacing an image with the same filename must use its new asset identity');
+
+const requests=[];let throttled=true;
+const reply=(body,status=200,headers={})=>new Response(JSON.stringify(body),{status,headers});
+const client=new NotionGalleryClient({token:'test-only',sleep:async()=>{},fetchImpl:async(url,options)=>{
+ requests.push({url,options});
+ if(throttled){throttled=false;return reply({},429,{'retry-after':'1'});}
+ if(url.includes('/query')){const cursor=JSON.parse(options.body).start_cursor;return reply(cursor?{results:[{id:'second',object:'page'}],has_more:false}:{results:[{id:'first',object:'page'}],has_more:true,next_cursor:'next'});}
+ if(url.includes('/blocks/root/children'))return reply({results:[{id:'column',type:'column_list',has_children:true,column_list:{}}],has_more:false});
+ if(url.includes('/blocks/column/children'))return reply({results:[{id:'nested',type:'paragraph',paragraph:{rich_text:[{plain_text:'Nested text'}]}}],has_more:false});
+ throw new Error('Unexpected request');
+}});
+assert.equal((await client.listPages('e7cabc37-a86f-831f-b28f-8728d395d577')).length,2);
+const blocks=await client.children('root');assert.equal(blocks[0].column_list.children[0].paragraph.rich_text[0].plain_text,'Nested text');
+assert(requests.every(r=>r.url.startsWith('https://api.notion.com/v1/')));
+const filter=JSON.parse(requests.find(r=>r.options.body)?.options.body).filter;assert(filter.and.some(f=>f.property==='Published'));
+const incomplete=new NotionGalleryClient({token:'test-only',fetchImpl:async()=>reply({request_status:{type:'incomplete'},results:[]})});
+await assert.rejects(()=>incomplete.listPages('e7cabc37-a86f-831f-b28f-8728d395d577'),/incomplete/);
+const props={Project:{type:'title',title:[{plain_text:'A project'}]},Published:{type:'checkbox',checkbox:true},PrivateNotes:{type:'rich_text',rich_text:[{plain_text:'Do not export'}]}};
+assert(!('PrivateNotes' in galleryPageSnapshot({id:'test',properties:props}).properties));
+
+const snapshot=JSON.parse(fs.readFileSync(new URL('gallery-notion/snapshot.json',import.meta.url),'utf8'));
+assert.equal(snapshot.pages.length,13);
+const sourceCounts=snapshot.pages.map(page=>allImages(page.blocks?adaptNotionBlocks(page.blocks):parseNotionMarkdown(page.markdown)).length);
+assert.equal(sourceCounts.reduce((a,b)=>a+b,0),136,'Every source photograph remains represented in the CMS');
+assert.equal(snapshot.pages.find(p=>p.properties.Slug==='trauma-induced-dissociative-amnesia').properties['Content kind'],'Concept photography');
+const imagesDir=new URL('../dist/gallery/assets/works/',import.meta.url);
+for(const file of fs.readdirSync(imagesDir).filter(n=>n.endsWith('.jpg'))){const dimensions=imageDimensions(fs.readFileSync(new URL(file,imagesDir)));assert(dimensions.width>0&&dimensions.height>0);}
+const qa=path.resolve('tools/stills-qa/gallery-converter-test');fs.mkdirSync(qa,{recursive:true});
+const emptyPath=path.join(qa,'empty.json');fs.writeFileSync(emptyPath,JSON.stringify({...snapshot,pages:[]}));
+const output=path.join(qa,'site');
+const empty=spawnSync(process.execPath,['tools/render-gallery.mjs','--snapshot',emptyPath,'--out',output],{encoding:'utf8'});
+assert.equal(empty.status,0,empty.stderr);assert.match(fs.readFileSync(path.join(output,'index.html'),'utf8'),/No published photography projects/);
+const protectedPage=fs.readFileSync(path.join(output,'index.html'),'utf8');
+const invalid=path.join(qa,'invalid.json');fs.writeFileSync(invalid,JSON.stringify({...snapshot,pages:[{...snapshot.pages[0],properties:{...snapshot.pages[0].properties,Slug:'../escape'}}]}));
+const rejected=spawnSync(process.execPath,['tools/render-gallery.mjs','--snapshot',invalid,'--out',output],{encoding:'utf8'});
+assert.notEqual(rejected.status,0);assert.equal(fs.readFileSync(path.join(output,'index.html'),'utf8'),protectedPage,'An invalid export cannot replace the existing page');
+const missingToken=spawnSync(process.execPath,['tools/sync-gallery-notion.mjs','--watch'],{encoding:'utf8',env:{...process.env,NOTION_TOKEN:''}});
+assert.equal(missingToken.status,1);assert.match(missingToken.stderr,/Set NOTION_TOKEN/);
+console.log('Passed: Notion document structures; natural image dimensions; native asset identities; safe links/markup; video rendering; pagination/nested blocks; rate-limit recovery; incomplete-export protection; CMS property scope; all 136 source photograph references.');

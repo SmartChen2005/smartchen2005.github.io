@@ -1,0 +1,56 @@
+name: Sync The Gallery from Notion
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17,47 * * * *'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  gallery:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check Notion connection configuration
+        id: configured
+        run: |
+          if [ -n "$NOTION_TOKEN" ]; then
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+            echo 'The Gallery sync needs the NOTION_TOKEN repository secret. No deployment was made.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Export published Notion projects
+        if: steps.configured.outputs.ready == 'true'
+        run: node tools/sync-gallery-notion.mjs
+      - name: Verify generated website
+        if: steps.configured.outputs.ready == 'true'
+        run: |
+          node tools/test-gallery-document.mjs
+          node tools/test-gallery.mjs
+          node tools/validate-site.mjs
+      - uses: actions/configure-pages@v5
+        if: steps.configured.outputs.ready == 'true'
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.configured.outputs.ready == 'true'
+        with:
+          path: dist
+      - uses: actions/deploy-pages@v4
+        id: deployment
+        if: steps.configured.outputs.ready == 'true'

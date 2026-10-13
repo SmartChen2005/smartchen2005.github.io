@@ -1,0 +1,124 @@
+{
+  "imported": "2026-10-13",
+  "photographySource": "https://sites.google.com/view/vegshark/photography",
+  "filmSource": "https://sites.google.com/view/vegshark/film",
+  "covers": [
+    {
+      "id": "trauma-induced-dissociative-amnesia",
+      "project": "https://sites.google.com/view/vegshark/photography/trauma-induced-dissociative-amnesia",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/66c8d1d2-1457-43f8-bd69-b621ab7a8edd/trauma-induced-dissociative-amnesia.jpg",
+      "width": 1280,
+      "height": 1280,
+      "original": "trauma-induced-dissociative-amnesia.jpg",
+      "display": "trauma-induced-dissociative-amnesia.webp"
+    },
+    {
+      "id": "rhythms-of-chaos",
+      "project": "https://sites.google.com/view/vegshark/photography/rhythms-of-chaos",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/179012e3-9b71-4e23-a417-b6c9fff29996/rhythms-of-chaos.jpg",
+      "width": 1280,
+      "height": 1280,
+      "original": "rhythms-of-chaos.jpg",
+      "display": "rhythms-of-chaos.webp"
+    },
+    {
+      "id": "deliberate-practice",
+      "project": "https://sites.google.com/view/vegshark/photography/film-photography/deliberate-practice",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/f8fd51fd-3b4a-49de-8018-8ed7b7e5e88b/deliberate-practice.jpg",
+      "width": 1280,
+      "height": 1280,
+      "original": "deliberate-practice.jpg",
+      "display": "deliberate-practice.webp"
+    },
+    {
+      "id": "the-life-of-a-poser",
+      "project": "https://sites.google.com/view/vegshark/photography/the-life-of-a-poser-skater",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/47e47bc9-a97d-4167-b6a7-a5a753f40839/the-life-of-a-poser.jpg",
+      "width": 1280,
+      "height": 1279,
+      "original": "the-life-of-a-poser.jpg",
+      "display": "the-life-of-a-poser.webp"
+    },
+    {
+      "id": "intro-to-darkroom",
+      "project": "https://sites.google.com/view/vegshark/photography/film-photography/intro-to-darkroom",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/b0966bfd-d318-4bc9-899f-3ed6d59abaaf/intro-to-darkroom.jpg",
+      "width": 1280,
+      "height": 1280,
+      "original": "intro-to-darkroom.jpg",
+      "display": "intro-to-darkroom.webp"
+    },
+    {
+      "id": "analog-and-digital",
+      "project": "https://sites.google.com/view/vegshark/photography/film-photography/analog-and-digital",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/33803d04-b5b8-4000-959d-f8a4241c40f9/analog-and-digital.jpg",
+      "width": 1280,
+      "height": 1280,
+      "original": "analog-and-digital.jpg",
+      "display": "analog-and-digital.webp"
+    },
+    {
+      "id": "cathedrals-of-light",
+      "project": "https://sites.google.com/view/vegshark/photography/cathedrals-of-light",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/074c8b43-a14f-4003-945f-5467aabda06a/cathedrals-of-light.jpg",
+      "width": 1280,
+      "height": 1280,
+      "original": "cathedrals-of-light.jpg",
+      "display": "cathedrals-of-light.webp"
+    },
+    {
+      "id": "surface-of-the-moon",
+      "project": "https://sites.google.com/view/vegshark/photography/surface-of-the-moon",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/b86ba892-ed78-4d99-96a2-2dc197a0d441/surface-of-the-moon.jpg",
+      "width": 1280,
+      "height": 1280,
+      "original": "surface-of-the-moon.jpg",
+      "display": "surface-of-the-moon.webp"
+    },
+    {
+      "id": "morning-unwoken",
+      "project": "https://sites.google.com/view/vegshark/film/morning-unwoken",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/04658161-c465-46e8-af34-c607e5d39855/morning-unwoken.jpg",
+      "width": 1280,
+      "height": 720,
+      "original": "morning-unwoken.jpg",
+      "display": "morning-unwoken.webp"
+    },
+    {
+      "id": "cursed-stage",
+      "project": "https://sites.google.com/view/vegshark/film/cursed-stage",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/91ac2f5a-bb0a-4975-9fbc-f208caf705f3/cursed-stage.jpg",
+      "width": 1280,
+      "height": 720,
+      "original": "cursed-stage.jpg",
+      "display": "cursed-stage.webp"
+    },
+    {
+      "id": "gorilla-in-the-studio",
+      "project": "https://sites.google.com/view/vegshark/film/gorilla-in-the-studio",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/811d1fdc-57b5-4b8b-a2ce-5436b684147c/gorilla-in-the-studio.jpg",
+      "width": 1280,
+      "height": 720,
+      "original": "gorilla-in-the-studio.jpg",
+      "display": "gorilla-in-the-studio.webp"
+    },
+    {
+      "id": "the-common-things",
+      "project": "https://sites.google.com/view/vegshark/film/the-common-things",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/c4e467e5-d174-4fc7-a4ef-cf3f339610d3/the-common-things.jpg",
+      "width": 1280,
+      "height": 720,
+      "original": "the-common-things.jpg",
+      "display": "the-common-things.webp"
+    },
+    {
+      "id": "rorschachs-mask",
+      "project": "https://sites.google.com/view/vegshark/film/rorschachs-mask",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/80c96b6c-268e-44c9-9ff3-9b3dcfb790c2/rorschachs-mask.jpg",
+      "width": 1280,
+      "height": 720,
+      "original": "rorschachs-mask.jpg",
+      "display": "rorschachs-mask.webp"
+    }
+  ]
+}

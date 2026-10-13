@@ -15,6 +15,9 @@ This repository is the source of truth for the **Polaroid of Yesterday** web arc
 - `dist/assets/` — shared site assets such as the portrait and fonts.
 - `dist/projects/polaroid-of-yesterday/game-design-document/assets/` — image assets owned by the Polaroid of Yesterday document.
 - `DESIGN.md` — visual and content-preservation constraints.
+- `tools/gallery-notion/`, `tools/gallery-document.mjs`, `tools/render-gallery.mjs` — Notion content snapshots, native media mappings and the shared editorial article renderer.
+- `tools/sync-gallery-notion.mjs`, `tools/GALLERY-NOTION-SYNC.md` — Read-only Notion export, local watcher and setup instructions.
+- `dist/gallery/` — Gallery homepage, photography/film articles, shared exhibition styles and local media.
 - `.github/workflows/pages.yml` — GitHub Pages deployment workflow.
 
 ## Standard update cycle

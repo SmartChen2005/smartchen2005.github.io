@@ -30,7 +30,8 @@ export function galleryLayout(width, height, photos, viewportWidth = width) {
   const printWidth = (width - margin * 2 - gap * (columns - 1)) / columns;
   const slotHeight = printWidth * 4 / 3;
   const rowGap = width <= 700 ? 32 : 44;
-  const top = height < 500 ? 100 : width <= 700 ? 200 : 230;
+  // The mobile Gallery/Polaroid breadcrumb occupies a second navigation row.
+  const top = height < 500 ? 100 : width <= 700 ? 240 : 230;
   const items = [];
   let rowTop = top;
   for (let index = 0; index < photos.length; index++) {

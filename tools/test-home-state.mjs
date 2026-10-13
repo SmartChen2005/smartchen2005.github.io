@@ -13,7 +13,7 @@ function identity(id, tagName = 'BUTTON') {
     matches() { return this.keyboardFocus; }, focus() {},
     getBoundingClientRect: () => ({ left: 150, top: 330, width: 140, height: 60 }) };
 }
-const name = identity('name'), games = identity('games', 'A'), photo = identity('photo'), cars = identity('cars');
+const name = identity('name'), games = identity('games', 'A'), photo = identity('photo', 'A'), cars = identity('cars');
 const identities = [name, games, photo, cars];
 const composition = { dataset: {}, style: style(), getBoundingClientRect: () => ({ left: 150 }) };
 const image = { getAttribute: key => key === 'height' ? '4000' : '6000' };
@@ -62,7 +62,8 @@ for (const target of [games, photo, cars, games]) {
   dispatch(target, 'pointerleave');
   assert.equal(world(), 'name'); assert(!dock.hidden, 'Leaving a temporary preview must restore portrait AND card');
 }
-dispatch(photo, 'click'); assert(dock.hidden); assert.equal(world(), 'photo');
+assert.equal(photo.handlers.click, undefined, 'Photographer retains native navigation to The Gallery');
+dispatch(cars, 'click'); assert(dock.hidden); assert.equal(world(), 'cars');
 dispatch(name, 'pointerenter'); assert(dock.hidden, 'Clicking another identity must clear the old card selection');
 dispatch(name, 'pointerleave');
 dispatch(name, 'click', 0); assert(!dock.hidden); assert.equal(keyboardEntries, 1);

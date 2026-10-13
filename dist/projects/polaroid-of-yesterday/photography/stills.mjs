@@ -1,4 +1,4 @@
-import { clamp, spiralMetrics, spiralPose, galleryLayout, interpolatePose } from './stills-layout.mjs';
+import { clamp, spiralMetrics, spiralPose, galleryLayout, interpolatePose } from './stills-layout.mjs?gallery=20261013';
 
 const figures = [...document.querySelectorAll('.print')];
 // The semantic HTML is the collection source at runtime. No fetch or WebGL is
@@ -61,7 +61,8 @@ function render(time) {
   const rawScroll = window.scrollY;
   scroll = rawScroll;
   const introBottom = document.querySelector('.exhibition-intro').getBoundingClientRect().bottom;
-  stage.style.setProperty('--stage-top', `${Math.max(height < 500 ? 60 : 72, introBottom + 24)}px`);
+  const headerBottom = document.querySelector('.exhibition-header').getBoundingClientRect().bottom;
+  stage.style.setProperty('--stage-top', `${Math.max(headerBottom + 8, introBottom + 24)}px`);
   let amount = 1;
   if (transition) {
     amount = clamp((time - transition.start) / 240);
@@ -116,7 +117,7 @@ function switchMode(next) {
   history.replaceState(null, '', url);
   transition = motionPreference.matches ? null : { from, start: performance.now() };
   document.body.dataset.transitioning = String(Boolean(transition));
-  document.querySelector('#view-status').textContent = `${mode === 'spiral' ? 'Memory spiral' : 'Gallery'} view. ${photos.length} images.`;
+  document.querySelector('#view-status').textContent = `${mode === 'spiral' ? 'Memory spiral' : 'Index'} view. ${photos.length} images.`;
   schedule();
 }
 
