@@ -1,5 +1,6 @@
 import { createScenes } from './home-scenes.mjs';
 import { installGameTransition } from './home-game-transition.mjs';
+import { installPhotoTransition } from './home-photo-transition.mjs';
 import { createBusinessCard } from './home-business-card.mjs';
 
 const composition = document.querySelector('.composition');
@@ -46,9 +47,11 @@ nameTrigger.setAttribute('aria-controls', 'business-card');
 nameTrigger.setAttribute('aria-expanded', 'false');
 const businessCard = createBusinessCard(cardDock, portrait, document.querySelector('.sentence'), nameTrigger);
 const gameTransition = installGameTransition(document.querySelector('.identity-games'), scenes, () => { clear(); measure(); });
+const photoTransition = installPhotoTransition(document.querySelector('.identity-photo'), () => { clear(); measure(); }, () => gameTransition.active);
+const transitioning = () => gameTransition.active || photoTransition.active;
 
 function render() {
-  if (gameTransition.active) return;
+  if (transitioning()) return;
   const active = hovered ?? focused ?? pinned ?? '';
   setPortrait(active === 'name');
   composition.dataset.active = active;
@@ -110,7 +113,7 @@ document.addEventListener('pointermove', (event) => {
 window.addEventListener('blur', () => { hovered = null; focused = null; render(); });
 
 function measure() {
-  if (gameTransition.active) return;
+  if (transitioning()) return;
   const bounds = composition.getBoundingClientRect();
   const name = document.querySelector('.identity-name').getBoundingClientRect();
   // Measure while hidden when detached; the closed reveal has no rendered box.

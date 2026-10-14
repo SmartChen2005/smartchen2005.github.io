@@ -23,8 +23,9 @@ const anchor = { before() { portrait.isConnected = true; } };
 const dock = { hidden: true, contains: () => false };
 const sentence = { getBoundingClientRect: () => ({ top: 330, bottom: 390 }) };
 const nodes = { '.composition': composition, '.portrait-full': portrait, '.identity-name': name,
-  '.identity-games': games, '.business-card-dock': dock, '.sentence': sentence };
-let cardOpen = false, keyboardEntries = 0, navigate;
+  '.identity-games': games, '.identity-photo': photo, '.business-card-dock': dock, '.sentence': sentence };
+let cardOpen = false, keyboardEntries = 0, navigate, navigatePhoto, photoBlocksGame;
+const gameController = { active: false }, photoController = { active: false };
 const sandbox = {
   document: { body: { dataset: {} }, documentElement: { style: style() }, fonts: { ready: { then() {} } },
     querySelector: selector => nodes[selector] || {}, querySelectorAll: () => identities,
@@ -39,7 +40,11 @@ const sandbox = {
     if (!cardOpen && keyboard) keyboardEntries++;
     cardOpen = true; dock.hidden = false;
   }, hide() { cardOpen = false; dock.hidden = true; }, place() {}, activateMotion() {} }),
-  installGameTransition: (_, __, clear) => { navigate = clear; return { active: false }; },
+  installGameTransition: (_, __, clear) => { navigate = clear; return gameController; },
+  installPhotoTransition: (link, clear, otherActive) => {
+    assert.equal(link, photo, 'The Gallery transition must attach to the native Photographer link');
+    navigatePhoto = clear; photoBlocksGame = otherActive; return photoController;
+  },
 };
 vm.createContext(sandbox);
 vm.runInContext(fs.readFileSync(new URL('../dist/home.mjs', import.meta.url), 'utf8').replace(/^import .*;\r?\n/gm, ''), sandbox);
@@ -62,7 +67,16 @@ for (const target of [games, photo, cars, games]) {
   dispatch(target, 'pointerleave');
   assert.equal(world(), 'name'); assert(!dock.hidden, 'Leaving a temporary preview must restore portrait AND card');
 }
-assert.equal(photo.handlers.click, undefined, 'Photographer retains native navigation to The Gallery');
+assert.equal(photo.handlers.click, undefined, 'The identity controller must leave Photographer clicks to its transition installer');
+assert.equal(photoBlocksGame(), false);
+gameController.active = true;
+assert.equal(photoBlocksGame(), true, 'The Photographer transition must respect an active game transition');
+gameController.active = false;
+photoController.active = true;
+dispatch(cars, 'pointerenter');
+assert.equal(world(), 'name', 'Identity previews must not replace an active Photographer transition');
+photoController.active = false;
+dispatch(cars, 'pointerleave');
 dispatch(cars, 'click'); assert(dock.hidden); assert.equal(world(), 'cars');
 dispatch(name, 'pointerenter'); assert(dock.hidden, 'Clicking another identity must clear the old card selection');
 dispatch(name, 'pointerleave');
@@ -73,4 +87,5 @@ dispatch(name, 'click'); assert(dock.hidden); assert.equal(world(), '');
 dispatch(name, 'click'); events.get('keydown')({ key: 'Escape' }); assert(dock.hidden); assert.equal(world(), '');
 dispatch(name, 'click'); events.get('pointerdown')({ target: { closest: () => null } }); assert(dock.hidden);
 dispatch(name, 'click'); navigate(); assert(dock.hidden); assert.equal(world(), '');
-console.log('Passed: expanded arrival; first click closes; portrait-only hover; click pins portrait and card; all temporary previews restore both; explicit selection/dismissal clears both; keyboard restoration preserves focus.');
+dispatch(name, 'click'); navigatePhoto(); assert(dock.hidden); assert.equal(world(), '');
+console.log('Passed: expanded arrival; first click closes; portrait-only hover; click pins portrait and card; all temporary previews restore both; explicit selection/dismissal clears both; keyboard restoration preserves focus; Photographer transition integration, mutual exclusion and restoration.');

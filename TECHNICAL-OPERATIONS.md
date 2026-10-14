@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-14 — Architectural Photographer to Gallery transition
+
+- Added a three-second entry sequence: Photographer viewfinder corners open into a line-drawn exhibition with an oculus, real photography prints and the existing Möbius outline, then dock the title and mark into the Gallery's measured masthead.
+- Refined Photographer hover/focus with original-tone photographs, quiet corner marks and a Gallery label. Preserved native links and direct-navigation fallbacks, keyboard/touch entry, reduced motion, forced colors and Back restoration.
+- Added deterministic geometry/lifecycle and homepage state checks. Browser verification, static audit, commit, synchronization and publication results are recorded in `tools/PHOTO-TRANSITION-QA.md` and the task completion report.
+
 ### 2026-10-14 — Restore original Film index covers
 
 - Restored the original title-bearing covers for Cursed Stage 戏怨, Gorilla in the Studio, The Common Things and Rorschach’s Mask. Morning Unwoken already matches the original Film index and retains its forest cover.

@@ -18,6 +18,8 @@
   --focus: #65685e;
   --mechanical: #080808;
   --game-underline: #A2CFFE;
+  --gallery-paper: #fff;
+  --gallery-ink: #111;
   --scroll-thumb: #b8b9b2;
   --scroll-hover: #888a81;
   --scroll-active: #5b5e54;
@@ -89,25 +91,35 @@ body[data-world='games'] .kinetic-scene { visibility: visible; }
 .motor-scene.is-exiting { visibility: visible; opacity: 0; transition: opacity 380ms ease-out; }
 .photo-scene { position: absolute; inset: 0; visibility: hidden; }
 body[data-world='photo'] .photo-scene { visibility: visible; }
+.identity-photo::before {
+  content: 'THE GALLERY' / ''; position: absolute; left: 0; top: -15px;
+  font: 10px/1 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  letter-spacing: .025em; opacity: 0; transition: opacity 160ms ease;
+}
+.identity-photo::after {
+  content: ''; position: absolute; inset: -6px -9px; opacity: 0;
+  background: linear-gradient(currentColor,currentColor) left top/8px 1px no-repeat,
+    linear-gradient(currentColor,currentColor) left top/1px 8px no-repeat,
+    linear-gradient(currentColor,currentColor) right bottom/8px 1px no-repeat,
+    linear-gradient(currentColor,currentColor) right bottom/1px 8px no-repeat;
+  transition: opacity 160ms ease; pointer-events: none;
+}
+body[data-world='photo'] .identity-photo::before,
+body[data-world='photo'] .identity-photo::after { opacity: 1; }
 .gallery-print { position: absolute; margin: 0; }
+.gallery-print::after {
+  content: ''; position: absolute; inset: -7px;
+  background: linear-gradient(var(--gallery-ink),var(--gallery-ink)) left top/12px 1px no-repeat,
+    linear-gradient(var(--gallery-ink),var(--gallery-ink)) left top/1px 12px no-repeat,
+    linear-gradient(var(--gallery-ink),var(--gallery-ink)) right bottom/12px 1px no-repeat,
+    linear-gradient(var(--gallery-ink),var(--gallery-ink)) right bottom/1px 12px no-repeat;
+}
 .gallery-print img { display: block; width: 100%; height: auto; visibility: hidden; }
 body[data-world='photo'] .gallery-print.is-ready img {
   visibility: visible;
-  animation: develop-print 2600ms cubic-bezier(.22,.45,.32,1) backwards;
-  animation-delay: var(--develop-delay, 0ms);
+  animation: reveal-print 280ms ease-out backwards;
 }
-.gallery-print:nth-child(2) { --develop-delay: 180ms; }
-.gallery-print:nth-child(3) { --develop-delay: 390ms; }
-.gallery-print:nth-child(4) { --develop-delay: 580ms; }
-/* Temporary tonal development only. Final frame is the unfiltered original. */
-@keyframes develop-print {
-  0% { filter: contrast(0) brightness(2); }
-  14% { filter: contrast(.08) brightness(1.86); }
-  38% { filter: contrast(.35) brightness(1.48); }
-  68% { filter: contrast(.73) brightness(1.14); }
-  88% { filter: contrast(.96) brightness(1.02); }
-  100% { filter: none; }
-}
+@keyframes reveal-print { from { opacity: 0; } to { opacity: 1; } }
 .sentence-mat {
   position: fixed;
   left: 0;
@@ -154,6 +166,19 @@ body[data-game-transition] .world-stage, body[data-game-transition] .portrait { 
 body[data-game-transition] .homepage { clip-path: inset(var(--game-inset-y, 0px) var(--game-inset-x, 0px)); pointer-events: none; }
 body[data-game-transition] .identity:focus-visible { outline: none; }
 body[data-game-transition='point'] .homepage { visibility: hidden; }
+/* Photographer's temporary, same-origin exhibition preview and architectural drawing. */
+.photo-destination { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; z-index: 5; visibility: hidden; pointer-events: none; }
+.photo-destination.is-revealed { visibility: visible; opacity: 0; }
+.photo-entry { position: fixed; inset: 0; z-index: 6; pointer-events: none; overflow: hidden; color: var(--gallery-ink); }
+.photo-entry-white, .photo-entry-lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+.photo-entry-white { background: var(--gallery-paper); }
+.photo-entry-brand { position: absolute; display: flex; align-items: center; justify-content: center; }
+.photo-entry-mark { position: absolute; top: -8px; left: 0; width: 100%; height: calc(100% + 16px); }
+.photo-entry-brand > span { position: relative; font: 400 28px/1.5 'Helvetica Neue', Helvetica, Arial, sans-serif; letter-spacing: -.04em; text-transform: uppercase; white-space: nowrap; -webkit-font-smoothing: antialiased; }
+body[data-photo-transition] { overflow: hidden; }
+body[data-photo-transition] .homepage, body[data-photo-transition] .world-stage { opacity: var(--photo-home-opacity, 1); pointer-events: none; }
+body[data-photo-transition] .business-card-dock { visibility: hidden; }
+body[data-photo-transition] .identity-photo::before, body[data-photo-transition] .identity-photo::after { visibility: hidden; }
 @media (max-width: 700px) and (pointer: coarse) {
   .homepage { padding: 190px 9vw; }
   .composition { width: 100%; }
