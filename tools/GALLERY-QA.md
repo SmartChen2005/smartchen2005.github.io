@@ -1,5 +1,10 @@
 # The Gallery verification
 
+## 2026-10-14 — Remove the header doorway
+
+- Removed the rejected doorway markup, styling and generator. Restored the original shared header without another decoration; retained the approved footer.
+- Passed site validation, Gallery, Möbius and entry-transition checks. Verified exact original-header restoration across all fourteen pages, unchanged main/footer markup and an unchanged footer SVG.
+
 ## 2026-10-14 — Vaulted doorway header revision
 
 - Removed the rejected split cornice and all header rules. Replaced them with one small perspective arch beside the wordmark; the approved footer drawing and layout remain byte-for-byte intact.

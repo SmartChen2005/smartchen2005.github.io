@@ -1,14 +1,4 @@
-// Two quiet architectural fragments for the exhibition's permanent frame.
-// Static, unfilled drawings keep the animated entrance separate from the work.
-export function renderGalleryPortal() {
-  // A small vaulted doorway in perspective, separate from the wordmark contour.
-  const joints = Array.from({length:7},(_,i)=>{
-    const angle=Math.PI+i/6*Math.PI;
-    const point=r=>[22+r*Math.cos(angle),27+r*Math.sin(angle)].map(v=>v.toFixed(2)).join(' ');
-    return `M${point(10)}L${point(14)}`;
-  }).join(' ');
-  return `<svg class="gallery-portal" viewBox="4 4 44 56" width="44" height="56" fill="none" stroke="currentColor" stroke-width=".8" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 50V22A14 14 0 0 1 44 22V50 M20 50V22A10 10 0 0 1 40 22V50" opacity=".45"/><path d="M8 55V27A14 14 0 0 1 36 27V55 M12 55V27A10 10 0 0 1 32 27V55 M8 55H12 M32 55H36 M8 27H12 M32 27H36 ${joints}"/><path d="M22 13L30 8 M36 27L44 22 M36 55L44 50 M32 55L40 50 M12 55L20 50" opacity=".6"/></svg>`;
-}
+// Static, unfilled exhibition-room drawing for the Gallery footer.
 
 export function renderExhibitionRoom() {
   const project = ([x, y, z]) => [64 + (x - z) * 15, 80 + (x + z) * 4.8 - y * 15];
