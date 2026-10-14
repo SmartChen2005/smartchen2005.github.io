@@ -38,6 +38,7 @@ if (exhibitionImages.length !== 4 || JSON.stringify([...exhibitionImages].sort()
 if (/\.identity::(?:after|before)/.test(homeCss)) failures.push('Persistent identity underline decorations must not return');
 if (!fs.existsSync(path.join(root, 'dist/home-scenes.mjs'))) failures.push('Homepage scenery module is missing');
 if (!fs.existsSync(path.join(root, 'dist/home-game-transition.mjs'))) failures.push('Game click transition module is missing');
+if (!fs.existsSync(path.join(root, 'dist/home-photo-transition.mjs'))) failures.push('Photographer click transition module is missing');
 const cardText = home.match(/<div class="card-print">([\s\S]*?)\n        <\/div>/)?.[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
 if (cardText !== "Smart Chen 陈弘毅 Emory University '27 smartchen324@gmail.com Résumé Instagram") failures.push('Business card copy must match the supplied content exactly');
 if (home.includes('↗') || (home.match(/class="card-arrow"/g) || []).length !== 2) failures.push('Business card arrows must be two inline SVGs, with no Unicode arrows');
@@ -53,7 +54,8 @@ if (!home.includes('Smart Chen is a (game) designer, photographer, and car enthu
 for (const match of home.matchAll(/(?:src|href)="([^"]+)"/g)) {
   const ref = match[1];
   if (/^(?:#|https?:|mailto:)/.test(ref)) continue;
-  if (!fs.existsSync(path.join(root, 'dist', ref))) failures.push(`Missing homepage destination or asset: ${ref}`);
+  const fileRef = ref.split(/[?#]/, 1)[0];
+  if (!fs.existsSync(path.join(root, 'dist', fileRef))) failures.push(`Missing homepage destination or asset: ${ref}`);
 }
 const sentenceMarkup = home.match(/<h1 class="sentence">([\s\S]*?)<\/h1>/)?.[1] ?? '';
 const sentenceText = sentenceMarkup.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();

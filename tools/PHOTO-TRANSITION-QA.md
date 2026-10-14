@@ -18,3 +18,5 @@ The homepage's native Photographer link has an optional 3000ms architectural ent
 - Narrow checks use a desktop browser viewport, not physical touch hardware. Reduced motion, forced colors and network/load fallbacks are covered by the deterministic controller suite rather than claimed as physical device checks.
 
 Commit, GitHub synchronization and Pages deployment results are reported in the task completion message.
+
+Post-publication check: the connected Chrome profile initially reused its cached pre-transition `home.css` and `home.mjs`, despite the server files matching the new commit. The homepage now carries a shared `20261014-gallery-entry` revision on these two resource URLs so the new document requests the updated styles and controller. Homepage validation resolves query/fragment suffixes to the actual local file and requires the Photographer module. No other homepage asset or layout changes.
