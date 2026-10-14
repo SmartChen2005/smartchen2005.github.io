@@ -87,38 +87,38 @@
     {
       "id": "cursed-stage",
       "project": "https://sites.google.com/view/vegshark/film/cursed-stage",
-      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/905f777e-f5bb-4509-b4b3-6cfca610ba1c/6bc8b503b93c58b444bb.jpg",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/91ac2f5a-bb0a-4975-9fbc-f208caf705f3/cursed-stage.jpg",
       "width": 1280,
       "height": 720,
-      "original": "assets/works/6bc8b503b93c58b444bb.jpg",
-      "display": "assets/works/6bc8b503b93c58b444bb.webp"
+      "original": "assets/cursed-stage.jpg",
+      "display": "assets/cursed-stage.webp"
     },
     {
       "id": "gorilla-in-the-studio",
       "project": "https://sites.google.com/view/vegshark/film/gorilla-in-the-studio",
-      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/6fe01371-7123-4694-b407-1a6381242a02/62ff897c3d23c19af4f6.jpg",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/811d1fdc-57b5-4b8b-a2ce-5436b684147c/gorilla-in-the-studio.jpg",
       "width": 1280,
       "height": 720,
-      "original": "assets/works/62ff897c3d23c19af4f6.jpg",
-      "display": "assets/works/62ff897c3d23c19af4f6.webp"
+      "original": "assets/gorilla-in-the-studio.jpg",
+      "display": "assets/gorilla-in-the-studio.webp"
     },
     {
       "id": "the-common-things",
       "project": "https://sites.google.com/view/vegshark/film/the-common-things",
-      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/ada55db0-a1ce-4625-aec8-d19e1d18accf/2baa73166188100bf376.jpg",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/c4e467e5-d174-4fc7-a4ef-cf3f339610d3/the-common-things.jpg",
       "width": 1280,
       "height": 720,
-      "original": "assets/works/2baa73166188100bf376.jpg",
-      "display": "assets/works/2baa73166188100bf376.webp"
+      "original": "assets/the-common-things.jpg",
+      "display": "assets/the-common-things.webp"
     },
     {
       "id": "rorschachs-mask",
       "project": "https://sites.google.com/view/vegshark/film/rorschachs-mask",
-      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/2b0c66e4-237c-435f-812d-9a1dd012029c/93f2eba9fc975a8d5689.jpg",
+      "image": "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/80c96b6c-268e-44c9-9ff3-9b3dcfb790c2/rorschachs-mask.jpg",
       "width": 1280,
       "height": 720,
-      "original": "assets/works/93f2eba9fc975a8d5689.jpg",
-      "display": "assets/works/93f2eba9fc975a8d5689.webp"
+      "original": "assets/rorschachs-mask.jpg",
+      "display": "assets/rorschachs-mask.webp"
     }
   ]
 }

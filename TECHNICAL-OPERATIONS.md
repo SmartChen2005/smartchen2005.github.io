@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-14 — Restore original Film index covers
+
+- Restored the original title-bearing covers for Cursed Stage 戏怨, Gorilla in the Studio, The Common Things and Rorschach’s Mask. Morning Unwoken already matches the original Film index and retains its forest cover.
+- Reused archived original/WebP assets and their existing native Notion uploads. Updated Notion Cover image, legacy Cover and page banner; read back selections and confirmed all affected page bodies remain unchanged before exporting.
+- Regenerated the Gallery homepage, article covers and related-project cards. Verification and publication status are recorded in the task completion report.
+
 ### 2026-10-14 — Compact Gallery index and outline wordmark
 
 - Reduced the four right-hand Photography entries to fit a desktop viewport while retaining the left-hand composition and uncropped image ratios.
