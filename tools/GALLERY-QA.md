@@ -1,5 +1,12 @@
 # The Gallery verification
 
+## 2026-10-14 — Restrained architectural accents
+
+- Added only a split cornice in the shared header and one small exhibition-room drawing in the footer. Generated all fourteen Gallery pages and the unfilled SVG from the common renderer; Notion content and photograph treatments remain intact.
+- Chrome review at desktop and 390px confirmed the quiet line hierarchy, working Contact jump, footer composition and loaded decorative asset. At 320px the shared article header retains 44px navigation targets, its 112px height, and no horizontal overflow; the cornice reduces to a single rule. Temporary viewport override reset afterward.
+- Passed `validate-site.mjs`, `test-gallery.mjs`, `test-gallery-document.mjs`, `test-gallery-mobius.mjs`, `test-photo-transition.mjs` and the strict design audit (zero findings). Existing entrance docking and three-second navigation checks remain green.
+- Local header preview: saved in this chat's visualization directory as `gallery-architectural-header.jpg`.
+
 2026-10-13. Prepared in the existing checkout for local review.
 
 ## Sources and scope

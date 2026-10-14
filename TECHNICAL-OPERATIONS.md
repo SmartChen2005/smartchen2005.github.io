@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-14 — Quiet architectural frame for The Gallery
+
+- Extended the museum entry's aesthetic with a fine header cornice and a small static exhibition-room drawing at the footer, shared across the Gallery homepage and articles.
+- Regenerated the fourteen pages and local SVG; preserved the wordmark geometry, authored project content and natural photographs. Simplified the header accent on phones and hid decorative linework in forced colors.
+- Passed site, Gallery content, Möbius and entry-transition checks, strict design audit, and desktop/390px/320px browser layout review.
+
 ### 2026-10-14 — Richer museum entry and restored photographic development
 
 - Restored Photographer hover's original darkroom development timing and stagger; removed the two wall photographs from the clicked transition.
