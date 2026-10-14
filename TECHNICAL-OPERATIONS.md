@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-14 — Sync updated Rhythms of Chaos images and text
+
+- Refreshed the live Notion content to nine photographs and “Street Photography with a 28mm Leica Q”; retained the number-only Index layout and the user's independent cover selection.
+- Imported five new 2048px Notion image exports, retaining their native source identities and checksums. Existing source files remain archived.
+- Validated current CMS image order, local assets and article text; removed the Index route's obsolete dependency on its original five-photo archive fixture.
+
 ### 2026-10-14 — Numbered Rhythms of Chaos image index
 
 - Applied the Polaroid Index grid to the series' five photographs, preserving their order and full proportions, with number-only captions and viewer labels.

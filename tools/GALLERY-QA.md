@@ -1,5 +1,12 @@
 # The Gallery verification
 
+## 2026-10-14 — Refresh the edited Rhythms of Chaos Notion page
+
+- Re-fetched the live page edited at `2026-10-14T21:24:08.174Z`: nine body photographs, a replacement first file, four additions and the new introduction “Street Photography with a 28mm Leica Q”. Confirmed the source did not change during import.
+- Cached the five new 2048px Notion image exports with stable native asset identities and SHA-256 checksums; preserved existing files, source references and the independently selected cover. Updated the single-page export and aggregate snapshot, then regenerated the homepage introduction and numbered article.
+- Updated document checks to validate CMS-driven Index content against the current Notion sequence instead of freezing it to the legacy five-photo source page. Original archive checks remain for other articles. Site, Gallery and document validation passed, including all 140 current source photograph references.
+- Chrome confirmed captions 01–09, no broken index images, the new introduction, and photograph 09 opening with its correct local file and number-only viewer caption. Other twelve Notion project records and article HTML remained unchanged; all exported-file checksums matched and no temporary signed credentials were stored.
+
 ## 2026-10-14 — Rhythms of Chaos numbered index
 
 - Applied the Polaroid Index's 3:4 viewing slots to the five source photographs in order, with captions 01–05 only. The cover is selectable once in the grid; the project introduction and byline remain above it. Only this article loads the index stylesheet.

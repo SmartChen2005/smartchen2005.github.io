@@ -3088,5 +3088,115 @@
     "height": 1707,
     "displayWidth": 1280,
     "displayHeight": 1707
+  },
+  "notion-file-block://3f9abc37-a86f-8018-8941-dacf0060f1bd/fb194ada-b6cc-4bdf-a869-ba5d1b5dca30?space_id=caeabc37-a86f-8101-a6fd-00033dd9a3dd&name=DO1050259.jpeg": {
+    "original": "assets/works/7387c3da54fd0f20d554.jpeg",
+    "display": "assets/works/7387c3da54fd0f20d554.jpeg",
+    "width": 2048,
+    "height": 1536,
+    "displayWidth": 2048,
+    "displayHeight": 1536,
+    "nativeAssetId": "fb194ada-b6cc-4bdf-a869-ba5d1b5dca30",
+    "sourceVariant": "notion-full-size-image-export",
+    "originalSha256": "56658b2bbc7b9c8a29297fcfd33361f82ab7e9cfb24cc287a3d07c4edd1d1858"
+  },
+  "notion-asset:fb194ada-b6cc-4bdf-a869-ba5d1b5dca30": {
+    "original": "assets/works/7387c3da54fd0f20d554.jpeg",
+    "display": "assets/works/7387c3da54fd0f20d554.jpeg",
+    "width": 2048,
+    "height": 1536,
+    "displayWidth": 2048,
+    "displayHeight": 1536,
+    "nativeAssetId": "fb194ada-b6cc-4bdf-a869-ba5d1b5dca30",
+    "sourceVariant": "notion-full-size-image-export",
+    "originalSha256": "56658b2bbc7b9c8a29297fcfd33361f82ab7e9cfb24cc287a3d07c4edd1d1858"
+  },
+  "notion-file-block://3f9abc37-a86f-8032-8c1d-e888e4234fbf/6516a0bf-fc72-422d-a98e-28595f7408f8?space_id=caeabc37-a86f-8101-a6fd-00033dd9a3dd&name=IMG_6463.jpeg": {
+    "original": "assets/works/7dc606776d0662c6f133.jpeg",
+    "display": "assets/works/7dc606776d0662c6f133.jpeg",
+    "width": 2048,
+    "height": 1365,
+    "displayWidth": 2048,
+    "displayHeight": 1365,
+    "nativeAssetId": "6516a0bf-fc72-422d-a98e-28595f7408f8",
+    "sourceVariant": "notion-full-size-image-export",
+    "originalSha256": "e391f5caea5a9feb66367084de37c8f2ae6870969f2b14dd8dd87e28ae196ad3"
+  },
+  "notion-asset:6516a0bf-fc72-422d-a98e-28595f7408f8": {
+    "original": "assets/works/7dc606776d0662c6f133.jpeg",
+    "display": "assets/works/7dc606776d0662c6f133.jpeg",
+    "width": 2048,
+    "height": 1365,
+    "displayWidth": 2048,
+    "displayHeight": 1365,
+    "nativeAssetId": "6516a0bf-fc72-422d-a98e-28595f7408f8",
+    "sourceVariant": "notion-full-size-image-export",
+    "originalSha256": "e391f5caea5a9feb66367084de37c8f2ae6870969f2b14dd8dd87e28ae196ad3"
+  },
+  "notion-file-block://3f9abc37-a86f-8054-bc96-f7a29b83882e/3c24f71c-a042-4f58-878e-ea0fefcf8048?space_id=caeabc37-a86f-8101-a6fd-00033dd9a3dd&name=DO1040548.jpeg": {
+    "original": "assets/works/b0005855690ce30e95bc.jpeg",
+    "display": "assets/works/b0005855690ce30e95bc.jpeg",
+    "width": 2048,
+    "height": 1365,
+    "displayWidth": 2048,
+    "displayHeight": 1365,
+    "nativeAssetId": "3c24f71c-a042-4f58-878e-ea0fefcf8048",
+    "sourceVariant": "notion-full-size-image-export",
+    "originalSha256": "9fa2b264bbad4a9f4d81e68813e7bb6fa977edf15dbd14db271ac7aaf7ede7bd"
+  },
+  "notion-asset:3c24f71c-a042-4f58-878e-ea0fefcf8048": {
+    "original": "assets/works/b0005855690ce30e95bc.jpeg",
+    "display": "assets/works/b0005855690ce30e95bc.jpeg",
+    "width": 2048,
+    "height": 1365,
+    "displayWidth": 2048,
+    "displayHeight": 1365,
+    "nativeAssetId": "3c24f71c-a042-4f58-878e-ea0fefcf8048",
+    "sourceVariant": "notion-full-size-image-export",
+    "originalSha256": "9fa2b264bbad4a9f4d81e68813e7bb6fa977edf15dbd14db271ac7aaf7ede7bd"
+  },
+  "notion-file-block://3f9abc37-a86f-80a5-89b0-fad367861e65/a36b3845-b279-4ab1-bcd0-9c89ed666ebf?space_id=caeabc37-a86f-8101-a6fd-00033dd9a3dd&name=DO1040527.jpeg": {
+    "original": "assets/works/611aab8954e66804bdc8.jpeg",
+    "display": "assets/works/611aab8954e66804bdc8.jpeg",
+    "width": 2048,
+    "height": 1365,
+    "displayWidth": 2048,
+    "displayHeight": 1365,
+    "nativeAssetId": "a36b3845-b279-4ab1-bcd0-9c89ed666ebf",
+    "sourceVariant": "notion-full-size-image-export",
+    "originalSha256": "13a7b7aac9990913abf00285d54dd357ed47aa3c9d0bc51c7a7e09bc2945f26f"
+  },
+  "notion-asset:a36b3845-b279-4ab1-bcd0-9c89ed666ebf": {
+    "original": "assets/works/611aab8954e66804bdc8.jpeg",
+    "display": "assets/works/611aab8954e66804bdc8.jpeg",
+    "width": 2048,
+    "height": 1365,
+    "displayWidth": 2048,
+    "displayHeight": 1365,
+    "nativeAssetId": "a36b3845-b279-4ab1-bcd0-9c89ed666ebf",
+    "sourceVariant": "notion-full-size-image-export",
+    "originalSha256": "13a7b7aac9990913abf00285d54dd357ed47aa3c9d0bc51c7a7e09bc2945f26f"
+  },
+  "notion-file-block://3f9abc37-a86f-8012-b6d2-ce77c6357178/8282e4bc-6731-4666-9244-8cc873d02124?space_id=caeabc37-a86f-8101-a6fd-00033dd9a3dd&name=DO1060416.jpeg": {
+    "original": "assets/works/d196932ae4e68a6c9ec0.jpeg",
+    "display": "assets/works/d196932ae4e68a6c9ec0.jpeg",
+    "width": 2048,
+    "height": 1365,
+    "displayWidth": 2048,
+    "displayHeight": 1365,
+    "nativeAssetId": "8282e4bc-6731-4666-9244-8cc873d02124",
+    "sourceVariant": "notion-full-size-image-export",
+    "originalSha256": "58f49ec4468889e897e2503ed02ba63b5bace8a43f5de5fc7459d7624535e1fc"
+  },
+  "notion-asset:8282e4bc-6731-4666-9244-8cc873d02124": {
+    "original": "assets/works/d196932ae4e68a6c9ec0.jpeg",
+    "display": "assets/works/d196932ae4e68a6c9ec0.jpeg",
+    "width": 2048,
+    "height": 1365,
+    "displayWidth": 2048,
+    "displayHeight": 1365,
+    "nativeAssetId": "8282e4bc-6731-4666-9244-8cc873d02124",
+    "sourceVariant": "notion-full-size-image-export",
+    "originalSha256": "58f49ec4468889e897e2503ed02ba63b5bace8a43f5de5fc7459d7624535e1fc"
   }
 }

@@ -46,7 +46,10 @@ assert(!('PrivateNotes' in galleryPageSnapshot({id:'test',properties:props}).pro
 const snapshot=JSON.parse(fs.readFileSync(new URL('gallery-notion/snapshot.json',import.meta.url),'utf8'));
 assert.equal(snapshot.pages.length,13);
 const sourceCounts=snapshot.pages.map(page=>allImages(page.blocks?adaptNotionBlocks(page.blocks):parseNotionMarkdown(page.markdown)).length);
-assert.equal(sourceCounts.reduce((a,b)=>a+b,0),136,'Every source photograph remains represented in the CMS');
+const articleLayouts=JSON.parse(fs.readFileSync(new URL('gallery-layouts.json',import.meta.url),'utf8')).articles;
+const indexed=p=>articleLayouts[p.properties.Slug]==='index';
+const archiveCount=snapshot.pages.filter(p=>!indexed(p)).reduce((count,p)=>count+JSON.parse(fs.readFileSync(new URL(`gallery-source/${p.properties.Slug}.json`,import.meta.url),'utf8')).sections.flatMap(s=>s.items).filter(i=>i.tag==='IMG').length,0);
+assert.equal(snapshot.pages.reduce((count,p,i)=>count+(indexed(p)?0:sourceCounts[i]),0),archiveCount,'Unchanged archive projects retain their source photographs');
 assert.equal(snapshot.pages.find(p=>p.properties.Slug==='trauma-induced-dissociative-amnesia').properties['Content kind'],'Concept photography');
 const imagesDir=new URL('../dist/gallery/assets/works/',import.meta.url);
 const media=JSON.parse(fs.readFileSync(new URL('gallery-notion/media.json',import.meta.url),'utf8'));
@@ -93,6 +96,16 @@ const local=u=>media[u]||media[canonicalMediaUrl(u)]||media['notion-asset:'+medi
 const normalized=s=>s.replace(/\[([^\]]+)\]\([^\s)]+\)/g,'$1').replace(/<[^>]+>/g,' ').replace(/\\([*])/g,'$1').replace(/\s+/g,' ').trim();
 for(const p of snapshot.pages){
  const slug=p.properties.Slug,nodes=parseNotionMarkdown(p.markdown),published=publicationNodes(nodes);
+ const article=fs.readFileSync(new URL(`../dist/gallery/${slug}/index.html`,import.meta.url),'utf8');
+ if(indexed(p)){
+  const photos=allImages(published),grid=article.match(/<section class="image-index"[^>]*>[\s\S]*?<\/section>/)?.[0];
+  assert(photos.length>0&&grid,`Current Notion photographs have an index: ${slug}`);
+  assert.deepEqual([...grid.matchAll(/href="\.\.\/([^\"]+)"/g)].map(m=>m[1]),photos.map(image=>local(image.src)?.original),`Current Notion image order and originals: ${slug}`);
+  assert.deepEqual([...grid.matchAll(/<figcaption>(.*?)<\/figcaption>/g)].map(m=>m[1]),photos.map((_,i)=>String(i+1).padStart(2,'0')),`Number-only captions: ${slug}`);
+  assert(normalized(article).includes(normalized(p.properties.Summary)),`Current Notion introduction: ${slug}`);
+  assert(!article.includes('Website layout notes'),`Editor notes stay private: ${slug}`);
+  continue;
+ }
  const source=JSON.parse(fs.readFileSync(new URL(`gallery-source/${slug}.json`,import.meta.url)));
  const originalImages=source.sections.flatMap(s=>s.items).filter(i=>i.tag==='IMG');
  const identity=i=>local(i.src)?.original||(local(i.src)?.unavailable?i.src:null);
@@ -102,7 +115,6 @@ for(const p of snapshot.pages){
   assert(normalized(p.markdown).includes(normalized(text)),`Source wording retained: ${slug} / ${item.text.slice(0,40)}`);
  }
  if(sourceGroups[slug])assert.deepEqual(published.filter(n=>n.type==='columns').map(n=>n.columns.map(c=>allImages(c.children).length)),sourceGroups[slug],`Author's original spatial groups: ${slug}`);
- const article=fs.readFileSync(new URL(`../dist/gallery/${slug}/index.html`,import.meta.url),'utf8');
  assert(p.markdown.includes('Website layout notes (not published)'),`Layout guidance saved in Notion: ${slug}`);
  assert(!article.includes('Website layout notes')&&!article.includes('制作或更新此网站页面'),`Editor notes stay private: ${slug}`);
  assert(!article.includes('project-breadcrumb'),`No duplicate navigation: ${slug}`);
@@ -164,4 +176,4 @@ const rejected=spawnSync(process.execPath,['tools/render-gallery.mjs','--snapsho
 assert.notEqual(rejected.status,0);assert.equal(fs.readFileSync(path.join(output,'index.html'),'utf8'),protectedPage,'An invalid export cannot replace the existing page');
 const missingToken=spawnSync(process.execPath,['tools/sync-gallery-notion.mjs','--watch'],{encoding:'utf8',env:{...process.env,NOTION_TOKEN:''}});
 assert.equal(missingToken.status,1);assert.match(missingToken.stderr,/Set NOTION_TOKEN/);
-console.log('Passed: Notion document structures; natural image dimensions; native asset identities; safe links/markup; video rendering; pagination/nested blocks; rate-limit recovery; incomplete-export protection; CMS property scope; all 136 source photograph references.');
+console.log(`Passed: Notion document structures; natural image dimensions; native asset identities; safe links/markup; video rendering; pagination/nested blocks; rate-limit recovery; incomplete-export protection; CMS property scope; ${sourceCounts.reduce((a,b)=>a+b,0)} current photograph references and CMS-driven index order.`);
