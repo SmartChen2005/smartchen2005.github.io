@@ -1,5 +1,11 @@
 # The Gallery verification
 
+## 2026-10-14 — Rhythms of Chaos numbered index
+
+- Applied the Polaroid Index's 3:4 viewing slots to the five source photographs in order, with captions 01–05 only. The cover is selectable once in the grid; the project introduction and byline remain above it. Only this article loads the index stylesheet.
+- Chrome confirmed four columns at 1440px, three at 1024px, and two at 390px / 320px, with full-image containment and no horizontal overflow. Opening 01 and moving to 02 retained number-only viewer captions and correct original URLs; Escape restored focus to the opening image. Reset the viewport after review.
+- Passed site validation, Gallery and Notion document checks, strict design audit (zero findings), plus image-order and unrelated-page preservation checks. Preview saved as `rhythms-numbered-index.jpg` in this chat's visualization directory.
+
 ## 2026-10-14 — Remove the header doorway
 
 - Removed the rejected doorway markup, styling and generator. Restored the original shared header without another decoration; retained the approved footer.

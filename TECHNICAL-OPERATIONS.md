@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-14 — Numbered Rhythms of Chaos image index
+
+- Applied the Polaroid Index grid to the series' five photographs, preserving their order and full proportions, with number-only captions and viewer labels.
+- Kept the project introduction, byline, original links and shared viewer. Added a route-specific stylesheet and generator variant; Notion source content and other pages remain intact.
+- Passed site, Gallery and document checks, strict design audit, desktop/phone layout review and viewer navigation/focus checks.
+
 ### 2026-10-14 — Replace the Gallery header cornice
 
 - Removed the rejected header cornice and its horizontal rules; added a small vaulted doorway beside the existing wordmark, echoing the approved footer drawing.
