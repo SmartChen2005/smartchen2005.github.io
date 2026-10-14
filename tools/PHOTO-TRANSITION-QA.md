@@ -1,22 +1,15 @@
-# Photographer to Gallery entry — 2026-10-14
+# Photographer to Gallery entry — museum revision, 2026-10-14
 
-The homepage's native Photographer link has an optional 3000ms architectural entry. Viewfinder corners inherit the clicked word's bounds; perspective lines and a domed skylight open into a white exhibition; two existing photographs retain their complete, original proportions; the shared Möbius outline traces around THE GALLERY; the title and mark move to the actual destination masthead while the page is revealed. The destination remains a normal, static Gallery page.
+The optional 3000ms entry now opens into an imagined European art museum. Native spatial geometry supplies an oculus, recessed dome coffers, fluted columns/capitals, layered arches, theatre galleries and balustrades, glazed entrance, portal layers, floor joints and steps. Forward travel, pan, upward gaze and banking create depth-dependent motion; the originating viewfinder expands beyond the screen. The shared Mobius outline/title still docks into the measured Gallery masthead. The two transition wall photographs are removed.
+
+Photographer hover/focus restores the original 2600ms darkroom development with 0/180/390/580ms delays. It settles to the unfiltered originals; reduced motion shows originals immediately. No Gallery content or image files change.
 
 ## Verification
 
-- Passed `node tools/validate-site.mjs`, `node tools/test-home.mjs`, `node tools/test-home-state.mjs`, `node tools/test-photo-transition.mjs`, `node tools/test-game-transition.mjs`, `node tools/test-gallery.mjs`, `node tools/test-gallery-mobius.mjs` and `node tools/test-gallery-document.mjs`.
-- Passed JavaScript syntax checks and `git diff --check`. The Pages workflow now runs the homepage, homepage state and Photographer entry checks before deployment.
-- Strict frontend audit: zero findings; saved in `tools/photo-transition-premium-audit.json`. Runtime entry colors and type are documented in DESIGN.md and match the Gallery's existing white/ink/Helvetica roles. No new dependency or raster asset was added. The optional DESIGN.md CLI lint is unavailable because this environment has no npx executable; existing prose format is preserved.
-- The new deterministic suite covers six viewport shapes, finite/continuous geometry, actual clicked-word origin, exact final masthead position, uncropped image ratios, asynchronous preparation, keyboard click, repeated clicks, active-game exclusion, native modifiers/download/new-tab behavior, unavailable iframe/SVG/canvas, reduced motion, forced colors, resize, backgrounding, Escape, preference changes, navigation watchdog, pagehide cleanup and Back replay.
+- Passed site validation, homepage and homepage state suites, Photographer transition geometry/lifecycle checks, Gallery and Mobius checks, JavaScript syntax and diff checks.
+- The transition suite covers six viewport shapes; bounded architectural detail; finite projection and near-plane clipping; visible travel/banking; exact clicked-word origin and masthead docking; restored development; zero canvas wall photographs; native modifiers, keyboard, load/preferences, interrupted navigation, watchdog and Back restoration.
+- Chrome inspected the actual entry and final Gallery URL. A temporary paused-frame preview using the same architecture renderer was used to inspect desktop and 390px detail/title balance, and removed before committing.
+- Real keyboard focus reports `develop-print` and the fourth photograph's `0.58s` delay. Keyboard entry at 390px reaches the Gallery. No captured console errors/warnings. Temporary viewport override reset.
+- Strict frontend audit has zero findings, saved in `tools/photo-transition-premium-audit.json`. No dependency or raster assets added. Physical touch devices were not exercised; reduced motion/forced colors and failure lifecycle are covered by the controller suite.
 
-## Browser observations
-
-- Real Chrome inspection at the default desktop viewport and 1440×900, plus narrow 390×844 and 320×568 viewports. Captured hover/focus, line-drawn room, photographs/Möbius/title and final Gallery states through the connected browser.
-- Verified `/gallery/` as the actual final URL, the Gallery document title, Back restoration and a second full entry. Photographer keeps its original accessible name; the decorative label is omitted from it.
-- Narrow layouts move the two temporary wall prints above the title. No Gallery horizontal overflow at 390px or 320px. The temporary viewport override was reset after inspection.
-- No captured console warnings or errors. Direct navigation also worked on an immediate cold click before the preview was ready.
-- Narrow checks use a desktop browser viewport, not physical touch hardware. Reduced motion, forced colors and network/load fallbacks are covered by the deterministic controller suite rather than claimed as physical device checks.
-
-Commit, GitHub synchronization and Pages deployment results are reported in the task completion message.
-
-Post-publication check: the connected Chrome profile initially reused its cached pre-transition `home.css` and `home.mjs`, despite the server files matching the new commit. The homepage now carries a shared `20261014-gallery-entry` revision on these two resource URLs so the new document requests the updated styles and controller. Homepage validation resolves query/fragment suffixes to the actual local file and requires the Photographer module. No other homepage asset or layout changes.
+Homepage resource URLs use the `20261014-museum-entry` revision; the Photographer module also has its own revision to avoid reuse of the earlier transition. Publish policy now follows the user's request: commit/push, briefly confirm the live update, then finish without extended Actions polling.

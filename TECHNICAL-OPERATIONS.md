@@ -32,7 +32,7 @@ Every update MUST follow this order:
 4. **摘要 / Summary** — write a short update summary in the commit message. The summary must state what changed, why it changed, and how it was verified. If the update is substantial, add a dated entry to this document's change log.
 5. **提交 / Commit** — commit the complete update as one logical unit. Do not leave generated output, source changes, or required assets uncommitted.
 6. **上传 / Upload** — push the commit to `origin/master` immediately after a successful commit. A local-only update is not considered complete.
-7. **上线确认 / Confirm publish** — confirm that the GitHub Actions Pages workflow completes and open the public URL to verify the deployed entry point.
+7. **上线确认 / Confirm publish** — do one brief publication check and open the public URL to confirm the updated feature works. Following the user's 2026-10-14 clarification, finish after that check instead of repeatedly polling Actions or concurrent Notion runs. If publication is still pending or unavailable, report that actual state with the run link.
 
 ### Required commands
 
@@ -86,7 +86,7 @@ If an asset is replaced, keep it beside the document or page that owns it, updat
 - Deployment source: `master` push, via `.github/workflows/pages.yml`.
 - Published directory: `dist/`.
 - Expected public URL: `https://smartchen2005.github.io/`
-- A deployment is complete only after the workflow succeeds and the public URL returns the current site.
+- Confirm that the public URL returns the current, working update. Check the workflow result when readily available; do not prolong the task with repeated deployment polling. Report pending or failed publication accurately.
 
 The workflow intentionally deploys the existing `dist/` directory as-is. This keeps the repository's source and generated output layout stable while making the GitHub Pages publication explicit and repeatable.
 
@@ -95,6 +95,12 @@ The workflow intentionally deploys the existing `dist/` directory as-is. This ke
 At the time this standard was added, the repository contains the complete current static archive, its local image assets, the Notion source, the renderer, the validator, and the design context. The baseline is published by the commit that adds this document and the Pages workflow.
 
 ## Change log
+
+### 2026-10-14 — Richer museum entry and restored photographic development
+
+- Restored Photographer hover's original darkroom development timing and stagger; removed the two wall photographs from the clicked transition.
+- Replaced the spare room with a spatial museum drawing: coffered dome and oculus, fluted colonnades, moulded arches, balconies and balustrades, glazed entrance, portal layers and inlaid floor. A forward camera movement adds pan, upward gaze, banking and depth-dependent parallax while retaining the three-second wordmark handoff.
+- Updated geometry/lifecycle checks and recorded the user's simpler publish policy in AGENTS.md: publish, briefly confirm the live feature, then finish without extended deployment polling.
 
 ### 2026-10-14 — Architectural Photographer to Gallery transition
 

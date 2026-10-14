@@ -1,6 +1,6 @@
 import { createScenes } from './home-scenes.mjs';
 import { installGameTransition } from './home-game-transition.mjs';
-import { installPhotoTransition } from './home-photo-transition.mjs';
+import { installPhotoTransition } from './home-photo-transition.mjs?rev=20261014-museum';
 import { createBusinessCard } from './home-business-card.mjs';
 
 const composition = document.querySelector('.composition');

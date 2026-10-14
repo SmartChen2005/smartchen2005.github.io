@@ -1,4 +1,6 @@
-// A viewfinder opens into a line-drawn exhibition, then becomes the Gallery masthead.
+import { createGalleryArchitecture, drawGalleryArchitecture } from './home-gallery-architecture.mjs';
+// A viewfinder opens into an imagined art museum, then becomes the Gallery masthead.
+const architecture = createGalleryArchitecture();
 export const PHOTO_TRANSITION_DURATION = 3000;
 const clamp = value => Math.max(0, Math.min(1, value));
 const ease = value => { const t = clamp(value); return t * t * (3 - 2 * t); };
@@ -13,11 +15,17 @@ export function photoTransitionFrame(time, width, height, origin, destination) {
   const roomWidth = Math.min(width * .57, 820), roomHeight = Math.min(height * .49, 460);
   const room = { x: center.x - roomWidth / 2, y: center.y - roomHeight / 2, width: roomWidth, height: roomHeight };
   const source = { x: origin.left - 12, y: origin.top - 8, width: origin.width + 24, height: origin.height + 16 };
-  const rear = {
+  const frame = {
     x: mix(source.x, room.x - roomWidth * travel * .8, open),
     y: mix(source.y, room.y - roomHeight * travel * .8, open),
     width: mix(source.width, roomWidth * (1 + travel * 1.6), open),
     height: mix(source.height, roomHeight * (1 + travel * 1.6), open),
+  };
+  // The original viewfinder passes beyond the viewport as the viewer enters the museum.
+  const aperture = phase(time, 250, 1050);
+  const rear = {
+    x: mix(frame.x, -width * .12, aperture), y: mix(frame.y, -height * .12, aperture),
+    width: mix(frame.width, width * 1.24, aperture), height: mix(frame.height, height * 1.24, aperture),
   };
   const brandWidth = Math.min(width - 36, 660);
   const brandHeight = brandWidth / 3;
@@ -31,7 +39,7 @@ export function photoTransitionFrame(time, width, height, origin, destination) {
     time, rear, brand, open, travel,
     homeOpacity: 1 - phase(time, 180, 540),
     whiteOpacity: phase(time, 160, 680) * (1 - phase(time, 2260, 2900)),
-    roomOpacity: phase(time, 0, 160) * (1 - phase(time, 1640, 2220)),
+    roomOpacity: phase(time, 0, 160) * (1 - phase(time, 1850, 2440)),
     trace: phase(time, 690, 1570), brandOpacity: phase(time, 680, 950),
     titleOpacity: phase(time, 990, 1370),
     titleSize: mix(Math.min(68, width * .088), destination.fontSize, dock),
@@ -116,7 +124,6 @@ export function installPhotoTransition(link, resetHome, otherTransitionActive = 
       target = { left: rect.left, top: rect.top, width: rect.width, height: rect.height, fontSize: parseFloat(styles.fontSize) };
     } catch { return; }
     const width = innerWidth, height = innerHeight, origin = link.getBoundingClientRect();
-    const photographs = [...document.querySelectorAll('.gallery-print img')].slice(0, 2);
     event.preventDefault();
     active = true;
     heading.style.visibility = 'hidden';
@@ -164,39 +171,17 @@ export function installPhotoTransition(link, resetHome, otherTransitionActive = 
         line(x + dx * corner, y, x, y); line(x, y, x, y + dy * corner);
       }
       context.stroke();
-      context.globalAlpha *= state.open;
-      context.beginPath();
-      line(r.x, r.y, 0, 0); line(right, r.y, width, 0);
-      line(r.x, bottom, 0, height); line(right, bottom, width, height);
-      line(r.x, r.y, right, r.y); line(r.x, bottom, right, bottom);
-      line(r.x, r.y, r.x, bottom); line(right, r.y, right, bottom);
-      // Coffered dome ribs, a circular skylight and a spare exhibition wall.
-      const cx = width / 2, cy = r.y + r.height * .07;
-      const rx = r.width * .16, ry = Math.max(8, r.height * .055);
-      context.moveTo(cx + rx, cy); context.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
-      for (let i = 0; i <= 6; i++) {
-        const angle = Math.PI + Math.PI * i / 6;
-        const x = cx + Math.cos(angle) * rx, y = cy + Math.sin(angle) * ry;
-        context.moveTo(x, y);
-        context.quadraticCurveTo(x, r.y - r.height * .32, width * i / 6, 0);
-      }
-      for (const t of [.18, .82]) {
-        const x = r.x + r.width * t;
-        line(x, bottom, mix(width / 2, x, 2.8), height);
-      }
-      context.stroke();
-      // Carry two real, uncropped prints from the hover exhibition onto the back wall.
-      const printOpacity = phase(state.time, 520, 860) * (1 - phase(state.time, 1480, 1970));
-      context.globalAlpha = printOpacity;
-      photographs.forEach((image, index) => {
-        const photoRatio = image.naturalHeight ? image.naturalWidth / image.naturalHeight : Number(image.width) / Number(image.height);
-        const printWidth = r.width * .14, printHeight = printWidth / photoRatio;
-        const x = r.x + r.width * (index ? .73 : .13);
-        const y = r.y + r.height * (width < 1000 ? .24 : .46) - printHeight / 2;
-        if (image.complete && image.naturalWidth) context.drawImage(image, x, y, printWidth, printHeight);
-        context.strokeRect(x - 5, y - 5, printWidth + 10, printHeight + 10);
-      });
+      context.save();
+      context.beginPath(); context.rect(r.x, r.y, r.width, r.height); context.clip();
+      drawGalleryArchitecture(context, architecture, state.time, width, height, state.roomOpacity * state.open);
+      context.restore();
       const b = state.brand;
+      // Keep the traced wordmark readable within the increasingly detailed interior.
+      context.save();
+      context.globalCompositeOperation = 'destination-out';
+      context.globalAlpha = state.titleOpacity;
+      context.beginPath(); context.ellipse(b.x + b.width / 2, b.y + b.height / 2, b.width * .37, b.height * .49, 0, 0, Math.PI * 2); context.fill();
+      context.restore();
       Object.assign(brand.style, { left: `${b.x}px`, top: `${b.y}px`, width: `${b.width}px`, height: `${b.height}px`, opacity: String(state.brandOpacity) });
       title.style.fontSize = `${state.titleSize}px`;
       title.style.opacity = state.titleOpacity;

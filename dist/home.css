@@ -117,9 +117,21 @@ body[data-world='photo'] .identity-photo::after { opacity: 1; }
 .gallery-print img { display: block; width: 100%; height: auto; visibility: hidden; }
 body[data-world='photo'] .gallery-print.is-ready img {
   visibility: visible;
-  animation: reveal-print 280ms ease-out backwards;
+  animation: develop-print 2600ms cubic-bezier(.22,.45,.32,1) backwards;
+  animation-delay: var(--develop-delay, 0ms);
 }
-@keyframes reveal-print { from { opacity: 0; } to { opacity: 1; } }
+.gallery-print:nth-child(2) { --develop-delay: 180ms; }
+.gallery-print:nth-child(3) { --develop-delay: 390ms; }
+.gallery-print:nth-child(4) { --develop-delay: 580ms; }
+/* Restore the original darkroom development, settling to the untouched photograph. */
+@keyframes develop-print {
+  0% { filter: contrast(0) brightness(2); }
+  14% { filter: contrast(.08) brightness(1.86); }
+  38% { filter: contrast(.35) brightness(1.48); }
+  68% { filter: contrast(.73) brightness(1.14); }
+  88% { filter: contrast(.96) brightness(1.02); }
+  100% { filter: none; }
+}
 .sentence-mat {
   position: fixed;
   left: 0;

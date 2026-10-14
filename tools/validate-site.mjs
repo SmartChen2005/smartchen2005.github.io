@@ -39,6 +39,7 @@ if (/\.identity::(?:after|before)/.test(homeCss)) failures.push('Persistent iden
 if (!fs.existsSync(path.join(root, 'dist/home-scenes.mjs'))) failures.push('Homepage scenery module is missing');
 if (!fs.existsSync(path.join(root, 'dist/home-game-transition.mjs'))) failures.push('Game click transition module is missing');
 if (!fs.existsSync(path.join(root, 'dist/home-photo-transition.mjs'))) failures.push('Photographer click transition module is missing');
+if (!fs.existsSync(path.join(root, 'dist/home-gallery-architecture.mjs'))) failures.push('Gallery entry architecture module is missing');
 const cardText = home.match(/<div class="card-print">([\s\S]*?)\n        <\/div>/)?.[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
 if (cardText !== "Smart Chen 陈弘毅 Emory University '27 smartchen324@gmail.com Résumé Instagram") failures.push('Business card copy must match the supplied content exactly');
 if (home.includes('↗') || (home.match(/class="card-arrow"/g) || []).length !== 2) failures.push('Business card arrows must be two inline SVGs, with no Unicode arrows');

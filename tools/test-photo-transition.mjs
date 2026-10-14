@@ -2,13 +2,33 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import { PHOTO_TRANSITION_DURATION, photoTransitionFrame } from '../dist/home-photo-transition.mjs';
+import { createGalleryArchitecture, galleryCamera, projectGalleryPoint, drawGalleryArchitecture } from '../dist/home-gallery-architecture.mjs';
 
 const source = fs.readFileSync(new URL('../dist/home-photo-transition.mjs', import.meta.url), 'utf8');
 const near = (actual, expected, message) => assert(Math.abs(actual - expected) < 1e-7, message);
 const alphaKeys = ['open', 'travel', 'homeOpacity', 'whiteOpacity', 'roomOpacity', 'trace', 'brandOpacity', 'titleOpacity', 'reveal'];
 assert.equal(PHOTO_TRANSITION_DURATION, 3000, 'The photographic journey should last three seconds');
+const museum = createGalleryArchitecture();
+const groups = new Set(museum.map(path => path.group));
+for (const feature of ['oculus', 'coffer', 'dome-rib', 'cornice', 'column', 'capital', 'arch', 'balcony', 'balustrade', 'portal', 'glass', 'floor', 'steps']) {
+  assert(groups.has(feature), `The museum must have actual ${feature} geometry`);
+}
+assert(museum.length < 1000, 'Architectural detail must remain bounded for a short mobile transition');
+assert(projectGalleryPoint([0, 0, 100], galleryCamera(1000), 1440, 900) === null, 'Geometry behind the camera must be clipped');
+const motionPoint = [5, 3, -3];
+const early = projectGalleryPoint(motionPoint, galleryCamera(400), 1440, 900);
+const late = projectGalleryPoint(motionPoint, galleryCamera(1800), 1440, 900);
+assert(Math.hypot(early.x - late.x, early.y - late.y) > 100, 'Camera travel must produce visible spatial movement');
+assert(galleryCamera(1200).roll !== galleryCamera(300).roll, 'The camera must gently bank while advancing');
+const css = fs.readFileSync(new URL('../dist/home.css', import.meta.url), 'utf8');
+assert(css.includes('animation: develop-print 2600ms'), 'Hover must restore the original photographic development');
+assert(/100%\s*\{\s*filter:\s*none;/.test(css), 'Developed hover photographs must settle to their original tones');
 
 for (const [width, height] of [[1440, 900], [1920, 1080], [535, 673], [390, 844], [320, 568], [844, 390]]) {
+  for (const time of [350, 900, 1400, 2000, 2400]) for (const path of museum) for (const point of path.points) {
+    const projected = projectGalleryPoint(point, galleryCamera(time), width, height);
+    if (projected) assert(Object.values(projected).every(Number.isFinite), 'Moving architecture must project to finite coordinates at every viewport');
+  }
   const origin = { left: width * .48, top: height * .5, width: 118, height: 42 };
   const destination = { left: 24, top: 32, width: Math.min(260, width - 48), height: 87, fontSize: 28 };
   const savedOrigin = structuredClone(origin), savedDestination = structuredClone(destination);
@@ -59,8 +79,6 @@ async function harness(options = {}) {
       if (method === 'stroke') draws++;
       if (method === 'drawImage') {
         imageDraws++;
-        assert.equal(args.length, 5, 'Transition prints must draw the complete source image');
-        near(args[3] / args[4], args[0].width / args[0].height, 'Transition prints must retain their photographic ratio');
       }
       for (const arg of args) if (typeof arg === 'number') assert(Number.isFinite(arg), 'Canvas coordinates must stay finite');
     },
@@ -92,10 +110,6 @@ async function harness(options = {}) {
   const body = node('body');
   const document = eventTarget({ body, hidden: false,
     querySelector: selector => selector === '.homepage' ? home : scenery,
-    querySelectorAll: () => options.photosMissing ? [] : [
-      { width: 864, height: 1296, complete: !options.photoLoadFailure, naturalWidth: options.photoLoadFailure ? 0 : 864 },
-      { width: 1440, height: 960, complete: !options.photoLoadFailure, naturalWidth: options.photoLoadFailure ? 0 : 1440 },
-    ],
     importNode: svg => svg.cloneNode(true),
     createElement(tag) {
       const element = node(tag);
@@ -112,7 +126,7 @@ async function harness(options = {}) {
   Object.assign(link, { href: options.external ? 'https://elsewhere.test/gallery/' : 'https://example.test/gallery/', target: options.target || '',
     getBoundingClientRect: () => ({ left: 650, top: 425, width: 118, height: 42 }) });
   if (options.download) link.setAttribute('download', '');
-  const sandbox = { document, window, URL,
+  const sandbox = { document, window, URL, createGalleryArchitecture, drawGalleryArchitecture,
     location: { href: 'https://example.test/', origin: 'https://example.test', assign: href => navigations.push(href) },
     matchMedia: query => query.includes('forced-colors') ? forced : reduce,
     fetch: async () => { if (options.fetchFailure) throw new Error('Unavailable'); return { ok: options.responseOK !== false, text: async () => '<svg></svg>' }; },
@@ -122,7 +136,7 @@ async function harness(options = {}) {
     setTimeout: (fn, delay) => { timers.set(++id, { fn, delay }); return id; }, clearTimeout: key => timers.delete(key),
   };
   vm.createContext(sandbox);
-  vm.runInContext(source.replace(/^export /gm, '') + '\nglobalThis.install = installPhotoTransition;', sandbox);
+  vm.runInContext(source.replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, '') + '\nglobalThis.install = installPhotoTransition;', sandbox);
   const controller = sandbox.install(link, () => resets++, () => otherActive);
   const preview = created.find(element => element.tag === 'iframe');
   if (options.ready !== false && preview) await preview.emit('load');
@@ -153,7 +167,7 @@ app.step(PHOTO_TRANSITION_DURATION);
 assert.equal(app.navigations.length, 1); assert.equal(app.navigations[0], 'https://example.test/gallery/');
 assert.equal(app.callbacks.size, 0); assert.equal(app.timers.size, 0); assert.equal(app.heading.style.visibility, '');
 assert.equal(app.preview.style.opacity, 1);
-assert(app.imageDraws > 0, 'The journey must carry photographs from the hover exhibition');
+assert.equal(app.imageDraws, 0, 'The clicked transition must contain no wall photographs');
 await app.window.emit('pagehide');
 assert(!app.controller.active); assert(!app.home.inert && !app.scenery.inert);
 assert.equal(app.document.body.dataset.photoTransition, undefined); assert.equal(app.document.body.style['--photo-home-opacity'], undefined);
@@ -178,11 +192,6 @@ assert(!((await app.click()).prevented)); await app.load();
 assert((await app.click({ detail: 0 })).prevented, 'Keyboard entry must work once asynchronous Gallery preparation completes');
 app = await harness(); app.blockOther(true);
 assert((await app.click()).prevented); assert(!app.controller.active); assert.equal(app.draws, 0);
-for (const options of [{ photosMissing: true }, { photoLoadFailure: true }]) {
-  app = await harness(options); assert((await app.click()).prevented);
-  app.step(PHOTO_TRANSITION_DURATION); assert.equal(app.navigations.length, 1);
-  assert.equal(app.imageDraws, 0, 'Unavailable decorative photographs must leave the line-drawn navigation functional');
-}
 
 for (const exit of ['hidden', 'Escape', 'reduced', 'forced', 'watchdog']) {
   app = await harness(); await app.click();
@@ -194,4 +203,4 @@ for (const exit of ['hidden', 'Escape', 'reduced', 'forced', 'watchdog']) {
   assert.equal(app.callbacks.size, 0); assert.equal(app.timers.size, 0); assert.equal(app.heading.style.visibility, '');
   await app.window.emit('pagehide'); assert(!app.home.inert && !app.scenery.inert); assert(!app.controller.active);
 }
-console.log('Passed: six viewport geometry journeys; clicked-word origin and exact masthead docking; finite continuous reveal; 3s navigation; async preview/keyboard readiness; native modified/download/target clicks; duplicate and other-transition prevention; reduced/forced/load/SVG/canvas fallbacks; resize/background/Escape/preference/watchdog exits; pagehide and Back restoration.');
+console.log('Passed: detailed museum geometry across six viewports; finite projection and visible camera travel/banking; restored darkroom hover; no transition wall photographs; clicked-word origin and exact masthead docking; 3s navigation; keyboard/native link behavior; duplicate prevention; reduced/forced/load fallbacks; interrupted navigation and Back restoration.');
