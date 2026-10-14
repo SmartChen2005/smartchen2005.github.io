@@ -6,6 +6,7 @@ import { parseNotionMarkdown, adaptNotionBlocks, renderDocument, allImages, cano
 import { NotionGalleryClient, galleryPageSnapshot } from './gallery-notion-client.mjs';
 import { imageDimensions } from './gallery-image.mjs';
 import { practiceSections, renderPractice } from './gallery-practice.mjs';
+import { withReadingLanguages } from './gallery-languages.mjs';
 
 const document=parseNotionMarkdown('An **editorial** paragraph.<br>Second line.\n<columns>\n\t<column ratio="65">\n\t\t![A portrait](https://images.unsplash.com/portrait.jpg)\n\t</column>\n\t<column ratio="35">\n\t\t![A landscape](https://images.unsplash.com/landscape.jpg)\n\t</column>\n</columns>\n<video src="https://www.youtube.com/watch?v=oOozEVsR1Ps">Film</video>');
 assert.equal(allImages(document).length,2);
@@ -49,6 +50,32 @@ assert.equal(sourceCounts.reduce((a,b)=>a+b,0),136,'Every source photograph rema
 assert.equal(snapshot.pages.find(p=>p.properties.Slug==='trauma-induced-dissociative-amnesia').properties['Content kind'],'Concept photography');
 const imagesDir=new URL('../dist/gallery/assets/works/',import.meta.url);
 const media=JSON.parse(fs.readFileSync(new URL('gallery-notion/media.json',import.meta.url),'utf8'));
+const languageConfig=JSON.parse(fs.readFileSync(new URL('gallery-layouts.json',import.meta.url))).readingLanguages['analog-and-digital'];
+const analogPage=snapshot.pages.find(p=>p.properties.Slug==='analog-and-digital');
+const analogNodes=parseNotionMarkdown(analogPage.markdown),unchangedAnalog=JSON.stringify(analogNodes);
+const bilingual=withReadingLanguages(analogNodes,languageConfig);
+const readingPair=bilingual[0].columns[0].children[0];
+assert.equal(readingPair.type,'language-pair');
+assert.deepEqual(readingPair.children.map(p=>p.code),['zh-Hans','en']);
+assert.equal(readingPair.children[0].children[0].text,analogNodes[0].columns[0].children[0].text,'Chinese prose remains editable in its original Notion column');
+assert.equal(readingPair.children[1].children[0].text,analogNodes[1].children[1].text,'English prose is read from its Notion section');
+assert.deepEqual(allImages(bilingual).map(i=>i.src),allImages(analogNodes).map(i=>i.src),'Moving translated prose cannot move or duplicate photographs');
+assert.equal(JSON.stringify(analogNodes),unchangedAnalog,'Public language layout must not rewrite CMS source blocks');
+assert(!bilingual.some(n=>n.type==='toggle'),'Remove the separate public translation disclosure');
+assert.throws(()=>withReadingLanguages([analogNodes[0]],languageConfig),/translated Notion section/,'Incomplete translated content cannot silently disappear');
+const restLanguages=adaptNotionBlocks([
+ {type:'column_list',column_list:{children:[
+  {column:{children:[{type:'paragraph',paragraph:{rich_text:[{plain_text:'中文原文'}]}}]}},
+  {column:{children:[{type:'image',image:{external:{url:'https://example.com/original.jpg'}}}]}}
+ ]}},
+ {type:'toggle',toggle:{rich_text:[{plain_text:'English translation'}],children:[{type:'paragraph',paragraph:{rich_text:[{plain_text:'Updated English from Notion'}]}}]}}
+]);
+const restReading=renderDocument(withReadingLanguages(restLanguages,languageConfig),{title:'Bilingual test'});
+assert.match(restReading,/Updated English from Notion/,'REST sync follows edited translation text');
+assert.match(restReading,/type="radio" name="article-reading-language"/,'Native language controls work without JavaScript');
+assert.match(restReading,/lang="zh-Hans"/);assert.match(restReading,/lang="en"/);
+const analogHtml=fs.readFileSync(new URL('../dist/gallery/analog-and-digital/index.html',import.meta.url),'utf8');
+assert(!analogHtml.includes('<summary>English translation</summary>'),'Translation is no longer a separate section below the article');
 const sourceGroups={
  'trauma-induced-dissociative-amnesia':[[1,2],[1,2],[1,1]],
  'rhythms-of-chaos':[[1,1],[1,1]],
@@ -70,7 +97,10 @@ for(const p of snapshot.pages){
  const originalImages=source.sections.flatMap(s=>s.items).filter(i=>i.tag==='IMG');
  const identity=i=>local(i.src)?.original||(local(i.src)?.unavailable?i.src:null);
  assert.deepEqual(allImages(nodes).map(identity),originalImages.map(identity),`Original photograph order is retained: ${slug}`);
- for(const item of source.sections.flatMap(s=>s.items).filter(i=>['P','LI','H2','H3'].includes(i.tag)))assert(normalized(p.markdown).includes(normalized(item.text)),`Source wording retained: ${slug} / ${item.text.slice(0,40)}`);
+ for(const item of source.sections.flatMap(s=>s.items).filter(i=>['P','LI','H2','H3'].includes(i.tag))){
+  const text=slug==='deliberate-practice'&&['H2','H3'].includes(item.tag)?item.text.replace(/^\((.*)\)$/s,'$1'):item.text;
+  assert(normalized(p.markdown).includes(normalized(text)),`Source wording retained: ${slug} / ${item.text.slice(0,40)}`);
+ }
  if(sourceGroups[slug])assert.deepEqual(published.filter(n=>n.type==='columns').map(n=>n.columns.map(c=>allImages(c.children).length)),sourceGroups[slug],`Author's original spatial groups: ${slug}`);
  const article=fs.readFileSync(new URL(`../dist/gallery/${slug}/index.html`,import.meta.url),'utf8');
  assert(p.markdown.includes('Website layout notes (not published)'),`Layout guidance saved in Notion: ${slug}`);
@@ -102,6 +132,12 @@ assert.equal((practiceHtml.match(/<figcaption>/g)||[]).length,16,'All source cap
 assert(!practiceHtml.includes('Website layout notes')&&!practiceHtml.includes('网站编辑备注'),'Internal layout notes are not published');
 assert.match(practiceHtml,/class="story-cover story-image-open"[^>]*href="\.\.\/assets\/works\/5b07dba56991f915781b\.jpg"/,'Selected Notion cover is used, independently of the first body image');
 assert.equal((practiceHtml.match(/class="practice-section practice-feature"/g)||[]).length,2,'The last two source sections have a larger print treatment');
+assert.match(practiceHtml,/id="practice-contents"/);
+assert.equal((practiceHtml.match(/href="#practice-contents"/g)||[]).length,5,'Every chapter heading returns to the contents');
+assert(!practiceHtml.match(/(?:<h2[^>]*><a[^>]*>|href="#practice-section-\d+">)\(/),'Chapter labels have no enclosing parentheses');
+const morning=snapshot.pages.find(p=>p.properties.Slug==='morning-unwoken');
+assert.equal(local(morning.properties['Cover image'][0]).original,local(allImages(parseNotionMarkdown(morning.markdown))[2].src).original,'Morning Unwoken uses its third photograph as the Notion cover');
+assert.match(galleryHome,/morning-unwoken[^>]*[\s\S]*?assets\/works\/58f7925f68ce9c2ac46c\.webp/);
 const notesOnly=adaptNotionBlocks([{type:'toggle',toggle:{rich_text:[{plain_text:'Website layout notes (not published)'}],children:[{type:'paragraph',paragraph:{rich_text:[{plain_text:'Internal layout guidance'}]}}]}}]);
 assert.equal(renderDocument(notesOnly,{title:'Test'}),'','REST exports also omit the internal note');
 assert.equal(renderPractice(notesOnly,{title:'Test'}).document,'');

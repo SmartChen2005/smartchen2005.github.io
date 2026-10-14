@@ -12,8 +12,9 @@ export function practiceSections(nodes) {
 
 export function renderPractice(nodes,options) {
   const {intro,sections}=practiceSections(nodes);
-  const index=sections.length?`<nav class="practice-index" aria-label="Assignments">${sections.map(s=>`<a class="text-link" href="#${s.id}">${inline(s.heading.text)}</a>`).join('')}</nav>`:'';
-  const document=renderDocument(intro,options)+sections.map(s=>`<section class="practice-section${/Assignment #4|Final Portfolio/.test(inline(s.heading.text))?' practice-feature':''}" id="${escapeHtml(s.id)}"><h2 class="story-heading">${inline(s.heading.text)}</h2><div class="practice-works">${renderDocument(imageCaptions(s.children),options)}</div></section>`).join('');
+  const label=s=>inline(s.heading.text).replace(/^\((.*)\)$/s,'$1');
+  const index=sections.length?`<nav class="practice-index" id="practice-contents" aria-label="Assignments">${sections.map(s=>`<a class="text-link" href="#${s.id}">${label(s)}</a>`).join('')}</nav>`:'';
+  const document=renderDocument(intro,options)+sections.map(s=>`<section class="practice-section${/Assignment #4|Final Portfolio/.test(label(s))?' practice-feature':''}" id="${escapeHtml(s.id)}"><h2 class="story-heading"><a href="#practice-contents">${label(s)}<span class="sr-only"> — back to contents</span></a></h2><div class="practice-works">${renderDocument(imageCaptions(s.children),options)}</div></section>`).join('');
   return {index,document};
 }
 

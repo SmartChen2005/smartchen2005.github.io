@@ -3,6 +3,12 @@
     "lead": "rhythms-of-chaos",
     "companions": ["deliberate-practice", "analog-and-digital"]
   },
+  "readingLanguages": {
+    "analog-and-digital": {
+      "original": { "code": "zh-Hans", "label": "中文" },
+      "translation": { "code": "en", "label": "English", "source": "English translation" }
+    }
+  },
   "articles": {
     "trauma-induced-dissociative-amnesia": "source",
     "rhythms-of-chaos": "source",

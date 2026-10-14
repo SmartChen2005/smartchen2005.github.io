@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-14 — Gallery reading, portrait scale and solid wordmark
+
+- Replaced the former header arrow and thin projected band with a rounded, thick WebGL Möbius solid, using shared geometry for its static fallback. Retained the native home link and existing Gallery art direction.
+- Preserved the completed Notion-driven Chinese/English reading switch for Analog & Digital. Increased that article's portrait prints and Deliberate Practice's cover/portrait sections while retaining original ratios and authored groups.
+- Removed Deliberate Practice chapter parentheses and linked every heading back to its contents. Updated Morning Unwoken to its third photograph in Notion and the generated homepage; synchronized private layout notes and verified exports.
+- Verified Gallery/source-content tests, solid geometry, site integrity, JavaScript syntax, strict design audit, and real desktop/mobile browser behavior. Deployment status is recorded in the task completion report.
+
 ### 2026-10-12 — Correct Stills image classification
 
 - Applied the user's clarification: every current Stills image is a game screenshot; concept photography will be supplied separately.

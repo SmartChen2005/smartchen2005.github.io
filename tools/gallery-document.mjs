@@ -179,14 +179,19 @@ export function renderDocument(nodes, {title, resolveMedia=url=>({display:url,or
   function render(list){
     let html='';
     for(let i=0;i<list.length;i++){
-      const n=list[i],nested=n.children?.length?render(n.children):'';
+      const n=list[i],nested=n.type==='language-pair'?'':n.children?.length?render(n.children):'';
       if(n.type==='paragraph'){if(omitIntro&&plain(n.text).trim()===omitIntro.trim()){omitIntro='';continue;} const caption=paragraphCaptions&&['image','columns'].includes(list[i-1]?.type)&&plain(n.text).length<140;html+=`<p class="${caption?'story-caption':'story-text'}"${/[\u3400-\u9fff]/.test(plain(n.text))?' lang="zh-Hans"':''}>${inline(n.text)}</p>${nested}`;}
       else if(n.type==='heading')html+=`<h${Math.min(4,n.level+1)} class="story-heading">${inline(n.text)}</h${Math.min(4,n.level+1)}>${nested}`;
+      else if(n.type==='language-pair'){
+        const id='article-reading-language';
+        const controls=n.children.map((language,index)=>`<input class="article-language-input sr-only" type="radio" name="${id}" id="${id}-${escapeHtml(language.code)}" value="${escapeHtml(language.code)}"${index===0?' checked':''}><label class="article-language-label" for="${id}-${escapeHtml(language.code)}" lang="${escapeHtml(language.code)}">${escapeHtml(language.label)}</label>`).join('<span class="article-language-divider" aria-hidden="true">/</span>');
+        html+=`<fieldset class="article-language"><legend class="sr-only">Article language</legend>${controls}${n.children.map(language=>`<section class="article-language-panel" lang="${escapeHtml(language.code)}" aria-label="${escapeHtml(language.label)}">${render(language.children)}</section>`).join('')}</fieldset>`;
+      }
       else if(n.type==='image')html+=image(n);
       else if(n.type==='columns'){
         const columns=n.columns.map(c=>({html:render(c.children),ratio:Number(c.ratio)>0?Number(c.ratio):50})).filter(c=>c.html.trim());
         if(columns.length===1)html+=columns[0].html;
-        else if(columns.length)html+=`<div class="story-columns${columns.length>2?' multicolumn':''}${n.columns.some(c=>c.children.some(child=>['paragraph','bullet','number','video'].includes(child.type)))?' prose-columns':''}" style="--columns:${columns.length};--column-tracks:${columns.map(c=>c.ratio+'fr').join(' ')}">${columns.map(c=>`<div>${c.html}</div>`).join('')}</div>`;
+        else if(columns.length)html+=`<div class="story-columns${columns.length>2?' multicolumn':''}${n.columns.some(c=>c.children.some(child=>['paragraph','bullet','number','video','language-pair'].includes(child.type)))?' prose-columns':''}" style="--columns:${columns.length};--column-tracks:${columns.map(c=>c.ratio+'fr').join(' ')}">${columns.map(c=>`<div>${c.html}</div>`).join('')}</div>`;
       }
       else if(n.type==='bullet'||n.type==='number'){
         const tag=n.type==='bullet'?'ul':'ol',kind=n.type;html+=`<${tag} class="story-list">`;

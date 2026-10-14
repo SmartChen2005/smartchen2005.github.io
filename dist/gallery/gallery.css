@@ -1,7 +1,12 @@
 @import url('./gallery-base.css');
 :root { --gallery-header-height: 84px; }
 .gallery-header { position: sticky; top: 0; z-index: 10; background: var(--photo-canvas); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px; min-height: var(--gallery-header-height); padding: 8px var(--margin); }
-.gallery-brand { display: flex; align-items: center; min-height: 44px; font-size: 28px; letter-spacing: -.04em; text-decoration-skip-ink: none; }
+.gallery-brand { position: relative; display: flex; align-items: center; justify-content: center; min-height: 64px; padding: 10px 26px; font-size: 28px; letter-spacing: -.04em; white-space: nowrap; }
+.gallery-brand-mobius { position: absolute; top: -8px; left: 0; width: 100%; height: calc(100% + 16px); object-fit: contain; pointer-events: none; }
+.gallery-brand-canvas { visibility: hidden; }
+.gallery-brand[data-mobius-ready] > img { visibility: hidden; }
+.gallery-brand[data-mobius-ready] > canvas { visibility: visible; }
+.gallery-brand > span { position: relative; }
 .gallery-brand, .gallery-main :is(h1, h2, h3), .project-main :is(h1, h2, h3, h4) { text-transform: uppercase; }
 .gallery-nav, .gallery-person { display: flex; align-items: center; gap: 24px; }
 .gallery-person { justify-content: flex-end; }
@@ -131,10 +136,18 @@
 .story--source .story-image figcaption { white-space: pre-line; }
 .story--source .story-toggle summary { text-transform: uppercase; font-size: 16px; }
 .story--source .story-toggle .story-text { margin-bottom: 8px; }
+.article-language { min-width: 0; border: 0; padding: 0; margin: 0; }
+.article-language-label { display: inline-flex; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; cursor: pointer; color: var(--photo-secondary); font-size: 13px; }
+.article-language-divider { margin: 0 12px; color: var(--photo-secondary); }
+.article-language-input:checked + .article-language-label { color: var(--photo-ink); text-decoration: underline; text-underline-offset: 5px; }
+.article-language-input:focus-visible + .article-language-label { outline: 2px solid var(--photo-ink); outline-offset: 4px; }
+.article-language-panel { margin-top: 16px; }
+.article-language-input[value=zh-Hans]:checked ~ .article-language-panel[lang=en],
+.article-language-input[value=en]:checked ~ .article-language-panel[lang=zh-Hans] { display: none; }
 .story--film .story-text { margin-bottom: 10px; }
 .story[data-project=cathedrals-of-light] .story-columns:first-child > :last-child { padding-top: 64px; }
 .story[data-project=trauma-induced-dissociative-amnesia] .story-body > .story-image.portrait:nth-last-child(2) { margin-right: 0; }
-.practice-index { display: grid; margin-top: 24px; }
+.practice-index { display: grid; margin-top: 24px; scroll-margin-top: calc(var(--gallery-header-height) + 24px); }
 .practice-index a { justify-self: start; }
 .practice-section { margin-top: 80px; scroll-margin-top: calc(var(--gallery-header-height) + 24px); }
 .practice-section:first-child { margin-top: 0; }
@@ -144,9 +157,13 @@
 .practice-works .story-columns .story-image { margin: 0; }
 .practice-works .story-image figcaption { text-align: center; }
 .practice-works > .story-image { margin: 0 auto; max-width: 344px; }
-.practice-works > .story-image.portrait { width: calc(min(100%, 344px) * var(--print-scale)); }
-.practice-feature .story-columns .story-image.portrait { width: min(100%, calc(100% * var(--print-scale) * 2)); }
-.practice-feature .practice-works > .story-image.portrait { width: min(100%, calc(344px * var(--print-scale) * 2)); }
+.practice-feature .practice-works .story-columns { max-width: 920px; }
+.practice-works .story-columns .story-image.portrait { width: 100%; max-width: none; }
+.practice-works > .story-image.portrait { width: 100%; max-width: 448px; }
+.story--practice .story-cover .media.portrait { width: min(100%, 448px); }
+.story[data-project=analog-and-digital] .prose-columns { grid-template-columns: 60fr 40fr; }
+.story[data-project=analog-and-digital] .story-columns:not(.prose-columns):has(.portrait) { max-width: 920px; }
+.story[data-project=analog-and-digital] .story-image.portrait { width: 100%; max-width: 448px; }
 .inline-underline { text-decoration: underline; }
 .gallery-viewer { width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; padding: 0; border: 0; background: var(--photo-canvas); color: var(--photo-ink); }
 .gallery-viewer::backdrop { background: var(--photo-canvas); }
@@ -172,9 +189,9 @@ body.viewer-open { overflow: hidden; }
   .editorial-spotlight h3 { font-size: 26px; }
 }
 @media (max-width: 700px) {
-  :root { --gallery-header-height: 100px; }
+  :root { --gallery-header-height: 112px; }
   .gallery-header { grid-template-columns: 1fr auto; gap: 0 16px; padding-top: 4px; }
-  .gallery-brand { grid-column: 1; grid-row: 1; font-size: 24px; }
+  .gallery-brand { grid-column: 1; grid-row: 1; min-height: 54px; padding: 8px 12px; font-size: 24px; }
   .gallery-person { grid-column: 2; grid-row: 1; gap: 14px; }
   .gallery-nav { grid-column: 1 / -1; grid-row: 2; gap: 24px; }
   .gallery-main { padding-top: 20px; padding-bottom: 56px; }
@@ -237,7 +254,9 @@ body.viewer-open { overflow: hidden; }
   .practice-works .story-columns.multicolumn { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .practice-works .story-columns { margin-bottom: 32px; }
   .practice-works .story-columns .story-image { margin: 0; }
-  .practice-feature .story-columns { grid-template-columns: 1fr; max-width: 344px; gap: 32px; }
+  .practice-feature .practice-works .story-columns { grid-template-columns: 1fr; max-width: 448px; gap: 32px; }
+  .story[data-project=analog-and-digital] .prose-columns { grid-template-columns: 1fr; }
+  .story[data-project=analog-and-digital] .story-columns:not(.prose-columns):has(.portrait) { grid-template-columns: 1fr; max-width: 448px; }
   .story-body { margin-top: 48px; }
   .story-text, .story-list, .story-quote { font-size: 18px; line-height: 1.65; }
   .story-text[lang=zh-Hans] { font-size: 17px; }
@@ -251,4 +270,11 @@ body.viewer-open { overflow: hidden; }
   .viewer-toolbar nav { gap: 16px; }
 }
 @media (max-width: 380px) { .practice-works .story-columns:not(.multicolumn) { grid-template-columns: 1fr; } }
+@media (max-width: 420px) { .gallery-brand { font-size: 22px; padding-inline: 8px; } }
+@media (max-width: 380px) {
+  .gallery-header { column-gap: 8px; }
+  .gallery-person { gap: 8px; }
+  .gallery-brand { font-size: clamp(16px, calc(10vw - 16px), 20px); padding-inline: 6px; }
+}
+@media (forced-colors: active) { .gallery-brand-mobius { display: none; } }
 @media print { .gallery-header, .gallery-footer { display: none; } .gallery-section, .stills-feature { break-inside: avoid; } }

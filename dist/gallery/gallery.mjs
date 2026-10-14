@@ -1,3 +1,8 @@
+import { mountMobiusMark } from './mobius-scene.mjs';
+for(const brand of document.querySelectorAll('.gallery-brand')){
+  try{mountMobiusMark(brand);}catch{brand.removeAttribute('data-mobius-ready');brand.querySelector('canvas')?.remove();}
+}
+
 // A failed cover retains its reserved geometry and the project's native link.
 for (const image of document.querySelectorAll('.media img')) {
   const message = image.parentElement.querySelector('.media-error');
