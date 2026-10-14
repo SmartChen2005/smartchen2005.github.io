@@ -2,9 +2,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { parseNotionMarkdown, adaptNotionBlocks, renderDocument, allImages, canonicalMediaUrl, mediaIdentity } from './gallery-document.mjs';
+import { parseNotionMarkdown, adaptNotionBlocks, renderDocument, allImages, canonicalMediaUrl, mediaIdentity, publicationNodes, withImageCaptions } from './gallery-document.mjs';
 import { NotionGalleryClient, galleryPageSnapshot } from './gallery-notion-client.mjs';
 import { imageDimensions } from './gallery-image.mjs';
+import { practiceSections, renderPractice } from './gallery-practice.mjs';
 
 const document=parseNotionMarkdown('An **editorial** paragraph.<br>Second line.\n<columns>\n\t<column ratio="65">\n\t\t![A portrait](https://images.unsplash.com/portrait.jpg)\n\t</column>\n\t<column ratio="35">\n\t\t![A landscape](https://images.unsplash.com/landscape.jpg)\n\t</column>\n</columns>\n<video src="https://www.youtube.com/watch?v=oOozEVsR1Ps">Film</video>');
 assert.equal(allImages(document).length,2);
@@ -48,15 +49,62 @@ assert.equal(sourceCounts.reduce((a,b)=>a+b,0),136,'Every source photograph rema
 assert.equal(snapshot.pages.find(p=>p.properties.Slug==='trauma-induced-dissociative-amnesia').properties['Content kind'],'Concept photography');
 const imagesDir=new URL('../dist/gallery/assets/works/',import.meta.url);
 const media=JSON.parse(fs.readFileSync(new URL('gallery-notion/media.json',import.meta.url),'utf8'));
-for(const slug of ['trauma-induced-dissociative-amnesia','rhythms-of-chaos','analog-and-digital']){
+const sourceGroups={
+ 'trauma-induced-dissociative-amnesia':[[1,2],[1,2],[1,1]],
+ 'rhythms-of-chaos':[[1,1],[1,1]],
+ 'intro-to-darkroom':[[4,0],[1,1,1],[1,1,1],[1,1,1],[1,1]],
+ 'analog-and-digital':[[0,1],[1,1],[1,1],[1,1]],
+ 'cathedrals-of-light':[[1,2],[1,1],[1,1],[1,1]],
+ 'surface-of-the-moon':[[2,2],[1,1],[1,1]],
+ 'morning-unwoken':[[1,1,1,1],[1,1,1,1]],
+ 'cursed-stage':[[0,3],[1,1,1],[1,1,1],[1,1,1]],
+ 'gorilla-in-the-studio':[[0,0],[3,3]],
+ 'the-common-things':[[0,0],[3,3]],
+ 'rorschachs-mask':[[2,2]]
+};
+const local=u=>media[u]||media[canonicalMediaUrl(u)]||media['notion-asset:'+mediaIdentity(u)];
+const normalized=s=>s.replace(/\[([^\]]+)\]\([^\s)]+\)/g,'$1').replace(/<[^>]+>/g,' ').replace(/\\([*])/g,'$1').replace(/\s+/g,' ').trim();
+for(const p of snapshot.pages){
+ const slug=p.properties.Slug,nodes=parseNotionMarkdown(p.markdown),published=publicationNodes(nodes);
+ const source=JSON.parse(fs.readFileSync(new URL(`gallery-source/${slug}.json`,import.meta.url)));
+ const originalImages=source.sections.flatMap(s=>s.items).filter(i=>i.tag==='IMG');
+ const identity=i=>local(i.src)?.original||(local(i.src)?.unavailable?i.src:null);
+ assert.deepEqual(allImages(nodes).map(identity),originalImages.map(identity),`Original photograph order is retained: ${slug}`);
+ for(const item of source.sections.flatMap(s=>s.items).filter(i=>['P','LI','H2','H3'].includes(i.tag)))assert(normalized(p.markdown).includes(normalized(item.text)),`Source wording retained: ${slug} / ${item.text.slice(0,40)}`);
+ if(sourceGroups[slug])assert.deepEqual(published.filter(n=>n.type==='columns').map(n=>n.columns.map(c=>allImages(c.children).length)),sourceGroups[slug],`Author's original spatial groups: ${slug}`);
+ const article=fs.readFileSync(new URL(`../dist/gallery/${slug}/index.html`,import.meta.url),'utf8');
+ assert(p.markdown.includes('Website layout notes (not published)'),`Layout guidance saved in Notion: ${slug}`);
+ assert(!article.includes('Website layout notes')&&!article.includes('制作或更新此网站页面'),`Editor notes stay private: ${slug}`);
+ assert(!article.includes('project-breadcrumb'),`No duplicate navigation: ${slug}`);
+}
+const pairedCaption=withImageCaptions(parseNotionMarkdown('![](https://example.com/photo.jpg)\nShot on Film\nby Jiacheng Liu\n## Next section'));
+assert.equal(pairedCaption[0].caption,'Shot on Film\nby Jiacheng Liu');
+assert.equal(pairedCaption[1].type,'heading','Caption grouping cannot consume the following chapter');
+const galleryHome=fs.readFileSync(new URL('../dist/gallery/index.html',import.meta.url),'utf8');
+const leftBlock=galleryHome.split('<div class="photography-main">')[1].split('<div class="photography-rail">')[0];
+assert.deepEqual([...leftBlock.matchAll(/<article class="project-card[^\"]*"><a href="([^\"]+)"/g)].map(m=>m[1]),['rhythms-of-chaos/','deliberate-practice/','analog-and-digital/']);
+for(const slug of ['trauma-induced-dissociative-amnesia','rhythms-of-chaos','analog-and-digital','deliberate-practice']){
  const page=snapshot.pages.find(p=>p.properties.Slug===slug);
  const article=fs.readFileSync(new URL(`../dist/gallery/${slug}/index.html`,import.meta.url),'utf8');
  for(const image of allImages(page.blocks?adaptNotionBlocks(page.blocks):parseNotionMarkdown(page.markdown))){
   const asset=media[image.src]||media[canonicalMediaUrl(image.src)]||media['notion-asset:'+mediaIdentity(image.src)];
   assert(asset?.original&&article.includes(`href="../${asset.original}"`),`Editorial layout must retain original photograph: ${slug}`);
  }
- if(slug!=='analog-and-digital')assert.equal((article.match(/class="(?:story-cover )?story-image-open"/g)||[]).length,allImages(parseNotionMarkdown(page.markdown)).length,'The opening image remains selectable once, in the hero');
+ if(['trauma-induced-dissociative-amnesia','rhythms-of-chaos'].includes(slug))assert.equal((article.match(/class="(?:story-cover )?story-image-open"/g)||[]).length,allImages(parseNotionMarkdown(page.markdown)).length,'The opening image remains selectable once, in the hero');
 }
+const practicePage=snapshot.pages.find(p=>p.properties.Slug==='deliberate-practice');
+const practiceNodes=parseNotionMarkdown(practicePage.markdown);
+const {sections}=practiceSections(practiceNodes);
+assert.deepEqual(sections.map(s=>allImages(s.children).length),[6,6,4,1,4],'Preserve the five source assignments and photo order');
+assert.deepEqual(sections.map(s=>s.children.filter(n=>n.type==='columns').map(n=>n.columns.length)),[[3,3],[2,2,2],[2,2],[],[2,2]],'Source comparison and pairings stay in the CMS');
+const practiceHtml=fs.readFileSync(new URL('../dist/gallery/deliberate-practice/index.html',import.meta.url),'utf8');
+assert.equal((practiceHtml.match(/<figcaption>/g)||[]).length,16,'All source captions remain with their photographs');
+assert(!practiceHtml.includes('Website layout notes')&&!practiceHtml.includes('网站编辑备注'),'Internal layout notes are not published');
+assert.match(practiceHtml,/class="story-cover story-image-open"[^>]*href="\.\.\/assets\/works\/5b07dba56991f915781b\.jpg"/,'Selected Notion cover is used, independently of the first body image');
+assert.equal((practiceHtml.match(/class="practice-section practice-feature"/g)||[]).length,2,'The last two source sections have a larger print treatment');
+const notesOnly=adaptNotionBlocks([{type:'toggle',toggle:{rich_text:[{plain_text:'Website layout notes (not published)'}],children:[{type:'paragraph',paragraph:{rich_text:[{plain_text:'Internal layout guidance'}]}}]}}]);
+assert.equal(renderDocument(notesOnly,{title:'Test'}),'','REST exports also omit the internal note');
+assert.equal(renderPractice(notesOnly,{title:'Test'}).document,'');
 for(const file of fs.readdirSync(imagesDir).filter(n=>n.endsWith('.jpg'))){const dimensions=imageDimensions(fs.readFileSync(new URL(file,imagesDir)));assert(dimensions.width>0&&dimensions.height>0);}
 const qa=path.resolve('tools/stills-qa/gallery-converter-test');fs.mkdirSync(qa,{recursive:true});
 const emptyPath=path.join(qa,'empty.json');fs.writeFileSync(emptyPath,JSON.stringify({...snapshot,pages:[]}));

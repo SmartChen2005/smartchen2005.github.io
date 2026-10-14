@@ -3072,5 +3072,21 @@
     "height": 720,
     "displayWidth": 1280,
     "displayHeight": 720
+  },
+  "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/6fcb793e-a656-474e-bec1-6c1a39eaedca/5b07dba56991f915781b.jpg": {
+    "original": "assets/works/5b07dba56991f915781b.jpg",
+    "display": "assets/works/5b07dba56991f915781b.webp",
+    "width": 1280,
+    "height": 1707,
+    "displayWidth": 1280,
+    "displayHeight": 1707
+  },
+  "notion-asset:6fcb793e-a656-474e-bec1-6c1a39eaedca": {
+    "original": "assets/works/5b07dba56991f915781b.jpg",
+    "display": "assets/works/5b07dba56991f915781b.webp",
+    "width": 1280,
+    "height": 1707,
+    "displayWidth": 1280,
+    "displayHeight": 1707
   }
 }

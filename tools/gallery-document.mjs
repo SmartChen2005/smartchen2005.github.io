@@ -117,6 +117,9 @@ export function allImages(nodes) {
   return nodes.flatMap(n=>n.type==='image'?[n]:n.type==='columns'?n.columns.flatMap(c=>allImages(c.children)):n.children?allImages(n.children):[]);
 }
 const plain=text=>Array.isArray(text)?text.map(t=>t.plain_text??t.text?.content??'').join(''):unescape(String(text||''));
+export function publicationNodes(nodes) {
+  return nodes.filter(n=>!(n.type==='toggle'&&plain(n.text)==='Website layout notes (not published)'));
+}
 export function videoDestination(src) {
   const url=safeUrl(src,{media:true});if(!url)return null;const u=new URL(url);
   const id=u.hostname==='youtu.be'?u.pathname.slice(1):/^(www\.)?youtube\.com$/.test(u.hostname)?u.searchParams.get('v')||u.pathname.match(/^\/embed\/([\w-]+)/)?.[1]:null;
@@ -137,7 +140,28 @@ export function landscapeRatio(nodes, resolveMedia) {
 export function portraitScale(width, height, referenceRatio=2/3) {
   return height>width&&width>0?referenceRatio*width/height:1;
 }
-export function renderDocument(nodes, {title, resolveMedia=url=>({display:url,original:url}), prefix='../', omitIntro='', omitFirstImage=''}={}) {
+// Imported captions are editable paragraphs below a photo in Notion. Keep those
+// adjacent short paragraphs with their image, including multi-line credits.
+export function withImageCaptions(nodes) {
+  return nodes.reduce((result,node,index)=>{
+    if(node.type==='columns')result.push({...node,columns:node.columns.map(c=>({...c,children:withImageCaptions(c.children)}))});
+    else if(node.type==='toggle')result.push({...node,children:withImageCaptions(node.children)});
+    else if(node.type==='image'&&!plain(node.caption)){
+      const captions=[];
+      for(let i=index+1;nodes[i]?.type==='paragraph'&&plain(nodes[i].text).length<=140;i++)captions.push(nodes[i].text);
+      if(captions.length){
+        const text=captions.every(c=>typeof c==='string')?captions.join('\n'):captions.flatMap((c,i)=>[...(i?[{plain_text:'\n'}]:[]),...(Array.isArray(c)?c:[{plain_text:c}])]);
+        result.push({...node,caption:text});
+      }else result.push(node);
+    }else if(node.type==='paragraph'){
+      let previous=index-1;while(nodes[previous]?.type==='paragraph'&&plain(nodes[previous].text).length<=140)previous--;
+      if(!(plain(node.text).length<=140&&nodes[previous]?.type==='image'&&!plain(nodes[previous].caption)))result.push(node);
+    }else result.push(node);
+    return result;
+  },[]);
+}
+export function renderDocument(nodes, {title, resolveMedia=url=>({display:url,original:url}), prefix='../', omitIntro='', omitFirstImage='', paragraphCaptions=true}={}) {
+  nodes=publicationNodes(nodes);
   const referenceRatio=landscapeRatio(nodes,resolveMedia);
   let number=0;const unavailableSeries=new Set();
   const image=node=>{
@@ -156,13 +180,13 @@ export function renderDocument(nodes, {title, resolveMedia=url=>({display:url,or
     let html='';
     for(let i=0;i<list.length;i++){
       const n=list[i],nested=n.children?.length?render(n.children):'';
-      if(n.type==='paragraph'){if(omitIntro&&plain(n.text).trim()===omitIntro.trim()){omitIntro='';continue;} const caption=['image','columns'].includes(list[i-1]?.type)&&plain(n.text).length<140;html+=`<p class="${caption?'story-caption':'story-text'}"${/[\u3400-\u9fff]/.test(plain(n.text))?' lang="zh-Hans"':''}>${inline(n.text)}</p>${nested}`;}
+      if(n.type==='paragraph'){if(omitIntro&&plain(n.text).trim()===omitIntro.trim()){omitIntro='';continue;} const caption=paragraphCaptions&&['image','columns'].includes(list[i-1]?.type)&&plain(n.text).length<140;html+=`<p class="${caption?'story-caption':'story-text'}"${/[\u3400-\u9fff]/.test(plain(n.text))?' lang="zh-Hans"':''}>${inline(n.text)}</p>${nested}`;}
       else if(n.type==='heading')html+=`<h${Math.min(4,n.level+1)} class="story-heading">${inline(n.text)}</h${Math.min(4,n.level+1)}>${nested}`;
       else if(n.type==='image')html+=image(n);
       else if(n.type==='columns'){
         const columns=n.columns.map(c=>({html:render(c.children),ratio:Number(c.ratio)>0?Number(c.ratio):50})).filter(c=>c.html.trim());
         if(columns.length===1)html+=columns[0].html;
-        else if(columns.length)html+=`<div class="story-columns${columns.length>2?' multicolumn':''}" style="--columns:${columns.length};--column-tracks:${columns.map(c=>c.ratio+'fr').join(' ')}">${columns.map(c=>`<div>${c.html}</div>`).join('')}</div>`;
+        else if(columns.length)html+=`<div class="story-columns${columns.length>2?' multicolumn':''}${n.columns.some(c=>c.children.some(child=>['paragraph','bullet','number','video'].includes(child.type)))?' prose-columns':''}" style="--columns:${columns.length};--column-tracks:${columns.map(c=>c.ratio+'fr').join(' ')}">${columns.map(c=>`<div>${c.html}</div>`).join('')}</div>`;
       }
       else if(n.type==='bullet'||n.type==='number'){
         const tag=n.type==='bullet'?'ul':'ol',kind=n.type;html+=`<${tag} class="story-list">`;

@@ -1,7 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseNotionMarkdown, adaptNotionBlocks, renderDocument, allImages, canonicalMediaUrl, mediaIdentity, safeUrl, landscapeRatio, portraitScale } from './gallery-document.mjs';
+import { parseNotionMarkdown, adaptNotionBlocks, renderDocument, allImages, canonicalMediaUrl, mediaIdentity, safeUrl, landscapeRatio, portraitScale, withImageCaptions } from './gallery-document.mjs';
+import { renderPractice } from './gallery-practice.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const option=name=>{const at=process.argv.indexOf(name);return at>=0?process.argv[at+1]:null;};
 const route=path.resolve(option('--out')||path.join(root,'dist/gallery'));
@@ -50,13 +51,13 @@ const card=(p,prefix='',wide=false)=>`<article class="project-card${wide?' wide'
 const editorialCard=(p,kind)=>`<article class="project-card editorial-${kind}"><a href="${p.id}/">${media(p)}<div class="editorial-copy"><h3>${esc(p.title)}</h3><p class="editorial-meta">${esc(p.contentKind==='Concept photography'?p.contentKind:p.category)}${p.date?' · '+esc(p.date):''}</p>${kind==='lead'&&p.summary?`<p class="editorial-summary">${esc(p.summary)}</p>`:''}</div></a></article>`;
 function photographyEditorial(photos){
  const remaining=[...photos],take=id=>{const index=remaining.findIndex(p=>p.id===id);return index>=0?remaining.splice(index,1)[0]:null;};
- const leads=layouts.photography.leads.map(take).filter(Boolean);
- while(leads.length<2&&remaining.length)leads.push(remaining.shift());
- const spotlight=take(layouts.photography.spotlight)||remaining.shift();
  if(!photos.length)return '';
- return `<div class="photography-editorial${!remaining.length?' no-rail':''}${!spotlight?' no-spotlight':''}"><div class="photography-leads">${leads.map(p=>editorialCard(p,'lead')).join('')}</div>${spotlight?`<div class="photography-spotlight">${editorialCard(spotlight,'spotlight')}</div>`:''}${remaining.length?`<div class="photography-rail">${remaining.map(p=>editorialCard(p,'compact')).join('')}</div>`:''}</div>`;
+ const lead=take(layouts.photography.lead)||remaining.shift();
+ const companions=layouts.photography.companions.map(take).filter(Boolean);
+ while(companions.length<2&&remaining.length)companions.push(remaining.shift());
+ return `<div class="photography-editorial${!remaining.length?' no-rail':''}"><div class="photography-main">${editorialCard(lead,'lead')}${companions.length?`<div class="photography-companions">${companions.map(p=>editorialCard(p,'spotlight')).join('')}</div>`:''}</div>${remaining.length?`<div class="photography-rail">${remaining.map(p=>editorialCard(p,'compact')).join('')}</div>`:''}</div>`;
 }
-const shell=(title,body,prefix='')=>`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="description" content="${esc(title)} — photography and film by Smart Chen."><title>${title==='The Gallery'?'The Gallery — Smart Chen':esc(title)+' | The Gallery — Smart Chen'}</title><link rel="stylesheet" href="${prefix}gallery.css?rev=20261013-editorial"><script type="module" src="${prefix}gallery.mjs?rev=20261013-notion"></script></head><body>${header(prefix)}${body}${footer(prefix)}</body></html>`;
+const shell=(title,body,prefix='')=>`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="description" content="${esc(title)} — photography and film by Smart Chen."><title>${title==='The Gallery'?'The Gallery — Smart Chen':esc(title)+' | The Gallery — Smart Chen'}</title><link rel="stylesheet" href="${prefix}gallery.css?rev=20261013-source-layouts"><script type="module" src="${prefix}gallery.mjs?rev=20261013-notion"></script></head><body>${header(prefix)}${body}${footer(prefix)}</body></html>`;
 const featured=projects.find(p=>p.featured)||projects[0], photos=projects.filter(p=>p.category==='Photography'&&p.id!==featured.id),films=projects.filter(p=>p.category==='Film'&&p.id!==featured?.id);
 const home=`<main class="gallery-main" id="main"><div class="gallery-intro"><h1>Photography &amp; film by Smart Chen</h1><span>${projects.length+1} projects</span></div>
 ${featured?`<section class="feature" aria-labelledby="featured-title"><div class="feature-copy"><p class="eyebrow">${featured.category==='Film'?'Selected film':'Selected series'} · ${esc(featured.contentKind==='Concept photography'?featured.contentKind:featured.category)}</p><h2 id="featured-title"><a href="${featured.id}/">${esc(featured.title)}</a></h2>${featured.summary?`<p class="intro">${esc(featured.summary)}</p>`:''}<a class="text-link" href="${featured.id}/">${featured.category==='Film'?'View film':'View series'}</a></div><a class="media-link" href="${featured.id}/" aria-label="View ${esc(featured.title)}">${media(featured,'',true)}</a></section>`:''}
@@ -68,15 +69,20 @@ const rendered=new Map([['index.html',shell('The Gallery',home)]]);
 for(const p of projects){
  const next=projects[(projects.indexOf(p)+1)%projects.length];
  const layout=layouts.articles[p.id];
- if(layout&&!['offset','centered'].includes(layout))throw new Error('Unknown article layout: '+layout);
+ if(layout&&!['offset','centered','practice','source'].includes(layout))throw new Error('Unknown article layout: '+layout);
  const firstImage=allImages(p.nodes)[0];
  const firstImageIndex=p.nodes.indexOf(firstImage);
  // The opening photograph already appears in the hero. Retain authored captions in the body.
  const heroIsFirst=layout&&firstImage&&firstImageIndex>=0&&!firstImage.caption&&p.nodes[firstImageIndex+1]?.type!=='paragraph'&&resolveMedia(firstImage.src).original===resolveMedia(p.coverSourceUrl).original;
- const document=renderDocument(p.nodes,{title:p.title,resolveMedia,omitIntro:p.summary,omitFirstImage:heroIsFirst?firstImage.src:''});
+ const practice=layout==='practice'?renderPractice(p.nodes,{title:p.title,resolveMedia}):null;
+ const sourceLayout=layout==='source';
+ const paragraphMatches=(nodes,text)=>Boolean(text)&&nodes.some(n=>n.type==='paragraph'&&(Array.isArray(n.text)?n.text.map(t=>t.plain_text??t.text?.content??'').join(''):n.text).trim()===text.trim()||n.children&&paragraphMatches(n.children,text)||n.columns?.some(c=>paragraphMatches(c.children,text)));
+ const sourceSummaryInBody=sourceLayout&&paragraphMatches(p.nodes,p.summary);
+ const sourceCoverIncluded=sourceLayout&&allImages(p.nodes).some(image=>resolveMedia(image.src).original===resolveMedia(p.coverSourceUrl).original);
+ const document=practice?.document??renderDocument(sourceLayout?withImageCaptions(p.nodes):p.nodes,{title:p.title,resolveMedia,omitIntro:sourceLayout?'':p.summary,omitFirstImage:!sourceLayout&&heroIsFirst?firstImage.src:'',paragraphCaptions:!sourceLayout});
  const originalCover=resolveMedia(p.coverSourceUrl).original;
  const coverHref=p.coverSourceUrl===catalog.find(seed=>seed.id===p.id)?.coverSourceUrl?`../assets/${p.id}.jpg`:originalCover.startsWith('assets/')?'../'+originalCover:originalCover;
- const body=`<main class="project-main" id="main"><a class="project-breadcrumb" href="../#${p.category==='Film'?'films':'photography'}">The Gallery / ${esc(p.category)}</a><article class="story${layout?' story--'+layout:''}"><header class="story-hero"><div class="story-title"><p class="eyebrow">${esc(p.contentKind||p.category)}${p.format?' · '+esc(p.format):''}</p><h1>${esc(p.title)}</h1>${p.subtitle?`<p class="story-subtitle" lang="zh-Hans">${esc(p.subtitle)}</p>`:''}${p.summary?`<p class="story-intro">${esc(p.summary)}</p>`:''}<div class="project-meta"><span>${esc(p.credit||'Smart Chen')}</span>${p.date?`<span>${esc(p.date)}</span>`:''}</div>${p.relatedProject==='Polaroid of Yesterday'?'<a class="text-link story-related-project" href="../../projects/polaroid-of-yesterday/photography/">View Polaroid of Yesterday stills</a>':''}</div><a class="story-cover story-image-open" href="${esc(coverHref)}" data-image-title="${esc(p.title)} — published cover">${media(p,'../',true)}</a></header><div class="story-body">${document}</div><p class="story-source"><a href="${esc(p.sourceUrl)}">Originally published on VegShark.com</a></p></article><section class="related" aria-labelledby="next-title"><div class="section-heading"><h2 id="next-title">Next project</h2><a class="text-link" href="../">All projects</a></div><div class="project-grid">${card(next,'../')}</div></section></main>`;
+ const body=`<main class="project-main" id="main"><article data-project="${esc(p.id)}" class="story${p.category==='Film'?' story--film':''}${layout?' story--'+layout:''}"><header class="story-hero"><div class="story-title"><p class="eyebrow">${esc(p.contentKind||p.category)}${p.format?' · '+esc(p.format):''}</p><h1>${esc(p.title)}</h1>${p.subtitle?`<p class="story-subtitle" lang="zh-Hans">${esc(p.subtitle)}</p>`:''}${p.summary&&!sourceSummaryInBody?`<p class="story-intro">${esc(p.summary)}</p>`:''}<div class="project-meta"><span>${esc(p.credit||'Smart Chen')}</span>${p.date?`<span>${esc(p.date)}</span>`:''}</div>${practice?.index||''}${p.relatedProject==='Polaroid of Yesterday'?'<a class="text-link story-related-project" href="../../projects/polaroid-of-yesterday/photography/">View Polaroid of Yesterday stills</a>':''}</div>${sourceCoverIncluded?'':`<a class="story-cover story-image-open" href="${esc(coverHref)}" data-image-title="${esc(p.title)} — published cover">${media(p,'../',true)}</a>`}</header><div class="story-body">${document}</div><p class="story-source"><a href="${esc(p.sourceUrl)}">Originally published on VegShark.com</a></p></article><section class="related" aria-labelledby="next-title"><div class="section-heading"><h2 id="next-title">Next project</h2><a class="text-link" href="../">All projects</a></div><div class="project-grid">${card(next,'../')}</div></section></main>`;
  rendered.set(p.id+'/index.html',shell(p.title,body,'../'));
 }
 const managedPath=path.join(route,'generated-pages.json');

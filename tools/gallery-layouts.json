@@ -1,11 +1,21 @@
 {
   "photography": {
-    "leads": ["rhythms-of-chaos", "deliberate-practice"],
-    "spotlight": "analog-and-digital"
+    "lead": "rhythms-of-chaos",
+    "companions": ["deliberate-practice", "analog-and-digital"]
   },
   "articles": {
-    "trauma-induced-dissociative-amnesia": "offset",
-    "rhythms-of-chaos": "offset",
-    "analog-and-digital": "centered"
+    "trauma-induced-dissociative-amnesia": "source",
+    "rhythms-of-chaos": "source",
+    "analog-and-digital": "source",
+    "deliberate-practice": "practice",
+    "the-life-of-a-poser": "source",
+    "intro-to-darkroom": "source",
+    "cathedrals-of-light": "source",
+    "surface-of-the-moon": "source",
+    "morning-unwoken": "source",
+    "cursed-stage": "source",
+    "gorilla-in-the-studio": "source",
+    "the-common-things": "source",
+    "rorschachs-mask": "source"
   }
 }
