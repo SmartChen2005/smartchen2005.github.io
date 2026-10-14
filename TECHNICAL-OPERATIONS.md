@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-14 — Compact Gallery index and outline wordmark
+
+- Reduced the four right-hand Photography entries to fit a desktop viewport while retaining the left-hand composition and uncropped image ratios.
+- Replaced the active WebGL wordmark with a static, unfilled SVG contour drawing. Kept the earlier filled asset and model modules archived; Gallery no longer imports the 3D runtime.
+- Updated shared Gallery navigation/footer branding to VegShark.com and ordered category navigation Photography / Stills / Film.
+- Verified Gallery/document/outline tests, site integrity, syntax, desktop/phone browser layouts and strict design audit. Commit, remote synchronization and Pages status are reported after publication.
+
 ### 2026-10-14 — Gallery reading, portrait scale and solid wordmark
 
 - Replaced the former header arrow and thin projected band with a rounded, thick WebGL Möbius solid, using shared geometry for its static fallback. Retained the native home link and existing Gallery art direction.

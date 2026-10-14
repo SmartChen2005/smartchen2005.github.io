@@ -1,16 +1,17 @@
 import assert from 'node:assert/strict';
-import {mobiusSolidPoint,mobiusNormal,createMobiusGeometry} from '../dist/gallery/mobius-geometry.mjs';
+import fs from 'node:fs';
+import {mobiusPoint,renderMobiusMark} from './gallery-mobius.mjs';
 const distance=(a,b)=>Math.hypot(...a.map((x,i)=>x-b[i]));
 for(let i=0;i<48;i++){
  const t=i/48*Math.PI*2;
- assert(distance(mobiusSolidPoint(2*Math.PI,t),mobiusSolidPoint(0,t+Math.PI))<1e-8,'The half-twisted solid closes without a seam');
- assert(distance(mobiusNormal(2*Math.PI,t),mobiusNormal(0,t+Math.PI))<1e-6,'Smooth lighting closes across the twist');
- const n=mobiusNormal(t,t*.7);assert(Math.abs(Math.hypot(...n)-1)<1e-8);
- assert(Math.abs(distance(mobiusSolidPoint(t,Math.PI/2),mobiusSolidPoint(t,-Math.PI/2))-.28)<1e-8,'The solid has real thickness everywhere');
+ const width=(i/47-.5)*.76;
+ assert(distance(mobiusPoint(2*Math.PI,width),mobiusPoint(0,-width))<1e-8,'The half-twist joins the opposite edge');
+ assert(distance(mobiusPoint(t,.38),mobiusPoint(t,-.38))>.75,'The strip retains its width through the twist');
+ assert(mobiusPoint(t,width).every(Number.isFinite));
 }
-const mesh=createMobiusGeometry();
-assert.equal(mesh.positions.length,129*25*3);assert.equal(mesh.normals.length,mesh.positions.length);
-assert.equal(mesh.indices.length,128*24*6);
-for(const index of mesh.indices)assert(index<mesh.positions.length/3);
-assert([...mesh.positions,...mesh.normals].every(Number.isFinite));
-console.log('Gallery Möbius: closed half-twist, constant thickness, smooth normals and valid indexed solid verified.');
+assert(distance(mobiusPoint(0,.38),mobiusPoint(4*Math.PI,.38))<1e-8,'One continuous boundary completes two revolutions');
+const svg=renderMobiusMark();assert.match(svg,/fill="none"/);assert.match(svg,/<path d="M/);
+assert(!/<(?:polygon|image|rect|canvas)|NaN|Infinity|fill="(?!none")|<animate/.test(svg),'The static mark contains only unfilled contour paths');
+assert.equal(svg,fs.readFileSync(new URL('../dist/gallery/assets/mobius-outline.svg',import.meta.url),'utf8'),'Generated contour asset is current');
+assert(!fs.readFileSync(new URL('../dist/gallery/gallery.mjs',import.meta.url),'utf8').includes('mobius-scene'),'No WebGL scene is loaded by Gallery pages');
+console.log('Gallery Möbius: continuous half-twist, unfilled static contours, generated asset and no live 3D runtime verified.');
