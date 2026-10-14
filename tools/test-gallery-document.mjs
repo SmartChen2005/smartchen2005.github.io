@@ -47,12 +47,33 @@ const sourceCounts=snapshot.pages.map(page=>allImages(page.blocks?adaptNotionBlo
 assert.equal(sourceCounts.reduce((a,b)=>a+b,0),136,'Every source photograph remains represented in the CMS');
 assert.equal(snapshot.pages.find(p=>p.properties.Slug==='trauma-induced-dissociative-amnesia').properties['Content kind'],'Concept photography');
 const imagesDir=new URL('../dist/gallery/assets/works/',import.meta.url);
+const media=JSON.parse(fs.readFileSync(new URL('gallery-notion/media.json',import.meta.url),'utf8'));
+for(const slug of ['trauma-induced-dissociative-amnesia','rhythms-of-chaos','analog-and-digital']){
+ const page=snapshot.pages.find(p=>p.properties.Slug===slug);
+ const article=fs.readFileSync(new URL(`../dist/gallery/${slug}/index.html`,import.meta.url),'utf8');
+ for(const image of allImages(page.blocks?adaptNotionBlocks(page.blocks):parseNotionMarkdown(page.markdown))){
+  const asset=media[image.src]||media[canonicalMediaUrl(image.src)]||media['notion-asset:'+mediaIdentity(image.src)];
+  assert(asset?.original&&article.includes(`href="../${asset.original}"`),`Editorial layout must retain original photograph: ${slug}`);
+ }
+ if(slug!=='analog-and-digital')assert.equal((article.match(/class="(?:story-cover )?story-image-open"/g)||[]).length,allImages(parseNotionMarkdown(page.markdown)).length,'The opening image remains selectable once, in the hero');
+}
 for(const file of fs.readdirSync(imagesDir).filter(n=>n.endsWith('.jpg'))){const dimensions=imageDimensions(fs.readFileSync(new URL(file,imagesDir)));assert(dimensions.width>0&&dimensions.height>0);}
 const qa=path.resolve('tools/stills-qa/gallery-converter-test');fs.mkdirSync(qa,{recursive:true});
 const emptyPath=path.join(qa,'empty.json');fs.writeFileSync(emptyPath,JSON.stringify({...snapshot,pages:[]}));
 const output=path.join(qa,'site');
 const empty=spawnSync(process.execPath,['tools/render-gallery.mjs','--snapshot',emptyPath,'--out',output],{encoding:'utf8'});
 assert.equal(empty.status,0,empty.stderr);assert.match(fs.readFileSync(path.join(output,'index.html'),'utf8'),/No published photography projects/);
+const curatedPath=path.join(qa,'unpublished-curation.json');
+const unpublished=new Set(['rhythms-of-chaos','analog-and-digital']);
+const curatedSnapshot={...snapshot,pages:snapshot.pages.map(p=>unpublished.has(p.properties.Slug)?{...p,properties:{...p.properties,Published:false}}:p)};
+fs.writeFileSync(curatedPath,JSON.stringify(curatedSnapshot));
+const curatedOutput=path.join(qa,'curated-site');
+const curated=spawnSync(process.execPath,['tools/render-gallery.mjs','--snapshot',curatedPath,'--out',curatedOutput],{encoding:'utf8'});
+assert.equal(curated.status,0,curated.stderr);
+const photoSection=fs.readFileSync(path.join(curatedOutput,'index.html'),'utf8').split('id="photography"')[1].split('<section class="stills-feature"')[0];
+const destinations=[...photoSection.matchAll(/<article class="project-card[^\"]*"><a href="([^\"]+)"/g)].map(m=>m[1]);
+const expected=snapshot.pages.filter(p=>p.properties.Type==='Photography'&&p.properties.Featured!=='__YES__'&&!unpublished.has(p.properties.Slug)).map(p=>p.properties.Slug+'/');
+assert.deepEqual(destinations.sort(),expected.sort(),'Unpublishing curated projects must retain each remaining project once');
 const protectedPage=fs.readFileSync(path.join(output,'index.html'),'utf8');
 const invalid=path.join(qa,'invalid.json');fs.writeFileSync(invalid,JSON.stringify({...snapshot,pages:[{...snapshot.pages[0],properties:{...snapshot.pages[0].properties,Slug:'../escape'}}]}));
 const rejected=spawnSync(process.execPath,['tools/render-gallery.mjs','--snapshot',invalid,'--out',output],{encoding:'utf8'});

@@ -2976,5 +2976,101 @@
     "original": "assets/rorschachs-mask.jpg",
     "displayWidth": 1280,
     "displayHeight": 720
+  },
+  "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/ace1faf5-56fe-4219-ae5b-710fa71d2455/feb135529bcc5949a90f.jpg": {
+    "original": "assets/works/feb135529bcc5949a90f.jpg",
+    "display": "assets/works/feb135529bcc5949a90f.webp",
+    "width": 1280,
+    "height": 853,
+    "displayWidth": 1280,
+    "displayHeight": 853
+  },
+  "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/372379b7-a60d-48ee-89a9-048e629e4b6e/3b55f2a3f21bdfa7ea44.jpg": {
+    "original": "assets/works/3b55f2a3f21bdfa7ea44.jpg",
+    "display": "assets/works/3b55f2a3f21bdfa7ea44.webp",
+    "width": 1280,
+    "height": 960,
+    "displayWidth": 1280,
+    "displayHeight": 960
+  },
+  "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/8766f380-ac9d-481a-827a-5bc50d8ed272/22ff1b58591809c99f6c.jpg": {
+    "original": "assets/works/22ff1b58591809c99f6c.jpg",
+    "display": "assets/works/22ff1b58591809c99f6c.webp",
+    "width": 1280,
+    "height": 853,
+    "displayWidth": 1280,
+    "displayHeight": 853
+  },
+  "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/fc4334ed-b3aa-4f3d-b875-b93b2e6339d5/tida-concept-01.jpg": {
+    "original": "assets/works/93b82b2ce3a874e1c203.jpg",
+    "display": "assets/works/93b82b2ce3a874e1c203.webp",
+    "width": 1280,
+    "height": 1707,
+    "displayWidth": 1280,
+    "displayHeight": 1707
+  },
+  "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/23ae35d6-7388-4f3e-b421-5ecf5c350a59/5c681080461f70a26045.jpg": {
+    "original": "assets/works/5c681080461f70a26045.jpg",
+    "display": "assets/works/5c681080461f70a26045.webp",
+    "width": 1280,
+    "height": 1920,
+    "displayWidth": 1280,
+    "displayHeight": 1920
+  },
+  "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/e322c1e3-37da-4ec7-a421-0744b492405b/af8fe2bf8f068464f4b9.jpg": {
+    "original": "assets/works/af8fe2bf8f068464f4b9.jpg",
+    "display": "assets/works/af8fe2bf8f068464f4b9.webp",
+    "width": 1280,
+    "height": 1920,
+    "displayWidth": 1280,
+    "displayHeight": 1920
+  },
+  "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/b1eb4c31-5d45-47e8-bab4-70ebbd53736d/cb7c641fa2ae4d862644.jpg": {
+    "original": "assets/works/cb7c641fa2ae4d862644.jpg",
+    "display": "assets/works/cb7c641fa2ae4d862644.webp",
+    "width": 1280,
+    "height": 853,
+    "displayWidth": 1280,
+    "displayHeight": 853
+  },
+  "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/bce64bf0-fb21-4cf0-bf82-2c4c2067ac18/780e285a83ffbcf6bf53.jpg": {
+    "original": "assets/works/780e285a83ffbcf6bf53.jpg",
+    "display": "assets/works/780e285a83ffbcf6bf53.webp",
+    "width": 1280,
+    "height": 720,
+    "displayWidth": 1280,
+    "displayHeight": 720
+  },
+  "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/905f777e-f5bb-4509-b4b3-6cfca610ba1c/6bc8b503b93c58b444bb.jpg": {
+    "original": "assets/works/6bc8b503b93c58b444bb.jpg",
+    "display": "assets/works/6bc8b503b93c58b444bb.webp",
+    "width": 1280,
+    "height": 720,
+    "displayWidth": 1280,
+    "displayHeight": 720
+  },
+  "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/6fe01371-7123-4694-b407-1a6381242a02/62ff897c3d23c19af4f6.jpg": {
+    "original": "assets/works/62ff897c3d23c19af4f6.jpg",
+    "display": "assets/works/62ff897c3d23c19af4f6.webp",
+    "width": 1280,
+    "height": 720,
+    "displayWidth": 1280,
+    "displayHeight": 720
+  },
+  "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/ada55db0-a1ce-4625-aec8-d19e1d18accf/2baa73166188100bf376.jpg": {
+    "original": "assets/works/2baa73166188100bf376.jpg",
+    "display": "assets/works/2baa73166188100bf376.webp",
+    "width": 1280,
+    "height": 720,
+    "displayWidth": 1280,
+    "displayHeight": 720
+  },
+  "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/2b0c66e4-237c-435f-812d-9a1dd012029c/93f2eba9fc975a8d5689.jpg": {
+    "original": "assets/works/93f2eba9fc975a8d5689.jpg",
+    "display": "assets/works/93f2eba9fc975a8d5689.webp",
+    "width": 1280,
+    "height": 720,
+    "displayWidth": 1280,
+    "displayHeight": 720
   }
 }

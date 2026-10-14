@@ -26,6 +26,10 @@ The eight photography series and five film projects from VegShark.com each have 
 
 The page body owns the article. Use native paragraphs, headings, image captions, columns, lists, quotes, tables, toggles and videos. Upload photographs directly to Notion. Image proportions are preserved; columns and large photographs provide the editorial rhythm. New published projects need a unique Slug and a Cover image. Unsupported blocks stop the export with a clear error, retaining the existing website.
 
+Cover image now uses the original first photograph for twelve imported projects, rather than the old square thumbnail. Skater's original images remain unavailable, so its existing cover is retained. Any future cover replacement displays its native proportions on both the homepage and article. Portrait photographs are narrower: their long edge matches the short edge of the article's first available landscape photograph at the same column scale, with a 2:3 reference when the article has no landscape. The focused viewer continues to fit the complete original to the viewport.
+
+`tools/gallery-layouts.json` owns presentation choices independently of Notion content. Its Photography selections define the two main stories and spotlight; every other published series is included once in the compact rail. Unpublished choices fall back to remaining projects. Its article map currently selects `offset` for TIDA and Rhythms of Chaos and `centered` for Analog & Digital. Remove an entry to use the original split introduction. Both Markdown and REST exports use these same layouts. Titles, paragraphs, captions and file choices remain owned by Notion; the layout config contains no article copy.
+
 ## One-time connection setup
 
 The connected Notion tools were used for this migration and the current website snapshot. An unattended Node/GitHub process requires its own **read-only Notion connection secret**; none is currently configured. The temporary file-upload grants are not used as a general API credential.

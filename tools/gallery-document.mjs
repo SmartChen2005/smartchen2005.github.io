@@ -126,17 +126,31 @@ export function videoDestination(src) {
   if(/^(www\.)?vimeo\.com$/.test(u.hostname)&&/^\/\d+$/.test(u.pathname))return {embed:`https://player.vimeo.com/video${u.pathname}`,watch:url,platform:'Vimeo'};
   return {watch:url};
 }
-export function renderDocument(nodes, {title, resolveMedia=url=>({display:url,original:url}), prefix='../', omitIntro=''}={}) {
+// A portrait's long edge matches a landscape's short edge at the same display scale.
+export function landscapeRatio(nodes, resolveMedia) {
+  for (const image of allImages(nodes)) {
+    const media=resolveMedia(image.src);
+    if(media.displayWidth>media.displayHeight&&media.displayHeight>0)return media.displayHeight/media.displayWidth;
+  }
+  return 2/3;
+}
+export function portraitScale(width, height, referenceRatio=2/3) {
+  return height>width&&width>0?referenceRatio*width/height:1;
+}
+export function renderDocument(nodes, {title, resolveMedia=url=>({display:url,original:url}), prefix='../', omitIntro='', omitFirstImage=''}={}) {
+  const referenceRatio=landscapeRatio(nodes,resolveMedia);
   let number=0;const unavailableSeries=new Set();
   const image=node=>{
     const native=/^notion-file-block:\/\//.test(node.src);
     const url=safeUrl(node.src,{media:true})||(native?node.src:null);if(!url)throw new Error('Image requires a valid HTTPS or native Notion source');
     const media=resolveMedia(url),caption=plain(node.caption),label=caption||`${title} — photograph ${String(++number).padStart(2,'0')}`;
+    if(omitFirstImage&&node.src===omitFirstImage){omitFirstImage='';return '';}
     if(native&&!media.display?.startsWith('assets/'))throw new Error('Native Notion image is not cached: '+mediaFilename(node.src));
     if(media.unavailable){if(unavailableSeries.has(media.sourcePage))return '';unavailableSeries.add(media.sourcePage);return `<p class="story-text story-unavailable"><a href="${escapeHtml(media.sourcePage)}">View additional photographs in the original series</a></p>`;}
     const src=media.display.startsWith('assets/')?prefix+media.display:media.display;
     const original=media.original.startsWith('assets/')?prefix+media.original:media.original;
-    return `<figure class="story-image${media.displayHeight>media.displayWidth?' portrait':''}"><a class="story-image-open" href="${escapeHtml(original)}" data-image-title="${escapeHtml(label)}"><span class="media"><img src="${escapeHtml(src)}"${media.displayWidth?` width="${media.displayWidth}" height="${media.displayHeight}"`:''} alt="${escapeHtml(label)}" loading="lazy" decoding="async"><span class="media-error" hidden>Image unavailable. Open the original photograph.</span></span></a>${caption?`<figcaption>${inline(node.caption)}</figcaption>`:''}</figure>`;
+    const portrait=media.displayHeight>media.displayWidth;
+    return `<figure class="story-image${portrait?' portrait':''}"${portrait?` style="--print-scale:${portraitScale(media.displayWidth,media.displayHeight,referenceRatio)}"`:''}><a class="story-image-open" href="${escapeHtml(original)}" data-image-title="${escapeHtml(label)}"><span class="media"><img src="${escapeHtml(src)}"${media.displayWidth?` width="${media.displayWidth}" height="${media.displayHeight}"`:''} alt="${escapeHtml(label)}" loading="lazy" decoding="async"><span class="media-error" hidden>Image unavailable. Open the original photograph.</span></span></a>${caption?`<figcaption>${inline(node.caption)}</figcaption>`:''}</figure>`;
   };
   function render(list){
     let html='';

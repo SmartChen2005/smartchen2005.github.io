@@ -1,0 +1,11 @@
+{
+  "photography": {
+    "leads": ["rhythms-of-chaos", "deliberate-practice"],
+    "spotlight": "analog-and-digital"
+  },
+  "articles": {
+    "trauma-induced-dissociative-amnesia": "offset",
+    "rhythms-of-chaos": "offset",
+    "analog-and-digital": "centered"
+  }
+}
