@@ -1,5 +1,11 @@
 # The Gallery verification
 
+## 2026-10-14 — Vaulted doorway header revision
+
+- Removed the rejected split cornice and all header rules. Replaced them with one small perspective arch beside the wordmark; the approved footer drawing and layout remain byte-for-byte intact.
+- Chrome review confirmed the isolated doorway and clear masthead. Responsive checks at 320px, 1024px and 1440px retained 44px navigation targets, unchanged wordmark height and no horizontal overflow; phones hide the extra doorway. Reset the temporary viewport override. Saved `gallery-vaulted-header.jpg` in this chat's visualization directory.
+- Passed site validation, Gallery, Möbius and entry-transition checks, strict design audit (zero findings), and exact main/footer preservation across all fourteen generated pages.
+
 ## 2026-10-14 — Restrained architectural accents
 
 - Added only a split cornice in the shared header and one small exhibition-room drawing in the footer. Generated all fourteen Gallery pages and the unfilled SVG from the common renderer; Notion content and photograph treatments remain intact.

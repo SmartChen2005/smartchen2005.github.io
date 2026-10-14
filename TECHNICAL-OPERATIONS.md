@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-14 — Replace the Gallery header cornice
+
+- Removed the rejected header cornice and its horizontal rules; added a small vaulted doorway beside the existing wordmark, echoing the approved footer drawing.
+- Preserved the footer and project content, regenerated all fourteen Gallery pages and refreshed the stylesheet revision. The doorway is decorative and hidden below 1024px.
+- Passed site, Gallery, Möbius and transition checks, strict design audit and responsive browser checks at 320px, 1024px and 1440px.
+
 ### 2026-10-14 — Quiet architectural frame for The Gallery
 
 - Extended the museum entry's aesthetic with a fine header cornice and a small static exhibition-room drawing at the footer, shared across the Gallery homepage and articles.
