@@ -22,6 +22,8 @@ This repository is the source of truth for the **Polaroid of Yesterday** web arc
 
 ## Standard update cycle
 
+`AGENTS.md` is the entry point for all project chats. The user has authorized agents to summarize, commit, push, and verify publication after each completed update without asking again, unless the current task explicitly requests local-only work. Use Git CLI; opening GitHub Desktop is optional. Commit only the current task's changes and preserve work from other chats.
+
 Every update MUST follow this order:
 
 1. **存档 / Archive** — before editing, preserve the current source, assets, and relevant configuration in Git history. For source imports or generated content, record the origin and date in the corresponding file or update note. Never rely on an external URL as the only copy of an asset.
@@ -38,7 +40,7 @@ Every update MUST follow this order:
 # From the repository root
 node tools/validate-site.mjs
 git status --short
-git add .
+git add -- <explicit-files-for-this-update>
 git commit -m "Describe the update and its purpose"
 git push origin master
 ```
