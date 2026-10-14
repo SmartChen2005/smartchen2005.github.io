@@ -10,7 +10,7 @@ const alphaKeys = ['open', 'travel', 'homeOpacity', 'whiteOpacity', 'roomOpacity
 assert.equal(PHOTO_TRANSITION_DURATION, 3000, 'The photographic journey should last three seconds');
 const museum = createGalleryArchitecture();
 const groups = new Set(museum.map(path => path.group));
-for (const feature of ['oculus', 'coffer', 'dome-rib', 'cornice', 'column', 'capital', 'arch', 'balcony', 'balustrade', 'portal', 'glass', 'floor', 'steps']) {
+for (const feature of ['oculus', 'coffer', 'dome-rib', 'cornice', 'column', 'capital', 'arch', 'balcony', 'balustrade', 'portal', 'glass', 'floor']) {
   assert(groups.has(feature), `The museum must have actual ${feature} geometry`);
 }
 assert(museum.length < 1000, 'Architectural detail must remain bounded for a short mobile transition');

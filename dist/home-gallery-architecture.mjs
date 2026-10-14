@@ -91,15 +91,11 @@ export function createGalleryArchitecture() {
     add([[x, 4.85, 8.3], [0, 8.3 - Math.abs(i) * .34, 4.5]], 'glass', .42, .04);
     add([[-5 + Math.abs(i) * .55, 5.1 + (i + 4) * .34, 8.3 - (i + 4) * .43], [5 - Math.abs(i) * .55, 5.1 + (i + 4) * .34, 8.3 - (i + 4) * .43]], 'glass', .34, .04);
   }
-  // Inlaid radial floor lines, concentric stone joints and three shallow steps.
+  // Inlaid radial floor lines and concentric stone joints.
   for (const radius of [2, 3.3, 4.6, 5.9, 7.2, 9.3]) add(ring(radius, -2.52), 'floor', .32, .4);
   for (let i = 0; i < 28; i++) {
     const theta = i * TAU / 28;
     add([[1.9 * Math.cos(theta), -2.52, 1.9 * Math.sin(theta)], [9.3 * Math.cos(theta), -2.52, 9.3 * Math.sin(theta)]], 'floor', .3, .44);
-  }
-  for (let step = 0; step < 3; step++) {
-    const z = -3.5 - step * .24, y = -2.5 + step * .12;
-    add([[-2.6, y, z], [2.6, y, z], [2.6, y + .12, z - .24], [-2.6, y + .12, z - .24]], 'steps', .55, .44);
   }
   return paths;
 }

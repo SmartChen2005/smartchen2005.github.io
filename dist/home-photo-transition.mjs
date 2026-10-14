@@ -1,4 +1,4 @@
-import { createGalleryArchitecture, drawGalleryArchitecture } from './home-gallery-architecture.mjs';
+import { createGalleryArchitecture, drawGalleryArchitecture } from './home-gallery-architecture.mjs?rev=20261014-no-steps';
 // A viewfinder opens into an imagined art museum, then becomes the Gallery masthead.
 const architecture = createGalleryArchitecture();
 export const PHOTO_TRANSITION_DURATION = 3000;
