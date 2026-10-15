@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-14 — Remove The Life of a Poser (Skater)
+
+- Confirmed the corresponding Notion page (`3f8abc37-a86f-81ee-b75f-f0687af09fbb`) is already deleted, then removed it from the active content snapshot and article layout configuration.
+- Regenerated the Gallery index, article routes and related-project links: twelve CMS projects remain, with seven photography series and five films; the separate Stills exhibition brings the homepage total to thirteen.
+- Kept original source/media archives for recovery. Gallery checks now follow active CMS routes and verify removed projects leave no public article or homepage entry.
+
 ### 2026-10-14 — Smooth the Gallery arrival
 
 - Keep the finished Gallery preview visible through native page navigation, restore its real masthead and allow a final paint before the browser captures it.

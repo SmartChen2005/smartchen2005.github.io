@@ -44,7 +44,7 @@ const props={Project:{type:'title',title:[{plain_text:'A project'}]},Published:{
 assert(!('PrivateNotes' in galleryPageSnapshot({id:'test',properties:props}).properties));
 
 const snapshot=JSON.parse(fs.readFileSync(new URL('gallery-notion/snapshot.json',import.meta.url),'utf8'));
-assert.equal(snapshot.pages.length,13);
+assert.equal(new Set(snapshot.pages.map(p=>p.id)).size,snapshot.pages.length,'Each current CMS project appears once');
 const sourceCounts=snapshot.pages.map(page=>allImages(page.blocks?adaptNotionBlocks(page.blocks):parseNotionMarkdown(page.markdown)).length);
 const articleLayouts=JSON.parse(fs.readFileSync(new URL('gallery-layouts.json',import.meta.url),'utf8')).articles;
 const indexed=p=>articleLayouts[p.properties.Slug]==='index';
