@@ -1,5 +1,13 @@
 # The Gallery verification
 
+## 2026-10-15 — Recover CSS carousel photographs
+
+- Recovered all 13 missing photographs from active original project pages: Darkroom 6, Gorilla 4, Rorschach 3. Fresh published HTML exposes these as CSS background images; the complete image count and document order were checked against the archived source.
+- Uploaded all 13 as native Notion files, replaced only the corresponding image references, updated Media status, and fetched each page again. Verified 16 / 10 / 7 body images respectively, with no remaining external Google Sites body image references in these pages.
+- Archived JPEGs, optimized WebPs, SHA-256 hashes, original/refreshed addresses and native Notion identities. No unresolved references remain in active projects; the deleted Skater archive is retained.
+- Validation: `node tools/test-gallery-carousels.mjs`, `node tools/test-gallery-document.mjs`, `node tools/test-gallery.mjs`, `node tools/validate-site.mjs`.
+- Chrome: checked all three article image lists; opened recovered Darkroom and Rorschach originals in the native viewer and confirmed actual photographs render. The Pages push workflow runs the carousel integrity check before deployment.
+
 ## 2026-10-14 — Refresh the edited Rhythms of Chaos Notion page
 
 - Re-fetched the live page edited at `2026-10-14T21:24:08.174Z`: nine body photographs, a replacement first file, four additions and the new introduction “Street Photography with a 28mm Leica Q”. Confirmed the source did not change during import.

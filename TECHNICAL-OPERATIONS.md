@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-15 — Recover missing Gallery carousel photographs
+
+- Restored 13 Google Sites CSS carousel photographs to their original positions in Darkroom, Gorilla in the Studio and Rorschach’s Mask. Uploaded them as native Notion files and verified page readback before rebuilding the website.
+- Preserved original JPEGs, optimized WebPs, source order, hashes and native asset identities; added an explicit carousel extraction tool and regression verification. All active Gallery projects now have their original photograph references resolved.
+- Verified Gallery document/rendering tests, carousel recovery integrity and the site validator. Publication status is reported in the completing chat.
+
 ### 2026-10-14 — Remove The Life of a Poser (Skater)
 
 - Confirmed the corresponding Notion page (`3f8abc37-a86f-81ee-b75f-f0687af09fbb`) is already deleted, then removed it from the active content snapshot and article layout configuration.

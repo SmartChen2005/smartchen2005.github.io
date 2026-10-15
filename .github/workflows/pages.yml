@@ -27,6 +27,7 @@ jobs:
       - name: Validate static site
         run: |
           node tools/validate-site.mjs
+          node tools/test-gallery-carousels.mjs
           node tools/test-home.mjs
           node tools/test-home-state.mjs
           node tools/test-photo-transition.mjs
