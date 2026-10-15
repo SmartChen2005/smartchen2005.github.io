@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-14 — Smooth the Gallery arrival
+
+- Keep the finished Gallery preview visible through native page navigation, restore its real masthead and allow a final paint before the browser captures it.
+- Share a short cross-document handoff between the homepage and Gallery index. Preserve the three-second architectural animation, native links/history, reduced-motion and forced-color fallbacks.
+- Cover final-frame preservation, interrupted arrivals, a bounded paint watchdog and Back restoration in the existing transition suite. Publication status is reported after pushing.
+
 ### 2026-10-14 — Sync updated Rhythms of Chaos images and text
 
 - Refreshed the live Notion content to nine photographs and “Street Photography with a 28mm Leica Q”; retained the number-only Index layout and the user's independent cover selection.

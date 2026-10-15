@@ -164,19 +164,26 @@ for (let ms = 16; ms < PHOTO_TRANSITION_DURATION; ms += 16) {
 }
 assert.equal(app.document.body.dataset.photoTransition, 'arrival');
 app.step(PHOTO_TRANSITION_DURATION);
+assert.equal(app.navigations.length, 0, 'The completed Gallery must receive one paint before native navigation');
+app.step(PHOTO_TRANSITION_DURATION + 16);
 assert.equal(app.navigations.length, 1); assert.equal(app.navigations[0], 'https://example.test/gallery/');
 assert.equal(app.callbacks.size, 0); assert.equal(app.timers.size, 0); assert.equal(app.heading.style.visibility, '');
-assert.equal(app.preview.style.opacity, 1);
+assert.equal(app.preview.style.opacity, '1');
+assert.equal(app.document.body.dataset.photoTransition, 'handoff');
+assert.equal(app.document.body.style['--photo-home-opacity'], '0');
+assert.equal(app.created.find(e => e.className === 'photo-entry').style.visibility, 'hidden', 'The outgoing snapshot must use the real preview masthead without a duplicate animation title');
 assert.equal(app.imageDraws, 0, 'The clicked transition must contain no wall photographs');
 await app.window.emit('pagehide');
+assert.equal(app.preview.style.opacity, '1', 'The complete Gallery frame must survive pagehide without flashing the homepage');
+assert(app.preview.classList.contains('is-revealed')); assert.equal(app.resets, 0);
+await app.window.emit('pageshow', { persisted: true });
 assert(!app.controller.active); assert(!app.home.inert && !app.scenery.inert);
 assert.equal(app.document.body.dataset.photoTransition, undefined); assert.equal(app.document.body.style['--photo-home-opacity'], undefined);
 assert(app.created.find(e => e.className === 'photo-entry').removed); assert.equal(app.preview.style.opacity, '');
 assert(!app.preview.classList.contains('is-revealed')); assert.equal(app.resets, 1);
-await app.window.emit('pageshow', { persisted: true });
-assert(!app.controller.active); assert.equal(app.resets, 2);
 assert((await app.click()).prevented, 'Browser Back must permit a second journey');
 await app.window.emit('resize');
+app.step(PHOTO_TRANSITION_DURATION + 32);
 assert.equal(app.navigations.length, 2, 'Resize must finish navigation rather than leave stale viewport geometry');
 await app.window.emit('resize'); assert.equal(app.navigations.length, 2, 'Repeated finish events must only navigate once');
 
@@ -199,8 +206,16 @@ for (const exit of ['hidden', 'Escape', 'reduced', 'forced', 'watchdog']) {
   else if (exit === 'Escape') await app.document.emit('keydown', { key: 'Escape' });
   else if (exit === 'watchdog') { assert.equal([...app.timers.values()][0].delay, PHOTO_TRANSITION_DURATION + 150); app.watchdog(); }
   else { app[exit === 'reduced' ? 'reduce' : 'forced'].matches = true; await app[exit === 'reduced' ? 'reduce' : 'forced'].emit('change'); }
+  if (exit === 'watchdog') {
+    assert.equal([...app.timers.values()][0].delay, 50, 'A suspended final paint must not stall navigation');
+    app.watchdog();
+  } else app.step(16);
   assert.equal(app.navigations.length, 1, `${exit} must immediately complete the Gallery navigation`);
   assert.equal(app.callbacks.size, 0); assert.equal(app.timers.size, 0); assert.equal(app.heading.style.visibility, '');
-  await app.window.emit('pagehide'); assert(!app.home.inert && !app.scenery.inert); assert(!app.controller.active);
+  assert.equal(app.preview.style.opacity, '1', `${exit} must settle the destination before navigation`);
+  await app.window.emit('pagehide');
+  assert.equal(app.document.body.dataset.photoTransition, 'handoff');
+  await app.window.emit('pageshow', { persisted: true });
+  assert(!app.home.inert && !app.scenery.inert); assert(!app.controller.active);
 }
-console.log('Passed: detailed museum geometry across six viewports; finite projection and visible camera travel/banking; restored darkroom hover; no transition wall photographs; clicked-word origin and exact masthead docking; 3s navigation; keyboard/native link behavior; duplicate prevention; reduced/forced/load fallbacks; interrupted navigation and Back restoration.');
+console.log('Passed: detailed museum geometry across six viewports; finite projection and visible camera travel/banking; restored darkroom hover; no transition wall photographs; clicked-word origin and exact masthead docking; 3s navigation; complete Gallery handoff through pagehide; keyboard/native link behavior; duplicate prevention; reduced/forced/load fallbacks; interrupted navigation and Back restoration.');

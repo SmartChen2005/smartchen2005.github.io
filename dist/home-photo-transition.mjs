@@ -91,7 +91,24 @@ export function installPhotoTransition(link, resetHome, otherTransitionActive = 
     cancelAnimationFrame(frame);
     clearTimeout(timer);
     if (heading) heading.style.visibility = '';
-    location.assign(destination.href);
+    // Give the browser a clean, fully loaded Gallery frame to carry into the
+    // new document. This also settles interrupted journeys before navigation.
+    preview.style.opacity = '1';
+    if (layer) layer.style.visibility = 'hidden';
+    document.body.style.setProperty('--photo-home-opacity', '0');
+    document.body.dataset.photoTransition = 'handoff';
+    const commit = () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(timer);
+      location.assign(destination.href);
+    };
+    // Let the iframe's restored heading and the removed drawing commit before
+    // the browser captures its outgoing frame; bound this to one paint/50ms.
+    if (document.hidden || reduce.matches || forced.matches) commit();
+    else {
+      frame = requestAnimationFrame(commit);
+      timer = setTimeout(commit, 50);
+    }
   }
   function cleanup() {
     cancelAnimationFrame(frame);
@@ -199,7 +216,13 @@ export function installPhotoTransition(link, resetHome, otherTransitionActive = 
   link.addEventListener('focus', prepare);
   link.addEventListener('click', play);
   window.addEventListener('resize', () => { if (active) navigate(); });
-  window.addEventListener('pagehide', () => { if (active) cleanup(); });
+  window.addEventListener('pagehide', () => {
+    // Preserve the outgoing frame for the native cross-document snapshot.
+    // A restored homepage is reset by pageshow before it becomes interactive.
+    cancelAnimationFrame(frame);
+    clearTimeout(timer);
+    if (active && !navigating) cleanup();
+  });
   window.addEventListener('pageshow', event => { if (event.persisted) cleanup(); });
   document.addEventListener('visibilitychange', () => { if (active && document.hidden) navigate(); });
   document.addEventListener('keydown', event => { if (active && event.key === 'Escape') navigate(); });
