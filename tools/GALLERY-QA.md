@@ -1,5 +1,13 @@
 # The Gallery verification
 
+## 2026-10-15 — Player loading, rail boundaries and current Rhythms photographs
+
+- YouTube verification used actual playback, not poster loading: Gorilla completed playback on the live site; Morning Unwoken advanced to 0:08 with its film credits visible in local preview; live Rorschach and Common Things both displayed moving film scenes after Play. The live lazy iframes initially remained blank until scrolling. Players now load eagerly; direct YouTube links and the existing origin referrer policy remain. No autoplay or host switch was introduced. Players have a 200px minimum height.
+- Localhost embeds for Common Things and Rorschach returned YouTube's generic unavailable message even though the same videos played on the public domain. That result does not establish an account or embedding restriction. A directly opened embed URL also returned error 153 without a referring page; this is not evidence of a production error. Official reference: https://developers.google.com/youtube/iframe_api_reference.
+- At the actual Chrome viewport of 1707px, every compact Photography image stays inside its fixed-height media frame and article row; adjacent photographs have their intended padding, object-fit is contain, and the page has no horizontal overflow. Explicit percentage dimensions and zero minimum dimensions remove reliance on flex intrinsic image sizing. The viewport override did not change Chrome's reported dimensions, so this run does not assert separate mobile or Safari browser coverage.
+- Imported the current Rhythms of Chaos Notion page, last edited 2026-10-15T19:06:09.087Z: eleven photographs in its latest authored order. New DO1050826.jpeg and IMG_2809.jpeg occupy 04 and 05. Both are cached 1024×683 Notion image renditions with local JPEG/WebP mappings; original-file download was blocked, so these are not claimed as full-resolution camera originals. No expiring download tokens are stored. Viewer opening, Next to 05, decoded dimensions and focus restoration were checked in Chrome.
+- Passed: Gallery document, layout, carousel and route tests; site validation; deployed-source strict frontend audit; staged diff checks.
+
 ## 2026-10-15 — Preserve every original carousel
 
 - Identified Darkroom's original Lightroom section (`h.390ad03ec58fd76_65`, four photographs) and Enlarger section (`h.7be52d76c56310e8_22`, two photographs). Both now use the shared carousel while retaining their source explanation, captions, chapter directory and all sixteen image references.

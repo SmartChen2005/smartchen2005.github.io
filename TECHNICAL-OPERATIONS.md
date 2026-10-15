@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-15 — Fix Gallery media sizing and sync Rhythms
+
+- Bound compact Photography images to their reserved frames without cropping; initialized Film embeds eagerly and retained their referrer policy and direct viewing links.
+- Synced eleven current Rhythms of Chaos photographs and their latest Notion order, adding two local 1024px image renditions. Source snapshots, native asset mappings and generated pages are synchronized.
+- Verified actual YouTube playback, desktop rail bounds and new-photo viewer navigation; Gallery regressions, site validation and the deployed-source strict audit pass. Browser coverage and source-resolution limitations are recorded in `tools/GALLERY-QA.md`.
+
 ### 2026-10-15 — Preserve original Darkroom carousels
 
 - Restored Lightroom's four-photo comparison and Enlarger's two-photo comparison as carousels, matching their original Google Sites groups. Ordinary photo grids remain in their authored arrangements.
