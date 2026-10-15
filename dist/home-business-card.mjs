@@ -145,7 +145,6 @@ export function createBusinessCard(dock, portrait, sentence, trigger) {
   dock.addEventListener('pointerup', event => {
     if (event.pointerType === 'touch' && !event.target.closest('a')) orientation.activate();
   });
-  dock.querySelector('[data-resume-placeholder]').addEventListener('click', event => event.preventDefault());
   document.addEventListener('visibilitychange', () => {
     syncMotion();
     if (document.hidden) { cancelAnimationFrame(frame); frame = 0; target = { x: 0, y: 0 }; }

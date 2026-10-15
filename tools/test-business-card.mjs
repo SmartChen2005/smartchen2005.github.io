@@ -28,11 +28,11 @@ function harness({reduced=false,forced=false,sensor=false,texture=false}={}) {
   let pixels;
   const canvas = texture ? { getContext:()=>({createImageData:(w,h)=>({data:new Uint8ClampedArray(w*h*4)}),putImageData:image=>{pixels=image.data;}}) } : null;
   const style=()=>({values:{},setProperty(key,value){this.values[key]=value;},getPropertyValue(key){return this.values[key]||'';}});
-  const card={style:style()}, email={focus:()=>focus++}, placeholder={addEventListener:(name,fn)=>{events.resume=fn;}};
+  const card={style:style()}, email={focus:()=>focus++};
   let entry=null;
   const slide={style:{},animate:()=>{animations++;entry={cancel(){this.cancelled=true;},finish(){this.onfinish?.();}};return entry;}};
   const dock={hidden:true,inert:true,style:style(),dataset:{},addEventListener:(name,fn)=>{events[`dock-${name}`]=fn;},
-    querySelector:selector=>({'.metal-card':card,'.metal-perlage':canvas,'.card-email':email,'.business-card-slide':slide,'[data-resume-placeholder]':placeholder})[selector],
+    querySelector:selector=>({'.metal-card':card,'.metal-perlage':canvas,'.card-email':email,'.business-card-slide':slide})[selector],
     getBoundingClientRect:()=>({left:400,top:100,width:300,height:183})};
   const portrait={isConnected:true,style:style(),getBoundingClientRect:()=>({height:188,bottom:292,toJSON:()=>({left:130,right:412,top:104,bottom:292,width:282,height:188})})};
   portrait.style.setProperty('--portrait-height','188px');
@@ -70,7 +70,11 @@ assert.equal(app.frames.size,0,'Restoration must stop after convergence');
 app.instance.hide();assert(app.dock.hidden && app.dock.inert);assert.equal(app.trigger.attrs['aria-expanded'],'false');
 app.instance.show(true);app.finish();assert.equal(app.values().focus,1,'Keyboard opening should reach the contact links');
 app.instance.hide();app.instance.show();app.instance.hide();app.finish();assert(app.dock.hidden,'Cancelled entry must not reopen a closed card');
-let prevented=false;app.events.resume({preventDefault:()=>{prevented=true;}});assert(prevented);
+const fs = await import('node:fs');
+const home = fs.readFileSync(new URL('../dist/index.html', import.meta.url), 'utf8');
+assert(home.includes('href="assets/hongyi-chen-resume.pdf" target="_blank" rel="noopener"'));
+assert(!home.includes('data-resume-placeholder'));
+assert.equal(fs.readFileSync(new URL('../dist/assets/hongyi-chen-resume.pdf', import.meta.url)).subarray(0,5).toString(), '%PDF-');
 for(const options of [{reduced:true},{forced:true}]){
   app=harness(options);app.instance.show(true);assert.equal(app.values().animations,0);assert.equal(app.dock.dataset.state,'settled');
   app.events.pointermove({clientX:700,clientY:100,pointerType:'mouse'});assert.equal(app.frames.size,0);
@@ -118,5 +122,5 @@ for(const view of [{x:-2,y:2},{x:2,y:-2}]) {
   assert.equal(Math.abs(parseFloat(state.properties['--tilt-x'])),7);
   assert.equal(Math.abs(parseFloat(state.properties['--tilt-y'])),8);
 }
-console.log('Passed: right-edge anchoring, narrow/short-screen containment and sentence clearance; entry/settle/close/reopen; inert links during entry; keyboard focus; delayed light response and idle RAF cleanup; placeholder handling; reduced motion and forced colors.');
+console.log('Passed: right-edge anchoring, narrow/short-screen containment and sentence clearance; entry/settle/close/reopen; inert links during entry; keyboard focus; delayed light response and idle RAF cleanup; enabled local résumé PDF; reduced motion and forced colors.');
 console.log('Passed: desktop constrained pivot; free centered handheld motion bounded to 7°/8°; both real input adapters share light, engraving, spectral colors and Perlage pixels.');
