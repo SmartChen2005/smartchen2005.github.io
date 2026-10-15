@@ -1,5 +1,13 @@
 # The Gallery verification
 
+## 2026-10-15 — Chapter navigation and original Film compositions
+
+- Opened all five live original Film detail pages in Chrome: Morning Unwoken, Cursed Stage, Gorilla in the Studio, The Common Things and Rorschach's Mask. Compared the player position/size, synopsis side, credit alignment, still groups and backstage carousel with the archived source geometry.
+- Removed the extra detail-page CMS poster and duplicate header credits. Restored per-project video ratios and centered standalone credit/poem lines; retained each native video/text column and still sequence. Backstage photographs remain complete in a caption-and-carousel composition, with native scrolling plus keyboard/button controls.
+- Intro to Darkroom now derives a five-link directory from native Notion headings using the shared Deliberate Practice section renderer. Enter followed a chapter link and its return link in Chrome; the target heading clears the sticky navigation. All sixteen images retain their order, continuous labels and natural proportions.
+- Chrome desktop/390px checks: original-versus-revised Gorilla composition, Darkroom chapter/return navigation, mobile stacked Film copy/player, and switching backstage photographs through Next. The source poem and original image viewer remain available. Restored the temporary viewport afterward.
+- Automated checks: `test-gallery-layouts.mjs`, `test-gallery-document.mjs`, `test-gallery-carousels.mjs`, `test-gallery.mjs`, site validator and strict frontend audit of the deployed `dist/` source roots (zero findings). The initial whole-repository audit also scanned archived third-party HTML and isolated generated test fixtures; those are outside the deployed UI scope. Pages CI now includes layout preservation checks.
+
 ## 2026-10-15 — Recover CSS carousel photographs
 
 - Recovered all 13 missing photographs from active original project pages: Darkroom 6, Gorilla 4, Rorschach 3. Fresh published HTML exposes these as CSS background images; the complete image count and document order were checked against the archived source.

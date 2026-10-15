@@ -1,4 +1,6 @@
 // A failed cover retains its reserved geometry and the project's native link.
+import './film-carousel.mjs';
+
 for (const image of document.querySelectorAll('.media img')) {
   const message = image.parentElement.querySelector('.media-error');
   if (!message) continue;

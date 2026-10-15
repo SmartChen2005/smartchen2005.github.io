@@ -150,9 +150,9 @@
 .story[data-project=trauma-induced-dissociative-amnesia] .story-body > .story-image.portrait:nth-last-child(2) { margin-right: 0; }
 .practice-index { display: grid; margin-top: 24px; scroll-margin-top: calc(var(--gallery-header-height) + 24px); }
 .practice-index a { justify-self: start; }
-.practice-section { margin-top: 80px; scroll-margin-top: calc(var(--gallery-header-height) + 24px); }
-.practice-section:first-child { margin-top: 0; }
-.practice-section > .story-heading { max-width: none; margin: 0 0 32px; text-align: center; font-size: clamp(20px, 2vw, 28px); }
+:is(.chapter-section, .practice-section) { margin-top: 80px; scroll-margin-top: calc(var(--gallery-header-height) + 24px); }
+:is(.chapter-section, .practice-section):first-child { margin-top: 0; }
+:is(.chapter-section, .practice-section) > .story-heading { max-width: none; margin: 0 0 32px; text-align: center; font-size: clamp(20px, 2vw, 28px); }
 .practice-works .story-columns { margin: 0 auto 48px; }
 .practice-works .story-columns:not(.multicolumn) { max-width: 712px; }
 .practice-works .story-columns .story-image { margin: 0; }
@@ -252,8 +252,8 @@ body.viewer-open { overflow: hidden; }
   .story--film .story-columns.multicolumn { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .story--centered .story-body > .story-text:first-child { font-size: 24px; margin-bottom: 32px; }
   .practice-index a { justify-self: center; }
-  .practice-section { margin-top: 56px; }
-  .practice-section > .story-heading { font-size: 20px; margin-bottom: 24px; }
+  :is(.chapter-section, .practice-section) { margin-top: 56px; }
+  :is(.chapter-section, .practice-section) > .story-heading { font-size: 20px; margin-bottom: 24px; }
   .practice-works .story-columns.multicolumn { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .practice-works .story-columns { margin-bottom: 32px; }
   .practice-works .story-columns .story-image { margin: 0; }

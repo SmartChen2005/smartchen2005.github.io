@@ -1,0 +1,41 @@
+/* Original Film detail compositions; homepage covers remain independent. */
+.story--film .story-body { margin-top: 48px; }
+.story--film .story-body > .story-video { max-width: 780px; }
+.story--film[data-project=cursed-stage] .story-body > .story-video { max-width: 980px; }
+.story--film[data-project=morning-unwoken] .story-video iframe { aspect-ratio: 777 / 527; }
+.story--film[data-project=gorilla-in-the-studio] .story-video iframe { aspect-ratio: 677 / 459; }
+.story--film[data-project=cursed-stage] .story-video iframe { aspect-ratio: 977 / 560; }
+.story--film .film-copy { max-width: 1080px; margin: 40px auto; text-align: center; }
+.story--film .film-copy:first-child { margin-top: 0; }
+.story--film .film-copy .story-text,
+.story--film.story--source .story-columns .story-text {
+  max-width: none;
+  margin: 0 0 6px;
+  font: 16px/1.6 var(--editorial-font);
+}
+.story--film.story--source .prose-columns { align-items: start; }
+.story--film.story--source .prose-columns .story-text { text-align: center; }
+.story--film[data-project=cursed-stage] .prose-columns .story-text { text-align: left; font-size: 18px; }
+.story--film[data-project=the-common-things] .prose-columns > :last-child { padding-top: 40px; }
+.story--film[data-project=gorilla-in-the-studio] .prose-columns > :first-child .story-text:nth-child(5) { margin-top: 24px; }
+.story--film[data-project=gorilla-in-the-studio] .prose-columns > :first-child .story-text:nth-child(6) { margin-top: 80px; }
+.story--film .story-toggle { max-width: 1080px; }
+.story--film .story-video figcaption { text-align: center; }
+.story--film .film-backstage { display: grid; grid-template-columns: 30fr 70fr; align-items: center; gap: 24px; max-width: 1080px; margin: 64px auto; }
+.story--film .film-backstage > .film-copy { margin: 0; }
+.film-carousel { min-width: 0; }
+.film-strip { position: relative; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-inline: contain; gap: 24px; padding-bottom: 12px; }
+.film-strip:focus-visible { outline: 2px solid var(--photo-ink); outline-offset: 4px; }
+.story--film .film-strip > .story-image { flex: 0 0 100%; width: 100%; max-width: none; margin: 0; scroll-snap-align: start; }
+.film-strip-controls { display: flex; justify-content: flex-end; gap: 24px; margin-top: 8px; }
+.film-strip-controls[hidden] { display: none; }
+.film-strip-controls button { min-width: 44px; min-height: 44px; border: 0; padding: 8px 0; background: transparent; color: var(--photo-ink); font: 12px/1.5 var(--font); cursor: pointer; }
+.film-strip-controls button:disabled { opacity: .4; cursor: default; }
+.film-strip-controls button:focus-visible { outline: 2px solid var(--photo-ink); outline-offset: 4px; }
+@media (max-width: 700px) {
+  .story--film .story-body { margin-top: 40px; }
+  .story--film .film-copy { margin-block: 32px; }
+  .story--film .film-backstage { grid-template-columns: 1fr; margin-block: 40px; }
+  .story--film[data-project=the-common-things] .prose-columns > :last-child { padding-top: 0; }
+  .story--film[data-project=gorilla-in-the-studio] .prose-columns > :first-child .story-text:nth-child(6) { margin-top: 32px; }
+}

@@ -160,10 +160,10 @@ export function withImageCaptions(nodes) {
     return result;
   },[]);
 }
-export function renderDocument(nodes, {title, resolveMedia=url=>({display:url,original:url}), prefix='../', omitIntro='', omitFirstImage='', paragraphCaptions=true}={}) {
+export function renderDocument(nodes, {title, resolveMedia=url=>({display:url,original:url}), prefix='../', omitIntro='', omitFirstImage='', paragraphCaptions=true, imageOffset=0, referenceRatio:articleRatio}={}) {
   nodes=publicationNodes(nodes);
-  const referenceRatio=landscapeRatio(nodes,resolveMedia);
-  let number=0;const unavailableSeries=new Set();
+  const referenceRatio=articleRatio??landscapeRatio(nodes,resolveMedia);
+  let number=imageOffset;const unavailableSeries=new Set();
   const image=node=>{
     const native=/^notion-file-block:\/\//.test(node.src);
     const url=safeUrl(node.src,{media:true})||(native?node.src:null);if(!url)throw new Error('Image requires a valid HTTPS or native Notion source');
@@ -205,7 +205,11 @@ export function renderDocument(nodes, {title, resolveMedia=url=>({display:url,or
       else if(n.type==='table')html+=`<div class="story-table"><table>${n.rows.map((row,r)=>`<tr>${row.map(c=>`<${n.header&&r===0?'th':'td'}>${inline(c)}</${n.header&&r===0?'th':'td'}>`).join('')}</tr>`).join('')}</table></div>`;
       else if(n.type==='code')html+=`<pre class="story-code"><code>${escapeHtml(plain(n.text))}</code></pre>`;
       else if(n.type==='divider')html+='<hr class="story-rule">';
-      else if(n.type==='group')html+=nested;
+      else if(n.type==='group'){
+        if(n.presentation==='film-carousel')html+=`<div class="film-carousel"><div class="film-strip" tabindex="0" role="region" aria-label="Behind the scenes photographs">${nested}</div><nav class="film-strip-controls" aria-label="Photograph carousel" hidden><button type="button" data-strip-prev>Previous</button><button type="button" data-strip-next>Next</button></nav></div>`;
+        else if(['film-copy','film-backstage'].includes(n.presentation))html+=`<div class="${n.presentation}">${nested}</div>`;
+        else html+=nested;
+      }
       else if(n.type!=='empty')throw new Error('Unknown document node: '+n.type);
     }
     return html;

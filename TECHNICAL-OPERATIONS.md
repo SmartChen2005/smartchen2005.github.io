@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-15 — Add chapter navigation and correct Film compositions
+
+- Added a CMS-driven chapter directory and return links to Intro to Darkroom, sharing Deliberate Practice's behavior while retaining the original photograph sizing and order.
+- Compared all five Film details with the live originals; restored their authored opening compositions, player dimensions, credit alignment and backstage carousel arrangement. Poster covers remain on project cards.
+- Verified source-content preservation, directory targets, photograph order, carousel controls and desktop/mobile previews; added the layout regression check to Pages CI.
+
 ### 2026-10-15 — Recover missing Gallery carousel photographs
 
 - Restored 13 Google Sites CSS carousel photographs to their original positions in Darkroom, Gorilla in the Studio and Rorschach’s Mask. Uploaded them as native Notion files and verified page readback before rebuilding the website.
