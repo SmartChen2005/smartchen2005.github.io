@@ -1,5 +1,12 @@
 # The Gallery verification
 
+## 2026-10-15 — Preserve every original carousel
+
+- Identified Darkroom's original Lightroom section (`h.390ad03ec58fd76_65`, four photographs) and Enlarger section (`h.7be52d76c56310e8_22`, two photographs). Both now use the shared carousel while retaining their source explanation, captions, chapter directory and all sixteen image references.
+- Gorilla and Rorschach retain their four- and three-image backstage carousels. Ordinary native photo rows/pairs remain static; the source-carousel adapter preserves all image order and works inside native Notion columns.
+- Added regression checks for the two Darkroom group sizes, accessible labels, adjacent text and preservation of unrelated photo pairs. Shared carousel CSS is available on photography pages as well as Film details.
+- Chrome desktop/390px: confirmed one image per carousel viewport, Lightroom Next changes photographs, Enlarger Next reaches the last photograph and disables at the end, and mobile captions/explanations follow the carousel without horizontal page overflow. Existing Gallery tests, site validator and scoped strict UI audit pass.
+
 ## 2026-10-15 — Chapter navigation and original Film compositions
 
 - Opened all five live original Film detail pages in Chrome: Morning Unwoken, Cursed Stage, Gorilla in the Studio, The Common Things and Rorschach's Mask. Compared the player position/size, synopsis side, credit alignment, still groups and backstage carousel with the archived source geometry.

@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { parseNotionMarkdown, adaptNotionBlocks, renderDocument, allImages, canonicalMediaUrl, mediaIdentity, safeUrl, landscapeRatio, portraitScale, withImageCaptions } from './gallery-document.mjs';
 import { renderPractice, renderChapters } from './gallery-practice.mjs';
 import { filmSections } from './gallery-film.mjs';
+import { sourceCarousels } from './gallery-carousels.mjs';
 import { withReadingLanguages } from './gallery-languages.mjs';
 import { renderMobiusMark } from './gallery-mobius.mjs';
 import { renderExhibitionRoom } from './gallery-architecture.mjs';
@@ -24,7 +25,15 @@ const projects=snapshot.pages.filter(p=>p.properties.Published==='__YES__'||p.pr
  const coverSource=p['Cover image']?.[0]||page.cover?.file?.url||p.Cover||page.cover?.external?.url;
  if(!safeUrl(coverSource,{media:true}))throw new Error('A published Gallery project needs a valid cover URL.');
  const cover=resolveMedia(coverSource),useSeed=coverSource===seed.coverSourceUrl;
- const nodes=page.blocks?adaptNotionBlocks(page.blocks):parseNotionMarkdown(page.markdown);
+ const authoredNodes=page.blocks?adaptNotionBlocks(page.blocks):parseNotionMarkdown(page.markdown);
+ const carouselDefinitions=layouts.sourceCarousels?.[p.Slug];
+ const originalSource=carouselDefinitions?JSON.parse(fs.readFileSync(path.join(root,'tools/gallery-source',p.Slug+'.json'),'utf8')):null;
+ const groups=carouselDefinitions?.map(def=>{
+  const section=originalSource.sections.find(s=>s.id===def.section);
+  if(!section)throw new Error('Unknown source carousel section: '+def.section);
+  return {label:def.label,originals:section.items.filter(i=>i.tag==='IMG').map(i=>resolveMedia(i.src).original)};
+ });
+ const nodes=sourceCarousels(authoredNodes,groups,resolveMedia);
  return {...seed,id:p.Slug,title:p.Project,category:p.Type,contentKind:p['Content kind'],relatedProject:p['Related project'],format:p.Format,summary:p.Summary,subtitle:p.Subtitle,date:p['Date label']||(p.Year?String(p.Year):''),credit:p.Credit,order:p.Order||0,featured:p.Featured==='__YES__'||p.Featured===true,sourceUrl:safeUrl(p.Link)||safeUrl(seed.sourceUrl)||'',coverSourceUrl:coverSource,cover:useSeed?seed.cover:cover.display,width:useSeed?seed.width:cover.displayWidth,height:useSeed?seed.height:cover.displayHeight,alt:useSeed?seed.alt:p.Project,nodes,referenceRatio:landscapeRatio(nodes,resolveMedia),page};
 }).sort((a,b)=>a.order-b.order||a.id.localeCompare(b.id));
 if(new Set(projects.map(p=>p.id)).size!==projects.length)throw new Error('Gallery requires published projects with unique slugs.');
@@ -62,7 +71,7 @@ function photographyEditorial(photos){
  while(companions.length<2&&remaining.length)companions.push(remaining.shift());
  return `<div class="photography-editorial${!remaining.length?' no-rail':''}"><div class="photography-main">${editorialCard(lead,'lead')}${companions.length?`<div class="photography-companions">${companions.map(p=>editorialCard(p,'spotlight')).join('')}</div>`:''}</div>${remaining.length?`<div class="photography-rail">${remaining.map(p=>editorialCard(p,'compact')).join('')}</div>`:''}</div>`;
 }
-const shell=(title,body,prefix='',layout='',film=false)=>`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="description" content="${esc(title)} — photography and film by Smart Chen."><title>${title==='The Gallery'?'The Gallery — Smart Chen':esc(title)+' | The Gallery — Smart Chen'}</title><link rel="stylesheet" href="${prefix}gallery.css?rev=20261015-chapters-film">${film?`<link rel="stylesheet" href="${prefix}film-layout.css?rev=20261015-source">`:''}${prefix===''?`<link rel="stylesheet" href="../gallery-entry.css?rev=20261014-smooth-arrival">`:''}${layout==='index'?`<link rel="stylesheet" href="${prefix}image-index.css?rev=20261014-numbered">`:''}<script type="module" src="${prefix}gallery.mjs?rev=20261015-film-carousel"></script></head><body>${header(prefix)}${body}${footer(prefix)}</body></html>`;
+const shell=(title,body,prefix='',layout='',film=false)=>`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="description" content="${esc(title)} — photography and film by Smart Chen."><title>${title==='The Gallery'?'The Gallery — Smart Chen':esc(title)+' | The Gallery — Smart Chen'}</title><link rel="stylesheet" href="${prefix}gallery.css?rev=20261015-source-carousels">${film?`<link rel="stylesheet" href="${prefix}film-layout.css?rev=20261015-source">`:''}${prefix===''?`<link rel="stylesheet" href="../gallery-entry.css?rev=20261014-smooth-arrival">`:''}${layout==='index'?`<link rel="stylesheet" href="${prefix}image-index.css?rev=20261014-numbered">`:''}<script type="module" src="${prefix}gallery.mjs?rev=20261015-film-carousel"></script></head><body>${header(prefix)}${body}${footer(prefix)}</body></html>`;
 const featured=projects.find(p=>p.featured)||projects[0], photos=projects.filter(p=>p.category==='Photography'&&p.id!==featured.id),films=projects.filter(p=>p.category==='Film'&&p.id!==featured?.id);
 const home=`<main class="gallery-main" id="main"><h1 class="sr-only">The Gallery</h1><div class="gallery-intro"><span>${projects.length+1} projects</span></div>
 ${featured?`<section class="feature" aria-labelledby="featured-title"><div class="feature-copy"><p class="eyebrow">${featured.category==='Film'?'Selected film':'Selected series'} · ${esc(featured.contentKind==='Concept photography'?featured.contentKind:featured.category)}</p><h2 id="featured-title"><a href="${featured.id}/">${esc(featured.title)}</a></h2>${featured.summary?`<p class="intro">${esc(featured.summary)}</p>`:''}<a class="text-link" href="${featured.id}/">${featured.category==='Film'?'View film':'View series'}</a></div><a class="media-link" href="${featured.id}/" aria-label="View ${esc(featured.title)}">${media(featured,'',true)}</a></section>`:''}

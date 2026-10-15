@@ -180,7 +180,7 @@ export function renderDocument(nodes, {title, resolveMedia=url=>({display:url,or
     let html='';
     for(let i=0;i<list.length;i++){
       const n=list[i],nested=n.type==='language-pair'?'':n.children?.length?render(n.children):'';
-      if(n.type==='paragraph'){if(omitIntro&&plain(n.text).trim()===omitIntro.trim()){omitIntro='';continue;} const caption=paragraphCaptions&&['image','columns'].includes(list[i-1]?.type)&&plain(n.text).length<140;html+=`<p class="${caption?'story-caption':'story-text'}"${/[\u3400-\u9fff]/.test(plain(n.text))?' lang="zh-Hans"':''}>${inline(n.text)}</p>${nested}`;}
+      if(n.type==='paragraph'){if(omitIntro&&plain(n.text).trim()===omitIntro.trim()){omitIntro='';continue;} const caption=paragraphCaptions&&(['image','columns'].includes(list[i-1]?.type)||list[i-1]?.presentation==='film-carousel')&&plain(n.text).length<140;html+=`<p class="${caption?'story-caption':'story-text'}"${/[\u3400-\u9fff]/.test(plain(n.text))?' lang="zh-Hans"':''}>${inline(n.text)}</p>${nested}`;}
       else if(n.type==='heading')html+=`<h${Math.min(4,n.level+1)} class="story-heading">${inline(n.text)}</h${Math.min(4,n.level+1)}>${nested}`;
       else if(n.type==='language-pair'){
         const id='article-reading-language';
@@ -206,7 +206,7 @@ export function renderDocument(nodes, {title, resolveMedia=url=>({display:url,or
       else if(n.type==='code')html+=`<pre class="story-code"><code>${escapeHtml(plain(n.text))}</code></pre>`;
       else if(n.type==='divider')html+='<hr class="story-rule">';
       else if(n.type==='group'){
-        if(n.presentation==='film-carousel')html+=`<div class="film-carousel"><div class="film-strip" tabindex="0" role="region" aria-label="Behind the scenes photographs">${nested}</div><nav class="film-strip-controls" aria-label="Photograph carousel" hidden><button type="button" data-strip-prev>Previous</button><button type="button" data-strip-next>Next</button></nav></div>`;
+        if(n.presentation==='film-carousel')html+=`<div class="film-carousel"><div class="film-strip" tabindex="0" role="region" aria-label="${escapeHtml(n.label||'Behind the scenes photographs')}">${nested}</div><nav class="film-strip-controls" aria-label="Photograph carousel" hidden><button type="button" data-strip-prev>Previous</button><button type="button" data-strip-next>Next</button></nav></div>`;
         else if(['film-copy','film-backstage'].includes(n.presentation))html+=`<div class="${n.presentation}">${nested}</div>`;
         else html+=nested;
       }

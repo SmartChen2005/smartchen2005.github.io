@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import { parseNotionMarkdown, adaptNotionBlocks, publicationNodes, allImages } from './gallery-document.mjs';
 import { renderChapters } from './gallery-practice.mjs';
 import { filmSections } from './gallery-film.mjs';
+import { sourceCarousels } from './gallery-carousels.mjs';
 
 const read=name=>fs.readFileSync(new URL(name,import.meta.url),'utf8');
 const snapshot=JSON.parse(read('gallery-notion/snapshot.json'));
@@ -26,6 +27,14 @@ for(const page of snapshot.pages.filter(p=>p.properties.Type==='Film')){
 }
 const darkroom=snapshot.pages.find(p=>p.properties.Slug==='intro-to-darkroom');
 const html=read('../dist/gallery/intro-to-darkroom/index.html');
+const darkroomStrips=[...html.matchAll(/<div class="film-carousel">([\s\S]*?)<nav class="film-strip-controls"/g)].map(m=>m[1]);
+assert.deepEqual(darkroomStrips.map(strip=>(strip.match(/class="story-image-open"/g)||[]).length),[4,2],'Original Lightroom and Enlarger groups remain four- and two-photo carousels');
+assert(html.includes('aria-label="Lightroom comparison photographs"')&&html.includes('aria-label="Enlarger contrast comparison photographs"'));
+const fixture=[{type:'columns',columns:[{children:[{type:'image',src:'a'},{type:'image',src:'b'}]},{children:[{type:'paragraph',text:'Original explanation'}]}]},{type:'columns',columns:[{children:[{type:'image',src:'c'}]},{children:[{type:'image',src:'d'}]}]}];
+const grouped=sourceCarousels(fixture,[{label:'Comparison',originals:['a','b']}],src=>({original:src}));
+assert.equal(grouped[0].columns[0].children[0].presentation,'film-carousel','Source carousel remains beside its explanation');
+assert.equal(grouped[1].type,'columns','Ordinary authored photo pairs are not converted to carousels');
+assert.deepEqual(allImages(grouped).map(i=>i.src),['a','b','c','d'],'Restoring carousel behavior preserves image order');
 const headings=publicationNodes(nodesOf(darkroom)).filter(n=>n.type==='heading'&&n.level===2);
 assert.equal((html.match(/href="#chapter-section-\d+"/g)||[]).length,headings.length);
 assert.equal((html.match(/href="#chapter-contents"/g)||[]).length,headings.length);

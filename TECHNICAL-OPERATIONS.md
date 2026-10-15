@@ -96,6 +96,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-15 — Preserve original Darkroom carousels
+
+- Restored Lightroom's four-photo comparison and Enlarger's two-photo comparison as carousels, matching their original Google Sites groups. Ordinary photo grids remain in their authored arrangements.
+- Reused the Film carousel's buttons, keyboard access, native scrolling and original-image viewer; shared its CSS with photography routes. The chapter directory and sixteen Darkroom photographs remain intact.
+
 ### 2026-10-15 — Add chapter navigation and correct Film compositions
 
 - Added a CMS-driven chapter directory and return links to Intro to Darkroom, sharing Deliberate Practice's behavior while retaining the original photograph sizing and order.

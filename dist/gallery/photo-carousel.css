@@ -1,0 +1,13 @@
+/* Shared source carousel: the legacy film-* hooks also serve photography. */
+.film-carousel { min-width: 0; max-width: 1080px; margin: 64px auto; }
+.story-columns > div { min-width: 0; }
+.story-columns .film-carousel, .film-backstage .film-carousel { margin: 0; }
+.film-strip { position: relative; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-inline: contain; gap: 24px; padding-bottom: 12px; }
+.film-strip:focus-visible { outline: 2px solid var(--photo-ink); outline-offset: 4px; }
+.story .film-strip > .story-image { flex: 0 0 100%; width: 100%; max-width: none; margin: 0; scroll-snap-align: start; }
+.film-strip-controls { display: flex; justify-content: flex-end; gap: 24px; margin-top: 8px; }
+.film-strip-controls[hidden] { display: none; }
+.film-strip-controls button { min-width: 44px; min-height: 44px; border: 0; padding: 8px 0; background: transparent; color: var(--photo-ink); font: 12px/1.5 var(--font); cursor: pointer; }
+.film-strip-controls button:disabled { opacity: .4; cursor: default; }
+.film-strip-controls button:focus-visible { outline: 2px solid var(--photo-ink); outline-offset: 4px; }
+@media (max-width: 700px) { .film-carousel { margin-block: 40px; } }

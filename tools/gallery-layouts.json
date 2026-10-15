@@ -3,6 +3,12 @@
     "lead": "rhythms-of-chaos",
     "companions": ["deliberate-practice", "analog-and-digital"]
   },
+  "sourceCarousels": {
+    "intro-to-darkroom": [
+      { "section": "h.390ad03ec58fd76_65", "label": "Lightroom comparison photographs" },
+      { "section": "h.7be52d76c56310e8_22", "label": "Enlarger contrast comparison photographs" }
+    ]
+  },
   "readingLanguages": {
     "analog-and-digital": {
       "original": { "code": "zh-Hans", "label": "中文" },
