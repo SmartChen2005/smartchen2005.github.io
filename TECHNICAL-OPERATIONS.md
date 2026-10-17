@@ -96,12 +96,6 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
-### 2026-10-17 — E85 × F55 homepage garage daydream
-
-- Replaced the 4.6-second abstract wheel with a 14-second one-shot car collage: ignition, MINI rally, burning Z4, tree parking, orbital flight and a still garage finale. Preserved the homepage sentence, existing identity controls, portrait, game and Gallery behavior.
-- Archived two transparent vehicle profiles from built-in ImageGen and four optimized owner-supplied photographs, including source names, prompt and SHA-256 manifests. All six runtime assets are local and lazy-loaded; unavailable media retains a procedural fallback.
-- Updated homepage timing/lifecycle and asset-integrity coverage. Browser QA exercises the real sequence, readable sentence pixels, keyboard/Escape, touch toggle, narrow/landscape layouts, reduced motion and unavailable/offline assets. Verification details are recorded in `tools/car-source/QA.md`; deployment status is reported after push.
-
 ### 2026-10-15 — Fix Gallery media sizing and sync Rhythms
 
 - Bound compact Photography images to their reserved frames without cropping; initialized Film embeds eagerly and retained their referrer policy and direct viewing links.

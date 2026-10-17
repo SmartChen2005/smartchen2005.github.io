@@ -1,330 +1,227 @@
 const TAU = Math.PI * 2;
 const clamp = value => Math.max(0, Math.min(1, value));
 const smooth = value => { const x = clamp(value); return x * x * (3 - 2 * x); };
-const mix = (a, b, p) => a + (b - a) * p;
-export const MOTOR_DURATION = 14;
-export const MOTOR_CUES = [
-  { start: 0, end: 1.7, phase: 'ignition' },
-  { start: 1.7, end: 4.1, phase: 'rally' },
-  { start: 4.1, end: 6.6, phase: 'thermal' },
-  { start: 6.6, end: 8.9, phase: 'arboreal' },
-  { start: 8.9, end: 11.8, phase: 'orbit' },
-  { start: 11.8, end: 14, phase: 'return' },
-];
-export const MOTOR_SHIFTS = [1.7, 2.5, 3.35, 5.25, 8.9, 10.25];
+export const MOTOR_DURATION = 4.6;
 
-// One clock owns every cut, instrument, particle and vehicle. No looping climax.
+// Seconds on a single, deterministic timeline. Hover does not loop the launch.
 export function motorsportFrame(seconds) {
-  const t = Number.isFinite(seconds) ? Math.max(0, seconds) : 0;
-  const idle = t >= MOTOR_DURATION;
-  const cue = MOTOR_CUES.find(cue => t < cue.end) || MOTOR_CUES.at(-1);
-  const shift = MOTOR_SHIFTS.filter(shift => t >= shift).length;
-  const since = t - (MOTOR_SHIFTS[shift - 1] ?? 0);
-  const rpm = idle ? 0 : t < 1.7 ? 950 + 4700 * smooth(t / 1.7)
-    : Math.min(7900, 3700 + since * 4300);
-  return { t, phase: idle ? 'idle' : cue.phase, cue, progress: clamp((t - cue.start) / (cue.end - cue.start)),
-    gear: idle ? 'N' : shift || 'N', rpm, idle, settling: smooth((t - 12.7) / 1.3) };
+  const t = Math.max(0, seconds);
+  const phase = t < .7 ? 'ignition' : t < 1.15 ? 'build' : t < 1.85 ? 'launch'
+    : t < 2.65 ? 'shift' : t < 3.45 ? 'redline' : t < 4.1 ? 'finish' : t < MOTOR_DURATION ? 'settle' : 'idle';
+  const gear = t < 1.15 ? 0 : t < 2.05 ? 1 : t < 2.65 ? 2 : t < 3.2 ? 3 : 4;
+  const drops = [2.05, 2.65, 3.2].reduce((sum, shift) => sum + (t >= shift ? 2500 * Math.exp(-(t - shift) * 8) : 0), 0);
+  const rpm = t < .7 ? 1200 + t * 2200 : t < MOTOR_DURATION
+    ? 2600 + 6600 * smooth((t - .7) / .7) - drops : 5600;
+  const settling = smooth((t - 4.1) / .5);
+  return { t, phase, gear, rpm, settling, idle: t >= MOTOR_DURATION,
+    rotationSpeed: t < 1.15 ? 1 + t * 4 : (16 + 24 * smooth((t - 1.15) / 1.8)) * (1 - settling) + 1.8 * settling };
 }
 
 export function createMotorsport(canvas) {
   const ctx = canvas.getContext('2d');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const styles = getComputedStyle(document.documentElement);
-  const palette = { paper: styles.getPropertyValue('--paper').trim() || '#f5f5f3',
-    black: styles.getPropertyValue('--mechanical').trim() || '#080808',
-    red: '#f04432', yellow: '#f5c841', blue: '#4266d5', violet: '#7854b9', green: '#b8d85b', gray: '#969892' };
+  const paper = styles.getPropertyValue('--paper').trim();
+  const black = styles.getPropertyValue('--mechanical').trim();
+  const red = '#f04432';
   let width = 0, height = 0, band = { top: 0, bottom: 0 };
-  let active = false, raf = 0, last = 0, time = 0, exitTimer = 0, input = .5;
-  let loaded = false;
-  const images = {};
-  function loadAssets() {
-    if (loaded || typeof Image === 'undefined') return;
-    loaded = true;
-    for (const name of ['z4', 'mini', 'z4-night', 'mini-tree', 'mini-city', 'garage']) {
-      const image = new Image(); image.decoding = 'async';
-      image.onload = image.onerror = () => { if (active && !document.hidden) paint(); };
-      image.src = `./assets/cars/${name}.webp`; images[name] = image;
-    }
-  }
-  const ready = image => image?.complete && image.naturalWidth > 0;
-  function line(x1, y1, x2, y2, color = palette.paper, weight = 1) {
+  let active = false, raf = 0, last = 0, time = 0, angle = 0, travel = 0, exitTimer = 0;
+  let input = .5;
+
+  function line(x1, y1, x2, y2, color = paper, weight = 1) {
     ctx.strokeStyle = color; ctx.lineWidth = weight;
     ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
   }
-  function circle(x, y, radius, color = palette.paper, fill = false, weight = 1) {
-    ctx.beginPath(); ctx.arc(x, y, Math.max(.1, radius), 0, TAU);
-    ctx.lineWidth = weight; ctx[fill ? 'fillStyle' : 'strokeStyle'] = color;
-    ctx[fill ? 'fill' : 'stroke']();
+  function arc(x, y, radius, start, end, color, weight = 1) {
+    ctx.strokeStyle = color; ctx.lineWidth = weight;
+    ctx.beginPath(); ctx.arc(x, y, Math.max(1, radius), start, end); ctx.stroke();
   }
-  function text(value, x, y, size, color = palette.paper, options = {}) {
-    ctx.save(); ctx.fillStyle = color; ctx.globalAlpha *= options.alpha ?? 1;
-    ctx.font = `${options.italic ? 'italic ' : ''}${options.mono ? '400' : '900'} ${Math.max(8, size)}px ${options.mono ? 'Consolas, monospace' : 'Arial, sans-serif'}`;
-    ctx.textAlign = options.align || 'left'; ctx.textBaseline = 'alphabetic';
-    ctx.fillText(value, x, y, options.maxWidth || width); ctx.restore();
+  function type(text, x, y, size, alpha = 1, italic = false) {
+    ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = paper;
+    ctx.font = `${italic ? 'italic ' : ''}700 ${Math.max(10, size)}px Arial, sans-serif`;
+    ctx.textBaseline = 'alphabetic'; ctx.fillText(text, x, y); ctx.restore();
   }
-  function polygon(points, color) {
-    ctx.fillStyle = color; ctx.beginPath();
-    points.forEach(([x, y], i) => ctx[i ? 'lineTo' : 'moveTo'](x, y)); ctx.closePath(); ctx.fill();
+
+  function wheel(frame) {
+    const burst = smooth((frame.t - 1.15) / .75) * (1 - frame.settling);
+    const radius = Math.min(width * (.32 + burst * .055), height * .58);
+    const cx = width * (.69 + burst * .035), cy = height * .5;
+    const intensity = frame.idle ? .28 : .85 - frame.settling * .55;
+    ctx.save(); ctx.globalAlpha = intensity;
+    arc(cx, cy, radius, 0, TAU, paper, 2);
+    arc(cx, cy, radius * .94, 0, TAU, paper);
+    arc(cx, cy, radius * .29, 0, TAU, paper);
+    arc(cx, cy, radius * .21, 0, TAU, paper, 2);
+    // Temporal spoke samples become a continuous mechanical blur as RPM rises.
+    const samples = frame.idle || reduced.matches ? 1 : 7;
+    for (let sample = 0; sample < samples; sample++) {
+      ctx.globalAlpha = intensity * (samples === 1 ? .6 : .16);
+      const rotation = angle - sample * frame.rotationSpeed * .006;
+      for (let spoke = 0; spoke < 12; spoke++) {
+        const a = spoke * TAU / 12 + rotation;
+        line(cx + Math.cos(a) * radius * .29, cy + Math.sin(a) * radius * .29,
+          cx + Math.cos(a + .13) * radius * .92, cy + Math.sin(a + .13) * radius * .92, paper, spoke % 3 ? 1 : 4);
+      }
+    }
+    ctx.globalAlpha = intensity;
+    // An oversized tachometer shares the wheel's geometry, then recedes at idle.
+    if (!frame.idle && frame.settling < 1) {
+      const start = Math.PI * .79, sweep = Math.PI * 1.43;
+      for (let tick = 0; tick <= 44; tick++) {
+        const a = start + sweep * tick / 44;
+        const r = radius * 1.09;
+        const length = tick % 4 ? 7 : 19;
+        line(cx + Math.cos(a) * r, cy + Math.sin(a) * r,
+          cx + Math.cos(a) * (r + length), cy + Math.sin(a) * (r + length), tick >= 36 ? red : paper, tick % 4 ? 1 : 2);
+      }
+      const sweepEnd = start + sweep * Math.min(frame.rpm / 10000, 1);
+      arc(cx, cy, radius * 1.05, start, sweepEnd, frame.rpm > 8500 ? red : paper, 5);
+      line(cx + Math.cos(sweepEnd) * radius * .98, cy + Math.sin(sweepEnd) * radius * .98,
+        cx + Math.cos(sweepEnd) * radius * 1.14, cy + Math.sin(sweepEnd) * radius * 1.14, red, 3);
+    }
+    ctx.restore();
   }
-  function panel() {
-    const pad = Math.max(18, Math.min(width * .045, 65)), top = Math.max(35, height * .07);
-    return { pad, top, bottom: Math.max(top + 1, band.top - 20), h: Math.max(1, band.top - 20 - top),
-      lower: band.bottom + Math.min(40, height * .045), lowerH: Math.max(1, height - band.bottom - 75), narrow: width < 700 };
+
+  function track(frame) {
+    const intensity = frame.idle ? .13 : .48 * smooth((frame.t - 1.15) / .5) * (1 - frame.settling * .7);
+    if (!intensity) return;
+    ctx.save(); ctx.globalAlpha = intensity;
+    const vanishing = width * .48;
+    const bottom = Math.max(1, height - band.bottom);
+    // Starting-grid boxes and dashed track marks accelerate out of the frame.
+    for (let stripe = 0; stripe < 12; stripe++) {
+      const z = ((stripe / 12 + travel * .17) % 1);
+      const perspective = z * z;
+      const y = band.bottom + bottom * perspective;
+      const half = width * (.035 + perspective * .39);
+      const depth = 4 + perspective * 20;
+      line(vanishing - half, y, vanishing - half - depth, y + depth, paper, 1 + perspective);
+      line(vanishing + half, y, vanishing + half + depth, y + depth, paper, 1 + perspective);
+      if (stripe % 2 === 0) {
+        line(vanishing - half, y, vanishing - half + half * .22, y, paper, 2);
+        line(vanishing + half, y, vanishing + half - half * .22, y, paper, 2);
+      }
+    }
+    // The racing line bends through the lower field, rather than reading as a HUD.
+    ctx.strokeStyle = paper; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(vanishing, band.bottom + 8);
+    ctx.bezierCurveTo(width * .16, height * .73, width * .74, height * .87, width * .2, height + 50);
+    ctx.stroke();
+    ctx.restore();
+    const rays = frame.idle ? 12 : 36;
+    for (let i = 0; i < rays; i++) {
+      const y = height * (i + .35) / rays;
+      const total = width + 700;
+      const x = ((i * 197 - travel * (330 + (i % 5) * 70)) % total + total) % total - 350;
+      const length = frame.idle ? 36 + i % 5 * 20 : 60 + frame.rpm / 28 + i % 4 * 30;
+      ctx.save(); ctx.globalAlpha = frame.idle ? .1 : .16 + (i % 4) * .05;
+      line(x, y, x + length, y - (frame.idle ? 0 : 6)); ctx.restore();
+    }
   }
-  function photo(name, x, y, w, h, angle = 0, alpha = 1) {
-    const image = images[name]; if (!ready(image)) return;
-    const ratio = image.naturalWidth / image.naturalHeight;
-    const dw = Math.min(w, h * ratio), dh = dw / ratio;
-    ctx.save(); ctx.globalAlpha *= alpha; ctx.translate(x, y); ctx.rotate(angle);
-    ctx.drawImage(image, -dw / 2, -dh / 2, dw, dh); ctx.restore();
-  }
-  function car(name, x, y, w, angle = 0, alpha = 1) {
-    const image = images[name];
-    ctx.save(); ctx.globalAlpha *= alpha; ctx.translate(x, y); ctx.rotate(angle);
-    if (ready(image)) {
-      const h = w * image.naturalHeight / image.naturalWidth;
-      ctx.drawImage(image, -w / 2, -h / 2, w, h);
+
+  function lettering(frame) {
+    if (frame.idle) return;
+    const alpha = 1 - frame.settling;
+    const left = width * .075, upper = Math.max(30, band.top * .7);
+    const size = Math.min(width * .15, band.top * .55);
+    if (frame.t < 1.15) {
+      // Five lamps load in one direction; lights-out is one clean event.
+      const unit = Math.min(width * .027, 24);
+      for (let i = 0; i < 5; i++) {
+        ctx.beginPath(); ctx.arc(left + i * unit * 2.9 + unit, height * .13, unit * .72, 0, TAU);
+        ctx.fillStyle = frame.t > i * .135 ? red : '#373b37'; ctx.fill();
+      }
+      type(String(Math.round(frame.rpm / 100) * 100).padStart(4, '0'), left, upper, size * .66, alpha);
+      type('RPM', left + 2, upper + 25, 11, .55 * alpha);
     } else {
-      // Intentional line drawing if media is unavailable, including offline entry.
-      const h = w * .25, hatch = name === 'mini';
-      ctx.strokeStyle = palette.paper; ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.moveTo(-w * .48, h * .3); ctx.lineTo(-w * .46, -h * .2);
-      ctx.lineTo(-w * .3, hatch ? -h * .72 : -h * .24); ctx.lineTo(w * .12, hatch ? -h * .72 : -h * .24);
-      ctx.lineTo(w * .26, -h * .22); ctx.lineTo(w * .46, -h * .08); ctx.lineTo(w * .49, h * .3); ctx.closePath(); ctx.stroke();
-      for (const wheel of [-.3,.31]) circle(w * wheel, h * .3, h * .26);
-      if (hatch) circle(0, 0, h * .23, palette.paper, true);
+      const shifts = [1.15, 2.05, 2.65, 3.2];
+      const sinceShift = frame.t - shifts[frame.gear - 1];
+      const kick = Math.exp(-Math.max(0, sinceShift) * 13) * size * .25;
+      type(String(frame.gear).padStart(2, '0'), left - kick * .2, upper + kick, size, alpha, true);
+      type('GEAR', left + 2, upper + 25, 11, .55 * alpha);
+    }
+    const words = { ignition: 'IGNITION', build: 'LIGHTS OUT', launch: 'LAUNCH', shift: 'SHIFT', redline: 'REDLINE', finish: 'FLAT OUT', settle: 'FLAT OUT' };
+    const launchTravel = frame.phase === 'launch' ? smooth((frame.t - 1.15) / .7) * width * .14 : 0;
+    type(words[frame.phase] || '', left + launchTravel, height * .9,
+      Math.min(width * .082, (height - band.bottom) * .3), alpha * .9, true);
+  }
+
+  function finish(frame) {
+    if (frame.t < 3.45 || frame.t > 4.15) return;
+    const progress = (frame.t - 3.45) / .7;
+    const size = Math.max(18, Math.min(width * .026, 40));
+    const x = -size * 7 + (width + size * 14) * progress;
+    ctx.save();
+    ctx.translate(x, 0); ctx.transform(1, 0, -.24, 1, 0, 0);
+    // A narrow chequered ribbon sweeps once through the whole composition.
+    for (let row = -1; row < height / size + 2; row++) {
+      const wave = Math.sin(row * .32 - progress * Math.PI * 2) * size * .35;
+      for (let col = 0; col < 6; col++) {
+        if ((row + col) % 2 === 0) { ctx.fillStyle = paper; ctx.fillRect(col * size + wave, row * size, size + .3, size + .3); }
+      }
     }
     ctx.restore();
   }
-  function checker(x, y, w, h, size, drift = 0, alpha = 1) {
-    ctx.save(); ctx.globalAlpha *= alpha; ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip(); ctx.fillStyle = palette.paper;
-    for (let row = -1; row < h / size + 1; row++) for (let col = -1; col < w / size + 1; col++) {
-      if ((row + col) % 2 === 0) ctx.fillRect(x + col * size + drift % size, y + row * size, size + .4, size + .4);
-    }
-    ctx.restore();
-  }
-  function headline(first, second, p, color = palette.paper) {
-    const size = Math.min(width * .097, p.lowerH * .39, 125);
-    const maxWidth = p.narrow ? width - p.pad * 2 : width * .66;
-    text(first, p.pad, p.lower + size, size, color, { italic: true, maxWidth });
-    text(second, p.pad, p.lower + size * 1.95, size, color, { italic: true, maxWidth });
-  }
-  function speedLines(f, p, color = palette.paper) {
-    ctx.save(); ctx.globalAlpha = .22;
-    for (let i = 0; i < 24; i++) {
-      const x = ((i * 197 - f.t * (190 + i % 5 * 80)) % (width + 500) + width + 500) % (width + 500) - 300;
-      const y = p.top + p.h * ((i * .173) % 1); line(x, y, x + 40 + i % 6 * 24, y, color);
-    }
-    ctx.restore();
-  }
-  function shifter(f, x, y, size) {
-    const col = size * .35, row = size * .25;
-    for (const v of [-1,0,1]) line(x + col * v, y - row, x + col * v, y + row, palette.gray);
-    line(x - col, y, x + col, y, palette.gray);
-    ['1','3','5','2','4','6'].forEach((gear, i) => text(gear, x + (i % 3 - 1) * col, y + (i < 3 ? -row - 7 : row + 18), 11, palette.gray, { mono: true, align: 'center' }));
-    const positions = [[0,0],[-1,-1],[-1,1],[0,-1],[0,1],[1,-1],[1,1]];
-    const position = positions[typeof f.gear === 'number' ? f.gear : 0];
-    circle(x + position[0] * col, y + position[1] * row, size * .09, palette.red, true);
-  }
-  function dotNumber(value, x, y, size, color = palette.paper) {
-    const digits = ['111101101101111','010110010010111','111001111100111','111001111001111','101101111001001',
-      '111100111001111','111100111101111','111001001001001','111101111101111','111101111001111'];
-    for (const [index, digit] of [...String(value)].entries()) {
-      const pattern = digits[Number(digit)];
-      if (!pattern) continue;
-      for (let i = 0; i < 15; i++) if (pattern[i] === '1') circle(x + index * size * 4 + i % 3 * size,
-        y + Math.floor(i / 3) * size, size * .28, color, true);
-    }
-  }
-  function tachometer(f, x, y, radius) {
-    const start = Math.PI * .78, sweep = Math.PI * 1.45;
-    for (let i = 0; i <= 40; i++) {
-      const a = start + sweep * i / 40, end = radius + (i % 5 ? 5 : 12);
-      line(x + Math.cos(a) * radius, y + Math.sin(a) * radius, x + Math.cos(a) * end, y + Math.sin(a) * end,
-        i >= 33 ? palette.red : palette.gray, i % 5 ? 1 : 2);
-    }
-    const needle = start + sweep * f.rpm / 8500;
-    line(x, y, x + Math.cos(needle) * radius * .85, y + Math.sin(needle) * radius * .85, palette.red, 2);
-    circle(x, y, 4, palette.paper, true);
-    text(String(Math.round(f.rpm / 100) * 100).padStart(4, '0'), x, y + radius * .65, radius * .28, palette.paper, { mono: true, align: 'center' });
-  }
-  function ignition(f, p) {
-    const r = Math.min(width * .105, p.h * .35);
-    tachometer(f, p.pad + r + 12, p.top + p.h * .52, r);
-    const w = Math.min(width * (p.narrow ? .88 : .55), p.h * 2.5);
-    const x = width * (p.narrow ? .5 : .61) + (1 - smooth(f.progress)) * width * .04;
-    if (!p.narrow) photo('z4-night', width * .83, p.top + p.h * .43, width * .2, p.h * .9, -.09, .5);
-    car('z4', x, p.top + p.h * .59, w, -.025);
-    text('E85 / STRAIGHT SIX', p.pad, p.bottom - 3, 11, palette.gray, { mono: true });
-    headline('KEY IN.', 'WORLD OUT.', p);
-    if (!p.narrow) shifter(f, width * .81, p.lower + p.lowerH * .48, Math.min(130, p.lowerH * .5));
-    for (let i = 0; i < 5; i++) circle(p.pad + 7 + i * 26, p.lower - 5, 5, f.progress > i * .17 ? palette.red : '#30322e', true);
-  }
-  function rally(f, p) {
-    speedLines(f, p);
-    const r = Math.min(p.h * .39, width * .15); circle(width * .74, p.top + p.h * .46, r, palette.yellow, true);
-    checker(p.pad, p.bottom - p.h * .16, width - p.pad * 2, p.h * .16, Math.max(9, p.h * .08), -f.t * 200);
-    const drift = Math.sin(f.progress * Math.PI * 2) * width * .045 + (input - .5) * width * .025;
-    const carWidth = Math.min(width * .66, p.h * 2.45);
-    car('mini', width * .5 + drift, p.top + p.h * .54 + Math.sin(f.t * 16) * 1.5, carWidth, -.04 + Math.sin(f.t * 3) * .02);
-    headline('SMALL CAR.', 'BIG STAGE.', p);
-    if (!p.narrow) {
-      shifter(f, width * .76, p.lower + p.lowerH * .53, Math.min(90, p.lowerH * .4));
-      dotNumber(f.gear, width * .746, p.lower + p.lowerH * .08, Math.min(9, p.lowerH * .033));
-      const x = width * .9, y = p.lower + p.lowerH * .38, s = Math.min(58, p.lowerH * .23);
-      // Piston Cup lightning: an original drawn wink, no film still or soundtrack.
-      polygon([[x-s*.3,y-s],[x+s*.65,y-s],[x+s*.1,y],[x+s*.45,y],[x-s*.6,y+s],[x-s*.12,y]], palette.yellow);
-      text('95', x, y + s * 1.65, s * .7, palette.paper, { italic: true, align: 'center' });
-      text('KA-CHOW.', x, y + s * 2.05, 10, palette.gray, { mono: true, align: 'center' });
-    }
-    text('F55 / COOPER S / SPECIAL STAGE', p.pad, p.top + 3, 10, palette.gray, { mono: true });
-  }
-  function flames(f, x, y, w, h) {
-    for (let i = 0; i < 32; i++) {
-      const seed = i * 2.399, xx = x - w / 2 + w * i / 31;
-      const pulse = .58 + .22 * Math.sin(f.t * 10 + seed) + .16 * Math.sin(f.t * 17 - seed);
-      const hh = h * pulse, sway = Math.sin(f.t * 8 + seed) * w * .022;
-      ctx.fillStyle = i % 3 ? palette.red : palette.yellow; ctx.beginPath(); ctx.moveTo(xx - w * .027, y);
-      ctx.bezierCurveTo(xx - w * .04, y - hh * .4, xx + sway, y - hh * .55, xx + sway * .7, y - hh);
-      ctx.bezierCurveTo(xx + w * .055, y - hh * .5, xx + w * .016, y - hh * .2, xx + w * .027, y); ctx.fill();
-    }
-  }
-  function thermal(f, p) {
-    const center = width * .54, cy = p.top + p.h * .57, r = Math.min(width * .23, p.h * .62);
-    ctx.save(); ctx.globalAlpha = .65;
-    for (let i = 0; i < 3; i++) {
-      ctx.save(); ctx.translate(center, cy); ctx.rotate(.25 + i * .32 + f.progress * .35);
-      ctx.strokeStyle = i === 1 ? palette.green : palette.violet; ctx.lineWidth = 2;
-      ctx.strokeRect(-r * (1 + i * .13), -r * .57, r * 2 * (1 + i * .13), r * 1.14); ctx.restore();
-    }
-    ctx.restore();
-    const w = Math.min(width * .65, p.h * 2.5);
-    flames(f, center - w * .15, cy + w * .08, w * .73, Math.min(p.h * 1.4, w * .8));
-    car('z4', center, cy, w, -.025 + Math.sin(f.t * 9) * .004);
-    text('PATTERN: PETROL', p.pad, p.top + 5, 11, palette.green, { mono: true });
-    text('AT FIELD / OFF', width - p.pad, p.bottom, 10, palette.violet, { mono: true, align: 'right' });
-    headline('SOUL', 'ON FIRE.', p, palette.red);
-    if (!p.narrow) {
-      text('NEON', width * .73, p.lower + p.lowerH * .32, Math.min(48, p.lowerH * .2), palette.violet);
-      text('GARAGE', width * .73, p.lower + p.lowerH * .54, Math.min(48, p.lowerH * .2), palette.green);
-      text('NOT A MALFUNCTION.', width * .73, p.lower + p.lowerH * .76, 10, palette.gray, { mono: true });
-    }
-  }
-  function branch(x, y, length, angle, depth) {
-    if (!depth) return;
-    const nx = x + Math.cos(angle) * length, ny = y + Math.sin(angle) * length;
-    line(x, y, nx, ny, depth > 2 ? palette.paper : palette.green, Math.max(1, depth * .9));
-    branch(nx, ny, length * .69, angle - .49, depth - 1); branch(nx, ny, length * .68, angle + .62, depth - 1);
-    if (depth < 3) circle(nx, ny, depth * 2, palette.green);
-  }
-  function arboreal(f, p) {
-    const tx = width * .6, ground = p.bottom - 5, length = Math.min(p.h * .39, width * .17);
-    branch(tx, ground, length * (.88 + .12 * smooth(f.progress * 3)), -Math.PI * .5, 6);
-    const w = Math.min(width * .47, p.h * 1.6);
-    car('mini', tx + length * .05, ground - length * 1.78 + Math.sin(f.t * 2) * 3, w, -.16);
-    if (!p.narrow) photo('mini-tree', width * .18, p.top + p.h * .48, width * .18, p.h * .83, -.075);
-    headline('WRONG TURN.', 'RIGHT TREE.', p, palette.green);
-    text('TRACTION: QUESTIONABLE', p.pad, p.top + 4, 10, palette.gray, { mono: true });
-    if (!p.narrow) {
-      line(width * .8, p.top + p.h * .22, width * .89, p.top + p.h * .14, palette.gray);
-      text('PARKING LEVEL +1', width - p.pad, p.top + p.h * .12, 10, palette.paper, { mono: true, align: 'right' });
-    }
-  }
-  function orbit(f, p) {
-    const cx = width * (p.narrow ? .5 : .55), cy = p.top + p.h * .5, r = Math.min(p.h * .27, width * .13);
-    // Bauhaus planets: the cars leave their gravity-bound photographic origins.
-    circle(cx, cy, r, palette.red, true); polygon([[cx-r,cy+r],[cx+r,cy-r],[cx+r,cy+r]], palette.yellow);
-    ctx.save(); ctx.strokeStyle = palette.gray; ctx.lineWidth = 1;
-    for (let i = 0; i < 3; i++) {
-      ctx.beginPath(); ctx.ellipse(cx, cy, r * (2.4 + i * .6), r * (.65 + i * .22), -.25 + i * .3, 0, TAU); ctx.stroke();
-    }
-    ctx.restore();
-    for (let i = 0; i < 54; i++) {
-      circle(((i * .754877) % 1) * width, p.top + ((i * .618) % 1) * p.h, i % 7 ? .8 : 1.6,
-        i % 9 ? palette.gray : palette.yellow, true);
-    }
-    const a = f.progress * Math.PI * 1.05 - .7, orbitX = Math.min(width * (p.narrow ? .23 : .29), r * 3.2), orbitY = p.h * .25;
-    const carWidth = Math.min(width * (p.narrow ? .34 : .39), p.h * 1.6);
-    car('z4', cx + Math.cos(a) * orbitX, cy - Math.sin(a) * orbitY, carWidth, -.32 - f.progress * .35);
-    car('mini', cx - Math.cos(a) * orbitX, cy + Math.sin(a) * orbitY, carWidth * .78, .3 + f.progress * .4);
-    text('GRAVITY (0)', p.pad, p.top + 4, 11, palette.paper, { mono: true });
-    headline('NO ROAD', 'REQUIRED.', p);
-    if (!p.narrow) {
-      const x = width * .82, y = p.lower + p.lowerH * .48;
-      circle(x, y, Math.min(78, p.lowerH * .29), palette.blue, true);
-      for (let i = 0; i < 7; i++) line(x - 80, y + i * 9 - 27, x + 80, y + i * 9 - 27, palette.black, 3);
-      text('FLY ME TO THE REDLINE.', width - p.pad, p.lower + p.lowerH * .9, 10, palette.gray, { mono: true, align: 'right' });
-    }
-  }
-  function garage(f, p) {
-    const arrival = f.idle ? 1 : smooth(f.progress * 2), spread = (1 - arrival) * width * .3;
-    const w = Math.min(width * (p.narrow ? .75 : .38), p.h * 1.7);
-    if (p.narrow) {
-      car('z4', width * .48 - spread, p.top + p.h * .35, w);
-      car('mini', width * .52 + spread, p.top + p.h * .78, w * .8);
-    } else {
-      photo('mini-city', width * .13, p.top + p.h * .5, width * .14, p.h * .9, -.07, .75);
-      photo('z4-night', width * .87, p.top + p.h * .5, width * .14, p.h * .9, .07, .75);
-      car('z4', width * .42 - spread, p.top + p.h * .37, w);
-      car('mini', width * .61 + spread, p.top + p.h * .77, w * .82);
-    }
-    headline('TWO CARS.', 'ONE DAYDREAM.', p);
-    if (!p.narrow) photo('garage', width * .83, p.lower + p.lowerH * .5, width * .19, p.lowerH * .87, -.04);
-    text('E85 × F55 / HOME AGAIN', p.pad, p.top + 2, 10, palette.gray, { mono: true });
-  }
-  function footer(f, p) {
-    const y = height - 22;
-    text('E85 × F55', p.pad, y, 10, palette.gray, { mono: true });
-    text(f.idle ? 'END / RE-ENTER TO REPLAY' : `${String(Math.floor(f.t)).padStart(2,'0')} / 14   ${f.phase.toUpperCase()}`,
-      width - p.pad, y, 10, palette.gray, { mono: true, align: 'right' });
-    line(p.pad, height - 8, width - p.pad, height - 8, '#282a27');
-    line(p.pad, height - 8, mix(p.pad, width - p.pad, clamp(f.t / MOTOR_DURATION)), height - 8, palette.red, 2);
-  }
+
   function paint(dt = 0) {
-    if (!ctx || !width || !height) return;
-    if (reduced.matches) time = MOTOR_DURATION; else time = Math.min(MOTOR_DURATION, time + dt);
-    const f = motorsportFrame(time), p = panel(); canvas.dataset.phase = f.phase;
-    ctx.clearRect(0, 0, width, height); ctx.fillStyle = palette.black; ctx.fillRect(0, 0, width, height);
-    ctx.save(); ctx.beginPath(); ctx.rect(0, 0, width, Math.max(0, band.top));
+    if (!ctx || !width) return;
+    if (reduced.matches) time = MOTOR_DURATION;
+    else time += dt;
+    const frame = motorsportFrame(time);
+    angle += dt * frame.rotationSpeed * (.85 + input * .3);
+    travel += dt * (frame.idle ? .32 : frame.rotationSpeed * .21);
+    canvas.dataset.phase = frame.phase;
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = black; ctx.fillRect(0, 0, width, height);
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 0, width, Math.max(0, band.top));
     ctx.rect(0, band.bottom, width, Math.max(0, height - band.bottom)); ctx.clip();
-    // Keep the homepage sentence and all its native hit targets completely clear.
-    const scenes = { ignition, rally, thermal, arboreal, orbit, return: garage, idle: garage }; scenes[f.phase](f, p);
-    if (!f.idle && f.t > .2 && f.progress < .065) {
-      // Brief local black shutters soften the cuts, without full-page flashes.
-      ctx.save(); ctx.globalAlpha = 1 - smooth(f.progress / .065); ctx.fillStyle = palette.black;
-      ctx.fillRect(0, 0, width, height); ctx.restore();
-    }
-    footer(f, p); ctx.restore();
+    // Vibration is confined to the machine, never the sentence or its hit targets.
+    if (!reduced.matches && frame.phase === 'redline') ctx.translate(Math.sin(time * 47) * 1.3, Math.sin(time * 61) * .7);
+    track(frame); wheel(frame); lettering(frame); finish(frame);
+    ctx.restore();
   }
   function tick(now) {
-    raf = 0; if (!active || document.hidden || reduced.matches || !ctx) return;
-    const dt = Math.min(Math.max(0, (now - last) / 1000), .05); last = now; paint(dt);
-    if (time < MOTOR_DURATION) raf = requestAnimationFrame(tick);
+    raf = 0;
+    if (!active || document.hidden || reduced.matches) return;
+    const dt = Math.min((now - last) / 1000, .05); last = now;
+    paint(dt); raf = requestAnimationFrame(tick);
   }
   function resume() {
-    cancelAnimationFrame(raf); raf = 0; if (!active || !ctx) return; paint();
-    if (!document.hidden && !reduced.matches && time < MOTOR_DURATION) { last = performance.now(); raf = requestAnimationFrame(tick); }
+    cancelAnimationFrame(raf); raf = 0;
+    if (!active) return;
+    paint();
+    if (!document.hidden && !reduced.matches) { last = performance.now(); raf = requestAnimationFrame(tick); }
   }
-  reduced.addEventListener('change', resume); document.addEventListener('visibilitychange', resume);
+  reduced.addEventListener('change', resume);
+  document.addEventListener('visibilitychange', resume);
   return {
     resize(w, h, measuredBand) {
-      if (![w,h,measuredBand?.top,measuredBand?.bottom].every(Number.isFinite) || w <= 0 || h <= 0) return;
-      width = w; height = h; band = { top: Math.max(0, measuredBand.top), bottom: Math.min(h, measuredBand.bottom) };
-      const ratio = Math.min(devicePixelRatio || 1, 2); canvas.width = Math.round(w * ratio); canvas.height = Math.round(h * ratio);
-      ctx?.setTransform(ratio, 0, 0, ratio, 0, 0); if (active) paint();
+      width = w; height = h; band = measuredBand;
+      const ratio = Math.min(devicePixelRatio || 1, 2);
+      canvas.width = Math.round(w * ratio); canvas.height = Math.round(h * ratio);
+      ctx?.setTransform(ratio, 0, 0, ratio, 0, 0);
+      if (active) paint();
     },
-    point(value) { if (Number.isFinite(value)) input = clamp(value); },
+    point(value) { input = clamp(value); },
     setActive(next, smoothExit = false) {
       clearTimeout(exitTimer); delete document.body.dataset.carExit;
-      if (next === active) { if (!next) canvas.classList.remove('is-exiting'); return; } active = next;
+      if (next === active) {
+        if (!next) canvas.classList.remove('is-exiting');
+        return;
+      }
+      active = next;
       if (next) {
-        time = 0; input = .5; loadAssets(); canvas.classList.remove('is-exiting'); canvas.classList.add('is-active'); resume();
+        time = 0; angle = 0; travel = 0;
+        canvas.classList.remove('is-exiting'); canvas.classList.add('is-active');
+        resume();
       } else {
         cancelAnimationFrame(raf); raf = 0;
         if (smoothExit && !reduced.matches) {
           document.body.dataset.carExit = 'true'; canvas.classList.add('is-exiting');
           exitTimer = setTimeout(() => { canvas.classList.remove('is-exiting'); delete document.body.dataset.carExit; }, 380);
-        } else canvas.classList.remove('is-exiting'); canvas.classList.remove('is-active');
+        } else canvas.classList.remove('is-exiting');
+        canvas.classList.remove('is-active');
       }
     },
   };

@@ -1,4 +1,4 @@
-import { createScenes } from './home-scenes.mjs?rev=20261017-daydream';
+import { createScenes } from './home-scenes.mjs';
 import { installGameTransition } from './home-game-transition.mjs';
 import { installPhotoTransition } from './home-photo-transition.mjs?rev=20261014-smooth-arrival';
 import { createBusinessCard } from './home-business-card.mjs';
