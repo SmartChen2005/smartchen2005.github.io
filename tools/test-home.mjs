@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import { createHash } from 'node:crypto';
 import { exhibitionLayout } from '../dist/home-exhibition.mjs';
-import { motorsportFrame, MOTOR_DURATION } from '../dist/home-motorsport.mjs';
+import { motorsportFrame, MOTOR_DURATION, MOTOR_CUES, MOTOR_SHIFTS } from '../dist/home-motorsport.mjs';
 
 // The wall must never crop, overlap or cross the sentence, even on short screens.
 for (const [width, height, sentenceHeight] of [[1920,1080,90],[1440,900,68],[1024,600,50],[701,450,35],[390,844,180],[320,568,200],[844,390,40]]) {
@@ -18,11 +19,23 @@ for (const [width, height, sentenceHeight] of [[1920,1080,90],[1440,900,68],[102
     assert(a.x + a.width <= b.x || b.x + b.width <= a.x || a.y + a.height <= b.y || b.y + b.height <= a.y);
   }
 }
-assert(MOTOR_DURATION >= 3 && MOTOR_DURATION <= 5);
-assert.deepEqual([0,.8,1.3,2.3,2.9,3.8,4.3,4.7].map(t => motorsportFrame(t).phase),
-  ['ignition','build','launch','shift','redline','finish','settle','idle']);
-assert(motorsportFrame(2.06).rpm < motorsportFrame(2.04).rpm, 'A gear change must unload RPM');
+assert(MOTOR_DURATION >= 10 && MOTOR_DURATION <= 15);
+assert.deepEqual([0,2,4.5,7,9.5,12.5,14].map(t => motorsportFrame(t).phase),
+  ['ignition','rally','thermal','arboreal','orbit','return','idle']);
+for (const shift of MOTOR_SHIFTS) assert(motorsportFrame(shift+.01).rpm < motorsportFrame(shift-.01).rpm, 'A manual gear change must unload RPM');
+for (const seconds of [-1,NaN,Infinity,0,1.7,6.6,13.999,14,100]) {
+  const frame = motorsportFrame(seconds);
+  assert(Number.isFinite(frame.rpm) && frame.rpm >= 0 && frame.rpm <= 8500);
+  assert(frame.progress >= 0 && frame.progress <= 1);
+}
+assert(MOTOR_CUES.every((cue,i) => cue.start === (MOTOR_CUES[i-1]?.end ?? 0)));
 assert(motorsportFrame(100).idle, 'The main sequence must not loop');
+const carAssets = JSON.parse(fs.readFileSync(new URL('./car-source/assets.json', import.meta.url)));
+assert.equal(carAssets.assets.length, 6);
+for (const asset of carAssets.assets) {
+  const bytes = fs.readFileSync(new URL(`../dist/assets/cars/${asset.file}`, import.meta.url));
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), asset.sha256, `${asset.file} must match the archived asset manifest`);
+}
 
 const callbacks = new Map(), mediaHandlers = [], pageHandlers = [], timers = new Map();
 let id = 0, now = 0, drawings = 0;
@@ -59,8 +72,9 @@ function step(count=1) {
   for(let i=0;i<count;i++) { now+=16; const pending=[...callbacks.values()];callbacks.clear();pending.forEach(fn=>fn(now));assert(callbacks.size<=1,'Duplicate animation loops'); }
 }
 scene.setWorld('games');step(240);scene.point(1,0);step(120);assert.equal(callbacks.size,1);
-scene.setWorld('cars');step(75);assert.equal(motorCanvas.dataset.phase,'launch');
-step(230);assert.equal(motorCanvas.dataset.phase,'idle');
+scene.setWorld('cars');step(130);assert.equal(motorCanvas.dataset.phase,'rally');
+step(760);assert.equal(motorCanvas.dataset.phase,'idle');
+assert.equal(callbacks.size,0,'The completed film must stop its animation loop');
 scene.setWorld('');assert.equal(callbacks.size,0);assert.equal(document.body.dataset.carExit,'true');
 for(const fn of timers.values())fn();timers.clear();assert.equal(document.body.dataset.carExit,undefined);
 scene.setWorld('cars');assert.equal(motorCanvas.dataset.phase,'ignition','Re-entry restarts the sequence');
@@ -83,4 +97,15 @@ pageHandlers.forEach(fn=>fn());mediaHandlers.forEach(fn=>fn());scene.setWorld('p
 assert.equal(callbacks.size,0,'Focus and visibility events must not restart the captured hover simulation');
 scene.releaseGame();scene.setWorld('games');assert.equal(callbacks.size,1);
 scene.setWorld('');assert.equal(callbacks.size,0);
-console.log('Passed: four uncropped non-overlapping prints; 4.6s motorsport phases, shifts, settle and restart; finite canvas geometry; single-loop lifecycle; reduced motion; background suspension.');
+for (const [width,height,sentenceHeight] of [[1440,900,68],[1024,600,50],[701,450,35],[390,844,180],[320,568,200],[844,390,40]]) {
+  sandbox.innerWidth=width;sandbox.innerHeight=height;
+  scene.resize({top:(height-sentenceHeight)/2-24,bottom:(height+sentenceHeight)/2+24});
+  scene.setWorld('cars');step(900);assert.equal(motorCanvas.dataset.phase,'idle');assert.equal(callbacks.size,0);
+  scene.setWorld('');
+}
+scene.setWorld('cars');step(65);const pausedPhase=motorCanvas.dataset.phase;
+document.hidden=true;pageHandlers.forEach(fn=>fn());assert.equal(callbacks.size,0);
+now+=100000;document.hidden=false;pageHandlers.forEach(fn=>fn());step(1);
+assert.equal(motorCanvas.dataset.phase,pausedPhase,'Returning to a hidden tab must not skip the story');
+scene.setWorld('');
+console.log('Passed: four uncropped non-overlapping prints; 14s car film phases, manual shifts, static end and restart; finite canvas geometry; single-loop lifecycle; reduced motion; background suspension.');

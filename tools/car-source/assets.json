@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-17",
+  "origin": "Owner-supplied car photographs; transparent side elevations made with built-in ImageGen using 111 and 120 as identity references.",
+  "assets": [
+    {
+      "file": "z4-night.webp",
+      "original": "Weixin Image_20261017144451_111_1.jpg",
+      "sourceSHA256": "a637be0d62beb19171a2644f9f1a31a7a82845fad511336761a7898035d38e3f",
+      "sha256": "a36b95bfdbda9f3e822cca6cc007eda2ef44ded80cbce883944ed52237d5adb1",
+      "bytes": 108414
+    },
+    {
+      "file": "mini-tree.webp",
+      "original": "Weixin Image_20261017144451_120_1.jpg",
+      "sourceSHA256": "c6c9c2487f283117ebcc4b10b8fa49353a403115050782a5e170088c2a1d3940",
+      "sha256": "a887f523a7c71404857374a4e4e1372477caf84e22d47fd898a68838656f4162",
+      "bytes": 238318
+    },
+    {
+      "file": "mini-city.webp",
+      "original": "Weixin Image_20261017144451_119_1.jpg",
+      "sourceSHA256": "4e10a8098fa96b65cdd21ac4bbf078b27c46cc707606493dcc842e76e281802a",
+      "sha256": "2f505fb93225e44a09cc956e7e8185d00d40d0a4a2a3c1740917382afc39790e",
+      "bytes": 97544
+    },
+    {
+      "file": "garage.webp",
+      "original": "Weixin Image_20261017144451_118_1.jpg",
+      "sourceSHA256": "f982f5ed21c5823ced0bb5c536419564a5dd8d43cd0ca6ef889381e6841dcda8",
+      "sha256": "834e2c982ac686ff0ab09107338afaa1690c182394ca9bdd178bc13849bfb67e",
+      "bytes": 72308
+    },
+    {
+      "file": "z4.webp",
+      "original": "vehicle-atlas.png",
+      "sourceSHA256": "b7ae90b1cfb457337ace7161dc43eb795953aa10215f00aef979a36fae85db05",
+      "sha256": "e7726c94d43e5319ad4dbc993fd7edded17da62851a71ae86f722e42418ab371",
+      "bytes": 110330
+    },
+    {
+      "file": "mini.webp",
+      "original": "vehicle-atlas.png",
+      "sourceSHA256": "b7ae90b1cfb457337ace7161dc43eb795953aa10215f00aef979a36fae85db05",
+      "sha256": "d0fbe1dc6b0b5d555a55d12d251d70d5f7337005be9a7c771b4698b6c2b3b980",
+      "bytes": 127984
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "findings": [
+    {
+      "category": "violation",
+      "file": "index.html",
+      "line": 30,
+      "message": "Enabled literal button has no detectable action or submit behavior.",
+      "remediation": "Connect the button to a real action, make it a submit button, or disable/remove it.",
+      "ruleId": "affordance.actionless-button",
+      "severity": "error"
+    },
+    {
+      "category": "violation",
+      "file": "index.html",
+      "line": 30,
+      "message": "Enabled literal button has no detectable action or submit behavior.",
+      "remediation": "Connect the button to a real action, make it a submit button, or disable/remove it.",
+      "ruleId": "affordance.actionless-button",
+      "severity": "error"
+    }
+  ],
+  "mode": "strict",
+  "projectRoot": "C:\\Users\\15811\\OneDrive\\Documents\\GitHub\\smartchen2005.github.io\\tools\\car-source\\.audit-ya_1ks8z",
+  "schemaVersion": 1,
+  "summary": {
+    "errors": 2,
+    "total": 2,
+    "unresolved": 0,
+    "violations": 2,
+    "warnings": 0
+  },
+  "scope": "Exact homepage source copies; .mjs renamed .js for static parsing. Inert imported HTML archives are excluded.",
+  "sources": {
+    "dist\\index.html": "9b92aab6355b7f415971fb178698a5c7a5924a5fb8d574aed75164599944c9a2",
+    "dist\\home.css": "5726aa95e687acf45659fc2b29deb269a1689a053a01a929e6351f7515623634",
+    "dist\\home-business-card.css": "6054b698225100fb548ecf12789ae1b9a26e5b35b20fa7e91738d5a7e46c7cc4",
+    "dist\\gallery-entry.css": "4fafc632546b132370631c0f9f1f95af402dbcb2c87ed679b57182c7787a85dd",
+    "dist\\home-business-card.mjs": "84962903941628b5e6cdf560e9eb4f858499f4910e94c00d4a4da34232abe902",
+    "dist\\home-card-orientation.mjs": "751abf995718c0c614307c45a121eebb698e6db4c304bc6cdd6faf8c369a78bf",
+    "dist\\home-card-perlage.mjs": "e047ed2aa3ef7ffa948fc877becc44a9a9e359a0de79f6c80fdf4c37bccc4d9e",
+    "dist\\home-exhibition.mjs": "b7e6fc4c9c34d1a6368781184c7fdf7048c3d8cd1df02047714d50ad4b1a84f2",
+    "dist\\home-gallery-architecture.mjs": "3028d358ee5135cd05989eded365a0a47b1aa673dce4d980d5ca2f8c380d79b9",
+    "dist\\home-game-transition.mjs": "6c731e146168d4b9dbea06b620c69f30e423db36db04a7140d90107cb935e1de",
+    "dist\\home-motorsport.mjs": "99d0edd73c51c3078b7a9820823dd6137a01a9bae039f94e819a9bf4b7990fb9",
+    "dist\\home-photo-transition.mjs": "b1f6e76801695e021c66e502eb0cabde51a271c6602ab5e69680b924d173e800",
+    "dist\\home-scenes.mjs": "090dbaa11789c02a7f9bb87f284287184caf3989f1bcf27fced9c319a05a0a3e",
+    "dist\\home.mjs": "ded24b41305030df5d11b42d247a31ddfa9350375d5aaa16d41c4be51fafe554"
+  }
+}
