@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-19 — Tighten VR opening and connect studies to scrolling
+
+- Reduced the VR cover to a compact two-line heading and smaller animated geometric mark, retaining its directory and bringing the first assignment into the opening viewport.
+- Paired authored procedural/environment paragraphs with sticky SVG diagrams. Native scrolling selects and reverses states, fills progress and moves the spatial marker along its path; manual, keyboard, reduced-motion and no-JavaScript access remain available.
+- Verified real wheel progression/reversal on desktop and phone, sticky placement, manual override, five viewport layouts, original PDF responses and actual playback of both videos. Source/render integrity, site validation and route strict audit pass; baseline ignored-archive audit findings remain documented in `tools/VR-QA.md`.
+
 ### 2026-10-19 — Add VR for Skill Learning collection
 
 - Added the fourth Projects entry and a single modernist editorial parent page for Wheel Removal Training and Garage Ready, with two YouTube demonstrations and the original public PDF design documents.

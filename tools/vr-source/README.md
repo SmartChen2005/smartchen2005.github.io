@@ -10,4 +10,6 @@ Imported 2026-10-19 from the user's two original PDFs and portfolio brief. PDFs 
 
 `node tools/render-vr.mjs` builds the complete semantic page and shared interaction data from `content.json`. The route owns `vr.css` and `vr.mjs` directly, following the existing static project-page convention. `node tools/test-vr.mjs` checks render parity, checksums, routes and video assignments. `tools/test-vr-browser.cjs` exercises the interactive and fallback paths using the existing bundled Playwright runtime; set `PLAYWRIGHT_MODULE`, `VR_PREVIEW_URL` and optionally `VR_QA_OUTPUT` for the environment.
 
+The user's 2026-10-19 follow-up replaces the oversized cover with a compact opening and requests natural-scroll-driven studies while preserving the graphic language and small directory. `vr.mjs` shares one controller between both studies; the left paragraphs remain readable with or without JavaScript and the right SVG stays beside them while scrolling. Manual controls remain available and reduced motion turns off automatic state changes. This later request supersedes the initial brief's click-only supporting diagram treatment.
+
 To extend the collection, add a new assignment record and its real assets; extend the renderer only if that assignment introduces another interaction type. Do not publish placeholder assignments or unsupported learning claims.

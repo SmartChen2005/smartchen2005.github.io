@@ -28,9 +28,13 @@ for (const [, ref] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
   if (ref.startsWith('#')) {
     assert(html.includes(`id="${ref.slice(1)}"`), `Missing anchor ${ref}`);
   } else {
-    assert(fs.existsSync(path.resolve(root, ref)), `Missing local file ${ref}`);
+    assert(fs.existsSync(path.resolve(root, ref.split('?')[0])), `Missing local file ${ref}`);
   }
 }
 assert(fs.readFileSync('dist/projects/index.html', 'utf8').includes('href="vr-for-skill-learning/"'));
-assert(html.includes('<noscript>'), 'All substantive interaction notes must remain available without JavaScript');
+for (const assignment of source.assignments) {
+  for (const item of assignment.steps || assignment.spaces) {
+    assert(html.includes(`<p>${item.description}</p>`), 'Every explanation must remain in readable HTML without JavaScript');
+  }
+}
 console.log('Passed: source/render parity, both original PDF checksums, video mappings/timestamps, local assets, section anchors, no-JS notes and Projects entrance.');
