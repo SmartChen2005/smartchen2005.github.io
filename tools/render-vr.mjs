@@ -12,7 +12,7 @@ function interaction(a) {
   const items = procedure ? a.steps : a.journey;
   const caption = procedure ? 'procedure-caption' : 'space-caption';
   return `<div class="study ${procedure ? 'procedure' : 'navigation-study'}" ${procedure ? 'data-procedure data-step="0"' : 'data-navigation data-space="garage"'}>
-    <div class="study-top"><h3>${procedure ? 'One action leads to the next.' : 'Two spaces. One preparation loop.'}</h3><span class="utility scroll-hint">Scroll slowly to explore / ${String(items.length).padStart(2,'0')} ${procedure ? 'actions' : 'stages'}</span></div>
+    <div class="study-top"><h3>${procedure ? 'One action leads to the next.' : 'Two spaces. One preparation loop.'}</h3></div>
     <div class="study-stage"><div class="study-visual"><div class="diagram-figure">${procedure ? wheel : map}<span class="utility diagram-label">${procedure ? 'Interaction study / Sequence, tools &amp; feedback' : 'Interaction study / Linked scenes &amp; persistent inventory'}</span></div><div class="study-progress" aria-hidden="true"><span></span></div><p class="study-caption" id="${caption}" aria-live="off">${e(items[0].title)}</p></div>
     <div class="story-stops" role="group" aria-label="${procedure ? 'Explore the wheel removal sequence' : 'Explore the preparation loop'}">${items.map((item,i)=>`<div class="story-stop" data-scroll-stop><button type="button" disabled ${procedure ? 'data-step-button' : 'data-journey-button'}="${i}" aria-pressed="${i===0}" aria-controls="${caption}"><span class="step-index">${String(i+1).padStart(2,'0')}</span><span>${e(item.title)}</span><span class="step-arrow" aria-hidden="true">&#8599;</span></button>${item.space ? `<span class="utility scene-name">${item.space === 'garage' ? 'Home Garage' : 'Auto Parts Store'}</span>` : ''}<p>${e(item.description)}</p></div>`).join('')}</div></div>
   </div>`;
@@ -20,7 +20,7 @@ function interaction(a) {
 
 function assignment(a) {
   return `<section class="assignment wrap" id="${a.id}" aria-labelledby="${a.id}-title">
-    <div class="assignment-heading"><span class="assignment-number" aria-hidden="true">${a.number}</span><div class="assignment-name"><p class="utility">${e(a.assignment)} / ${e(a.topic)}</p><h2 id="${a.id}-title">${e(a.title)}</h2></div></div>
+    <div class="assignment-heading"><span class="assignment-number" aria-hidden="true">${a.number}</span><div class="assignment-name"><p class="utility">${e(a.topic)}</p><h2 id="${a.id}-title">${e(a.title)}</h2></div></div>
     ${interaction(a)}
     <p class="description">${e(a.description)}</p>
     <div class="project-body"><div class="project-media"><figure class="video"><iframe width="960" height="540" src="https://www.youtube-nocookie.com/embed/${a.video}?start=${a.start}&amp;rel=0" title="${e(a.title)} — demonstration" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowfullscreen></iframe><figcaption><span class="utility">${a.number} / Project demonstration</span><a href="https://www.youtube.com/watch?v=${a.video}&amp;t=${a.start}s" target="_blank" rel="noopener noreferrer">Watch on YouTube <span aria-hidden="true">↗</span></a></figcaption></figure>
