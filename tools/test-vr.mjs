@@ -31,9 +31,15 @@ for (const [, ref] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
     assert(fs.existsSync(path.resolve(root, ref.split('?')[0])), `Missing local file ${ref}`);
   }
 }
+assert(!html.includes('hero-art'), 'Remove the purposeless hero decoration');
+for (const a of source.assignments) {
+  const section = html.split(`id="${a.id}"`)[1].split('</section>')[0];
+  assert(section.indexOf('class="study ') < section.indexOf('class="description"'), 'The interaction precedes explanatory copy');
+  assert(section.indexOf('class="study ') < section.indexOf('<iframe '), 'The interaction precedes the video');
+}
 assert(fs.readFileSync('dist/projects/index.html', 'utf8').includes('href="vr-for-skill-learning/"'));
 for (const assignment of source.assignments) {
-  for (const item of assignment.steps || assignment.spaces) {
+  for (const item of assignment.steps || assignment.journey) {
     assert(html.includes(`<p>${item.description}</p>`), 'Every explanation must remain in readable HTML without JavaScript');
   }
 }

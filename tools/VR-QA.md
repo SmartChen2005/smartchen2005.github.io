@@ -2,6 +2,16 @@
 
 Verified 2026-10-19. Publication results are reported in the completing chat.
 
+## Larger interaction-first revision — 2026-10-19
+
+- Removed the decorative hero SVG and its motion. Static integrity checks now require each interaction study to precede both the assignment description and video. The directory, videos and original PDF assets remain intact.
+- Drawing width grows from the earlier 330px maximum to about 866px at a 1440px viewport. At 390px it uses the full 350px reading width, with a sticky drawing above the chapters. Each desktop chapter is at least 280px tall (42svh, capped at 440px); phone chapters are at least 300px (48svh, capped at 460px). Native wheel input progresses/reverses all four procedure stages and all three preparation-loop stages at both desktop and phone widths.
+- Wheel choreography now includes jack placement, a socket wrench visiting the five nuts in star order, continuous vehicle/jack extension, and transfer to the receiving rack. A phone keyboard-End regression verifies the settled wheel has `--remove: 1` and `--wheel-x: 400px`. The final state exposes the hub while the removed wheel sits in the rack.
+- Garage Ready now follows the PDF-grounded preparation loop: identify missing supplies in the garage, collect them in the six-department store, and return to store purchases and retrieve reusable tools. The schematic depicts the task board, directory, workbench, storage, arrivals table and snap zones. The purchase crate arrives in storage; the reused tool appears at the bench. The complete return state has `data-space="garage"` and `--ready: 1`.
+- Motion follows scroll progress with a 160ms response, then stops when settled. A keyboard-focus regression found native smooth focus scrolling could cancel manual End selection; keyboard navigation now finishes an immediate native control scroll before storing the manual position. Rechecked selection after 1600ms and the complete storage state. Manual controls still yield to the next actual scroll.
+- The browser suite covers seven states, real wheel progression/reversal, larger drawing bounds, slower stage height, sticky placement, manual/keyboard operation, original PDF HTTP responses, five viewport widths without overflow, 16:9 videos, no-JavaScript prose, reduced motion and forced colors, with zero page exceptions. Actual playback was reconfirmed: A1 reached 19.09s and A2 13.64s, unpaused with readyState 4. Desktop and phone drawings, including final storage states, were inspected in the chat's `interaction-revision` screenshot directory.
+- Source/render/PDF integrity, `node tools/validate-site.mjs`, module syntax and route strict audit pass. The repository audit retains the same 16 unrelated findings in Git-ignored archived Gallery/test HTML; current raw evidence is `vr-interaction-project-audit.json` in the visualization directory. No configured DESIGN.md linter is available.
+
 ## Compact opening and scroll revision — 2026-10-19
 
 - The cover now uses two desktop title lines and a 200px geometric mark, with smaller spacing and the original two-link directory. At all five tested widths, the first assignment heading begins within 680px of the document top (660px on desktop). Both video/PDF mappings and project content are preserved; the video column is slightly narrower.

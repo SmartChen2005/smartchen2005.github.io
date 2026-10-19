@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-19 — Expand meaningful VR interaction studies
+
+- Removed the purposeless hero geometry; kept the compact title and assignment directory. Moved each interaction study before its project description and video.
+- Replaced the small symbols with large explanatory SVG drawings: continuous jack/wrench/star-pattern/lift/rack actions, and a three-stage garage/store/garage loop with purchases, storage and tool reuse. Increased stage reading distance and eased diagram response without changing native scrolling.
+- Verified desktop/phone wheel input, reverse progression, complete rack/storage states, long-lived keyboard selection, five responsive widths, reduced-motion/forced-color/no-JavaScript modes, original PDF responses and actual video playback. Source/render, site and route audit results are recorded in `tools/VR-QA.md`.
+
 ### 2026-10-19 — Tighten VR opening and connect studies to scrolling
 
 - Reduced the VR cover to a compact two-line heading and smaller animated geometric mark, retaining its directory and bringing the first assignment into the opening viewport.

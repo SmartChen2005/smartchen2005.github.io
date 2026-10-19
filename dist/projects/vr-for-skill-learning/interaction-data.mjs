@@ -18,16 +18,50 @@ export default {
       "description": "Fully remove the nuts, pull off the wheel, and secure it in the designated rack to complete training."
     }
   ],
-  "spaces": [
+  "journey": [
     {
-      "id": "garage",
-      "title": "Home Garage",
-      "description": "Store purchases, retrieve reusable tools, and prepare the workbench. New purchases count as ready after storage; reused tools must reach the bench."
+      "space": "garage",
+      "title": "Find what's missing",
+      "description": "Start at the Home Garage task board. Tire care, wiper care, and oil service preparation each call for different supplies and reusable tools."
     },
     {
-      "id": "store",
-      "title": "Auto Parts Store",
-      "description": "Navigate six departments, use the directory and overhead signs, and collect the missing supplies on the checklist. Return through a labeled exit door."
+      "space": "store",
+      "title": "Collect the supplies",
+      "description": "Travel to the Auto Parts Store. Use six signed departments, the directory, and the left-hand map and checklist to locate the missing supplies."
+    },
+    {
+      "space": "garage",
+      "title": "Store, retrieve, prepare",
+      "description": "Return to the Home Garage. Store new purchases, retrieve saved tools, and bring reusable tools to the workbench before confirming readiness."
     }
+  ],
+  "lugPoints": [
+    [
+      310,
+      231
+    ],
+    [
+      366.11233446141404,
+      271.7679973318781
+    ],
+    [
+      344.6793298852559,
+      337.7320026681219
+    ],
+    [
+      275.3206701147441,
+      337.7320026681219
+    ],
+    [
+      253.88766553858594,
+      271.76799733187806
+    ]
+  ],
+  "starOrder": [
+    0,
+    2,
+    4,
+    1,
+    3
   ]
 };

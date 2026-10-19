@@ -31,23 +31,25 @@ if (output) fs.mkdirSync(output, { recursive: true });
     await page.keyboard.press('ArrowRight');
     assert.equal(await page.locator('[data-step-button="1"]').evaluate(e => e === document.activeElement), true);
     assert.equal(await page.locator('[data-step-button="1"]').getAttribute('aria-pressed'), 'true');
-    for (const space of content.assignments[1].spaces) {
-      await page.locator(`[data-space-button="${space.id}"]`).click();
-      assert((await page.locator('#space-caption').textContent()).includes(space.title));
-      assert.equal(await page.locator('[data-navigation]').getAttribute('data-space'), space.id);
+    for (const [index, item] of content.assignments[1].journey.entries()) {
+      await page.locator(`[data-journey-button="${index}"]`).click();
+      assert((await page.locator('#space-caption').textContent()).includes(item.title));
+      assert.equal(await page.locator('[data-navigation]').getAttribute('data-space'), item.space);
     }
-    await page.locator('[data-space-button=store]').press('ArrowLeft');
-    assert.equal(await page.locator('[data-space-button=garage]').getAttribute('aria-pressed'), 'true');
+    await page.waitForTimeout(1600);
+    assert(await page.locator('[data-navigation]').evaluate(e => Number(e.style.getPropertyValue('--ready')) > .99), 'The return journey deposits purchases and readies a reusable tool');
+    await page.locator('[data-journey-button="2"]').press('Home');
+    assert.equal(await page.locator('[data-navigation]').getAttribute('data-journey'), '0');
 
     // Actual wheel input advances and reverses both stories without capturing scroll.
     const alignStop = async (locator) => {
       const delta = await locator.evaluate(e => {
         const rect = e.closest('[data-scroll-stop]').getBoundingClientRect();
-        return rect.top + rect.height / 2 - innerHeight * .55;
+        return rect.top + rect.height / 2 - innerHeight * (innerWidth <= 760 ? .75 : .55);
       });
       await page.mouse.move(30, 250);
       await page.mouse.wheel(0, delta);
-      await page.waitForTimeout(250);
+      await page.waitForTimeout(350);
     };
     for (const width of [1440, 390]) {
       await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
@@ -55,10 +57,15 @@ if (output) fs.mkdirSync(output, { recursive: true });
         await alignStop(page.locator(`[data-step-button="${index}"]`));
         assert.equal(await page.locator('[data-procedure]').getAttribute('data-step'), String(index), `Wheel progression/reversal at ${width}px`);
       }
-      for (const space of ['garage', 'store', 'garage']) {
-        await alignStop(page.locator(`[data-space-button="${space}"]`));
-        assert.equal(await page.locator('[data-navigation]').getAttribute('data-space'), space, `Spatial wheel progression/reversal at ${width}px`);
+      for (const index of [0, 1, 2, 1, 0]) {
+        await alignStop(page.locator(`[data-journey-button="${index}"]`));
+        assert.equal(await page.locator('[data-navigation]').getAttribute('data-journey'), String(index), `Preparation loop progression/reversal at ${width}px`);
+        assert.equal(await page.locator('[data-navigation]').getAttribute('data-space'), content.assignments[1].journey[index].space);
       }
+      const widthPx = await page.locator('.wheel-diagram').evaluate(e => e.getBoundingClientRect().width);
+      assert(widthPx > (width === 390 ? 300 : 800), 'The explanatory drawing has a substantial reading area');
+      const pace = await page.locator('.procedure .story-stop').first().evaluate(e => e.getBoundingClientRect().height);
+      assert(pace >= (width === 390 ? 300 : 280), 'Each action has a slower native-scroll reading distance');
     }
     // The illustration really stays visible between stops, without hiding text.
     await page.setViewportSize({ width: 1440, height: 1000 });
@@ -70,8 +77,9 @@ if (output) fs.mkdirSync(output, { recursive: true });
     assert(Math.abs(diagramTop - newTop) < 2, 'The diagram rests beside the scrolling procedure');
     await page.locator('[data-step-button="1"]').click();
     await page.locator('[data-step-button="1"]').press('End');
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(1600);
     assert.equal(await page.locator('[data-procedure]').getAttribute('data-step'), '3', 'Manual selection persists while idle');
+    assert(await page.locator('[data-procedure]').evaluate(e => Number(e.style.getPropertyValue('--remove')) > .99), 'The complete wheel removal reaches its storage state');
     assert.equal(await page.locator('#procedure-caption').getAttribute('aria-live'), 'polite');
     await alignStop(page.locator('[data-step-button="1"]'));
     assert.equal(await page.locator('#procedure-caption').getAttribute('aria-live'), 'off', 'Scroll changes do not flood assistive announcements');
@@ -85,7 +93,7 @@ if (output) fs.mkdirSync(output, { recursive: true });
     }
     for (const width of [1440, 1024, 760, 390, 320]) {
       await page.setViewportSize({ width, height: width < 760 ? 844 : 1000 });
-      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.evaluate(() => window.scrollTo({top:0,behavior:'instant'}));
       await page.waitForTimeout(150);
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), `No horizontal overflow at ${width}px`);
       const titleTop = await page.locator('#wheel-removal-training-title').evaluate(e => e.getBoundingClientRect().top);
@@ -94,17 +102,17 @@ if (output) fs.mkdirSync(output, { recursive: true });
       boxes.forEach(([w, h]) => assert(Math.abs(w / h - 16 / 9) < .02, 'Videos retain 16:9'));
       if (output && [1440,390,320].includes(width)) {
         await page.waitForTimeout(750);
-        await page.screenshot({ path: path.join(output, `vr-${width}.png`), fullPage: true });
+        await page.screenshot({ path: path.join(output, `vr-${width}.png`) });
       }
     }
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    assert.equal(await page.locator('.hero-art svg').evaluate(e => getComputedStyle(e).animationName), 'none');
+    assert.equal(await page.locator('.hero-art').count(), 0, 'The meaningless opening decoration is removed');
     await page.locator('[data-step-button="1"]').click();
     await alignStop(page.locator('[data-step-button="3"]'));
     assert.equal(await page.locator('[data-procedure]').getAttribute('data-step'), '1', 'Reduced motion keeps manual control');
-    assert.equal(await page.locator('.orange-quarter').evaluate(e => getComputedStyle(e).transform), 'none');
+    assert.equal(await page.locator('[data-procedure]').evaluate(e=>Number(e.style.getPropertyValue('--loosen'))), 1, 'Reduced motion renders the selected action immediately');
     await page.emulateMedia({ forcedColors: 'active' });
-    assert.equal(await page.locator('.hero-art').isVisible(), false);
+    assert.equal(await page.locator('[data-step-button="1"]').getAttribute('aria-pressed'), 'true');
     await page.emulateMedia({ forcedColors: 'none', reducedMotion: 'no-preference' });
     await page.goto(origin + '/projects/');
     await page.getByRole('link').filter({ hasText: 'VR for Skill Learning' }).click();
@@ -117,10 +125,10 @@ if (output) fs.mkdirSync(output, { recursive: true });
     assert.equal(await fallback.locator('iframe').count(), 2);
     assert.equal(await fallback.locator('.document-link').count(), 2);
     assert(await fallback.getByText(content.assignments[0].steps[3].description, { exact: true }).isVisible());
-    assert(await fallback.getByText(content.assignments[1].spaces[1].description, { exact: true }).isVisible());
+    assert(await fallback.getByText(content.assignments[1].journey[2].description, { exact: true }).isVisible());
     await nojs.close();
     assert.deepEqual(errors, []);
-    console.log('Passed: six states; real wheel progression and reversal at desktop/phone widths; sticky diagram; manual override and idle stability; quiet automatic announcements; compact opening; keyboard access; PDF responses; Projects round trip; five viewport widths; 16:9 media; reduced motion; forced colors; no-JS content; zero page exceptions.');
+    console.log('Passed: four procedure actions and three preparation stages; real wheel progression/reversal at desktop/phone widths; larger drawings and slower reading distance; sticky placement; manual override and idle stability; keyboard access; PDF responses; five viewport widths; reduced motion; forced colors; no-JS content; zero page exceptions.');
     // External playback is evidence rather than an unconditional test: network/account restrictions are reported honestly.
     await page.goto(origin + route, { waitUntil: 'domcontentloaded' });
     for (const a of content.assignments) {
