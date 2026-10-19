@@ -2,7 +2,7 @@
 
 ## VR for Skill Learning — modernist editorial collection (2026-10-19)
 
-Route: `/projects/vr-for-skill-learning/`, the fourth Projects entry. This is a single ongoing collection, currently containing Wheel Removal Training and Garage Ready. The user-supplied brief explicitly requests an independent Modernist/Bauhaus/Swiss direction with a universal learning identity. The first two projects' automotive context belongs to their content and small teaching diagrams, never to the parent identity. No car, garage room, heavy 3D or automotive branding in the hero.
+Route: `/projects/vr-for-skill-learning/`, the second Projects entry, immediately before World Sensing Music Station. This is a single ongoing collection, currently containing Wheel Removal Training and Garage Ready. The user-supplied brief explicitly requests an independent Modernist/Bauhaus/Swiss direction with a universal learning identity. The first two projects' automotive context belongs to their content and small teaching diagrams, never to the parent identity. No car, garage room, heavy 3D or automotive branding in the hero.
 
 Token owner (Model B): `dist/projects/vr-for-skill-learning/vr.css` defines paper `--paper: #f3f2ec`, ink `--ink: #242520`, cobalt `--blue: #2446d8`, orange `--orange: #e9692c`, secondary text `--muted: #62635c`, rules `--rule: #c9cac0`, quiet surfaces `--wash: #e9e9e1`, next-nut guidance `--suggested: #187344`. Local OFL Archivo variable supplies tight, large grotesk display type and legible body copy; SFMono-Regular / Consolas / Liberation Mono supplies small utility labels. All route components consume these canonical variables. Global visible scrollbar thumb, track, hover and active tokens are scoped to this document; forced colors retain system behavior.
 
