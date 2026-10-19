@@ -1,0 +1,60 @@
+1
+VR Wheel Removal Training
+CS 485 Assignment 1
+Demo video: https://youtu.be/oPTZlXH334Q
+Design and Learning Goals
+This is a virtual reality procedural training experience designed to teach users the process of
+removing a wheel from a car. The experience focuses on learning the correct sequence of actions
+through direct physical interaction with the vehicle and tools.
+Main Steps
+1. Position the jack correctly, keeping its base grounded.
+2. Slightly loosen all five lug nuts while the wheel is on the ground.
+3. Pump the jack to raise the vehicle.
+4. Fully remove the nuts, pull off the wheel, and place it in the rack.
+Audience and Prerequisites
+Novices and automotive students. No maintenance experience is required, only basic familiarity with
+VR controls.
+Learning Outcomes
+By the end of the experience, the user should understand both how to perform each individual action
+and why the actions must be completed in the correct order. The goal is not to simulate every detail of
+changing a tire, but to teach a short and clearly structured real-world procedure.
+Interaction Design
+The interactions are designed to mirror the physical actions involved in wheel removal. The
+experience includes:
+ Grab and Move: Picking up tools and handling the removed wheel.
+ Place: Positioning the jack beneath the car and placing the wheel in the designated rack.
+ Snap: Aligning the jack with its placement target and securing the wheel in the rack.
+ Tool Use: Aligning the impact wrench with each lug nut and pressing the trigger to loosen or
+remove it.
+ Mechanical Interaction: Pumping the jack handle to raise the vehicle.
+
+
+2
+Interaction Design continued
+Alongside the wall-mounted instructions, environmental highlights guide users through the procedure.
+A highlighted floor area shows where to position the jack. During nut loosening and removal, the next
+suggested nut glows green, while the remaining nuts glow blue. The green highlight follows a star
+pattern, helping users identify their next action without numbered labels.
+Snapping reduces the precision required for placement, allowing users to focus on the procedure.
+The wrench still requires socket alignment, reinforcing correct tool positioning.
+Instructional Design
+The four-step workflow provides clear structure, while the garage, car, and recognizable tools place
+learning in a realistic context. Users learn by positioning tools, pumping the jack, and removing the
+wheel. Simplified mechanics and automatic stand deployment keep attention on the procedure.
+Instructions combine board text, object highlights, visible mechanical movement, and brief sound
+cues. These show users what to do and how their actions affect the task.
+ Correct action: A confirmation message, tone, and visible change acknowledge progress.
+ Incorrect action: An error tone and corrective message explain what to do next. Existing progress
+is preserved.
+ Step completion: The board marks the step green with “DONE,” and the progress bar advances.
+ Next step: Instructions and highlights shift to the next required action.
+Training completes when the removed wheel is secured in the rack. Users can reset the session to
+practice again.
+Learning-Related Error Handling
+Step gates prevent lifting before loosening, removing nuts before support, and pulling the wheel
+before all nuts are removed.
+Incorrect actions produce specific guidance, such as “Loosen the lug nuts before raising the vehicle.”
+Current instructions remain visible, and valid progress is preserved.
+After 18 seconds without progress, required highlights become brighter and pulse faster. Dropped
+tools can return to their starting positions. Reset restores the training while preserving player position
+and tracking.

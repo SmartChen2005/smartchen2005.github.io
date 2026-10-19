@@ -1,0 +1,19 @@
+{
+  "imported": "2026-10-19",
+  "documents": [
+    {
+      "file": "A1_VR_Wheel_Removal_Training.pdf",
+      "source": "User-supplied PDF in Downloads",
+      "pages": 2,
+      "bytes": 77441,
+      "sha256": "eebcadc5a6dd80b5a29f4109b7a8c6b468493d59acc36df90039886153d0e94d"
+    },
+    {
+      "file": "A2_Design_Document.pdf",
+      "source": "User-supplied PDF in Downloads",
+      "pages": 1,
+      "bytes": 75419,
+      "sha256": "03f36ceb655e29573d9656b682c84f4b6d75a2b2d45cf6d9bb07ee880f01e614"
+    }
+  ]
+}

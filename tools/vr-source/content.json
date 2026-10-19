@@ -1,0 +1,51 @@
+{
+  "title": "VR for Skill Learning",
+  "subtitle": "Exploring how virtual reality can support practical skill learning through physical interaction, procedural guidance, and spatial exploration.",
+  "year": "2026 — Ongoing",
+  "assignments": [
+    {
+      "id": "wheel-removal-training",
+      "number": "01",
+      "assignment": "Assignment 1",
+      "topic": "Procedural Task Training",
+      "title": "Wheel Removal Training",
+      "description": "A VR procedural training experience that teaches the sequence of removing a vehicle wheel through direct interaction with tools, guided actions, and immediate feedback.",
+      "video": "oPTZlXH334Q",
+      "start": 17,
+      "pdf": "A1_VR_Wheel_Removal_Training.pdf",
+      "pages": 2,
+      "focus": "Learning a sequence",
+      "note": "Wall-mounted instructions and object highlights guide each action. Step gates keep the procedure in order; corrective messages explain what to do next while preserving valid progress.",
+      "detailTitle": "Guidance through interaction",
+      "detail": "Snap targets reduce placement precision, while the wrench still requires socket alignment. The next suggested lug nut glows green in a star pattern; the remaining nuts glow blue. After 18 seconds without progress, required highlights become brighter and pulse faster.",
+      "steps": [
+        {"title": "Position the jack", "description": "Align the jack with its highlighted target beneath the car, keeping the base grounded."},
+        {"title": "Loosen the five lug nuts", "description": "Slightly loosen every nut while the wheel is on the ground. The green highlight suggests the next nut in a star pattern."},
+        {"title": "Raise the vehicle", "description": "Pump the jack handle to lift the vehicle. This step unlocks after all five nuts have been loosened."},
+        {"title": "Remove and store the wheel", "description": "Fully remove the nuts, pull off the wheel, and secure it in the designated rack to complete training."}
+      ]
+    },
+    {
+      "id": "garage-ready",
+      "number": "02",
+      "assignment": "Assignment 2",
+      "topic": "Spatial Navigation, Teleportation and Scene Switching",
+      "title": "Garage Ready",
+      "description": "A VR learning experience where users navigate between a home garage and an auto parts store, locate supplies, organize equipment, and reuse tools across multiple preparation tasks.",
+      "video": "BIA2i71Cy2g",
+      "start": 11,
+      "pdf": "A2_Design_Document.pdf",
+      "pages": 1,
+      "focus": "Learning across spaces",
+      "note": "Three tasks cover tire care, wiper care, and oil service preparation. Inventory and storage locations persist between scenes during the session, so earlier purchases can become tools for later tasks.",
+      "detailTitle": "Movement and wayfinding",
+      "detail": "Teleportation, continuous movement, and 45-degree snap turning are available together. Overhead signs, a store directory, north-up maps, and a left-hand checklist support wayfinding. Labeled exit doors switch scenes with a fade and a short arrival sound. Headset comfort still needs evaluation.",
+      "spaces": [
+        {"id": "garage", "title": "Home Garage", "description": "Store purchases, retrieve reusable tools, and prepare the workbench. New purchases count as ready after storage; reused tools must reach the bench."},
+        {"id": "store", "title": "Auto Parts Store", "description": "Navigate six departments, use the directory and overhead signs, and collect the missing supplies on the checklist. Return through a labeled exit door."}
+      ]
+    }
+  ],
+  "closing": "A sequence to follow. A space to remember. Tools to put into practice.",
+  "reflection": "These projects explore different parts of skill learning: procedural guidance, spatial familiarity, and hands-on preparation. The collection will grow as new assignments explore other skills and interaction systems. Learning benefits remain design goals, rather than measured outcomes."
+}

@@ -35,6 +35,7 @@ jobs:
           node tools/test-music-station.mjs
           node tools/test-music-firmware.mjs
           node tools/test-masb.mjs
+          node tools/test-vr.mjs
           node tools/test-construction-space.mjs
 
   deploy:

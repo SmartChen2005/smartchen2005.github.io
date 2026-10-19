@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-19 — Add VR for Skill Learning collection
+
+- Added the fourth Projects entry and a single modernist editorial parent page for Wheel Removal Training and Garage Ready, with two YouTube demonstrations and the original public PDF design documents.
+- Archived the supplied brief, extracted source text and document checksums; concise modular assignment data and a deterministic renderer own the new route. Added small keyboard-operable procedure and spatial navigation diagrams, no-JavaScript notes, responsive media and motion/contrast fallbacks.
+- Run `node tools/render-vr.mjs`, `node tools/test-vr.mjs` and `node tools/validate-site.mjs` for this route. The new source/asset integrity check also runs in Pages CI. Browser coverage and external playback limits are recorded in `tools/VR-QA.md`; commit/push/publication results are reported by the completing chat.
+
 ### 2026-10-15 — Fix Gallery media sizing and sync Rhythms
 
 - Bound compact Photography images to their reserved frames without cropping; initialized Film embeds eagerly and retained their referrer policy and direct viewing links.

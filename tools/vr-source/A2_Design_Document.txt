@@ -1,0 +1,36 @@
+1
+Garage Ready VR Design Document
+CS 485 Assignment 2
+October 18, 2026
+Demo video: https://youtu.be/BIA2i71Cy2g
+Garage Ready VR teaches equipment preparation across a Home Garage and an Auto Parts Store.
+Three tasks cover tire care, wiper care, and oil service preparation. The car provides context; the
+activity focuses on supplies and tool reuse.
+Spatial Design
+The two scenes separate shopping from workspace preparation. The garage has a clear central
+route, perimeter storage, a task board, an arrivals table, and a workbench. The larger store organizes
+six departments around open aisles and overhead signs. Learners select labeled exit doors to switch
+scenes. Distinct garage and store door designs make these connections recognizable. Inventory and
+storage locations persist between scenes during the session, allowing earlier purchases to be
+retrieved later.
+Locomotion
+The default setup enables teleportation, continuous movement, and snap turning together. I
+recommend teleportation for longer trips to limit sustained visual motion. Right-stick forward and
+release targets floor Teleportation Areas or the fixed workbench Teleportation Anchor. The left stick
+supports walking and strafing; right-stick sideways turns 45 degrees. Collision boundaries, a soft
+black movement vignette, and scene-transition fades support comfort. Clear arrival positions help
+users reorient. Headset comfort still needs evaluation.
+Wayfinding
+Overhead signs, a store directory, and north-up maps show departments, exits, and the learner's
+position. Selecting a directory category highlights its department. The portable map and checklist stay
+on the left hand, leaving the right hand clear for carrying. Checklist labels identify what to buy, store,
+or bring to the bench. At arrival, the fade clears near entrance guidance and a short sound confirms
+the transition. Labeled doors and raised task buttons make the next actions visible.
+Learning
+Learners travel to find missing supplies, organize purchases, and retrieve saved tools for later tasks.
+Repeated visits are intended to connect equipment categories with remembered locations.
+Recognizable objects, shelves, and a workbench place these decisions in a practical setting. Holding
+objects and releasing them into matching snap zones connects instructions with physical actions.
+New purchases count as ready after storage; reused tools must reach the workbench. Confirmation
+checks readiness before advancing. Learning benefits remain design goals rather than measured
+outcomes.
