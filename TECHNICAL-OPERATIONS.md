@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-19 — Unify Projects navigation
+
+- The directory and all four project landing pages share right-aligned VegShark.com, Projects and The Gallery links, reusing the Gallery's original Möbius wordmark asset.
+- `tools/project-header.mjs` and `dist/project-header.css` own the shared component. After navigation changes run `node tools/render-project-headers.mjs`, `node tools/render-vr.mjs` and `node tools/render-masb.mjs`; keep all generated landing pages synchronized.
+- Site validation checks the published link order and destinations across the directory's project routes. Browser and publication results are reported by the completing chat.
+
 ### 2026-10-19 — Expand meaningful VR interaction studies
 
 - Removed the purposeless hero geometry; kept the compact title and assignment directory. Moved each interaction study before its project description and video.

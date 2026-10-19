@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { projectHeader, projectHeaderStylesheet } from './project-header.mjs';
 import path from 'node:path';
 
 // The archive owns the original project copy; user-supplied metadata is added to the hero.
@@ -50,15 +51,13 @@ const html=`<!doctype html>
   <meta name="description" content="Multiverse All-Star Battlefront: an AI-driven battle simulation. Create a pixel-art fighter from your words and follow the battle in a generated comic.">
   <title>Multiverse All-Star Battlefront | Smart Chen</title>
   <link rel="stylesheet" href="battlefront.css">
+  ${projectHeaderStylesheet('../../')}
   <script type="module" src="battlefront.mjs"></script>
 </head>
 <body>
   <a class="skip-link" href="#overview">Skip to content</a>
   <div class="poster" id="top">
-    <header class="masthead wrap">
-      <a class="brand" href="../../">Smart Chen</a>
-      <nav aria-label="Primary navigation"><a href="../">Projects <span aria-hidden="true">↗</span></a><a href="../../">Home</a></nav>
-    </header>
+    ${projectHeader({ theme: 'light' })}
     <div class="hero wrap">
       <p class="project-type">A generative AI battle simulation</p>
       <h1><span>Multiverse</span><span>All-Star</span><span>Battlefront</span></h1>

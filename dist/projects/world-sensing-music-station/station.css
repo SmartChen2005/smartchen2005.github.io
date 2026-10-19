@@ -16,8 +16,6 @@ a:focus-visible { outline-color:var(--station-cyan); }
 button,a,input { -webkit-tap-highlight-color:transparent; }
 .skip-link { position:absolute; top:-100px; left:25px; z-index:30; padding:14px; background:var(--black); }
 .skip-link:focus { top:16px; }
-.station-header { position:absolute; z-index:10; inset:0 5vw auto; display:flex; justify-content:space-between; align-items:center; padding:28px 0; }
-.station-header .site-brand { color:var(--white); }
 .technical,.micro,figcaption,.scene-controls,.scene-caption,.station-footer { font-family:var(--station-mono); font-size:10px; line-height:1.7; letter-spacing:.04em; }
 .technical { color:var(--station-muted); text-transform:uppercase; margin:0 0 19px; }
 .micro { color:var(--station-muted); }
@@ -163,9 +161,6 @@ figcaption a { text-decoration:none; min-height:44px; display:inline-flex; align
 @media (min-width:701px) and (max-width:1100px) { .chapter-copy { width:39vw; } h2 { font-size:35px; } .mode-controls { gap:8px; } .mode-controls button { font-size:9px; } .spatial-world { left:42vw; width:58vw; } .world-tools,.world-readout { font-size:8px; } }
 @media (max-width:700px) {
   html { scroll-padding-top:38svh; }
-  .station-header { inset-inline:6vw; padding:22px 0; }
-  .station-header .site-brand { font-size:15px; }
-  .site-nav { gap:18px; font-size:10px; }
   h2 { font-size:clamp(31px,8vw,48px); }
   .chapter { min-height:100svh; padding:42svh 7vw 40px; align-items:flex-start; }
   .chapter-copy { width:100%; max-width:520px; }

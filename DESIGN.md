@@ -1,5 +1,11 @@
 # Polaroid of Yesterday — Design Context
 
+## Shared Projects header (2026-10-19)
+
+The Projects directory and all four project landing pages share one right-aligned navigation: **VegShark.com / Projects / The Gallery**. VegShark.com returns to the portfolio homepage; Projects returns to the project directory. Remove the former left Smart Chen brand and inconsistent Home/Projects order. Keep the exact mixed-case VegShark.com spelling. The Gallery uses its existing uppercase wordmark and the same decorative `gallery/assets/mobius-outline.svg`, with no new logo geometry or animation.
+
+`tools/project-header.mjs` owns the static markup; `dist/project-header.css` owns spacing, 13px Helvetica navigation, 48px link targets, responsive gutters and focus treatment. Light pages map to their existing ink/focus variables, dark pages to their existing white/yellow variables. VR and Battlefront render the shared fragment directly; `tools/render-project-headers.mjs` synchronizes the directory, Music Station and Polaroid landing pages. Headers remain in normal flow except the existing Music Station overlay and Polaroid's desktop room composition; the phone room header flows above its title. Internal document contents and exhibition view controls retain their contextual navigation.
+
 ## VR for Skill Learning — modernist editorial collection (2026-10-19)
 
 Route: `/projects/vr-for-skill-learning/`, the second Projects entry, immediately before World Sensing Music Station. This is a single ongoing collection, currently containing Wheel Removal Training and Garage Ready. The user-supplied brief explicitly requests an independent Modernist/Bauhaus/Swiss direction with a universal learning identity. The first two projects' automotive context belongs to their content and small teaching diagrams, never to the parent identity. No car, garage room, heavy 3D or automotive branding in the hero.

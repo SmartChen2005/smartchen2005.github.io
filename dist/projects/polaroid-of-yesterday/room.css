@@ -37,10 +37,6 @@ a { color: inherit; }
 a:focus-visible, button:focus-visible { outline: 3px solid var(--project-yellow); outline-offset: 5px; }
 .room { position: relative; width: min(100vw, calc(100svh * 16 / 9)); width: min(100vw, calc(100dvh * 16 / 9)); aspect-ratio: 16 / 9; flex: none; container-type: inline-size; isolation: isolate; overflow: clip; }
 .room-photograph { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; }
-.room-breadcrumb { position: absolute; left: 4.3%; top: 4.2%; display: flex; align-items: baseline; gap: .65cqw; font-size: .88cqw; line-height: 1.4; color: var(--wall-ink); text-shadow: 0 1px 3px #000; }
-.room-breadcrumb a { text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: .12cqw; }
-.room-breadcrumb a:hover { color: var(--project-yellow); }
-.room-breadcrumb a:active { opacity: .7; }
 .wall-title { position: absolute; left: 8.3%; top: 8.5%; margin: 0; color: var(--project-yellow); font: 400 4.7cqw/1.2 var(--title-script); letter-spacing: .005em; white-space: nowrap; text-shadow: .06cqw .1cqw .16cqw #101a1899; transform: rotate(-1.2deg); }
 .gdd-sheet { position: absolute; left: 8.7%; top: 23%; width: 21.4%; min-height: 15.5%; padding: 1.1cqw 1.45cqw .85cqw; color: var(--paper-ink); background: var(--paper); text-decoration: none; transform: rotate(-3deg); transform-origin: 50% 4%; box-shadow: .18cqw .45cqw .6cqw #101a1866, 0 .05cqw .08cqw #0006; transition: transform 240ms ease, box-shadow 240ms ease; }
 .gdd-sheet::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, #24262202 0, #24262202 1px, transparent 1px, transparent 3px); }
@@ -74,7 +70,6 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--project-yellow)
 @media (max-width: 600px) {
   body { display: block; height: auto; min-height: 100svh; }
   .room { width: 100%; aspect-ratio: auto; overflow: visible; padding-bottom: 24px; }
-  .room-breadcrumb { position: static; margin: 12px 24px 0; min-height: 44px; font-size: 14px; align-items: center; text-shadow: none; }
   .wall-title { position: static; margin: 8px 24px 22px; font-size: clamp(36px, 10vw, 58px); line-height: 1.3; transform: none; white-space: normal; }
   .room-photograph { width: 100%; height: auto; }
   .gdd-sheet { position: relative; display: block; left: auto; top: auto; width: auto; min-height: 0; margin: 30px 24px 0; padding: 22px 24px 18px; transform: rotate(-1deg); }

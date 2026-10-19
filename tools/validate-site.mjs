@@ -179,6 +179,27 @@ if (html.includes("prod-files-secure.s3")) failures.push("Expiring Notion asset 
 if (html.includes("&lt;empty-block/&gt;")) failures.push("Unparsed Notion empty block remains");
 if (html.includes("####")) failures.push("Unparsed Markdown heading remains");
 
+// All project entrances must expose the same destinations in the same order.
+const directoryFile = path.join(root, 'dist/projects/index.html');
+const directoryHtml = fs.readFileSync(directoryFile, 'utf8');
+const projectRoutes = [...directoryHtml.matchAll(/class="directory-link" href="([^"]+)"/g)].map(match => match[1]);
+for (const route of ['', ...projectRoutes]) {
+  const file = path.join(root, 'dist/projects', route, 'index.html');
+  const page = fs.readFileSync(file, 'utf8');
+  const header = page.match(/<header[^>]*data-project-header[^>]*>([\s\S]*?)<\/header>/)?.[1] || '';
+  const links = [...header.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
+  const labels = links.map(match => stripMarkup(match[2]).trim());
+  const expected = ['VegShark.com', 'Projects', 'The Gallery'];
+  if (JSON.stringify(labels) !== JSON.stringify(expected)) failures.push(`Project header order or labels differ: ${route || 'directory'}`);
+  const targetPaths = ['dist/index.html', 'dist/projects/index.html', 'dist/gallery/index.html'];
+  links.forEach((match, i) => {
+    const target = path.resolve(path.dirname(file), match[1], 'index.html');
+    if (target !== path.join(root, targetPaths[i] || '')) failures.push(`Incorrect project header destination: ${route} → ${match[1]}`);
+  });
+  if (!header.includes('gallery/assets/mobius-outline.svg')) failures.push(`Missing original Gallery logo: ${route || 'directory'}`);
+  if (!page.includes('project-header.css')) failures.push(`Missing shared project header styles: ${route || 'directory'}`);
+}
+
 if (failures.length) {
   console.error(failures.join("\n"));
   process.exit(1);

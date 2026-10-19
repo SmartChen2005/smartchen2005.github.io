@@ -30,11 +30,6 @@ h1,h2,h3,h4 { margin: 0; font-family: var(--display); }
 .skip-link { position: fixed; top: 12px; left: 12px; padding: 10px 20px; background: var(--ink); color: var(--paper); z-index: 3; transform: translateY(-200%); }
 .skip-link:focus { transform: none; }
 .poster { background: var(--vermilion); }
-.masthead { display: flex; align-items: center; justify-content: space-between; padding-block: 24px; border-bottom: 1px solid var(--ink); }
-.masthead a { text-decoration: none; font-weight: 600; }
-.brand { font-size: 20px; letter-spacing: -.04em; }
-.masthead nav { display: flex; gap: 32px; }
-.masthead a:hover { text-decoration: underline; }
 .hero { position: relative; padding-top: 32px; padding-bottom: 32px; }
 .project-type,.label { font-size: 13px; font-weight: 600; }
 .project-type { margin-bottom: 38px; }
@@ -122,9 +117,6 @@ figcaption { margin-top: 12px; font-size: 12px; line-height: 1.4; color: var(--m
 }
 @media (max-width: 640px) {
   body { font-size: 16px; }
-  .masthead { padding-block: 18px; }
-  .masthead nav { gap: 20px; font-size: 14px; }
-  .masthead a { display: inline-flex; align-items: center; min-height: 32px; }
   .hero { padding-top: 24px; }
   .project-type { margin-bottom: 44px; font-size: 12px; }
   .hero h1 { font-size: 12vw; letter-spacing: -.07em; line-height: .98; }

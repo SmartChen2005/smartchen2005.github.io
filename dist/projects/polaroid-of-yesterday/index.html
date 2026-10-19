@@ -10,12 +10,17 @@
   <link rel="preload" as="font" href="../../assets/fonts/great-vibes-regular.ttf" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="room.css">
   <script type="module" src="room.mjs"></script>
+  <link rel="stylesheet" href="../../project-header.css">
 </head>
 <body>
-  <main class="room" aria-labelledby="project-title">
-    <nav class="room-breadcrumb" aria-label="Breadcrumb">
-      <a href="../"><span aria-hidden="true">←</span> Projects</a>
+  <header class="project-header project-header--dark project-header--room" data-project-header>
+    <nav class="project-header__nav" aria-label="Primary navigation">
+      <a href="../../">VegShark.com</a>
+      <a href="../">Projects</a>
+      <a class="project-header__gallery" href="../../gallery/"><img src="../../gallery/assets/mobius-outline.svg" width="160" height="54" alt="" aria-hidden="true" decoding="async"><span>The Gallery</span></a>
     </nav>
+  </header>
+  <main class="room" aria-labelledby="project-title">
     <h1 class="wall-title" id="project-title">Polaroid of Yesterday</h1>
     <img class="room-photograph" src="assets/room.jpg" width="3840" height="2160" alt="A photographed living room: a camera in the foreground, a television on a cabinet, and a person sitting in a red chair beside an open window." fetchpriority="high">
     <a class="gdd-sheet" href="game-design-document/">
