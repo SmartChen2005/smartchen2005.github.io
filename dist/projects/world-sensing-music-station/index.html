@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#070707">
-  <meta name="description" content="A handheld instrument for turning movement and space into sound. Explore the prototype, play with its Arduino-based musical rules, and see how it was made.">
+  <meta name="description" content="A loop station and a musical instrument. Move through familiar space, retrace a route, and hear the theme song of a place.">
   <title>World Sensing Music Station — Smart Chen</title>
   <link rel="stylesheet" href="../../site.css">
   <link rel="stylesheet" href="station.css">
@@ -24,23 +24,28 @@
   <main>
     <div class="instrument-story">
       <div class="scene" data-chapter="hero">
+        <figure class="hero-photo"><img src="assets/prototype-in-hand-1800.webp" srcset="assets/prototype-in-hand-900.webp 900w, assets/prototype-in-hand-1800.webp 1800w" sizes="(max-width:900px) 92vw, 46vw" width="3024" height="4032" fetchpriority="high" alt="Holding the handmade music station in a familiar room, its loop of light glowing around exposed circuits."><figcaption>World Sensing Music Station / working prototype</figcaption></figure>
         <div class="spatial-world" aria-label="A schematic space for moving the music station">
           <svg class="room-svg" viewBox="0 0 1000 740" aria-hidden="true">
             <defs><linearGradient id="room-floor" x2="0" y2="1"><stop stop-color="#151b17"/><stop offset="1" stop-color="#090c09"/></linearGradient></defs>
-            <path class="room-wall" d="M170 350V150L790 0V200Z"/><path class="room-side" d="M170 350V150L300 400V600Z"/>
+            <path class="room-wall" d="M170 350V190L790 40V200Z"/><path class="room-side" d="M790 40L920 290V450L790 200Z"/>
             <path class="room-floor" d="M170 350L790 200L920 450L300 600Z"/>
             <g class="room-grid">
-              <path d="M294 320L424 570M418 290L548 540M542 260L672 510M666 230L796 480"/>
-              <path d="M196 400L816 250M222 450L842 300M248 500L868 350M274 550L894 400"/>
+              <path d="M325 312.5L455 562.5M480 275L610 525M635 237.5L765 487.5"/>
+              <path d="M202.5 412.5L822.5 262.5M235 475L855 325M267.5 537.5L887.5 387.5"/>
             </g>
-            <path class="room-edge" d="M170 150L790 0V200L920 450M170 150V350L300 600L920 450"/>
+            <path class="room-edge" d="M170 350V190L790 40L920 290V450L300 600L170 350M790 40V200M170 350L790 200L920 450"/>
+            <path class="room-window" d="M295 282V219L465 178V241ZM380 198V261M295 250L465 209"/>
+            <path class="room-door" d="M824 265V158L881 268V375"/>
+            <text class="place-label" x="300" y="194">WINDOW</text><text class="place-label" x="844" y="404">DOOR</text><text class="place-label" x="398" y="574">DESK</text>
+            <path id="route-path"/><g id="route-markers"></g>
             <ellipse id="room-shadow" cx="570" cy="400" rx="94" ry="24"/>
             <g class="echo-diagram"><path id="distance-ray"/><path id="distance-ticks"/><circle id="wall-hit" r="4"/><text id="echo-caption">ULTRASONIC ECHO</text><text id="room-distance" x="400" y="250">45 cm</text><path id="sonar-outbound"/><path id="sonar-return"/></g>
-            <text class="room-label" x="195" y="172">REFLECTING WALL</text>
+            <text class="room-label" x="180" y="155">A FAMILIAR ROOM</text>
             <path id="music-wave" d="M170 675H920"/>
           </svg>
           <button type="button" id="world-control" aria-label="Move the music station. Drag, click a position, or use the arrow keys." aria-describedby="world-instruction"></button>
-          <div class="world-tools"><span id="world-instruction">Drag · arrow keys</span><button type="button" id="follow-toggle" aria-pressed="false">Follow cursor</button></div>
+          <div class="world-tools"><span id="world-instruction">Move: drag or arrow keys</span><button type="button" id="follow-toggle" aria-pressed="false">Follow cursor</button></div>
           <div class="world-readout"><span>Music waveform</span><output id="live-note" aria-live="off">Move to hear</output></div>
         </div>
         <div class="device-stage"><div class="device-model">
@@ -128,20 +133,23 @@
       </div>
       <div class="chapters">
         <section class="chapter hero" data-scene="hero" aria-labelledby="project-title">
-          <div class="hero-title"><p class="technical">Physical computing / experimental instrument</p><h1 id="project-title">WORLD SENSING<br>MUSIC STATION</h1></div>
-          <div class="hero-bottom"><p>A handheld instrument for turning<br class="desktop-break"> movement and space into sound.</p><a class="text-link" href="#playground">Enter the space <span aria-hidden="true">↓</span></a></div>
+          <div class="hero-title"><p class="technical">A loop station + a musical instrument</p><h1 id="project-title">WORLD SENSING<br>MUSIC STATION</h1></div>
+          <div class="hero-bottom"><p class="hero-thesis">Every place has<br> its own theme song.</p><p>Move through familiar space.<br>Walk the same route. Hear a familiar melody.</p><a class="text-link" href="#playground">Find the song of this room <span aria-hidden="true">↓</span></a></div>
         </section>
         <section class="chapter playground" data-scene="play" id="playground" aria-labelledby="play-title">
-          <div class="chapter-copy"><p class="technical">Movement → distance → music</p><h2 id="play-title">SPACE<br>BECOMES SOUND.</h2><p class="play-intro">Move the station to hear the distance.<br>Choose a layer. Record eight steps to keep a loop.</p>
+          <div class="chapter-copy"><p class="technical">Moving through familiar space</p><h2 id="play-title">ONE ROUTE.<br>A FAMILIAR MELODY.</h2><p class="play-intro">A route becomes a rhythm you can return to. Each place holds its notes; retracing your steps brings back the room’s theme song.</p>
             <div class="play-controls">
-              <div class="mode-controls" role="group" aria-label="Musical mode"><button type="button" data-mode="ambient" aria-pressed="true">AMBIENT</button><button type="button" data-mode="trap" aria-pressed="false">TRAP</button><button type="button" data-mode="techno" aria-pressed="false">TECHNO</button><output id="bpm-output" aria-live="off">80 BPM</output></div>
+              <div class="route-actions"><button type="button" id="route-demo" aria-pressed="false">Walk the familiar route <span aria-hidden="true">↻</span></button><button type="button" id="route-replay" disabled aria-pressed="false">Replay my route</button></div><p class="micro route-hint" id="route-status" role="status">Try the route, then walk it again. The melody returns.</p>
+              <div class="control-heading"><span>Sound character</span><output id="bpm-output" aria-live="off">80 BPM</output></div>
+              <div class="mode-controls" role="group" aria-label="Musical mode"><button type="button" data-mode="ambient" aria-pressed="true"><strong>Ambient</strong><span>Soft &amp; spacious</span></button><button type="button" data-mode="trap" aria-pressed="false"><strong>Trap</strong><span>Low &amp; syncopated</span></button><button type="button" data-mode="techno" aria-pressed="false"><strong>Techno</strong><span>Steady &amp; driving</span></button></div>
+              <div class="control-heading"><span>Choose a layer to record</span><span>8 steps / loop</span></div>
               <div class="sequencer" role="group" aria-label="Select a musical layer"></div>
-              <div class="loop-actions"><button type="button" id="record-button">Record 8 steps <span aria-hidden="true">●</span></button><button type="button" id="randomize-button">Randomize</button><button type="button" id="clear-button">Clear</button></div>
-              <p id="record-status" class="micro" role="status" aria-live="polite">PLAY / Empty loops. Record movement or try Randomize.</p>
+              <div class="loop-actions"><button type="button" id="record-button"><span aria-hidden="true">●</span> Record melody</button><button type="button" id="randomize-button">New pattern</button><button type="button" id="clear-button">Clear loops</button></div>
+              <p id="record-status" class="micro" role="status" aria-live="polite">Choose a layer, press Record, then move for eight beats.</p>
               <label class="distance-control" for="distance-input"><span>SIMULATED DISTANCE <output id="distance-output" aria-live="off">45 cm</output><output id="zone-output" aria-live="off">ZONE 2 / 8</output></span><input type="range" id="distance-input" min="10" max="180" value="45" step="1"><span class="range-labels"><span>10 cm</span><span>180 cm</span></span></label>
-              <p class="input-hint micro">Drag in the space, or use the slider. Speaker icon: mute.</p>
+              <p class="input-hint micro">Drag the instrument or use the slider. Notes land on the beat. Record another layer to build the loop.</p>
             </div>
-            <details class="technical-details"><summary>Inside the instrument <span aria-hidden="true">＋</span></summary><p>Ultrasonic distance is smoothed into eight zones. Motion and mode determine rhythm, bass and melody. One layer is replaced for eight steps, then returns to PLAY.</p><p>The control board handles sensing, the 30-LED loop and time-sliced audio. Serial messages go to a second board, which scrolls text on the 8×8 matrix.</p><button type="button" class="inspect-button" id="inspect-button" aria-pressed="false">Inspect hardware ↗</button><ul class="mobile-anatomy"><li>Ultrasonic sensor</li><li>LED matrix</li><li>NeoPixel loop</li><li>Seven buttons</li><li>Audio output</li><li>Control board</li><li>Display board</li></ul></details>
+            <details class="technical-details"><summary>Inside the instrument <span aria-hidden="true">＋</span></summary><p>The physical prototype senses ultrasonic distance and movement, recording rhythm, bass and melody into eight-step loops. Its 30 LEDs show the loop; a second board scrolls messages on the 8×8 matrix.</p><p>This web interpretation gives locations stable notes, softens the sound and places movement on the beat. It makes the project’s idea audible: familiar spaces can hold familiar music. The original firmware is available below.</p><button type="button" class="inspect-button" id="inspect-button" aria-pressed="false">Inspect hardware ↗</button><ul class="mobile-anatomy"><li>Ultrasonic sensor</li><li>LED matrix</li><li>NeoPixel loop</li><li>Seven buttons</li><li>Audio output</li><li>Control board</li><li>Display board</li></ul></details>
           </div>
         </section>
       </div>
@@ -150,17 +158,27 @@
       <div class="section-heading"><h2 id="prototype-title">THE REAL<br>PROTOTYPE.</h2><p>Exposed wires. A loop of light.<br>An instrument carried through ordinary space.</p></div>
       <div class="prototype-pair"><figure class="prototype-video"><div class="video-frame" id="video"><div class="video-poster" id="video-poster"><img src="assets/IMG_7469-1800.webp" srcset="assets/IMG_7469-900.webp 900w, assets/IMG_7469-1800.webp 1800w" sizes="(max-width:700px) 86vw, 58vw" width="4032" height="3024" loading="lazy" alt="The real handmade station: a glowing translucent loop around breadboards, exposed wires and the LED matrix."><button type="button" id="video-play"><span aria-hidden="true">▶</span> Watch the prototype</button></div><div id="video-player"></div></div><figcaption><a href="https://youtube.com/shorts/EojQMf95e6k" target="_blank" rel="noopener noreferrer">Demonstration / YouTube ↗</a></figcaption></figure><figure class="prototype-use"><img src="assets/IMG_7466-900.webp" width="4032" height="3024" loading="lazy" alt="A person in headphones holds the glowing handheld station in a stairwell."><figcaption>Movement through familiar space</figcaption></figure></div>
     </section>
-    <section class="document-section process-section" id="process" aria-labelledby="process-title"><div class="section-heading"><h2 id="process-title">FROM SKETCH<br>TO INSTRUMENT.</h2><div class="process-tools"><p class="micro">Drag or scroll the original sheets.</p><div><button type="button" id="process-prev" aria-label="Earlier sketches">←</button><button type="button" id="process-next" aria-label="Later sketches">→</button></div></div></div>
-      <div class="process-track" tabindex="0" role="region" aria-label="Original sketch sequence; use arrow keys or the previous and next buttons">
-        <figure class="process-sheet"><img src="assets/sketch-page-4.webp" width="1300" height="1733" loading="lazy" alt="Original experiments with plants, water and fluid music."><figcaption>FLUID EXPERIMENTS <small>PDF p. 4</small></figcaption></figure>
-        <figure class="process-sheet"><img src="assets/sketch-page-3.webp" width="1300" height="1733" loading="lazy" alt="Original sketches explore a circular loop machine and ultrasonic sensing."><figcaption>LOOP / SPATIAL SENSING <small>PDF p. 3</small></figcaption></figure>
-        <figure class="process-sheet"><img src="assets/sketch-page-9.webp" width="1300" height="1733" loading="lazy" alt="The original storyboard develops the instrument as a handheld object."><figcaption>HANDHELD INSTRUMENT <small>PDF p. 9</small></figcaption></figure>
-        <figure class="process-sheet"><img src="assets/sketch-page-10.webp" width="1300" height="1733" loading="lazy" alt="Final device drawing with its NeoPixel loop, sensor, buttons and electronics."><figcaption>FINAL PROTOTYPE <small>PDF p. 10</small></figcaption></figure>
-      </div>
+    <section class="document-section process-section" id="process" aria-labelledby="process-title"><div class="section-heading"><div><p class="technical">The complete process / 13 pages</p><h2 id="process-title">FROM SKETCH<br>TO INSTRUMENT.</h2></div><div class="process-tools"><p class="micro">Swipe through every page. Select a page to read it.</p><div><button type="button" id="process-prev" aria-label="Previous PDF pages">←</button><button type="button" id="process-next" aria-label="Next PDF pages">→</button></div></div></div>
+      <div class="process-track" tabindex="0" role="region" aria-label="All 13 original PDF pages; use arrow keys or the previous and next buttons">
+        <figure class="process-sheet"><a href="assets/process-page-01.webp" data-process-page="0" aria-label="Enlarge PDF page 1: Project overview"><img src="assets/process-thumb-01.webp" width="1391" height="1800" loading="lazy" alt="Complete original PDF page 1: Project overview."></a><figcaption><span>Project overview</span><small>PDF 1 / 13</small></figcaption></figure>
+        <figure class="process-sheet"><a href="assets/process-page-02.webp" data-process-page="1" aria-label="Enlarge PDF page 2: Scribble sketches I"><img src="assets/process-thumb-02.webp" width="1391" height="1800" loading="lazy" alt="Complete original PDF page 2: Scribble sketches I."></a><figcaption><span>Scribble sketches I</span><small>PDF 2 / 13</small></figcaption></figure>
+        <figure class="process-sheet"><a href="assets/process-page-03.webp" data-process-page="2" aria-label="Enlarge PDF page 3: Scribble sketches II"><img src="assets/process-thumb-03.webp" width="1391" height="1800" loading="lazy" alt="Complete original PDF page 3: Scribble sketches II."></a><figcaption><span>Scribble sketches II</span><small>PDF 3 / 13</small></figcaption></figure>
+        <figure class="process-sheet"><a href="assets/process-page-04.webp" data-process-page="3" aria-label="Enlarge PDF page 4: Fluid experiments"><img src="assets/process-thumb-04.webp" width="1391" height="1800" loading="lazy" alt="Complete original PDF page 4: Fluid experiments."></a><figcaption><span>Fluid experiments</span><small>PDF 4 / 13</small></figcaption></figure>
+        <figure class="process-sheet"><a href="assets/process-page-05.webp" data-process-page="4" aria-label="Enlarge PDF page 5: Early concepts"><img src="assets/process-thumb-05.webp" width="1391" height="1800" loading="lazy" alt="Complete original PDF page 5: Early concepts."></a><figcaption><span>Early concepts</span><small>PDF 5 / 13</small></figcaption></figure>
+        <figure class="process-sheet"><a href="assets/process-page-06.webp" data-process-page="5" aria-label="Enlarge PDF page 6: Elevator pitch & research"><img src="assets/process-thumb-06.webp" width="1391" height="1800" loading="lazy" alt="Complete original PDF page 6: Elevator pitch & research."></a><figcaption><span>Elevator pitch & research</span><small>PDF 6 / 13</small></figcaption></figure>
+        <figure class="process-sheet"><a href="assets/process-page-07.webp" data-process-page="6" aria-label="Enlarge PDF page 7: Research gap"><img src="assets/process-thumb-07.webp" width="1391" height="1800" loading="lazy" alt="Complete original PDF page 7: Research gap."></a><figcaption><span>Research gap</span><small>PDF 7 / 13</small></figcaption></figure>
+        <figure class="process-sheet"><a href="assets/process-page-08.webp" data-process-page="7" aria-label="Enlarge PDF page 8: Sensing research"><img src="assets/process-thumb-08.webp" width="1391" height="1800" loading="lazy" alt="Complete original PDF page 8: Sensing research."></a><figcaption><span>Sensing research</span><small>PDF 8 / 13</small></figcaption></figure>
+        <figure class="process-sheet"><a href="assets/process-page-09.webp" data-process-page="8" aria-label="Enlarge PDF page 9: Storyboard"><img src="assets/process-thumb-09.webp" width="1391" height="1800" loading="lazy" alt="Complete original PDF page 9: Storyboard."></a><figcaption><span>Storyboard</span><small>PDF 9 / 13</small></figcaption></figure>
+        <figure class="process-sheet"><a href="assets/process-page-10.webp" data-process-page="9" aria-label="Enlarge PDF page 10: Prototype drawing"><img src="assets/process-thumb-10.webp" width="1391" height="1800" loading="lazy" alt="Complete original PDF page 10: Prototype drawing."></a><figcaption><span>Prototype drawing</span><small>PDF 10 / 13</small></figcaption></figure>
+        <figure class="process-sheet"><a href="assets/process-page-11.webp" data-process-page="10" aria-label="Enlarge PDF page 11: Instrument development"><img src="assets/process-thumb-11.webp" width="1391" height="1800" loading="lazy" alt="Complete original PDF page 11: Instrument development."></a><figcaption><span>Instrument development</span><small>PDF 11 / 13</small></figcaption></figure>
+        <figure class="process-sheet"><a href="assets/process-page-12.webp" data-process-page="11" aria-label="Enlarge PDF page 12: Device in use"><img src="assets/process-thumb-12.webp" width="1391" height="1800" loading="lazy" alt="Complete original PDF page 12: Device in use."></a><figcaption><span>Device in use</span><small>PDF 12 / 13</small></figcaption></figure>
+        <figure class="process-sheet"><a href="assets/process-page-13.webp" data-process-page="12" aria-label="Enlarge PDF page 13: Prototype & demonstration"><img src="assets/process-thumb-13.webp" width="1391" height="1800" loading="lazy" alt="Complete original PDF page 13: Prototype & demonstration."></a><figcaption><span>Prototype & demonstration</span><small>PDF 13 / 13</small></figcaption></figure>
+      </div><p class="process-position micro" id="process-position" aria-live="polite">Pages 1–4 of 13</p>
     </section>
     <section class="document-section files-section" id="files" aria-labelledby="files-title"><h2 id="files-title">PROJECT FILES</h2><div class="file-list"><a href="files/World%20Sensing%20Music%20Station%20Design%20Document.docx" download><span>Design document</span><span>DOCX / Download ↓</span></a><a href="files/Final%20Project.pdf" download><span>Process, research &amp; sketches</span><span>PDF / Download ↓</span></a></div><div class="source-links"><span>Arduino source</span><a href="files/Control.ino" download>Control.ino ↓</a><a href="files/Display.ino" download>Display.ino ↓</a><a href="https://github.com/SmartChen2005/journal/tree/main/Final%20Project" target="_blank" rel="noopener noreferrer">Project journal ↗</a></div></section>
   </main>
   <footer class="station-footer"><a href="../">← All projects</a><a href="#project-title">Back to instrument ↑</a></footer>
   <p class="sr-only" id="audio-status" role="status" aria-live="polite"></p>
+  <dialog class="process-viewer" aria-labelledby="viewer-title"><div class="viewer-tools"><button type="button" id="viewer-prev" aria-label="Previous PDF page">←</button><p id="viewer-title" aria-live="polite">PDF page 1 / 13</p><button type="button" id="viewer-next" aria-label="Next PDF page">→</button><button type="button" id="viewer-zoom" aria-pressed="false">Zoom in</button><button type="button" id="viewer-close">Close ×</button></div><div class="viewer-body"><p id="viewer-error" role="status" hidden>This page could not load. Try another page or open the original PDF below.</p><img id="viewer-image" src="assets/process-page-01.webp" width="1273" height="1800" alt="Complete original PDF page 1"></div><a class="viewer-pdf" href="files/Final%20Project.pdf#page=1" target="_blank" rel="noopener noreferrer">Open original PDF ↗</a></dialog>
 </body>
 </html>

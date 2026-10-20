@@ -62,6 +62,15 @@
         3024
       ],
       "sha256": "16d5e9a63418aedfccbdc317474f71b2ccb318a5f49db9b65eb672f9f0165d06"
+    },
+    {
+      "file": "prototype-in-hand.jpg",
+      "displaySize": [
+        3024,
+        4032
+      ],
+      "sha256": "886d457470652f0925de9e040550ca58cd792c6dbc9794a102058311dd67f7d1",
+      "origin": "User attachment, imported 2026-10-20; original EXIF retained."
     }
   ],
   "sketches": [
@@ -119,6 +128,125 @@
       "size": [
         1300,
         1733
+      ]
+    }
+  ],
+  "processPages": [
+    {
+      "pdf": "Final Project.pdf",
+      "pdfPage": 1,
+      "file": "process-page-01.webp",
+      "size": [
+        1391,
+        1800
+      ]
+    },
+    {
+      "pdf": "Final Project.pdf",
+      "pdfPage": 2,
+      "file": "process-page-02.webp",
+      "size": [
+        1391,
+        1800
+      ]
+    },
+    {
+      "pdf": "Final Project.pdf",
+      "pdfPage": 3,
+      "file": "process-page-03.webp",
+      "size": [
+        1391,
+        1800
+      ]
+    },
+    {
+      "pdf": "Final Project.pdf",
+      "pdfPage": 4,
+      "file": "process-page-04.webp",
+      "size": [
+        1391,
+        1800
+      ]
+    },
+    {
+      "pdf": "Final Project.pdf",
+      "pdfPage": 5,
+      "file": "process-page-05.webp",
+      "size": [
+        1391,
+        1800
+      ]
+    },
+    {
+      "pdf": "Final Project.pdf",
+      "pdfPage": 6,
+      "file": "process-page-06.webp",
+      "size": [
+        1391,
+        1800
+      ]
+    },
+    {
+      "pdf": "Final Project.pdf",
+      "pdfPage": 7,
+      "file": "process-page-07.webp",
+      "size": [
+        1391,
+        1800
+      ]
+    },
+    {
+      "pdf": "Final Project.pdf",
+      "pdfPage": 8,
+      "file": "process-page-08.webp",
+      "size": [
+        1391,
+        1800
+      ]
+    },
+    {
+      "pdf": "Final Project.pdf",
+      "pdfPage": 9,
+      "file": "process-page-09.webp",
+      "size": [
+        1391,
+        1800
+      ]
+    },
+    {
+      "pdf": "Final Project.pdf",
+      "pdfPage": 10,
+      "file": "process-page-10.webp",
+      "size": [
+        1391,
+        1800
+      ]
+    },
+    {
+      "pdf": "Final Project.pdf",
+      "pdfPage": 11,
+      "file": "process-page-11.webp",
+      "size": [
+        1391,
+        1800
+      ]
+    },
+    {
+      "pdf": "Final Project.pdf",
+      "pdfPage": 12,
+      "file": "process-page-12.webp",
+      "size": [
+        1391,
+        1800
+      ]
+    },
+    {
+      "pdf": "Final Project.pdf",
+      "pdfPage": 13,
+      "file": "process-page-13.webp",
+      "size": [
+        1391,
+        1800
       ]
     }
   ]

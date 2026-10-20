@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-20 — Make familiar routes musical
+
+- Reframed World Sensing Music Station as a loop station and musical instrument whose repeatable routes become a place’s theme song. Added the user-selected prototype photograph and a reversible photo/model/room scroll transition.
+- Rebuilt the room with a consistent projection, increased type and control sizes, and separated route, sound, layer and recording controls. The browser interpretation uses stable spatial notes, beat-aligned soft audio, eight-beat layer recording and route replay; original firmware remains unchanged.
+- Rendered every page of the 13-page process PDF, with four-sheet desktop browsing and a keyboard/touch-accessible zoom viewer. Original files and new-image provenance remain local.
+- Run `node tools/render-music-process.mjs`, `node tools/test-music-station.mjs`, `node tools/test-music-firmware.mjs` and `node tools/validate-site.mjs`; browser checks use `tools/test-music-browser.mjs` and `tools/test-music-sidebar.mjs`. Detailed results and limits are recorded in `tools/MUSIC-STATION-QA.md`.
+
 ### 2026-10-19 — Unify Projects navigation
 
 - The directory and all four project landing pages share right-aligned VegShark.com, Projects and The Gallery links, reusing the Gallery's original Möbius wordmark asset.

@@ -4,6 +4,7 @@ import {createHash} from 'node:crypto';
 import {MusicEngine,MODES,distanceToZone,rhythmHit,noteIndex,noteColor} from '../dist/projects/world-sensing-music-station/music-engine.mjs';
 import {displayText,matrixFrame} from '../dist/projects/world-sensing-music-station/display-engine.mjs';
 import {floorPoint,floorCoordinates,distanceAt,roomPose,sonarArc} from '../dist/projects/world-sensing-music-station/space-engine.mjs';
+import {PlaceEngine,FAMILIAR_ROUTE,placeNotes,routePath} from '../dist/projects/world-sensing-music-station/place-score.mjs';
 const root=new URL('../dist/projects/world-sensing-music-station/',import.meta.url);
 const html=fs.readFileSync(new URL('index.html',root),'utf8');
 const manifest=JSON.parse(fs.readFileSync(new URL('assets/sources.json',root),'utf8'));
@@ -50,7 +51,24 @@ assert.equal(displayText('AMBIENT 80bpm RHY PLAY'),'AMBIENT 80BPM RHY');
 assert.equal(matrixFrame('A',0).filter(Boolean).length,28);assert(matrixFrame('A',9).every(value=>!value));
 assert.equal((html.match(/class="loop-led"/g)||[]).length,30);
 assert.equal((html.match(/class="matrix-pixel"/g)||[]).length,64);
-assert.equal((html.match(/class="process-sheet"/g)||[]).length,4);
+assert.equal((html.match(/class="process-sheet"/g)||[]).length,13);
+assert.equal(manifest.processPages.length,13);
+assert.deepEqual(manifest.processPages.map(page=>page.pdfPage),Array.from({length:13},(_,i)=>i+1));
+for(const {file,pdfPage} of manifest.processPages){assert(fs.existsSync(new URL(`assets/${file}`,root)));assert(fs.existsSync(new URL(`assets/process-thumb-${String(pdfPage).padStart(2,'0')}.webp`,root)));}
+assert(html.includes('prototype-in-hand-1800.webp'));
+assert(html.includes('A loop station + a musical instrument'));
+assert(!routePath(FAMILIAR_ROUTE).includes('NaN'));
+for(const mode of Object.keys(MODES))for(const layer of [0,1,2]){
+  const instrument=new PlaceEngine();instrument.setMode(mode);instrument.selected=layer;instrument.replace();
+  const first=FAMILIAR_ROUTE.map(([u,v])=>instrument.tickAt(u,v,true));
+  assert(!instrument.recording);assert.equal(instrument.route.length,8);
+  assert.deepEqual(instrument.loops[layer],FAMILIAR_ROUTE.map(([u,v],step)=>placeNotes(u,v,step,mode)[layer]));
+  const second=FAMILIAR_ROUTE.map(([u,v])=>instrument.tickAt(u,v,true));
+  assert.deepEqual(second.map(tick=>tick.notes[layer]),first.map(tick=>tick.notes[layer]),'Retracing the same route returns the same score');
+  const loop=structuredClone(instrument.loops);instrument.setMode('ambient');assert.deepEqual(instrument.loops,loop);
+  instrument.clear();assert.equal(instrument.route.length,0);
+  assert.deepEqual(instrument.tickAt(.4,.4,false).notes,[0,-1,-1],'Empty web loops remain silent');
+}
 assert.equal((html.match(/data-scene=/g)||[]).length,2);
 assert(!html.includes('autoplay=1'));
 for(const u of [.12,.4,.88])for(const v of [0,.3,1]){
