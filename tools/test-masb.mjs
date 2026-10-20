@@ -2,10 +2,22 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 
 const root='dist/projects/multiverse-all-star-battlefront';
 const source=JSON.parse(fs.readFileSync('tools/masb-source/content.json','utf8'));
 const html=fs.readFileSync(`${root}/index.html`,'utf8');
+const processData=fs.readFileSync(`${root}/process-data.mjs`,'utf8');
+execFileSync(process.execPath,['tools/render-masb.mjs']);
+assert.equal(fs.readFileSync(`${root}/index.html`,'utf8'),html,'Published page must match the renderer');
+assert.equal(fs.readFileSync(`${root}/process-data.mjs`,'utf8'),processData,'Published example must match the maintained source');
+const guide=JSON.parse(fs.readFileSync('tools/masb-source/user-document.json','utf8'));
+const pdf=fs.readFileSync(`${root}/files/${guide.file}`);
+assert.equal(pdf.subarray(0,5).toString(),'%PDF-');
+assert.equal(createHash('sha256').update(pdf).digest('hex'),guide.sha256,'Preserve the supplied user guide byte-for-byte');
+assert(html.includes('Application currently unavailable.'));
+assert(html.includes('Stats, actions, and outcome are a scripted example.'));
+assert(html.indexOf('id="experience"')<html.indexOf('id="overview"'),'The process leads the project introduction');
 const decode=text=>text.replaceAll('&amp;','&').replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&quot;','"');
 const text=decode(html.replace(/<[^>]*>/g,' ')).replace(/\s+/g,' ');
 let cursor=0;
@@ -39,4 +51,4 @@ for(const [,ref] of html.matchAll(/(?:src|href)="([^"]+)"/g)){
 for(const [,id] of html.matchAll(/href="#([^"]+)"/g))assert(html.includes(`id="${id}"`),`Missing anchor: ${id}`);
 assert(!/<iframe|https:\/\/(sites|docs)\.google\.com\/(?:sitesv|docs)-images/.test(html),'No expiring remote image URLs or source embeds');
 assert(fs.readFileSync('dist/projects/index.html','utf8').includes('href="multiverse-all-star-battlefront/"'));
-console.log('Passed: complete ordered source copy; 7 sections; 4 contributors; 19 original image checksums and ratios; ordered list; all routes and anchors; local assets.');
+console.log('Passed: render parity; original user-guide PDF hash; honest availability/example labels; complete ordered source copy; 7 sections; 4 contributors; 19 original image checksums and ratios; all routes and anchors.');

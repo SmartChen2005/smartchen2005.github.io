@@ -1,3 +1,5 @@
+import './battle-process.mjs';
+
 const viewer = document.querySelector('.image-viewer');
 const preview = viewer.querySelector('.viewer-image');
 const caption = document.querySelector('#viewer-caption');

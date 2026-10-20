@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-20 — Illustrate the Multiverse game process
+
+- Retained Multiverse's red/white/black identity while shortening its opening and adding a leading Describe/Generate/Battle/Result scroll sequence using existing character artwork. Sample input, stats, turn states and outcome are identified as illustrative.
+- Added the supplied two-page user guide as a local original PDF with checksum/source archive and an explicit current-unavailability notice. Preserved the complete introduction, technical document, nineteen original assets and shared Projects navigation.
+- `node tools/render-masb.mjs` generates the page and process data; `node tools/test-masb.mjs` verifies parity, the original guide and archive. Run `tools/test-masb-browser.cjs` for wheel/manual/keyboard progression, responsive scenes, guide access and image-viewer behavior. Detailed results are in `tools/MASB-QA.md`.
+
 ### 2026-10-20 — Make familiar routes musical
 
 - Reframed World Sensing Music Station as a loop station and musical instrument whose repeatable routes become a place’s theme song. Added the user-selected prototype photograph and a reversible photo/model/room scroll transition.

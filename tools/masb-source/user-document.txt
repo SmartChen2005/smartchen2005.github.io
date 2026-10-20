@@ -1,0 +1,56 @@
+Multiverse All-Star Battlefront — Quick User Guide
+1. Accessing the Game
+Only one user per link can play at a time. Try them in order:
+https://battle.patrickstar .dev
+https://battle2.patrickstar .dev
+https://battle3.patrickstar .dev
+If busy, you’ll see “The app is currently in use.” Try the next link. If all are busy, please return later .
+➡️
+Please close the tab when finished so others can play.
+2. Before You Start
+A popup will show: Rules & Guidelines, Terms & Conditions
+You must click both links before the I Agree button unlocks.
+3. How to Play
+Step 1 — Describe Your Character
+Enter a short description (max \~500 characters). Example:
+"an adorable Siamese cat named Mocha, wearing a tiny crown and wielding a magical wish‑granting
+lantern"
+Step 2 — Loading
+You’ll be redirected to a page introducing the game. By the time you finish reading, you can return and your
+character will be ready.
+Do not refresh. If an error occurs, restart and try again with a new description.
+Step 3 — Character Stats
+You will see:
+portrait
+HP , MP , ATK, DEF, AGI, LUCK
+1.
+2.
+3.
+•
+•
+•
+1
+
+skillset
+Step 4 — Mini Game / Progress Bar
+While the battle sim processes, a mini game is available. A progress bar shows when the battle is ready.
+Step 5 — Battle Simulation
+View a comic-style battle. Use Next / Prev buttons to flip pages.
+Step 6 — Results
+See win/lose/draw and a short summary. Close or restart when finished.
+4. Tips
+Try links in order .
+Close the site when done.
+Don’t refresh during loading.
+5. Troubleshooting
+Images slow: Normal—generated in real time.
+Character generation error: Restart and use a slightly different description or a new one.
+6. Contact
+For issues or feedback, contact the developer .
+smart.chen@emory.edu
+Thank you for playing Multiverse All‑Star Battlefront!
+•
+•
+•
+•
+2

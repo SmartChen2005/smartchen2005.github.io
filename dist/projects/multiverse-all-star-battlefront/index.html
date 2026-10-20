@@ -6,12 +6,13 @@
   <meta name="theme-color" content="#f13d24">
   <meta name="description" content="Multiverse All-Star Battlefront: an AI-driven battle simulation. Create a pixel-art fighter from your words and follow the battle in a generated comic.">
   <title>Multiverse All-Star Battlefront | Smart Chen</title>
-  <link rel="stylesheet" href="battlefront.css">
+  <link rel="stylesheet" href="battlefront.css?v=process-1">
+  <link rel="stylesheet" href="battle-process.css?v=process-1">
   <link rel="stylesheet" href="../../project-header.css?v=20261019c">
-  <script type="module" src="battlefront.mjs"></script>
+  <script type="module" src="battlefront.mjs?v=process-1"></script>
 </head>
 <body>
-  <a class="skip-link" href="#overview">Skip to content</a>
+  <a class="skip-link" href="#experience">Skip to content</a>
   <div class="poster" id="top">
     <header class="project-header project-header--light" data-project-header>
     <nav class="project-header__nav" aria-label="Primary navigation">
@@ -22,16 +23,53 @@
   </header>
     <div class="hero wrap">
       <p class="project-type">A generative AI battle simulation</p>
-      <h1><span>Multiverse</span><span>All-Star</span><span>Battlefront</span></h1>
-      <div class="poster-circle" aria-hidden="true">Words<br>become<br>fighters.</div>
+      <h1><span>Multiverse</span><span>All-Star Battlefront</span></h1>
       <div class="hero-bottom">
         <p><time datetime="2025-09">September</time> to <time datetime="2025-11">November 2025</time><br><strong>Not a vibe-coding project</strong></p>
         <p>Smart Chen<br>Group leader, designer &amp; engineer</p>
-        <nav aria-label="On this page"><a href="#overview">The game <span aria-hidden="true">↓</span></a><a href="#gallery">In action <span aria-hidden="true">↓</span></a><a href="#technical-document">Technical document <span aria-hidden="true">↓</span></a></nav>
+        <nav aria-label="On this page"><a href="#experience">How it plays <span aria-hidden="true">↓</span></a><a href="#user-guide">User guide <span aria-hidden="true">↓</span></a><a href="#gallery">In action <span aria-hidden="true">↓</span></a><a href="#technical-document">Technical document <span aria-hidden="true">↓</span></a></nav>
       </div>
     </div>
   </div>
   <main>
+    <section class="process wrap" id="experience" aria-labelledby="experience-title">
+    <div class="process-heading"><div><p class="label">How it plays</p><p class="process-availability">Application currently unavailable.<a href="#user-guide">Read the user guide ↗</a></p></div><h2 id="experience-title">A sentence becomes a showdown.</h2></div>
+    <div class="process-layout" data-battle-process data-stage="0">
+      <div class="process-sticky">
+        <div class="process-screen" aria-label="Illustrative game sequence" aria-describedby="experience-caption">
+          <div class="screen-meta"><span>Multiverse / An illustrative encounter</span><span data-scene-label>01 — Describe</span></div>
+          <div class="process-scene describe-scene is-active" data-process-scene="0" aria-hidden="false">
+            <div class="prompt-heading"><span class="label">Your character</span><span class="prompt-corner" aria-hidden="true">↙</span></div>
+            <div class="example-prompt"><span data-typed-prompt>A winged, armored dragon carrying a shield, guarding the arena with patience and resolve.</span><span class="prompt-caret" aria-hidden="true"></span></div>
+            <div class="prompt-traits"><span>Appearance</span><span>Personality</span><span>Abilities</span></div>
+            <p class="prompt-limit">A few words set the world in motion.</p>
+          </div>
+          <div class="process-scene generate-scene" data-process-scene="1" aria-hidden="true" inert>
+            <div class="portrait-sheet"><img class="process-fighter " src="assets/character-03.webp" width="1024" height="1024" alt="Winged Guardian — existing project artwork" decoding="async"><span class="portrait-name">Winged Guardian</span><span class="portrait-tick" aria-hidden="true">+</span></div>
+            <div class="stat-sheet"><p class="label">Character generated</p><h3>Winged Guardian</h3><div class="example-stats"><div><span>HP</span><strong data-stat-value="120">120</strong><span class="stat-rule" aria-hidden="true"><i style="--stat-size:1"></i></span></div><div><span>MP</span><strong data-stat-value="70">70</strong><span class="stat-rule" aria-hidden="true"><i style="--stat-size:0.5833333333333334"></i></span></div><div><span>ATK</span><strong data-stat-value="26">26</strong><span class="stat-rule" aria-hidden="true"><i style="--stat-size:0.21666666666666667"></i></span></div><div><span>DEF</span><strong data-stat-value="22">22</strong><span class="stat-rule" aria-hidden="true"><i style="--stat-size:0.18333333333333332"></i></span></div><div><span>AGI</span><strong data-stat-value="15">15</strong><span class="stat-rule" aria-hidden="true"><i style="--stat-size:0.125"></i></span></div><div><span>LUCK</span><strong data-stat-value="9">9</strong><span class="stat-rule" aria-hidden="true"><i style="--stat-size:0.075"></i></span></div></div><p class="skill-label">Skillset</p><p class="example-skill">Shield guard / Aerial strike</p><p class="sample-label">Example attributes</p></div>
+          </div>
+          <div class="process-scene battle-scene" data-process-scene="2" aria-hidden="true" inert>
+            <div class="comic-title"><span data-turn-label>01 / The opening move</span><span>Battle simulation</span></div>
+            <div class="arena">
+              <div class="combatant combatant-player"><p>Winged Guardian</p><div class="hp-track" role="meter" aria-label="Example Guardian health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span data-player-health></span></div><img class="process-fighter " src="assets/character-03.webp" width="1024" height="1024" alt="Winged Guardian — existing project artwork" decoding="async"></div>
+              <span class="versus" aria-hidden="true">VS</span><svg class="battle-impact" viewBox="0 0 200 200" aria-hidden="true"><path d="M100 2L112 67L166 22L135 80L198 100L134 113L173 177L115 136L99 199L83 137L24 174L67 115L2 98L66 82L23 24L84 65Z"/><path d="M53 143L138 50L105 103L154 77L62 160L91 111Z"/></svg>
+              <div class="combatant combatant-opponent"><p>Shadow Duelist</p><div class="hp-track" role="meter" aria-label="Example Duelist health" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><span data-opponent-health></span></div><img class="process-fighter " src="assets/character-04.webp" width="1024" height="1024" alt="Shadow Duelist — existing project artwork" decoding="async"></div>
+            </div>
+            <div class="comic-caption"><p data-turn-caption>The Duelist advances. The Guardian raises its shield.</p><div class="comic-page-marks" aria-hidden="true"><span></span><span></span><span></span></div></div>
+          </div>
+          <div class="process-scene result-scene" data-process-scene="3" aria-hidden="true" inert>
+            <div class="result-heading"><span class="label">The encounter ends</span><span class="label">Win / Loss / Draw</span></div>
+            <div class="result-composition"><img class="process-fighter " src="assets/character-03.webp" width="1024" height="1024" alt="Winged Guardian — existing project artwork" decoding="async"><div class="result-type"><p class="result-word">Victory</p><p class="result-winner">Winged Guardian</p><p class="result-summary">The Winged Guardian wins this example encounter.</p></div></div>
+            <p class="result-end">Another description. Another possible battle.</p>
+          </div>
+        </div>
+        <div class="process-progress" aria-hidden="true"><span></span></div><p class="process-current" id="process-current" aria-live="off">01 / Describe</p>
+      </div>
+      <div class="process-stops" role="group" aria-label="Explore the game process"><div class="process-stop" data-process-stop><button type="button" disabled data-process-button="0" aria-pressed="true" aria-controls="process-current"><span>01</span><strong>Describe</strong></button><p>Start with a character in your own words. Their appearance, personality, and abilities become the starting point for the game.</p></div><div class="process-stop" data-process-stop><button type="button" disabled data-process-button="1" aria-pressed="false" aria-controls="process-current"><span>02</span><strong>Generate</strong></button><p>The description becomes a pixel-art portrait, a skillset, and six attributes: HP, MP, ATK, DEF, AGI, and LUCK. An opponent enters through the same character pipeline.</p></div><div class="process-stop" data-process-stop><button type="button" disabled data-process-button="2" aria-pressed="false" aria-controls="process-current"><span>03</span><strong>Battle simulation</strong></button><p>The fighters meet in a turn-based simulation. Actions update the battle state, while successive comic panels carry the encounter forward. In the application, Next and Prev let players revisit the pages.</p></div><div class="process-stop" data-process-stop><button type="button" disabled data-process-button="3" aria-pressed="false" aria-controls="process-current"><span>04</span><strong>Result</strong></button><p>A win, loss, or draw and a short summary bring the encounter to a close. Players can restart with another description and imagine a different fighter.</p></div></div>
+    </div>
+    <p class="process-footnote" id="experience-caption">Illustrative sequence using existing project artwork. Stats, actions, and outcome are a scripted example.</p>
+    <div class="user-guide" id="user-guide"><div><p class="label">Original user guide</p><p>Instructions preserved from the application's original release.</p></div><a href="files/Multiverse-User-Document.pdf" target="_blank" rel="noopener noreferrer"><span>User guide <span aria-hidden="true">↗</span></span><small>PDF · 2 pages · opens in a new tab</small></a></div>
+  </section>
     <section class="overview wrap section-grid" id="overview" aria-labelledby="overview-title">
       <div class="section-label"><p class="label">The game</p><h2 id="overview-title">Welcome to the Multiverse All-Star Battlefront!</h2></div>
       <div class="overview-copy"><p>Imagine a game where the hero you dream up from just a few lines of description comes to life as a pixelated champion. In Multiverse All-Star Battlefront, you simply describe a character in your own words, and our system—powered by large language models—transforms that description into a fully realized, unique fighter.</p><p>Once your character is ready, they face off against another AI-generated opponent in turn-based battles. Every turn is brought to life with AI-crafted visuals, blending a retro pixel art style with modern creativity. Behind the scenes, we use language models to interpret your words and turn them into stats like health, attack power, speed, and more. This way, each character feels truly one-of-a-kind, and every battle is a fresh, visually stunning experience.</p><p>In short, we’ve combined the magic of language models with a love for retro game art to let you create and battle your own heroes. Welcome to the arena—we can’t wait to see who you’ll bring to life!</p></div>
