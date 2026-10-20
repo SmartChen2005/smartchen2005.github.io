@@ -4,9 +4,9 @@ export function projectHeader({ base = '../../', current = false, theme = 'dark'
     <nav class="project-header__nav" aria-label="Primary navigation">
       <a href="${base}">VegShark.com</a>
       <a href="${current ? './' : '../'}"${current ? ' aria-current="page"' : ''}>Projects</a>
-      <a class="project-header__gallery" href="${base}gallery/"><img src="${base}gallery/assets/mobius-outline.svg" width="160" height="54" alt="" aria-hidden="true" decoding="async"><span>The Gallery</span></a>
+      <a class="project-header__gallery" href="${base}gallery/"><span class="project-header__gallery-mark" aria-hidden="true"><img src="${base}gallery/assets/mobius-outline.svg" width="164" height="55" alt="" decoding="async"></span><span>The Gallery</span></a>
     </nav>
   </header>`;
 }
 
-export const projectHeaderStylesheet = base => `<link rel="stylesheet" href="${base}project-header.css">`;
+export const projectHeaderStylesheet = base => `<link rel="stylesheet" href="${base}project-header.css?v=20261019b">`;

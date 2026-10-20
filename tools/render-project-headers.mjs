@@ -18,7 +18,8 @@ for (const page of pages) {
     html = html.replace(page.legacy, '');
     html = html.replace('<body>', `<body>\n  ${header}`);
   } else html = html.replace(page.legacy, header);
-  if (!html.includes('project-header.css')) html = html.replace('</head>', `  ${projectHeaderStylesheet(page.base)}\n</head>`);
+  if (html.includes('project-header.css')) html = html.replace(/<link rel="stylesheet" href="[^"]*project-header\.css[^"]*">/, projectHeaderStylesheet(page.base));
+  else html = html.replace('</head>', `  ${projectHeaderStylesheet(page.base)}\n</head>`);
   fs.writeFileSync(page.file, html);
 }
 console.log('Rendered shared navigation for Projects, Music Station and Polaroid.');

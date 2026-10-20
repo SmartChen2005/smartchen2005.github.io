@@ -34,7 +34,7 @@ for(const item of items){
 }
 for(const [,ref] of html.matchAll(/(?:src|href)="([^"]+)"/g)){
   if(/^(https?:|mailto:|#)/.test(ref))continue;
-  assert(fs.existsSync(path.resolve(root,ref)),`Missing destination: ${ref}`);
+  assert(fs.existsSync(path.resolve(root,ref.split(/[?#]/,1)[0])),`Missing destination: ${ref}`);
 }
 for(const [,id] of html.matchAll(/href="#([^"]+)"/g))assert(html.includes(`id="${id}"`),`Missing anchor: ${id}`);
 assert(!/<iframe|https:\/\/(sites|docs)\.google\.com\/(?:sitesv|docs)-images/.test(html),'No expiring remote image URLs or source embeds');

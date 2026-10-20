@@ -31,7 +31,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 48px;
+  min-height: 56px;
   color: inherit;
   white-space: nowrap;
   text-decoration: none;
@@ -44,35 +44,54 @@
 .project-header__nav > a:active { opacity: .7; }
 .project-header__nav > .project-header__gallery {
   position: relative;
-  width: 120px;
-  overflow: clip;
+  width: 100px;
+  flex: 0 0 100px;
   letter-spacing: -.04em;
   text-transform: uppercase;
 }
-.project-header__gallery img {
+.project-header__gallery-mark {
   position: absolute;
-  left: -20px;
-  top: -3px;
-  width: 160px;
-  max-width: none;
-  height: 54px;
+  inset: 0;
+  overflow: hidden;
   pointer-events: none;
 }
-.project-header__gallery span { position: relative; }
+.project-header__gallery-mark img {
+  position: absolute;
+  left: -32px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 164px;
+  max-width: none;
+  height: auto;
+  filter: brightness(0) invert(1);
+}
+.project-header--light .project-header__gallery-mark img { filter: brightness(0); }
+.project-header__gallery > span:last-child { position: relative; }
 .project-header__nav > .project-header__gallery:hover { text-decoration: none; }
 .project-header--overlay { position: absolute; z-index: 10; inset: 0 0 auto; }
-.project-header--room { position: absolute; z-index: 3; inset: 0 0 auto; border: 0; text-shadow: 0 1px 3px #000; }
+.project-header--room { position: absolute; z-index: 3; inset: 0 0 auto; border: 0; }
+.project-header--room .project-header__nav { position: relative; isolation: isolate; }
+.project-header--room .project-header__nav::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -2px -12px;
+  background: var(--letterbox);
+  opacity: .94;
+  pointer-events: none;
+}
 @media (max-width: 640px) {
   .project-header { min-height: 68px; }
   .project-header__nav { gap: 12px; }
 }
 @media (max-width: 360px) { .project-header__nav { gap: 10px; } }
 @media (max-width: 600px) {
-  .project-header--room { position: relative; text-shadow: none; }
+  .project-header--room { position: relative; }
 }
 @media (forced-colors: active) {
   .project-header { color: LinkText; border-color: CanvasText; }
-  .project-header__gallery img { display: none; }
+  .project-header__gallery-mark { display: none; }
+  .project-header--room .project-header__nav::before { background: Canvas; opacity: 1; }
   .project-header__nav > a:focus-visible { outline-color: Highlight; }
 }
 @media print { .project-header { display: none; } }
