@@ -70,15 +70,11 @@
 .project-header__nav > .project-header__gallery:hover { text-decoration: none; }
 .project-header--overlay { position: absolute; z-index: 10; inset: 0 0 auto; }
 .project-header--room { position: absolute; z-index: 3; inset: 0 0 auto; border: 0; }
-.project-header--room .project-header__nav { position: relative; isolation: isolate; }
-.project-header--room .project-header__nav::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: -2px -12px;
-  background: var(--letterbox);
-  opacity: .94;
-  pointer-events: none;
+.project-header--room .project-header__nav {
+  text-shadow: 0 1px 2px #000, 0 0 6px #000c, 0 0 12px #0008;
+}
+.project-header--room .project-header__gallery-mark {
+  filter: drop-shadow(0 1px 1px #000) drop-shadow(0 0 4px #000c);
 }
 @media (max-width: 640px) {
   .project-header { min-height: 68px; }
@@ -91,7 +87,7 @@
 @media (forced-colors: active) {
   .project-header { color: LinkText; border-color: CanvasText; }
   .project-header__gallery-mark { display: none; }
-  .project-header--room .project-header__nav::before { background: Canvas; opacity: 1; }
+  .project-header--room .project-header__nav { text-shadow: none; }
   .project-header__nav > a:focus-visible { outline-color: Highlight; }
 }
 @media print { .project-header { display: none; } }

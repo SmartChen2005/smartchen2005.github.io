@@ -9,4 +9,4 @@ export function projectHeader({ base = '../../', current = false, theme = 'dark'
   </header>`;
 }
 
-export const projectHeaderStylesheet = base => `<link rel="stylesheet" href="${base}project-header.css?v=20261019b">`;
+export const projectHeaderStylesheet = base => `<link rel="stylesheet" href="${base}project-header.css?v=20261019c">`;

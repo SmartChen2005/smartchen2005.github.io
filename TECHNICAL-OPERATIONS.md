@@ -99,7 +99,7 @@ At the time this standard was added, the repository contains the complete curren
 ### 2026-10-19 — Unify Projects navigation
 
 - The directory and all four project landing pages share right-aligned VegShark.com, Projects and The Gallery links, reusing the Gallery's original Möbius wordmark asset.
-- Follow-up: contain the complete logo vertically, measure equal gaps from its visible edge, and give Polaroid's navigation white artwork over a restrained dark backing. Desktop, phone and landscape checks are recorded in `tools/PROJECT-HEADER-QA.md`.
+- Follow-up: contain the complete logo vertically, measure equal gaps from its visible edge, and give Polaroid's navigation white artwork with soft shadows around its text and logo. The rejected rectangular backing is removed. Desktop, phone and landscape checks are recorded in `tools/PROJECT-HEADER-QA.md`.
 - `tools/project-header.mjs` and `dist/project-header.css` own the shared component. After navigation changes run `node tools/render-project-headers.mjs`, `node tools/render-vr.mjs` and `node tools/render-masb.mjs`; keep all generated landing pages synchronized.
 - Site validation checks the published link order and destinations across the directory's project routes. Browser and publication results are reported by the completing chat.
 
