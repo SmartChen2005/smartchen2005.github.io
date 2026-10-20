@@ -17,7 +17,7 @@ assert.equal(pdf.subarray(0,5).toString(),'%PDF-');
 assert.equal(createHash('sha256').update(pdf).digest('hex'),guide.sha256,'Preserve the supplied user guide byte-for-byte');
 assert(html.includes('Application currently unavailable.'));
 assert(html.includes('Stats, actions, and outcome are a scripted example.'));
-assert(html.indexOf('id="experience"')<html.indexOf('id="overview"'),'The process leads the project introduction');
+assert(html.indexOf('id="experience"')<html.indexOf('id="overview"'),'The process leads the preserved project introduction');
 const decode=text=>text.replaceAll('&amp;','&').replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&quot;','"');
 const text=decode(html.replace(/<[^>]*>/g,' ')).replace(/\s+/g,' ');
 let cursor=0;
@@ -35,6 +35,9 @@ for(const block of source.blocks.slice(2).filter(b=>b.text)){
   cursor=index+block.text.length;
 }
 assert.equal((html.match(/data-preview/g)||[]).length,19,'Preserve all original images');
+for(const item of source.media) assert.equal((html.match(new RegExp(`href="assets/${item.file.replaceAll('.', '\\.')}"`, 'g'))||[]).length,1,`Original media appears once: ${item.file}`);
+assert(html.indexOf('id="archive"')<html.indexOf('id="user-guide"') && html.indexOf('id="user-guide"')<html.indexOf('id="technical-document"'),'Archive leads into guide and full document');
+assert.equal((html.match(/data-beat-button=/g)||[]).length,6,'All six narrated exchanges are manually accessible');
 assert.equal((html.match(/<li>/g)||[]).length,2,'Preserve the source ordered list');
 assert.equal((html.match(/class="document-section"/g)||[]).length,7);
 assert.equal((html.match(/class="contribution"/g)||[]).length,4);

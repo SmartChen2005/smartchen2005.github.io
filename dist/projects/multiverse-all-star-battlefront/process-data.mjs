@@ -4,23 +4,23 @@ export default {
   "steps": [
     {
       "title": "Describe",
-      "description": "Start with a character in your own words. Their appearance, personality, and abilities become the starting point for the game."
+      "description": "Begin with a character, not a preset class. Describe how they look, what drives them, and how they fight. The system interprets those details as a visual identity, a personality, and a set of combat strengths and weaknesses."
     },
     {
       "title": "Generate",
-      "description": "The description becomes a pixel-art portrait, a skillset, and six attributes: HP, MP, ATK, DEF, AGI, and LUCK. An opponent enters through the same character pipeline."
+      "description": "Words become a pixel-art fighter with a portrait, a skillset, and six attributes: HP, MP, ATK, DEF, AGI, and LUCK. The same pipeline creates an opponent. A defensive dragon and a fast-moving duelist turn the description into a readable matchup."
     },
     {
       "title": "Battle simulation",
-      "description": "The fighters meet in a turn-based simulation. Actions update the battle state, while successive comic panels carry the encounter forward. In the application, Next and Prev let players revisit the pages."
+      "description": "The characters enter a turn-based encounter. Each action changes the battle state; those events become successive comic panels. This illustrated encounter breaks that process into six exchanges. In the original application, Next and Prev let players revisit the generated pages."
     },
     {
       "title": "Result",
-      "description": "A win, loss, or draw and a short summary bring the encounter to a close. Players can restart with another description and imagine a different fighter."
+      "description": "The final battle state resolves into a win, loss, or draw, followed by a short account of what happened. Here the Guardian survives by defending, finding an opening, and counterattacking. A new description starts the creative loop again."
     }
   ],
   "example": {
-    "prompt": "A winged, armored dragon carrying a shield, guarding the arena with patience and resolve.",
+    "prompt": "A silver-scaled dragon knight with wide, weathered wings and a scarred emerald shield. Patient and protective, he studies an opponent before moving. He absorbs the first strike, then answers with a low aerial lunge and a sweeping blade. Strong in defense, but slower to change direction.",
     "player": {
       "name": "Winged Guardian",
       "file": "character-03.webp",
@@ -62,26 +62,62 @@ export default {
     "skill": "Shield guard / Aerial strike",
     "turns": [
       {
-        "title": "The opening move",
-        "caption": "The Duelist advances. The Guardian raises its shield.",
+        "title": "Read the opponent",
+        "effect": "approach",
+        "sound": "READY",
+        "caption": "The Guardian holds the center. Across the arena, the Duelist lowers its stance and searches for an opening.",
+        "description": "A heavy guard meets a faster opponent. Their contrasting strengths establish the encounter before the first hit.",
         "playerHP": 100,
         "opponentHP": 100
       },
       {
-        "title": "Guard and counter",
-        "caption": "A guarded strike becomes an opening for a counterattack.",
-        "playerHP": 76,
-        "opponentHP": 48
+        "title": "A sudden dash",
+        "effect": "dash",
+        "sound": "SWISH",
+        "caption": "The Duelist crosses the gap in a blur. A quick blade catches the Guardian before the shield is fully raised.",
+        "description": "Speed creates the first advantage. The Duelist closes the distance, lands a glancing strike, and slips away.",
+        "playerHP": 90,
+        "opponentHP": 100
       },
       {
-        "title": "The final exchange",
-        "caption": "The Guardian takes the last exchange and closes the encounter.",
+        "title": "Hold the line",
+        "effect": "shield",
+        "sound": "CLANG",
+        "caption": "A second strike crashes into the shield. The Guardian gives ground, but turns the block into a short counter.",
+        "description": "Defense changes the rhythm. The shield absorbs the attack while a close counter chips away at the Duelist.",
+        "playerHP": 78,
+        "opponentHP": 92
+      },
+      {
+        "title": "Take to the air",
+        "effect": "aerial",
+        "sound": "WHOOSH",
+        "caption": "The Guardian lifts off, clears the next blade, and sweeps downward. The Duelist is forced onto the defensive.",
+        "description": "The wings become part of the fighting style. An aerial counter turns a defensive character into the aggressor.",
+        "playerHP": 78,
+        "opponentHP": 59
+      },
+      {
+        "title": "Blades collide",
+        "effect": "clash",
+        "sound": "KRAK",
+        "caption": "Both fighters commit. Steel meets steel, sparks cut across the panel, and each combatant takes damage.",
+        "description": "Neither side leaves the exchange untouched. A simultaneous clash reduces both health bars and sets up the finish.",
+        "playerHP": 61,
+        "opponentHP": 25
+      },
+      {
+        "title": "The deciding strike",
+        "effect": "finish",
+        "sound": "SLASH",
+        "caption": "The Guardian drives through the opening with one final sweep. The Duelist falls, and the encounter is resolved.",
+        "description": "The last opening decides the battle. The remaining health determines the outcome that appears in the result.",
         "playerHP": 58,
         "opponentHP": 0
       }
     ],
     "outcome": "Victory",
-    "summary": "The Winged Guardian wins this example encounter."
+    "summary": "After weathering the opening attacks, the Guardian turns a shield block into an aerial counter and wins the final exchange."
   },
   "guide": {
     "file": "Multiverse-User-Document.pdf",

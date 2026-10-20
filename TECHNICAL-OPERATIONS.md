@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-20 — Expand the Multiverse encounter and connect the archive
+
+- Expanded the character prompt and process explanations; added six narrated, selectable battle exchanges with scroll-controlled dash, guard, aerial, clash, damage and victory effects.
+- Reorganized the original media into character creation, attributes/comic/result screens and exhibition use, leading into the preserved user guide and full technical document. Kept the original introduction in a native disclosure and all nineteen source media unchanged.
+- Retained red/white/black, native scrolling, keyboard controls, reduced-motion/forced-color manual selection and no-JavaScript reading. Verification evidence and limitations are recorded in `tools/MASB-QA.md`; publication status is reported in the completing chat.
+
 ### 2026-10-20 — Illustrate the Multiverse game process
 
 - Retained Multiverse's red/white/black identity while shortening its opening and adding a leading Describe/Generate/Battle/Result scroll sequence using existing character artwork. Sample input, stats, turn states and outcome are identified as illustrative.

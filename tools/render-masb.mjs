@@ -52,10 +52,10 @@ const html=`<!doctype html>
   <meta name="theme-color" content="#f13d24">
   <meta name="description" content="Multiverse All-Star Battlefront: an AI-driven battle simulation. Create a pixel-art fighter from your words and follow the battle in a generated comic.">
   <title>Multiverse All-Star Battlefront | Smart Chen</title>
-  <link rel="stylesheet" href="battlefront.css?v=process-1">
-  <link rel="stylesheet" href="battle-process.css?v=process-1">
+  <link rel="stylesheet" href="battlefront.css?v=process-2">
+  <link rel="stylesheet" href="battle-process.css?v=process-2">
   ${projectHeaderStylesheet('../../')}
-  <script type="module" src="battlefront.mjs?v=process-1"></script>
+  <script type="module" src="battlefront.mjs?v=process-2"></script>
 </head>
 <body>
   <a class="skip-link" href="#experience">Skip to content</a>
@@ -67,25 +67,24 @@ const html=`<!doctype html>
       <div class="hero-bottom">
         <p><time datetime="2025-09">September</time> to <time datetime="2025-11">November 2025</time><br><strong>Not a vibe-coding project</strong></p>
         <p>Smart Chen<br>Group leader, designer &amp; engineer</p>
-        <nav aria-label="On this page"><a href="#experience">How it plays <span aria-hidden="true">↓</span></a><a href="#user-guide">User guide <span aria-hidden="true">↓</span></a><a href="#gallery">In action <span aria-hidden="true">↓</span></a><a href="#technical-document">Technical document <span aria-hidden="true">↓</span></a></nav>
+        <nav aria-label="On this page"><a href="#experience">How it plays <span aria-hidden="true">↓</span></a><a href="#user-guide">User guide <span aria-hidden="true">↓</span></a><a href="#archive">Project archive <span aria-hidden="true">↓</span></a><a href="#technical-document">Technical document <span aria-hidden="true">↓</span></a></nav>
       </div>
     </div>
   </div>
   <main>
     ${renderExperience(experience)}
-    <section class="overview wrap section-grid" id="overview" aria-labelledby="overview-title">
-      <div class="section-label"><p class="label">The game</p><h2 id="overview-title">${escape(source.intro[0])}</h2></div>
-      <div class="overview-copy">${source.intro.slice(1).map(p=>`<p>${escape(p)}</p>`).join('')}</div>
-    </section>
-    <section class="fighters" aria-labelledby="fighters-title">
-      <div class="wrap">
-        <div class="section-heading"><h2 id="fighters-title">Characters from imagination.</h2><p>AI-generated fighters / Pixel art</p></div>
-        <div class="fighter-grid">${characters.map((m,i)=>`<figure>${imageLink(m,descriptions[i])}</figure>`).join('')}</div>
-      </div>
-    </section>
-    <section class="gallery wrap" id="gallery" aria-labelledby="gallery-title">
-      <div class="section-heading"><h2 id="gallery-title">In action.</h2><p>The game &amp; the exhibition</p></div>
-      <div class="photo-grid">${photos.map((m,i)=>`<figure>${imageLink(m,photoDescriptions[i])}<figcaption>${escape(photoDescriptions[i])}</figcaption></figure>`).join('')}</div>
+    <section class="archive wrap" id="archive" aria-labelledby="archive-title">
+      <header class="archive-intro"><p class="label">From the example to the project</p><h2 id="archive-title">The same journey.<br>Many possible worlds.</h2><p>The encounter above is an illustration. These original characters, application screens, and exhibition photographs show the project itself: an open-ended description becomes a fighter, a sequence of comic pages, and a story to share.</p></header>
+      <section class="archive-chapter" aria-labelledby="fighters-title"><div class="archive-heading"><p class="label">Describe → Generate</p><h3 id="fighters-title">No fixed roster.</h3><p>A crowned serpent, a winged knight, a basketball champion. The character pipeline lets different ideas take a visual form, rather than asking every player to choose from the same cast.</p></div><div class="fighter-grid">${characters.map((m,i)=>`<figure>${imageLink(m,descriptions[i])}</figure>`).join('')}</div></section>
+      <section class="archive-chapter" aria-labelledby="screens-title"><div class="archive-heading"><p class="label">Generate → Battle → Result</p><h3 id="screens-title">An idea becomes<br>a playable story.</h3><p>The original interface carries the same progression: inspect the generated character, follow its battle through comic panels, then read the outcome. These photographs capture that flow running on exhibition laptops.</p></div>
+        <div class="evidence-grid">${[
+          {label:'The fighter',title:'Identity becomes attributes.',copy:'The portrait sits beside the character’s statistics, making its strengths and weaknesses visible before the encounter.',indices:[0,6]},
+          {label:'The encounter',title:'Actions become comic panels.',copy:'Sequential pages give the battle a visual rhythm. Players read the exchanges and move between the generated panels.',indices:[4,8]},
+          {label:'The outcome',title:'Every encounter has an ending.',copy:'The result screen closes the loop. This photographed encounter ended in defeat; a new description offers another possibility.',indices:[1]}
+        ].map(group=>`<div class="evidence-group"><p class="label">${group.label}</p><h4>${group.title}</h4><p>${group.copy}</p><div class="evidence-photos">${group.indices.map(i=>`<figure>${imageLink(photos[i],photoDescriptions[i])}<figcaption>${escape(photoDescriptions[i])}</figcaption></figure>`).join('')}</div></div>`).join('')}</div>
+      </section>
+      <section class="archive-chapter exhibition" id="gallery" aria-labelledby="gallery-title"><div class="archive-heading"><p class="label">From screen to exhibition</p><h3 id="gallery-title">A world worth<br>passing around.</h3><p>At the exhibition, visitors could try their own characters, watch the encounter unfold, and compare the stories that emerged. The project moved from a private prompt to a shared experience around the screen.</p></div><div class="exhibition-grid">${[7,2,3,5,9].map(i=>`<figure>${imageLink(photos[i],photoDescriptions[i])}<figcaption>${escape(photoDescriptions[i])}</figcaption></figure>`).join('')}</div></section>
+      <div class="archive-references"><div class="user-guide" id="user-guide"><div><p class="label">Continue into the details</p><p>The original user guide explains the application flow. The technical document below records how the team built it.</p></div><a href="files/${experience.guide.file}" target="_blank" rel="noopener noreferrer"><span>User guide ↗</span><small>PDF · ${experience.guide.pages} pages · opens in a new tab</small></a></div><details class="original-intro" id="overview"><summary>Original project introduction</summary><div><h3>${escape(source.intro[0])}</h3>${source.intro.slice(1).map(p=>`<p>${escape(p)}</p>`).join('')}</div></details></div>
     </section>
     <section class="technical wrap" id="technical-document" aria-labelledby="technical-title">
       <header class="technical-heading"><p class="label">${escape(source.blocks[0].text)}</p><h2 id="technical-title">Behind<br>the battle.</h2><p>${escape(source.blocks[1].text)}</p></header>

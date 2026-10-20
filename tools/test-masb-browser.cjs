@@ -27,7 +27,7 @@ if (output) fs.mkdirSync(output, { recursive: true });
       assert.equal(await page.locator('.process-scene:not([inert])').count(), 1);
       if (i === 0) assert.equal(await page.locator('[data-typed-prompt]').textContent(), content.example.prompt);
       if (i === 1) assert.equal(await page.locator('[data-stat-value="120"]').textContent(), '120');
-      if (i === 2) assert.equal(await page.locator('[data-opponent-health]').locator('..').getAttribute('aria-valuenow'), '0');
+      if (i === 2) assert.equal(await page.locator('[data-opponent-health]').locator('..').getAttribute('aria-valuenow'), '100');
       if (output) await page.screenshot({ path: path.join(output, `desktop-stage-${i}.png`) });
     }
     await page.locator('[data-process-button="3"]').press('Home');
@@ -39,8 +39,9 @@ if (output) fs.mkdirSync(output, { recursive: true });
 
     const align = async index => {
       const delta = await page.locator(`[data-process-button="${index}"]`).evaluate(e => {
-        const r = e.closest('[data-process-stop]').getBoundingClientRect();
-        return r.top + r.height / 2 - innerHeight * (innerWidth <= 760 ? .75 : .55);
+        const stop = e.closest('[data-process-stop]');
+        const r = (stop.querySelector('[data-battle-beat]') || stop).getBoundingClientRect();
+        return r.top + r.height / 2 - innerHeight * (innerWidth <= 760 ? .78 : .55);
       });
       await page.mouse.move(12, 250);
       await page.mouse.wheel(0, delta);
@@ -60,23 +61,38 @@ if (output) fs.mkdirSync(output, { recursive: true });
       assert(Math.abs(await page.locator('.process-sticky').evaluate(e => e.getBoundingClientRect().top) - top) < 2, 'Canvas stays beside/above the moving stages');
       if (output) await page.screenshot({ path: path.join(output, `scroll-${width}.png`) });
     }
-    // Sample three positions inside the battle chapter, including actual wheel input.
-    await page.setViewportSize({ width: 1440, height: 1000 });
-    const positions = await page.locator('[data-process-stop]').evaluateAll(es => es.map(e => { const r=e.getBoundingClientRect();return scrollY+r.top+r.height/2; }));
-    for (const [progress, expectedTurn] of [[.52, '0'], [.65, '1'], [.80, '2']]) {
-      await page.evaluate(y => scrollTo({ top: y, behavior: 'instant' }), positions[0] + (positions[3]-positions[0])*progress - 550);
-      await page.waitForTimeout(1500);
-      assert.equal(await page.locator('[data-battle-process]').getAttribute('data-turn'), expectedTurn);
+    // Each exchange is separately selectable and reversible through actual wheel input.
+    for (const width of [1440, 390]) {
+      await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+      for (const index of [0,1,2,3,4,5,4,3,2,1,0]) {
+        const delta = await page.locator('[data-battle-beat]').nth(index).evaluate(e => {
+          const r=e.getBoundingClientRect(); return r.top+r.height/2-innerHeight*(innerWidth<=760?.78:.55);
+        });
+        await page.mouse.wheel(0, delta);
+        await page.waitForTimeout(2100);
+        assert.equal(await page.locator('[data-battle-process]').getAttribute('data-stage'), '2');
+        assert.equal(await page.locator('[data-battle-process]').getAttribute('data-effect'), content.example.turns[index].effect);
+        assert.equal(await page.locator('[data-opponent-health]').locator('..').getAttribute('aria-valuenow'), String(content.example.turns[index].opponentHP));
+      }
     }
-    for (const width of [1440, 1024, 760, 390, 320]) {
-      await page.setViewportSize({ width, height: width < 760 ? 844 : 1000 });
+    for (let index=0; index<6; index++) {
+      await page.locator(`[data-beat-button="${index}"]`).click();
+      await page.waitForTimeout(1800);
+      assert.equal(await page.locator(`[data-beat-button="${index}"]`).getAttribute('aria-pressed'), 'true');
+    }
+    await page.locator('[data-beat-button="5"]').press('Home');
+    await page.keyboard.press('ArrowDown');
+    await page.waitForTimeout(1800);
+    assert.equal(await page.locator('[data-beat-button="1"]').getAttribute('aria-pressed'), 'true');
+    for (const [width,height] of [[1440,1000],[1024,1000],[760,1000],[390,844],[320,844],[320,568]]) {
+      await page.setViewportSize({ width, height });
       await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), `No horizontal overflow at ${width}px`);
       for (let index = 0; index < 4; index++) {
         await page.locator(`[data-process-button="${index}"]`).click();
-        await page.waitForTimeout(300);
+        await page.waitForTimeout(1800);
         const fits = await page.locator(`[data-process-scene="${index}"]`).evaluate(e => e.scrollHeight <= e.clientHeight + 2 && e.scrollWidth <= e.clientWidth + 2);
-        assert(fits, `Scene ${index} content fits at ${width}px`);
+        assert(fits, `Scene ${index} content fits at ${width}x${height}`);
       }
       if (output && [390,320].includes(width)) await page.screenshot({ path: path.join(output, `result-${width}.png`) });
     }
@@ -110,6 +126,6 @@ if (output) fs.mkdirSync(output, { recursive: true });
     assert.equal(await fallback.locator('[data-preview]').count(), 19);
     await fallbackContext.close();
     assert.deepEqual(errors, []);
-    console.log('Passed: 4 manual/keyboard stages; real wheel progression and reverse at desktop/phone widths; 3 battle pages and example HP; sticky canvas; manual override; 5 responsive widths and all scene bounds; reduced motion; forced colors; original PDF HTTP response; original image viewer/focus restoration; Projects navigation; no-JS content; no page exceptions.');
+    console.log('Passed: 4 manual/keyboard stages; real wheel progression and reverse at desktop/phone widths; 6 distinct battle exchanges, manual/keyboard beat selection and example HP; sticky canvas; manual override; 6 viewport shapes and all scene bounds; reduced motion; forced colors; original PDF HTTP response; original image viewer/focus restoration; Projects navigation; no-JS content; no page exceptions.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exit(1); });
