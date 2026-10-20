@@ -179,10 +179,12 @@ if (html.includes("prod-files-secure.s3")) failures.push("Expiring Notion asset 
 if (html.includes("&lt;empty-block/&gt;")) failures.push("Unparsed Notion empty block remains");
 if (html.includes("####")) failures.push("Unparsed Markdown heading remains");
 
-// All project entrances must expose the same destinations in the same order.
+// Local project entrances must expose the same destinations in the same order.
 const directoryFile = path.join(root, 'dist/projects/index.html');
 const directoryHtml = fs.readFileSync(directoryFile, 'utf8');
-const projectRoutes = [...directoryHtml.matchAll(/class="directory-link" href="([^"]+)"/g)].map(match => match[1]);
+const projectRoutes = [...directoryHtml.matchAll(/class="directory-link" href="([^"]+)"/g)]
+  .map(match => match[1])
+  .filter(route => !/^https?:\/\//i.test(route));
 for (const route of ['', ...projectRoutes]) {
   const file = path.join(root, 'dist/projects', route, 'index.html');
   const page = fs.readFileSync(file, 'utf8');
