@@ -1,5 +1,9 @@
 # World Sensing Music Station verification
 
+## 2026-10-20 — Reduce opening photograph
+
+Reduced the desktop photograph by about one fifth and moved its center downward. A height-based cap reserves space for the header and bottom playback controls; short desktop views hide the wrapping caption. Landscape phone sizing also keeps the photograph below the header. Connected Chrome inspection covers 1707×932, 1440×600, 844×390 and 390×844: no photo/header overlap, no portrait photo/thesis overlap, and the original photograph remains uncropped. The model transition continues to read the photograph’s actual dimensions.
+
 ## 2026-10-20 — Familiar routes become a place’s theme song
 
 The current page foregrounds a loop station + musical instrument, played by moving through familiar space. The user-selected photograph opens the page, dissolves into the reconstructed device with the coils aligned, and shrinks into the room through reversible native scrolling. The existing overall page order, prototype media, shared navigation, original downloads and device geometry remain.
