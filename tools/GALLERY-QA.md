@@ -1,5 +1,12 @@
 # The Gallery verification
 
+## 2026-10-21 — Three coordinated palettes, scroll blending and soft focus
+
+- Reduced the light to three CSS-owned systems with three tones each: champagne/greige/cream, mist blue/silver lilac/ice, and blush/mauve/apricot. The route-only controller mixes them continuously over native document scroll, with reversible smoothstep interpolation and a 160ms response. Idle and hidden states stop rendering; restored navigation and resize resynchronize. No-JavaScript and reduced-motion preferences retain champagne. Background-only blur is 8px on desktop / 4px on phones; clipped 24px overscan fixes the initial horizontal overflow without clipping header links or content.
+- Passed `node tools/test-cathedral-light.mjs`, site validation, Gallery route/assets, layout and carousel checks, module/renderer syntax, and whitespace checks. The new regression runs in Pages CI and checks continuous interpolation, AA secondary contrast throughout all blends, scroll easing/reversal, idle/hidden/BFCache cleanup, throttled frames, reduced-motion/forced-color fallbacks and route scoping.
+- Chrome: actual 1707px desktop plus 390px and 320px phones have no horizontal overflow. Real forward/reverse scrolling reaches all three palettes, with header/body colors synchronized. At y=1772 of a 3636px range the palette is mist blue; the document end resolves to blush. Phone scrolling also changes the palette. The body and photographs compute to `filter: none`; only decoration is blurred. The white viewer opens and Escape restores the original link. Console errors: none. Viewport overrides reset.
+- Screenshots and audit evidence: ignored `tools/stills-qa/cathedral-palettes-review/`. Scoped strict audit reports zero findings; root strict audit retains sixteen existing findings in ignored archive/test HTML. Preference and lifecycle behavior were exercised in the controller harness; OS preference emulation and physical touch hardware were not available in the browser session.
+
 ## 2026-10-21 — Soft self-emitting light
 
 - Used the supplied second photograph only as a loose warm-amber/cool-gray color reference. The route now layers twelve soft luminous cores and broad bloom over its continuous, irregular pastel field. Header/body share all four viewport-aligned layers. No image asset, animation or script was added; original photographs remain unfiltered.

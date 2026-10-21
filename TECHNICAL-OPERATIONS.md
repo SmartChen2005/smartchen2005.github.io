@@ -96,6 +96,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-21 — Three coordinated Cathedral light palettes
+
+- Reduced the route background to three CSS-owned color systems, added reversible native-scroll color transitions and a slight clipped background blur.
+- `node tools/render-gallery.mjs` synchronizes the route markup/assets. Run `node tools/test-cathedral-light.mjs` for palette interpolation, contrast, scroll easing, preference fallbacks and lifecycle checks; this regression also runs in Pages CI. Browser evidence and audit limits are recorded in `tools/GALLERY-QA.md`.
+
 ### 2026-10-20 — Redraw the Multiverse illustrative fighters
 
 - Replaced abstract character polygons with detailed, curved SVG ink illustrations, clearer anatomy/equipment and opaque front-to-back layering. The generator owns all four appearances; scroll drawing and existing battle choreography are preserved.

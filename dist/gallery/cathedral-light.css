@@ -1,102 +1,117 @@
-/* Muted amber and cool mineral light, with luminous cores and soft bloom. */
+/* Three coordinated palettes share the same soft, irregular light field. */
 .cathedral-light-page {
-  --light-apricot: 231 209 180;
-  --light-rose: 233 211 201;
-  --light-lilac: 216 213 226;
-  --light-blue: 205 218 225;
-  --light-sage: 209 214 211;
-  --light-warm-core: 255 246 219;
-  --light-cool-core: 239 248 250;
+  --cathedral-amber-a: 229 207 176;
+  --cathedral-amber-b: 215 211 203;
+  --cathedral-amber-c: 249 237 207;
+  --cathedral-mist-a: 199 218 230;
+  --cathedral-mist-b: 211 215 229;
+  --cathedral-mist-c: 235 246 249;
+  --cathedral-rose-a: 232 206 200;
+  --cathedral-rose-b: 220 205 213;
+  --cathedral-rose-c: 249 234 220;
+  --light-a: var(--cathedral-amber-a);
+  --light-b: var(--cathedral-amber-b);
+  --light-c: var(--cathedral-amber-c);
+  --light-blur: clamp(4px, .5vw, 8px);
+  --light-bleed: 24px;
   --photo-secondary: #50514d;
   /* Opaque colors meet directly: narrow shafts alternate with broad pools. */
   --cathedral-light-field: linear-gradient(90deg,
-    rgb(var(--light-blue)) 0% 2%,
-    rgb(var(--light-lilac)) 3% 3.8%,
-    rgb(var(--light-apricot)) 4.8% 9.6%,
-    rgb(var(--light-rose)) 10.6% 11.3%,
-    rgb(var(--light-sage)) 12.3% 14.1%,
-    rgb(var(--light-blue)) 15.1% 15.5%,
-    rgb(var(--light-rose)) 16.5% 17.1%,
-    rgb(var(--light-lilac)) 18.1% 23.9%,
-    rgb(var(--light-sage)) 24.9% 25.3%,
-    rgb(var(--light-apricot)) 26.3% 27.4%,
-    rgb(var(--light-blue)) 28.4% 31.2%,
-    rgb(var(--light-sage)) 32.2% 32.8%,
-    rgb(var(--light-rose)) 33.8% 34.4%,
-    rgb(var(--light-apricot)) 35.4% 35.8%,
-    rgb(var(--light-lilac)) 36.8% 37.9%,
-    rgb(var(--light-blue)) 38.9% 39.3%,
-    rgb(var(--light-rose)) 40.3% 46.6%,
-    rgb(var(--light-sage)) 47.6% 48.3%,
-    rgb(var(--light-lilac)) 49.3% 52%,
-    rgb(var(--light-apricot)) 53% 53.4%,
-    rgb(var(--light-blue)) 54.4% 55.8%,
-    rgb(var(--light-sage)) 56.8% 57.2%,
-    rgb(var(--light-rose)) 58.2% 60.4%,
-    rgb(var(--light-lilac)) 61.4% 61.9%,
-    rgb(var(--light-apricot)) 62.9% 69.9%,
-    rgb(var(--light-sage)) 70.9% 71.4%,
-    rgb(var(--light-blue)) 72.4% 74.3%,
-    rgb(var(--light-rose)) 75.3% 76%,
-    rgb(var(--light-lilac)) 77% 79.9%,
-    rgb(var(--light-apricot)) 80.9% 81.3%,
-    rgb(var(--light-sage)) 82.3% 86.8%,
-    rgb(var(--light-blue)) 87.8% 88.2%,
-    rgb(var(--light-lilac)) 89.2% 90.6%,
-    rgb(var(--light-rose)) 91.6% 92.2%,
-    rgb(var(--light-apricot)) 93.2% 96.5%,
-    rgb(var(--light-blue)) 97.5% 100%);
+    rgb(var(--light-b)) 0% 2%,
+    rgb(var(--light-a)) 3% 3.8%,
+    rgb(var(--light-a)) 4.8% 9.6%,
+    rgb(var(--light-b)) 10.6% 11.3%,
+    rgb(var(--light-c)) 12.3% 14.1%,
+    rgb(var(--light-b)) 15.1% 15.5%,
+    rgb(var(--light-a)) 16.5% 17.1%,
+    rgb(var(--light-b)) 18.1% 23.9%,
+    rgb(var(--light-c)) 24.9% 25.3%,
+    rgb(var(--light-a)) 26.3% 27.4%,
+    rgb(var(--light-b)) 28.4% 31.2%,
+    rgb(var(--light-c)) 32.2% 32.8%,
+    rgb(var(--light-a)) 33.8% 34.4%,
+    rgb(var(--light-c)) 35.4% 35.8%,
+    rgb(var(--light-b)) 36.8% 37.9%,
+    rgb(var(--light-c)) 38.9% 39.3%,
+    rgb(var(--light-a)) 40.3% 46.6%,
+    rgb(var(--light-b)) 47.6% 48.3%,
+    rgb(var(--light-b)) 49.3% 52%,
+    rgb(var(--light-a)) 53% 53.4%,
+    rgb(var(--light-c)) 54.4% 55.8%,
+    rgb(var(--light-b)) 56.8% 57.2%,
+    rgb(var(--light-a)) 58.2% 60.4%,
+    rgb(var(--light-b)) 61.4% 61.9%,
+    rgb(var(--light-a)) 62.9% 69.9%,
+    rgb(var(--light-c)) 70.9% 71.4%,
+    rgb(var(--light-b)) 72.4% 74.3%,
+    rgb(var(--light-a)) 75.3% 76%,
+    rgb(var(--light-b)) 77% 79.9%,
+    rgb(var(--light-c)) 80.9% 81.3%,
+    rgb(var(--light-c)) 82.3% 86.8%,
+    rgb(var(--light-b)) 87.8% 88.2%,
+    rgb(var(--light-a)) 89.2% 90.6%,
+    rgb(var(--light-b)) 91.6% 92.2%,
+    rgb(var(--light-a)) 93.2% 96.5%,
+    rgb(var(--light-b)) 97.5% 100%);
   --cathedral-light-bloom: linear-gradient(90deg,
-    transparent 0%, rgb(255 228 174 / .48) 6.7%, transparent 12%,
-    rgb(244 227 210 / .34) 19.6%, transparent 25%,
-    rgb(228 245 251 / .3) 29.2%, transparent 34%,
-    rgb(255 225 190 / .42) 43.8%, transparent 49%,
-    rgb(237 232 249 / .34) 50.8%, transparent 56%,
-    rgb(255 227 172 / .5) 65.4%, transparent 72%,
-    rgb(229 242 248 / .38) 78.6%, transparent 82%,
-    rgb(243 236 208 / .4) 85.1%, transparent 90%,
-    rgb(255 229 181 / .46) 94.3%, transparent 100%);
+    transparent 0%, rgb(var(--light-c) / .48) 6.7%, transparent 12%,
+    rgb(var(--light-c) / .34) 19.6%, transparent 25%,
+    rgb(var(--light-c) / .3) 29.2%, transparent 34%,
+    rgb(var(--light-c) / .42) 43.8%, transparent 49%,
+    rgb(var(--light-c) / .34) 50.8%, transparent 56%,
+    rgb(var(--light-c) / .5) 65.4%, transparent 72%,
+    rgb(var(--light-c) / .38) 78.6%, transparent 82%,
+    rgb(var(--light-c) / .4) 85.1%, transparent 90%,
+    rgb(var(--light-c) / .46) 94.3%, transparent 100%);
   --cathedral-light-cores: linear-gradient(90deg,
     transparent 0% 5.1%,
-    rgb(var(--light-warm-core) / .84) 6.4% 6.9%, transparent 8.6% 10.3%,
-    rgb(var(--light-warm-core) / .58) 10.9%, transparent 11.7% 18.1%,
-    rgb(var(--light-warm-core) / .7) 19.4% 19.8%, transparent 21.9% 28.1%,
-    rgb(var(--light-cool-core) / .78) 29.1%, transparent 30.5% 34.8%,
-    rgb(var(--light-warm-core) / .66) 35.6%, transparent 36.6% 41.7%,
-    rgb(var(--light-warm-core) / .82) 43.3% 44.1%, transparent 46.2% 49.3%,
-    rgb(var(--light-cool-core) / .65) 50.7%, transparent 52% 62.3%,
-    rgb(var(--light-warm-core) / .88) 64.2% 65.6%, transparent 68.1%,
-    rgb(var(--light-warm-core) / .62) 69.1%, transparent 70.2% 76.9%,
-    rgb(var(--light-cool-core) / .78) 78.5%, transparent 80% 83.4%,
-    rgb(var(--light-warm-core) / .64) 85%, transparent 86.7% 92.1%,
-    rgb(var(--light-warm-core) / .84) 94.1% 94.5%, transparent 96.3% 100%);
+    rgb(var(--light-c) / .84) 6.4% 6.9%, transparent 8.6% 10.3%,
+    rgb(var(--light-c) / .58) 10.9%, transparent 11.7% 18.1%,
+    rgb(var(--light-c) / .7) 19.4% 19.8%, transparent 21.9% 28.1%,
+    rgb(var(--light-c) / .78) 29.1%, transparent 30.5% 34.8%,
+    rgb(var(--light-c) / .66) 35.6%, transparent 36.6% 41.7%,
+    rgb(var(--light-c) / .82) 43.3% 44.1%, transparent 46.2% 49.3%,
+    rgb(var(--light-c) / .65) 50.7%, transparent 52% 62.3%,
+    rgb(var(--light-c) / .88) 64.2% 65.6%, transparent 68.1%,
+    rgb(var(--light-c) / .62) 69.1%, transparent 70.2% 76.9%,
+    rgb(var(--light-c) / .78) 78.5%, transparent 80% 83.4%,
+    rgb(var(--light-c) / .64) 85%, transparent 86.7% 92.1%,
+    rgb(var(--light-c) / .84) 94.1% 94.5%, transparent 96.3% 100%);
   isolation: isolate;
 }
 
-.cathedral-light-page::before,
-.cathedral-light-page .gallery-header::before {
-  content: "";
+.cathedral-light-background {
+  position: fixed;
   inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: clip;
+}
+
+.cathedral-light-background::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--light-bleed));
   z-index: -1;
   pointer-events: none;
   background-color: var(--photo-canvas);
   background-image:
-    radial-gradient(ellipse at 67% 72%, rgb(255 234 195 / .18), transparent 68%),
+    radial-gradient(ellipse at 67% 72%, rgb(var(--light-c) / .18), transparent 68%),
     var(--cathedral-light-cores), var(--cathedral-light-bloom), var(--cathedral-light-field);
-  background-size: 100% 100vh, clamp(620px, 100vw, 1440px) 100vh,
-    clamp(620px, 100vw, 1440px) 100vh, clamp(620px, 100vw, 1440px) 100vh;
+  background-size: 100% calc(100vh + 2 * var(--light-bleed)),
+    clamp(620px, 100vw, 1440px) calc(100vh + 2 * var(--light-bleed)),
+    clamp(620px, 100vw, 1440px) calc(100vh + 2 * var(--light-bleed)),
+    clamp(620px, 100vw, 1440px) calc(100vh + 2 * var(--light-bleed));
   background-position: center top;
+  filter: blur(var(--light-blur));
 }
-
-.cathedral-light-page::before { position: fixed; }
 
 /* The same viewport-aligned field continues through the opaque sticky header. */
 .cathedral-light-page .gallery-header { isolation: isolate; }
-.cathedral-light-page .gallery-header::before { position: absolute; }
+.cathedral-light-background--header { position: absolute; }
 
 @media (forced-colors: active), print {
-  .cathedral-light-page::before,
-  .cathedral-light-page .gallery-header::before { display: none; }
+  .cathedral-light-background { display: none; }
 }
 
 @media (forced-colors: active) {
