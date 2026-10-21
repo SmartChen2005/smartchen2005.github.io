@@ -96,6 +96,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-21 — Glass edges around Cathedral light beams
+
+- Added generated SVG glass bevels aligned with every CSS-defined beam boundary, sharing the existing palettes and clipped wall/header backgrounds.
+- `tools/cathedral-glass.mjs` owns the geometry; `node tools/render-gallery.mjs` synchronizes the page. `node tools/test-cathedral-light.mjs` now also checks complete rim coverage, finite geometry, SVG references and contrast with edge shading. Browser evidence and audit limits are in `tools/GALLERY-QA.md`.
+
 ### 2026-10-21 — Three coordinated Cathedral light palettes
 
 - Reduced the route background to three CSS-owned color systems, added reversible native-scroll color transitions and a slight clipped background blur.

@@ -106,6 +106,27 @@
   filter: blur(var(--light-blur));
 }
 
+/* Local color compression and paired contours suggest a polished glass bevel. */
+.cathedral-glass {
+  position: absolute;
+  top: calc(-1 * var(--light-bleed));
+  left: 50%;
+  width: clamp(620px, 100vw, 1440px);
+  height: calc(100vh + 2 * var(--light-bleed));
+  max-width: none;
+  overflow: visible;
+  transform: translateX(-50%);
+  filter: blur(.22px);
+  opacity: .78;
+  pointer-events: none;
+}
+.glass-tone-a { stop-color: rgb(var(--light-a)); }
+.glass-tone-b { stop-color: rgb(var(--light-b)); }
+.glass-tone-c { stop-color: rgb(var(--light-c)); }
+.glass-lens { opacity: .86; }
+.glass-edge-shadow { fill: none; stroke: rgb(33 39 43 / .08); stroke-width: .8; }
+.glass-edge-highlight { fill: none; stroke-width: 1.05; }
+
 /* The same viewport-aligned field continues through the opaque sticky header. */
 .cathedral-light-page .gallery-header { isolation: isolate; }
 .cathedral-light-background--header { position: absolute; }

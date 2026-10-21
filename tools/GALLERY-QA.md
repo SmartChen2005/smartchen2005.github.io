@@ -1,5 +1,12 @@
 # The Gallery verification
 
+## 2026-10-21 — Refractive glass rims beside each beam
+
+- Generated thirty-six gently curved glass boundaries from the actual CSS beam stops. Each narrow bevel compresses its neighboring palette colors and pairs a low-opacity shaded contour with a reflection that varies along its height. Wall/header SVGs have unique namespaces and repeat with the light field. Palette transitions, background blur and preference fallbacks remain intact; no new runtime, animation loop or image asset was added. Optical inspiration: [Apple's Liquid Glass layers](https://developer.apple.com/videos/play/wwdc2025/219/).
+- Passed the Cathedral regression, Gallery route/assets and document/source-order tests, site validation, helper/renderer syntax and whitespace checks. The regression now verifies all thirty-six boundaries, finite geometry, repeating coverage, unique/local SVG references, and AA secondary contrast including the rim shading. Scoped strict audit: zero findings. Root audit retains sixteen existing ignored archive/test HTML findings.
+- Chrome at actual 1707px, 390px and 320px widths has no horizontal overflow. Both decorative regions contain all thirty-six edges, and their SVG stops inherit the same current palette as the body while scrolling into mist blue and blush. Header stays at y=0 after Contact navigation. Photographs remain unfiltered; the viewer stays white, opens normally and Escape restores its source link. Console errors: none. Viewport overrides reset.
+- Evidence and desktop screenshot: ignored `tools/stills-qa/cathedral-glass-review/`. A cropped screenshot request timed out; the full-page viewport capture succeeded. Preference behavior remains covered by the existing controller harness and static CSS inspection, rather than OS emulation.
+
 ## 2026-10-21 — Three coordinated palettes, scroll blending and soft focus
 
 - Reduced the light to three CSS-owned systems with three tones each: champagne/greige/cream, mist blue/silver lilac/ice, and blush/mauve/apricot. The route-only controller mixes them continuously over native document scroll, with reversible smoothstep interpolation and a 160ms response. Idle and hidden states stop rendering; restored navigation and resize resynchronize. No-JavaScript and reduced-motion preferences retain champagne. Background-only blur is 8px on desktop / 4px on phones; clipped 24px overscan fixes the initial horizontal overflow without clipping header links or content.

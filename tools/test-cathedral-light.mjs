@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {paletteAt, startCathedralLight} from '../dist/gallery/cathedral-light.mjs';
+import {cathedralLightBands, renderCathedralGlass} from './cathedral-glass.mjs';
 
 const css = fs.readFileSync(new URL('../dist/gallery/cathedral-light.css', import.meta.url), 'utf8');
 const tokens = new Map([...css.matchAll(/(--cathedral-(?:amber|mist|rose)-[abc]):\s*([\d ]+);/g)].map(m => [m[1], m[2]]));
@@ -13,8 +14,10 @@ assert.deepEqual(paletteAt(palettes, -1), palettes[0]);
 assert.deepEqual(paletteAt(palettes, 2), palettes[2]);
 const luminance = color => color.map(v => v / 255).map(v => v <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4).reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
 const secondary = luminance([80, 81, 77]);
+const withGlassShade = color => color.map((channel, i) => channel * (1 - .08 * .78) + [33, 39, 43][i] * .08 * .78);
 for (let progress = 0; progress <= 1; progress += .01) {
   assert(paletteAt(palettes, progress).every(color => (luminance(color) + .05) / (secondary + .05) >= 4.5), 'Secondary copy keeps AA contrast throughout the palette transition');
+  assert(paletteAt(palettes, progress).every(color => (luminance(withGlassShade(color)) + .05) / (secondary + .05) >= 4.5), 'Fine glass shading also preserves secondary-text contrast');
   const colors = paletteAt(palettes, progress).flat();
   assert(colors.every(channel => Number.isFinite(channel) && channel >= 0 && channel <= 255));
   const next = paletteAt(palettes, Math.min(1, progress + .001)).flat();
@@ -61,8 +64,22 @@ assert.deepEqual(harness({offset: 1000}).color(), palettes[1], 'Restored scroll 
 const throttled = harness(); throttled.win.scrollY = 2000; throttled.listeners.get('scroll')(); throttled.advance(3, 1000);
 assert.deepEqual(throttled.color(), palettes[2], 'Slow frames still use elapsed time rather than stretching the transition'); throttled.destroy();
 const page = fs.readFileSync(new URL('../dist/gallery/cathedrals-of-light/index.html', import.meta.url), 'utf8');
+const bands = cathedralLightBands(css);
+assert.equal(bands.length, 36);
+const glass = renderCathedralGlass(css, 'test');
+const edges = [...glass.matchAll(/data-glass-edge="([\d.]+)"/g)].map(m => Number(m[1]));
+assert.equal(edges.length, bands.length, 'Every authored light band gets a shared glass boundary');
+assert.equal(new Set(edges).size, bands.length);
+assert.equal(edges[0], 0); assert.equal(edges[1], 2.5, 'Glass is aligned with the actual transition between adjoining bands');
+assert(!glass.includes('NaN') && !glass.includes('Infinity'), 'All glass paths have finite coordinates');
+assert(glass.includes('x="-1000"') && glass.includes('x="1000"'), 'Rims repeat with the light field on wide screens');
+assert.throws(() => renderCathedralGlass(css, 'unsafe"id'), /namespace/);
+const ids = [...page.matchAll(/\bid="([^"]+)"/g)].map(m => m[1]);
+assert.equal(new Set(ids).size, ids.length, 'Header and wall SVG definitions have distinct namespaces');
+for (const match of page.matchAll(/url\(#([^)]*)\)|href="#([^"]+)"/g)) assert(ids.includes(match[1] || match[2]), 'Every local glass/anchor reference resolves');
+assert.equal((page.match(/data-glass-edge=/g) || []).length, 72, 'Header and wall both render every glass edge');
 assert.equal((page.match(/class="cathedral-light-background(?: cathedral-light-background--header)?" aria-hidden="true"/g) || []).length, 2, 'Both decorative paint regions are clipped and hidden from assistive technology');
 assert(page.includes('cathedral-light.mjs?rev=20261021-three-palettes'));
 const sibling = fs.readFileSync(new URL('../dist/gallery/surface-of-the-moon/index.html', import.meta.url), 'utf8');
 assert(!sibling.includes('cathedral-light.mjs'), 'Other routes do not load the scroll controller');
-console.log('Passed: three CSS-owned palettes, continuous color interpolation, native-scroll easing/reversal, idle/hidden/BFCache cleanup, preference fallbacks, decorative regions and route scoping.');
+console.log('Passed: CSS-owned palettes, contrast including glass shade, native-scroll easing/lifecycle/fallbacks, all 36 glass boundaries, repeat coverage, unique SVG references and route scoping.');
