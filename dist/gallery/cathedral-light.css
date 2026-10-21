@@ -1,69 +1,48 @@
 /* A continuous, irregular field of soft light through vertical blinds. */
 .cathedral-light-page {
-  --light-apricot: 224 202 174;
-  --light-rose: 218 193 191;
-  --light-lilac: 200 195 215;
-  --light-blue: 186 206 217;
-  --light-sage: 198 210 192;
+  --light-apricot: 237 226 210;
+  --light-rose: 236 221 222;
+  --light-lilac: 227 223 237;
+  --light-blue: 220 231 238;
+  --light-sage: 229 234 221;
+  /* Opaque colors meet directly: narrow shafts alternate with broad pools. */
   --cathedral-light-field: linear-gradient(90deg,
-    rgb(var(--light-blue) / .32) 0%,
-    rgb(var(--light-blue) / .12) 1.1%,
-    rgb(var(--light-apricot) / .58) 2.8%,
-    rgb(var(--light-apricot) / .18) 4.2%,
-    rgb(var(--light-rose) / .42) 5.4%,
-    rgb(var(--light-rose) / .1) 6.3%,
-    rgb(var(--light-sage) / .52) 7.5%,
-    rgb(var(--light-sage) / .14) 9.3%,
-    rgb(var(--light-lilac) / .56) 11.2%,
-    rgb(var(--light-lilac) / .12) 12.4%,
-    rgb(var(--light-blue) / .46) 14.6%,
-    rgb(var(--light-blue) / .18) 16.3%,
-    rgb(var(--light-rose) / .56) 17.5%,
-    rgb(var(--light-rose) / .12) 18.4%,
-    rgb(var(--light-apricot) / .44) 20.9%,
-    rgb(var(--light-apricot) / .14) 23.1%,
-    rgb(var(--light-sage) / .5) 24.2%,
-    rgb(var(--light-sage) / .1) 25.7%,
-    rgb(var(--light-blue) / .54) 28.4%,
-    rgb(var(--light-blue) / .18) 30.5%,
-    rgb(var(--light-lilac) / .46) 31.6%,
-    rgb(var(--light-lilac) / .12) 33.4%,
-    rgb(var(--light-apricot) / .56) 35.9%,
-    rgb(var(--light-apricot) / .16) 37.6%,
-    rgb(var(--light-rose) / .44) 38.8%,
-    rgb(var(--light-rose) / .1) 39.7%,
-    rgb(var(--light-blue) / .5) 41.8%,
-    rgb(var(--light-blue) / .14) 44.4%,
-    rgb(var(--light-sage) / .58) 46.3%,
-    rgb(var(--light-sage) / .18) 48.1%,
-    rgb(var(--light-apricot) / .46) 49.2%,
-    rgb(var(--light-apricot) / .12) 50.6%,
-    rgb(var(--light-lilac) / .54) 53.4%,
-    rgb(var(--light-lilac) / .16) 55.8%,
-    rgb(var(--light-rose) / .5) 57.1%,
-    rgb(var(--light-rose) / .12) 58.2%,
-    rgb(var(--light-blue) / .44) 60.5%,
-    rgb(var(--light-blue) / .18) 62.1%,
-    rgb(var(--light-apricot) / .58) 63.3%,
-    rgb(var(--light-apricot) / .14) 65.7%,
-    rgb(var(--light-sage) / .46) 68.4%,
-    rgb(var(--light-sage) / .12) 70.5%,
-    rgb(var(--light-rose) / .54) 71.7%,
-    rgb(var(--light-rose) / .18) 73.2%,
-    rgb(var(--light-lilac) / .48) 75.8%,
-    rgb(var(--light-lilac) / .1) 78.1%,
-    rgb(var(--light-blue) / .58) 79.4%,
-    rgb(var(--light-blue) / .16) 80.8%,
-    rgb(var(--light-apricot) / .42) 83.6%,
-    rgb(var(--light-apricot) / .14) 85.5%,
-    rgb(var(--light-rose) / .5) 86.7%,
-    rgb(var(--light-rose) / .12) 88.2%,
-    rgb(var(--light-sage) / .56) 90.8%,
-    rgb(var(--light-sage) / .18) 92.9%,
-    rgb(var(--light-lilac) / .44) 94.1%,
-    rgb(var(--light-lilac) / .12) 96.3%,
-    rgb(var(--light-blue) / .52) 98.2%,
-    rgb(var(--light-blue) / .32) 100%);
+    rgb(var(--light-blue)) 0% 2%,
+    rgb(var(--light-lilac)) 3% 3.8%,
+    rgb(var(--light-apricot)) 4.8% 9.6%,
+    rgb(var(--light-rose)) 10.6% 11.3%,
+    rgb(var(--light-sage)) 12.3% 14.1%,
+    rgb(var(--light-blue)) 15.1% 15.5%,
+    rgb(var(--light-rose)) 16.5% 17.1%,
+    rgb(var(--light-lilac)) 18.1% 23.9%,
+    rgb(var(--light-sage)) 24.9% 25.3%,
+    rgb(var(--light-apricot)) 26.3% 27.4%,
+    rgb(var(--light-blue)) 28.4% 31.2%,
+    rgb(var(--light-sage)) 32.2% 32.8%,
+    rgb(var(--light-rose)) 33.8% 34.4%,
+    rgb(var(--light-apricot)) 35.4% 35.8%,
+    rgb(var(--light-lilac)) 36.8% 37.9%,
+    rgb(var(--light-blue)) 38.9% 39.3%,
+    rgb(var(--light-rose)) 40.3% 46.6%,
+    rgb(var(--light-sage)) 47.6% 48.3%,
+    rgb(var(--light-lilac)) 49.3% 52%,
+    rgb(var(--light-apricot)) 53% 53.4%,
+    rgb(var(--light-blue)) 54.4% 55.8%,
+    rgb(var(--light-sage)) 56.8% 57.2%,
+    rgb(var(--light-rose)) 58.2% 60.4%,
+    rgb(var(--light-lilac)) 61.4% 61.9%,
+    rgb(var(--light-apricot)) 62.9% 69.9%,
+    rgb(var(--light-sage)) 70.9% 71.4%,
+    rgb(var(--light-blue)) 72.4% 74.3%,
+    rgb(var(--light-rose)) 75.3% 76%,
+    rgb(var(--light-lilac)) 77% 79.9%,
+    rgb(var(--light-apricot)) 80.9% 81.3%,
+    rgb(var(--light-sage)) 82.3% 86.8%,
+    rgb(var(--light-blue)) 87.8% 88.2%,
+    rgb(var(--light-lilac)) 89.2% 90.6%,
+    rgb(var(--light-rose)) 91.6% 92.2%,
+    rgb(var(--light-apricot)) 93.2% 96.5%,
+    rgb(var(--light-blue)) 97.5% 100%);
   isolation: isolate;
 }
 
@@ -74,7 +53,7 @@
   z-index: -1;
   pointer-events: none;
   background-color: var(--photo-canvas);
-  background-image: linear-gradient(174deg, rgb(255 255 255 / .24), transparent 70%), var(--cathedral-light-field);
+  background-image: linear-gradient(174deg, rgb(255 255 255 / .12), transparent 70%), var(--cathedral-light-field);
   background-size: 100% 100vh, clamp(620px, 100vw, 1440px) 100vh;
   background-position: center top;
 }

@@ -1,5 +1,11 @@
 # The Gallery verification
 
+## 2026-10-21 — Continuous color and more varied widths
+
+- Replaced the near-white alpha valleys with opaque pastel colors throughout all thirty-six adjoining bands. Narrow shafts now alternate with several broad color pools; transitions stay soft, and header/body use the same field. Updated the stylesheet revision and regenerated the article.
+- Passed `node tools/validate-site.mjs`, `node tools/test-gallery.mjs`, renderer syntax and whitespace checks. Scoped strict audit has zero findings; the root audit retains the same sixteen existing findings in ignored archive/test HTML. Evidence and desktop screenshot: ignored `tools/stills-qa/cathedral-color-review/`.
+- Chrome: actual 1707px, 390px and 320px widths have no horizontal overflow; header/body fields match, Contact scrolls to the footer, sticky header remains at y=0, and its decoration accepts no pointer events. Console errors: none. Viewport overrides reset. Forced-colors/print rules remain unchanged and were inspected statically.
+
 ## 2026-10-21 — Denser irregular light through the header
 
 - Replaced the nine isolated beams with twenty-eight irregular, softly interpolated color peaks and continuously tinted valleys. The route's muted palette remains canonical. Body and sticky header share one viewport-aligned gradient; the header retains an opaque surface and working navigation. Versioned the stylesheet reference and regenerated the article.
