@@ -1,5 +1,12 @@
 # The Gallery verification
 
+## 2026-10-21 — Soft self-emitting light
+
+- Used the supplied second photograph only as a loose warm-amber/cool-gray color reference. The route now layers twelve soft luminous cores and broad bloom over its continuous, irregular pastel field. Header/body share all four viewport-aligned layers. No image asset, animation or script was added; original photographs remain unfiltered.
+- Darkened secondary copy for the richer field. Computed secondary-text contrast against the five base swatches ranges from 5.40:1 to 5.60:1. Forced colors restore CanvasText and hide the decorative layers; print omission was inspected statically.
+- Passed site validation, Gallery route/assets checks, renderer syntax, whitespace checks and scoped strict audit. Root strict audit retains the same sixteen existing ignored archive/test HTML findings. Evidence and desktop screenshot: ignored `tools/stills-qa/cathedral-emissive-review/`.
+- Chrome at actual 1707px, 390px and 320px widths has no horizontal overflow. Header/body gradients match, Contact reaches the footer, and the sticky header remains at y=0. Viewer retains its white background, opens the original photo and closes with Escape to its originating link. Console errors: none. Viewport overrides reset.
+
 ## 2026-10-21 — Continuous color and more varied widths
 
 - Replaced the near-white alpha valleys with opaque pastel colors throughout all thirty-six adjoining bands. Narrow shafts now alternate with several broad color pools; transitions stay soft, and header/body use the same field. Updated the stylesheet revision and regenerated the article.
