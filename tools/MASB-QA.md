@@ -1,5 +1,14 @@
 # Multiverse All-Star Battlefront verification
 
+## Line-drawn characters and directory order — 2026-10-20
+
+- Corrected the opening directory to follow the real section positions: How it plays → Project archive → User guide → Technical document. The source/render check now verifies increasing destination order.
+- Replaced every animated character image with authored, unfilled SVG geometry from `tools/masb-fighters.mjs`. The winged guardian and hooded duelist use the existing ink/vermilion tokens. Normalized stroke lengths reveal the generated portrait progressively; both battle participants and the result reuse the same vectors. The animation section contains zero raster images and four line-drawn figures. All nineteen original media and the PDF remain intact in the archive.
+- `node tools/test-masb.mjs`, `node tools/validate-site.mjs`, module syntax checks and `git diff --check` pass. The source check covers directory order, absence of animated images, all four SVG placements, renderer/data parity and original media/PDF hashes.
+- The complete existing `tools/test-masb-browser.cjs` regression passes: four stages and keyboard selection; six exchanges forward/backward through actual wheel input at desktop/phone widths; health meters; sticky/manual behavior; six viewport shapes through 320×568; reduced motion; forced colors; original PDF response; original-image viewer/focus; Projects navigation; no-JavaScript reading; zero page exceptions.
+- Connected Chrome inspection confirms the corrected directory, the generated guardian, both fighting silhouettes and readable phone rendering. Screenshots are retained in this chat’s `masb-lines` visualization directory.
+- Route strict audit has zero findings. Official DESIGN.md lint has zero errors and the existing no-YAML warning. No packages were added to the repository.
+
 ## Expanded encounter and continuous archive — 2026-10-20
 
 - Expanded the sample character description and all four process explanations. The battle now has six scripted, narrated exchanges (approach, dash, shield block, aerial counter, clash, finish), each with a manual button. The red/white/black tokens and original artwork are unchanged.

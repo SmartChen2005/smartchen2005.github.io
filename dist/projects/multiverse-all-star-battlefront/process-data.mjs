@@ -23,15 +23,11 @@ export default {
     "prompt": "A silver-scaled dragon knight with wide, weathered wings and a scarred emerald shield. Patient and protective, he studies an opponent before moving. He absorbs the first strike, then answers with a low aerial lunge and a sweeping blade. Strong in defense, but slower to change direction.",
     "player": {
       "name": "Winged Guardian",
-      "file": "character-03.webp",
-      "width": 1024,
-      "height": 1024
+      "drawing": "guardian"
     },
     "opponent": {
       "name": "Shadow Duelist",
-      "file": "character-04.webp",
-      "width": 1024,
-      "height": 1024
+      "drawing": "duelist"
     },
     "stats": [
       [

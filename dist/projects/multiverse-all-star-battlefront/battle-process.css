@@ -15,8 +15,11 @@
 .prompt-limit{font-size:13px;margin-top:22px;color:var(--muted)}
 .generate-scene{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.95fr);grid-template-rows:minmax(0,1fr);gap:24px;align-items:center}
 .portrait-sheet{position:relative;align-self:stretch;display:flex;align-items:center;justify-content:center;border-right:1px solid var(--rule);padding-right:20px;min-width:0;min-height:0}
-.process-fighter{display:block;width:100%;height:100%;object-fit:contain;image-rendering:auto}
-.portrait-sheet .process-fighter{height:84%;clip-path:inset(0 0 calc((1 - var(--generated))*100%) 0)}
+.process-fighter{display:block;width:100%;height:100%;color:var(--ink);fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.fighter-line{stroke-width:1.8;vector-effect:non-scaling-stroke}
+.fighter-accent{color:var(--vermilion)}
+.portrait-sheet .process-fighter{height:84%}
+.portrait-sheet .fighter-line{stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--generated))}
 .portrait-name{position:absolute;bottom:0;left:0;right:20px;font-size:12px;border-top:1px solid var(--ink);padding-top:12px}
 .portrait-tick{position:absolute;top:0;left:0;font:32px/1 Consolas,monospace;color:var(--vermilion)}
 .stat-sheet{min-width:0}.stat-sheet h3{font-size:clamp(25px,3vw,43px);line-height:1;letter-spacing:-.055em;margin-top:14px}

@@ -1,4 +1,4 @@
-import content from './process-data.mjs?v=process-2';
+import content from './process-data.mjs?v=process-3';
 
 const root = document.querySelector('[data-battle-process]');
 if (root) {

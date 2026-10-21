@@ -1,4 +1,4 @@
-import './battle-process.mjs?v=process-2';
+import './battle-process.mjs?v=process-3';
 
 const viewer = document.querySelector('.image-viewer');
 const preview = viewer.querySelector('.viewer-image');

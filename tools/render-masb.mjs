@@ -52,10 +52,10 @@ const html=`<!doctype html>
   <meta name="theme-color" content="#f13d24">
   <meta name="description" content="Multiverse All-Star Battlefront: an AI-driven battle simulation. Create a pixel-art fighter from your words and follow the battle in a generated comic.">
   <title>Multiverse All-Star Battlefront | Smart Chen</title>
-  <link rel="stylesheet" href="battlefront.css?v=process-2">
-  <link rel="stylesheet" href="battle-process.css?v=process-2">
+  <link rel="stylesheet" href="battlefront.css?v=process-3">
+  <link rel="stylesheet" href="battle-process.css?v=process-3">
   ${projectHeaderStylesheet('../../')}
-  <script type="module" src="battlefront.mjs?v=process-2"></script>
+  <script type="module" src="battlefront.mjs?v=process-3"></script>
 </head>
 <body>
   <a class="skip-link" href="#experience">Skip to content</a>
@@ -67,7 +67,7 @@ const html=`<!doctype html>
       <div class="hero-bottom">
         <p><time datetime="2025-09">September</time> to <time datetime="2025-11">November 2025</time><br><strong>Not a vibe-coding project</strong></p>
         <p>Smart Chen<br>Group leader, designer &amp; engineer</p>
-        <nav aria-label="On this page"><a href="#experience">How it plays <span aria-hidden="true">↓</span></a><a href="#user-guide">User guide <span aria-hidden="true">↓</span></a><a href="#archive">Project archive <span aria-hidden="true">↓</span></a><a href="#technical-document">Technical document <span aria-hidden="true">↓</span></a></nav>
+        <nav aria-label="On this page"><a href="#experience">How it plays <span aria-hidden="true">↓</span></a><a href="#archive">Project archive <span aria-hidden="true">↓</span></a><a href="#user-guide">User guide <span aria-hidden="true">↓</span></a><a href="#technical-document">Technical document <span aria-hidden="true">↓</span></a></nav>
       </div>
     </div>
   </div>

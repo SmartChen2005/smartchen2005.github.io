@@ -1,7 +1,9 @@
+import {lineFighter} from './masb-fighters.mjs';
+
 export function renderExperience(content) {
   const e = value => String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
   const { example, steps } = content;
-  const fighter = (who, cls = '') => `<img class="process-fighter ${cls}" src="assets/${who.file}" width="${who.width}" height="${who.height}" alt="${e(who.name)} — existing project artwork" decoding="async">`;
+  const fighter = who => lineFighter(who.drawing,who.name);
   const impact = `<svg class="battle-impact" viewBox="0 0 200 200" aria-hidden="true"><path d="M100 2L112 67L166 22L135 80L198 100L134 113L173 177L115 136L99 199L83 137L24 174L67 115L2 98L66 82L23 24L84 65Z"/><path d="M53 143L138 50L105 103L154 77L62 160L91 111Z"/></svg>`;
   return `<section class="process wrap" id="experience" aria-labelledby="experience-title">
     <div class="process-heading"><div><p class="label">How it plays</p><p class="process-availability">Application currently unavailable.<a href="#user-guide">Read the user guide ↗</a></p></div><h2 id="experience-title">${e(content.title)}</h2></div>
@@ -42,6 +44,6 @@ export function renderExperience(content) {
       </div>
       <div class="process-stops" role="group" aria-label="Explore the game process">${steps.map((step,i)=>`<div class="process-stop" data-process-stop><button type="button" disabled data-process-button="${i}" aria-pressed="${i===0}" aria-controls="process-current"><span>${String(i+1).padStart(2,'0')}</span><strong>${e(step.title)}</strong></button><p>${e(step.description)}</p>${i===2?`<div class="battle-beats" role="group" aria-label="Battle exchanges">${example.turns.map((turn,j)=>`<div class="battle-beat" data-battle-beat><button type="button" disabled data-beat-button="${j}" aria-pressed="false" aria-controls="process-current"><span>${String(j+1).padStart(2,'0')}</span><strong>${e(turn.title)}</strong></button><p>${e(turn.description)}</p></div>`).join('')}</div>`:''}</div>`).join('')}</div>
     </div>
-    <p class="process-footnote" id="experience-caption">Illustrative sequence using existing project artwork. Stats, actions, and outcome are a scripted example.</p>
+    <p class="process-footnote" id="experience-caption">Line-drawn illustration of the game flow. Stats, actions, and outcome are a scripted example.</p>
   </section>`;
 }

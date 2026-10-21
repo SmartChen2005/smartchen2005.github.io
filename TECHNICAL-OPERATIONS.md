@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-20 — Draw the Multiverse example with lines
+
+- Corrected the opening directory to follow the actual experience, archive, guide and technical-document order.
+- Replaced all game artwork in the scroll sequence with authored inline SVG characters and progressive stroke drawing. Original game media remain in the archive, while all existing exchanges and accessibility controls are retained.
+- Run `node tools/render-masb.mjs`, `node tools/test-masb.mjs`, `node tools/validate-site.mjs` and the existing `tools/test-masb-browser.cjs` regression. Current verification evidence is recorded in `tools/MASB-QA.md`.
+
 ### 2026-10-20 — Expand the Multiverse encounter and connect the archive
 
 - Expanded the character prompt and process explanations; added six narrated, selectable battle exchanges with scroll-controlled dash, guard, aerial, clash, damage and victory effects.
