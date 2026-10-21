@@ -1,0 +1,65 @@
+/* Light falling through vertical blinds, confined to the exhibition wall. */
+.cathedral-light-page {
+  --light-apricot: 224 202 174;
+  --light-rose: 218 193 191;
+  --light-lilac: 200 195 215;
+  --light-blue: 186 206 217;
+  --light-sage: 198 210 192;
+  isolation: isolate;
+}
+
+.cathedral-light-page::before {
+  content: "";
+  position: fixed;
+  inset: -24px;
+  z-index: -1;
+  pointer-events: none;
+  background-image: linear-gradient(90deg,
+    transparent 0%,
+    rgb(var(--light-apricot) / .06) 3%,
+    rgb(var(--light-apricot) / .52) 5%,
+    rgb(var(--light-apricot) / .16) 7%,
+    transparent 9%,
+    transparent 12%,
+    rgb(var(--light-lilac) / .48) 15%,
+    rgb(var(--light-lilac) / .12) 17%,
+    transparent 19%,
+    transparent 22%,
+    rgb(var(--light-blue) / .46) 25%,
+    rgb(var(--light-blue) / .1) 28%,
+    transparent 30%,
+    transparent 33%,
+    rgb(var(--light-rose) / .5) 36%,
+    rgb(var(--light-rose) / .14) 38%,
+    transparent 40%,
+    transparent 43%,
+    rgb(var(--light-apricot) / .48) 46%,
+    rgb(var(--light-apricot) / .12) 49%,
+    transparent 51%,
+    transparent 54%,
+    rgb(var(--light-sage) / .52) 57%,
+    rgb(var(--light-sage) / .1) 60%,
+    transparent 62%,
+    transparent 65%,
+    rgb(var(--light-lilac) / .54) 68%,
+    rgb(var(--light-lilac) / .12) 70%,
+    transparent 73%,
+    transparent 76%,
+    rgb(var(--light-rose) / .46) 79%,
+    rgb(var(--light-rose) / .12) 82%,
+    transparent 84%,
+    transparent 87%,
+    rgb(var(--light-blue) / .5) 90%,
+    rgb(var(--light-blue) / .1) 93%,
+    transparent 96%,
+    transparent 100%);
+  background-size: clamp(840px, 100vw, 1680px) 100%;
+  background-position: center top;
+  filter: blur(clamp(6px, .65vw, 11px));
+  /* A gradual falloff keeps the bands airy rather than uniformly striped. */
+  mask-image: linear-gradient(174deg, rgb(0 0 0 / .24), #000 58%, rgb(0 0 0 / .68));
+}
+
+@media (forced-colors: active), print {
+  .cathedral-light-page::before { display: none; }
+}

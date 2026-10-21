@@ -1,5 +1,13 @@
 # The Gallery verification
 
+## 2026-10-21 — Soft vertical light in Cathedrals of Light
+
+- Added a route-only, static CSS background with softly blurred, low-saturation apricot, rose, lilac, blue and sage beams. The renderer preserves the stylesheet/body class during regeneration. No photograph, caption, content order or other Gallery page changed.
+- Passed `node tools/validate-site.mjs`, `node tools/test-gallery.mjs`, `node tools/test-gallery-document.mjs`, `node tools/test-gallery-layouts.mjs`, renderer syntax and `git diff --check`.
+- Chrome: verified actual 1707px, 390px and 320px viewport widths without horizontal overflow; fixed light remains behind content through the footer. Original image filters compute to `none`. Viewer opening, Next, Escape and source-focus restoration work. Surface of the Moon retains its white background and does not load the light stylesheet. Console has no errors. Temporary viewport overrides were reset.
+- The static effect also works without animation or JavaScript. Forced-color and print omission were checked in CSS, not emulated. Screenshot: this chat's visualization directory, `cathedral-desktop.jpg`.
+- Scoped strict audit of the deployed article and its actual styles: zero findings (`cathedral-review/audit.json` in the visualization directory). Repository-wide strict audit still reports sixteen existing actionless-button findings in ignored Gallery source bundles and generated test HTML; raw evidence is `cathedral-audit.json` in the same directory. No DESIGN.md linter is configured. Commit/push/Pages results are reported in the completing chat.
+
 ## 2026-10-15 — Player loading, rail boundaries and current Rhythms photographs
 
 - YouTube verification used actual playback, not poster loading: Gorilla completed playback on the live site; Morning Unwoken advanced to 0:08 with its film credits visible in local preview; live Rorschach and Common Things both displayed moving film scenes after Play. The live lazy iframes initially remained blank until scrolling. Players now load eagerly; direct YouTube links and the existing origin referrer policy remain. No autoplay or host switch was introduced. Players have a 200px minimum height.
