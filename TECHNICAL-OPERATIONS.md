@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-20 — Redraw the Multiverse illustrative fighters
+
+- Replaced abstract character polygons with detailed, curved SVG ink illustrations, clearer anatomy/equipment and opaque front-to-back layering. The generator owns all four appearances; scroll drawing and existing battle choreography are preserved.
+- Updated the design/source notes and versioned process assets. Original archive media, PDF and source copy remain unchanged.
+- Verified renderer/source integrity, site validation, module syntax, desktop/phone browser regression and the scoped strict audit. See `tools/MASB-QA.md` for results and the unchanged repository-wide audit limitations.
+
 ### 2026-10-20 — Draw the Multiverse example with lines
 
 - Corrected the opening directory to follow the actual experience, archive, guide and technical-document order.

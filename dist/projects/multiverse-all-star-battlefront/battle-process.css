@@ -16,10 +16,16 @@
 .generate-scene{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.95fr);grid-template-rows:minmax(0,1fr);gap:24px;align-items:center}
 .portrait-sheet{position:relative;align-self:stretch;display:flex;align-items:center;justify-content:center;border-right:1px solid var(--rule);padding-right:20px;min-width:0;min-height:0}
 .process-fighter{display:block;width:100%;height:100%;color:var(--ink);fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
-.fighter-line{stroke-width:1.8;vector-effect:non-scaling-stroke}
+.fighter-line{stroke-width:.8;vector-effect:non-scaling-stroke}
+.fighter-contour{fill:var(--white);stroke-width:1.45}
+.fighter-shadow{fill:currentColor;stroke:none}
 .fighter-accent{color:var(--vermilion)}
+.fighter-accent .fighter-contour{fill:var(--vermilion);stroke:var(--ink)}
+.fighter-accent .fighter-detail{stroke:var(--ink);opacity:.6}
+.fighter-accent-line{stroke:var(--vermilion);stroke-width:1.3}
 .portrait-sheet .process-fighter{height:84%}
 .portrait-sheet .fighter-line{stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--generated))}
+.portrait-sheet .fighter-shadow,.portrait-sheet .fighter-accent .fighter-contour{fill-opacity:var(--generated)}
 .portrait-name{position:absolute;bottom:0;left:0;right:20px;font-size:12px;border-top:1px solid var(--ink);padding-top:12px}
 .portrait-tick{position:absolute;top:0;left:0;font:32px/1 Consolas,monospace;color:var(--vermilion)}
 .stat-sheet{min-width:0}.stat-sheet h3{font-size:clamp(25px,3vw,43px);line-height:1;letter-spacing:-.055em;margin-top:14px}
@@ -94,7 +100,7 @@
 .spark-strokes{stroke:var(--vermilion);stroke-width:5;transform:scale(calc(.5 + var(--impact,0)*.5))}
 .battle-sound{position:absolute;top:18%;left:50%;font-size:clamp(30px,4.3vw,62px);line-height:1;font-weight:800;font-style:italic;letter-spacing:-.08em;transform:translate(-50%,-50%) rotate(-12deg) scale(calc(.6 + var(--impact,0)*.4));opacity:var(--impact,0);color:var(--vermilion);-webkit-text-stroke:1px var(--ink);z-index:4;pointer-events:none}
 .damage{position:absolute;top:35%;font:700 26px/1 Consolas,monospace;color:var(--vermilion);opacity:var(--impact,0);transform:translateY(calc(var(--beat-progress,0)*-35px));z-index:4}.damage-player{left:20%}.damage-opponent{right:20%}
-.combatant .process-fighter{position:relative;mix-blend-mode:multiply;transform-origin:50% 85%;will-change:transform}
+.combatant .process-fighter{position:relative;transform-origin:50% 85%;will-change:transform}
 [data-effect=approach] .combatant-player .process-fighter{transform:translateX(calc(var(--beat-progress)*10px))}
 [data-effect=approach] .combatant-opponent .process-fighter{transform:translateX(calc(var(--beat-progress)*-10px))}
 [data-effect=dash] .combatant-opponent .process-fighter{transform:translateX(calc(var(--motion)*-80px)) skewX(calc(var(--motion)*-7deg));filter:drop-shadow(calc(var(--motion)*28px) 0 0 var(--rule))}

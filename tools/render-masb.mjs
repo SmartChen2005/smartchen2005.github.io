@@ -52,10 +52,10 @@ const html=`<!doctype html>
   <meta name="theme-color" content="#f13d24">
   <meta name="description" content="Multiverse All-Star Battlefront: an AI-driven battle simulation. Create a pixel-art fighter from your words and follow the battle in a generated comic.">
   <title>Multiverse All-Star Battlefront | Smart Chen</title>
-  <link rel="stylesheet" href="battlefront.css?v=process-3">
-  <link rel="stylesheet" href="battle-process.css?v=process-3">
+  <link rel="stylesheet" href="battlefront.css?v=process-4">
+  <link rel="stylesheet" href="battle-process.css?v=process-4">
   ${projectHeaderStylesheet('../../')}
-  <script type="module" src="battlefront.mjs?v=process-3"></script>
+  <script type="module" src="battlefront.mjs?v=process-4"></script>
 </head>
 <body>
   <a class="skip-link" href="#experience">Skip to content</a>

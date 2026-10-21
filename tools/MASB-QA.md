@@ -1,5 +1,13 @@
 # Multiverse All-Star Battlefront verification
 
+## Character illustration redraw — 2026-10-20
+
+- Replaced the rejected abstract geometry with original curved ink illustrations: a dragon-profile armored guardian with membrane wings, articulated greaves, a raised-rim shield and sword; and a masked duelist with a hood, cloth folds, wrist/shin bindings, a curved blade and trailing vermilion scarf. Layered white contours conceal rear lines; contour/detail weights and small ink shadows make equipment readable. Removed fighter multiply blending so overlapping surfaces remain opaque.
+- Generation still reveals normalized strokes with scroll progress. Colored areas and ink shadows follow that progress. All four placements share the same maintained SVG generator; there are no game/raster images in the animation. All nineteen archive originals, source prose and guide hashes are preserved. Cache references are advanced to `process-4`.
+- `node tools/render-masb.mjs`, `node tools/test-masb.mjs`, `node tools/validate-site.mjs`, `node --check tools/masb-fighters.mjs` and `git diff --check` pass.
+- The complete existing `tools/test-masb-browser.cjs` regression passes: manual/keyboard stages; actual wheel progression/reversal at desktop and phone widths; six exchanges, beat controls and health; six viewport shapes down to 320×568; reduced motion; forced colors; original PDF and image viewer/focus; Projects navigation; no-JavaScript content; zero page exceptions. Visual evidence is in this chat's `masb-redraw` directory. In-app browser inspection at 390px also confirms both silhouettes are visible within the battle panel.
+- Scoped route audit has zero findings. Official DESIGN.md lint has zero errors and the existing missing-YAML warning. The repository-wide strict audit still reports the same sixteen pre-existing findings in ignored Gallery source bundles/test HTML; its output is retained as `masb-redraw/project-audit.json`. No package dependencies were added to the repository.
+
 ## Line-drawn characters and directory order — 2026-10-20
 
 - Corrected the opening directory to follow the real section positions: How it plays → Project archive → User guide → Technical document. The source/render check now verifies increasing destination order.
