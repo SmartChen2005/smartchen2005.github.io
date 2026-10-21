@@ -1,14 +1,14 @@
-/* Three coordinated palettes share the same soft, irregular light field. */
+/* Celadon/coral, lilac/wheat and blue/blush: muted opposing hues, luminous accents. */
 .cathedral-light-page {
-  --cathedral-amber-a: 229 207 176;
-  --cathedral-amber-b: 215 211 203;
-  --cathedral-amber-c: 249 237 207;
-  --cathedral-mist-a: 199 218 230;
-  --cathedral-mist-b: 211 215 229;
-  --cathedral-mist-c: 235 246 249;
-  --cathedral-rose-a: 232 206 200;
-  --cathedral-rose-b: 220 205 213;
-  --cathedral-rose-c: 249 234 220;
+  --cathedral-amber-a: 180 214 204;
+  --cathedral-amber-b: 238 202 180;
+  --cathedral-amber-c: 231 242 220;
+  --cathedral-mist-a: 205 203 230;
+  --cathedral-mist-b: 232 219 169;
+  --cathedral-mist-c: 249 237 218;
+  --cathedral-rose-a: 183 210 231;
+  --cathedral-rose-b: 236 200 207;
+  --cathedral-rose-c: 230 238 247;
   --light-a: var(--cathedral-amber-a);
   --light-b: var(--cathedral-amber-b);
   --light-c: var(--cathedral-amber-c);

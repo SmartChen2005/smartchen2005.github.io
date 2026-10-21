@@ -1,5 +1,12 @@
 # The Gallery verification
 
+## 2026-10-21 — Three new palettes with opposing hues
+
+- Replaced all nine CSS-owned tones: celadon/coral/pale mint, lilac/wheat/cream, and mist blue/blush/icy lavender. Each system now combines restrained cool and warm hues. Kept the existing irregular field, emissive accents, glass rims, blur and scroll controller. Updated the CSS revision and regenerated the article; no photograph or layout changed.
+- Passed `node tools/test-cathedral-light.mjs`, `node tools/test-gallery.mjs`, `node tools/validate-site.mjs`, renderer syntax and whitespace checks. The existing regression verifies AA secondary-text contrast throughout every interpolated palette, including glass shading. Scoped strict audit: zero findings. Root strict audit retains the same sixteen existing findings in ignored archive/test HTML.
+- Chrome at actual 1707px and 390px widths: no horizontal overflow. Forward scrolling reached all three palettes, Contact reached the final blue/blush system, and reverse phone scrolling returned to celadon/coral. Both glass layers inherit the current palette; photographs compute to `filter: none`. Console errors: none. Viewport override reset. Preference/lifecycle behavior is covered by the existing controller harness rather than OS emulation.
+- Screenshots of each palette, the phone view and audit evidence: ignored `tools/stills-qa/cathedral-contrast-review/`. Commit, GitHub sync and Pages status are reported in the completing chat.
+
 ## 2026-10-21 — Refractive glass rims beside each beam
 
 - Generated thirty-six gently curved glass boundaries from the actual CSS beam stops. Each narrow bevel compresses its neighboring palette colors and pairs a low-opacity shaded contour with a reflection that varies along its height. Wall/header SVGs have unique namespaces and repeat with the light field. Palette transitions, background blur and preference fallbacks remain intact; no new runtime, animation loop or image asset was added. Optical inspiration: [Apple's Liquid Glass layers](https://developer.apple.com/videos/play/wwdc2025/219/).
