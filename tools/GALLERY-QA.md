@@ -1,5 +1,11 @@
 # The Gallery verification
 
+## 2026-10-21 — Disable all Cathedral background effects
+
+- Restored the shared white Gallery canvas and header at the user's request. Removed route-only light/glass markup, stylesheet, palette controller, glass generator and their dedicated test/CI command. The removed implementation remains in Git history. Updated the renderer and generated article together; all main/article and footer markup is unchanged.
+- Passed Gallery route/assets, document/source-order and layout checks, site validation, renderer syntax and whitespace checks. Scoped strict audit: zero findings. Root strict audit retains the same sixteen existing findings in ignored archive/test HTML; no DESIGN.md linter is configured.
+- Chrome at actual 1707px and 390px widths: body/header are white, effect nodes and asset references are absent, original photograph filters are `none`, and there is no horizontal overflow. Contact reaches the footer while the background stays white. Console errors: none. Viewport override reset. Evidence: ignored `tools/stills-qa/cathedral-disabled-review/`.
+
 ## 2026-10-21 — Three new palettes with opposing hues
 
 - Replaced all nine CSS-owned tones: celadon/coral/pale mint, lilac/wheat/cream, and mist blue/blush/icy lavender. Each system now combines restrained cool and warm hues. Kept the existing irregular field, emissive accents, glass rims, blur and scroll controller. Updated the CSS revision and regenerated the article; no photograph or layout changed.

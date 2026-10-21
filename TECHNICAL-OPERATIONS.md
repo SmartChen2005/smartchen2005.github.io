@@ -96,6 +96,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-21 — Disable the Cathedral background effects
+
+- Restored the shared white Gallery background and header at the user's request. Removed all route-only light/glass markup, styles, scroll controller and generator dependencies; photographs and article content remain unchanged.
+- Removed the now-unused effect implementation and its dedicated test/CI command. Git history retains the experiment. Use the existing Gallery route, document and layout checks plus site validation for this article. This supersedes the light/glass entries below.
+
 ### 2026-10-21 — Glass edges around Cathedral light beams
 
 - Added generated SVG glass bevels aligned with every CSS-defined beam boundary, sharing the existing palettes and clipped wall/header backgrounds.
