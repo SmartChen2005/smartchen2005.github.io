@@ -1,5 +1,11 @@
 # The Gallery verification
 
+## 2026-10-21 — Denser irregular light through the header
+
+- Replaced the nine isolated beams with twenty-eight irregular, softly interpolated color peaks and continuously tinted valleys. The route's muted palette remains canonical. Body and sticky header share one viewport-aligned gradient; the header retains an opaque surface and working navigation. Versioned the stylesheet reference and regenerated the article.
+- Passed site validation, Gallery route/assets and layout checks, renderer syntax and whitespace checks. Scoped strict audit of the actual article/styles has zero findings; the root audit retains the same sixteen existing ignored archive/test HTML findings. Evidence and desktop screenshot are in ignored `tools/stills-qa/cathedral-dense-review/`.
+- Chrome at actual 1707px, 390px and 320px widths has no horizontal overflow. Header/body gradient images and sizing match; Contact works and the sticky header remains at y=0 after scrolling to the footer. Both decorative layers use `pointer-events: none`. Viewport overrides reset. Forced-colors and print omission inspected in CSS rather than emulated.
+
 ## 2026-10-21 — Soft vertical light in Cathedrals of Light
 
 - Added a route-only, static CSS background with softly blurred, low-saturation apricot, rose, lilac, blue and sage beams. The renderer preserves the stylesheet/body class during regeneration. No photograph, caption, content order or other Gallery page changed.
