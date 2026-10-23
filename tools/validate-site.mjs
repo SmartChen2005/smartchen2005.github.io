@@ -49,7 +49,7 @@ const imageDigest = file => createHash('sha256').update(fs.readFileSync(path.joi
 if (imageDigest('selfportrait.jpg') !== imageDigest('dist/assets/selfportrait.jpg')) {
   failures.push('The published portrait must be byte-for-byte identical to the supplied blue monochrome artwork');
 }
-if (!home.includes('Smart Chen is a (game) designer, photographer, and car enthusiast.')) {
+if (!home.includes('Smart Chen is a (game) designer, filmmaker, and car enthusiast.')) {
   failures.push('The homepage identity sentence is missing');
 }
 for (const match of home.matchAll(/(?:src|href)="([^"]+)"/g)) {
@@ -60,7 +60,7 @@ for (const match of home.matchAll(/(?:src|href)="([^"]+)"/g)) {
 }
 const sentenceMarkup = home.match(/<h1 class="sentence">([\s\S]*?)<\/h1>/)?.[1] ?? '';
 const sentenceText = sentenceMarkup.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-if (sentenceText !== 'Smart Chen is a (game) designer, photographer, and car enthusiast.') {
+if (sentenceText !== 'Smart Chen is a (game) designer, filmmaker, and car enthusiast.') {
   failures.push('The visible homepage sentence must remain exact and continuous');
 }
 if (/<br|<section|<dialog|<template/.test(home)) failures.push('The minimal homepage must not contain forced line breaks, sections, or dialogs');
