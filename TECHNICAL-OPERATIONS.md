@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-24 — Draw the Car Enthusiast racing entrance
+
+- Replaced the oversized wheel montage with authored white-line MINI Cooper S F56 and open-top BMW Z4 E85 geometry on one circuit. The 8.8-second race exchanges the lead three times and moves through front-quarter, side, overhead and chase views, with a linked tachometer, circuit markers and a chequered finish flag.
+- Preserved homepage typography, identity controls, measured text exclusion, neutral black background and the 380ms exit. Reduced motion shows the frozen finish; forced colors and hidden documents do not animate; the completed race releases its animation loop.
+- Run `node tools/test-motor-race.mjs`, `node tools/test-home.mjs`, `node tools/test-home-state.mjs`, `node tools/test-photo-transition.mjs`, `node tools/test-game-transition.mjs` and `node tools/validate-site.mjs`. The new race regression also runs in Pages CI. Browser evidence and scope are recorded in `tools/MOTOR-RACE-QA.md`.
+
 ### 2026-10-21 — Disable the Cathedral background effects
 
 - Restored the shared white Gallery background and header at the user's request. Removed all route-only light/glass markup, styles, scroll controller and generator dependencies; photographs and article content remain unchanged.
