@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import { renderExperience } from './masb-experience.mjs';
-import { projectHeader, projectHeaderStylesheet } from './project-header.mjs';
+import { projectHeader, projectHeaderAssets } from './project-header.mjs';
 import path from 'node:path';
 
 // The archive owns the original project copy; user-supplied metadata is added to the hero.
@@ -54,7 +54,7 @@ const html=`<!doctype html>
   <title>Multiverse All-Star Battlefront | Smart Chen</title>
   <link rel="stylesheet" href="battlefront.css?v=process-4">
   <link rel="stylesheet" href="battle-process.css?v=process-4">
-  ${projectHeaderStylesheet('../../')}
+  ${projectHeaderAssets('../../')}
   <script type="module" src="battlefront.mjs?v=process-4"></script>
 </head>
 <body>

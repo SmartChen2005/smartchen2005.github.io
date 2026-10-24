@@ -1,5 +1,18 @@
-/* Shared only by the homepage and Gallery index: hold the developed frame
-   through native navigation, then reveal the real document over it. */
+/* Shared Gallery entrance from the homepage and project headers. The same
+   museum drawing docks into the real Gallery masthead on every host page. */
+.photo-destination { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; z-index: 10000; visibility: hidden; pointer-events: none; }
+.photo-destination.is-revealed { visibility: visible; opacity: 0; }
+.photo-entry { position: fixed; inset: 0; z-index: 10001; pointer-events: none; overflow: hidden; color: var(--gallery-ink, #111); }
+.photo-entry-white, .photo-entry-lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+.photo-entry-white { background: var(--gallery-paper, #fff); }
+.photo-entry-brand { position: absolute; display: flex; align-items: center; justify-content: center; }
+.photo-entry-mark { position: absolute; top: -8px; left: 0; width: 100%; height: calc(100% + 16px); }
+.photo-entry-brand > span { position: relative; font: 400 28px/1.5 'Helvetica Neue', Helvetica, Arial, sans-serif; letter-spacing: -.04em; text-transform: uppercase; white-space: nowrap; -webkit-font-smoothing: antialiased; }
+body[data-photo-transition] { overflow: hidden; }
+body[data-photo-transition] > [data-photo-source] { opacity: var(--photo-home-opacity, 1); pointer-events: none; }
+
+/* Hold the developed frame through native navigation, then reveal the real
+   document over it. Browsers without this API still use the complete preview. */
 @view-transition { navigation: auto; }
 ::view-transition-group(root) { animation: none; }
 ::view-transition-old(root) { animation: none; opacity: 1; mix-blend-mode: normal; }

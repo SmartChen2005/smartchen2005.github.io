@@ -1,4 +1,4 @@
-// Shared, static navigation for the Projects directory and project landing pages.
+// Shared navigation and Gallery entrance for the Projects directory and landing pages.
 export function projectHeader({ base = '../../', current = false, theme = 'dark', placement = '' } = {}) {
   return `<header class="project-header project-header--${theme}${placement ? ` project-header--${placement}` : ''}" data-project-header>
     <nav class="project-header__nav" aria-label="Primary navigation">
@@ -9,4 +9,6 @@ export function projectHeader({ base = '../../', current = false, theme = 'dark'
   </header>`;
 }
 
-export const projectHeaderStylesheet = base => `<link rel="stylesheet" href="${base}project-header.css?v=20261019c">`;
+export const projectHeaderAssets = base => `<link rel="stylesheet" href="${base}project-header.css?v=20261019c">
+  <link rel="stylesheet" href="${base}gallery-entry.css?rev=20261024-shared-entry">
+  <script type="module" src="${base}gallery-entry.mjs?rev=20261024-shared-entry"></script>`;

@@ -178,17 +178,6 @@ body[data-game-transition] .world-stage, body[data-game-transition] .portrait { 
 body[data-game-transition] .homepage { clip-path: inset(var(--game-inset-y, 0px) var(--game-inset-x, 0px)); pointer-events: none; }
 body[data-game-transition] .identity:focus-visible { outline: none; }
 body[data-game-transition='point'] .homepage { visibility: hidden; }
-/* Photographer's temporary, same-origin exhibition preview and architectural drawing. */
-.photo-destination { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; z-index: 5; visibility: hidden; pointer-events: none; }
-.photo-destination.is-revealed { visibility: visible; opacity: 0; }
-.photo-entry { position: fixed; inset: 0; z-index: 6; pointer-events: none; overflow: hidden; color: var(--gallery-ink); }
-.photo-entry-white, .photo-entry-lines { position: absolute; inset: 0; width: 100%; height: 100%; }
-.photo-entry-white { background: var(--gallery-paper); }
-.photo-entry-brand { position: absolute; display: flex; align-items: center; justify-content: center; }
-.photo-entry-mark { position: absolute; top: -8px; left: 0; width: 100%; height: calc(100% + 16px); }
-.photo-entry-brand > span { position: relative; font: 400 28px/1.5 'Helvetica Neue', Helvetica, Arial, sans-serif; letter-spacing: -.04em; text-transform: uppercase; white-space: nowrap; -webkit-font-smoothing: antialiased; }
-body[data-photo-transition] { overflow: hidden; }
-body[data-photo-transition] .homepage, body[data-photo-transition] .world-stage { opacity: var(--photo-home-opacity, 1); pointer-events: none; }
 body[data-photo-transition] .business-card-dock { visibility: hidden; }
 body[data-photo-transition] .identity-photo::before, body[data-photo-transition] .identity-photo::after { visibility: hidden; }
 @media (max-width: 700px) and (pointer: coarse) {

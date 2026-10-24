@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { projectHeader, projectHeaderStylesheet } from './project-header.mjs';
+import { projectHeader, projectHeaderAssets } from './project-header.mjs';
 import { wheel, map, lugPoints, starOrder } from './vr-illustrations.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -41,7 +41,7 @@ const html = `<!doctype html>
   <title>${e(content.title)} | Smart Chen</title>
   <link rel="canonical" href="https://smartchen2005.github.io/projects/vr-for-skill-learning/">
   <link rel="stylesheet" href="vr.css?v=interaction-3">
-  ${projectHeaderStylesheet('../../')}
+  ${projectHeaderAssets('../../')}
   <script type="module" src="vr.mjs?v=interaction-3"></script>
 </head>
 <body>

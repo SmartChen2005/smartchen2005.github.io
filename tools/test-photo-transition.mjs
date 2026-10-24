@@ -89,6 +89,7 @@ async function harness(options = {}) {
     const item = eventTarget({ tag, children: [], attributes: {}, dataset: {}, style: style(), inert: false,
       classList: { add: name => classes.add(name), remove: name => classes.delete(name), contains: name => classes.has(name) },
       setAttribute(key, value) { this.attributes[key] = value; },
+      removeAttribute(key) { delete this.attributes[key]; },
       hasAttribute(key) { return Object.hasOwn(this.attributes, key); },
       append(...children) { this.children.push(...children); },
       remove() { this.removed = true; },
@@ -99,6 +100,9 @@ async function harness(options = {}) {
     created.push(item); return item;
   }
   const home = node('main'), scenery = node('section'), heading = node('h1');
+  const projectHeader = node('header'), projectMain = node('main'), alreadyInert = node('aside');
+  alreadyInert.inert = true;
+  const sources = options.projectPage ? [projectHeader, projectMain, alreadyInert] : [home, scenery];
   const target = { left: 24, top: 32, width: 260, height: 87 };
   heading.getBoundingClientRect = () => target;
   const brandImage = { src: 'https://example.test/gallery/assets/mark.svg' };
@@ -109,7 +113,7 @@ async function harness(options = {}) {
   } };
   const body = node('body');
   const document = eventTarget({ body, hidden: false,
-    querySelector: selector => selector === '.homepage' ? home : scenery,
+    querySelectorAll: () => sources,
     importNode: svg => svg.cloneNode(true),
     createElement(tag) {
       const element = node(tag);
@@ -137,10 +141,10 @@ async function harness(options = {}) {
   };
   vm.createContext(sandbox);
   vm.runInContext(source.replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, '') + '\nglobalThis.install = installPhotoTransition;', sandbox);
-  const controller = sandbox.install(link, () => resets++, () => otherActive);
+  const controller = options.projectPage ? sandbox.install(link) : sandbox.install(link, () => resets++, () => otherActive);
   const preview = created.find(element => element.tag === 'iframe');
   if (options.ready !== false && preview) await preview.emit('load');
-  return { controller, document, window, home, scenery, heading, preview, created, callbacks, timers, reduce, forced, navigations,
+  return { controller, document, window, home, scenery, sources, heading, preview, created, callbacks, timers, reduce, forced, navigations,
     get resets() { return resets; }, get draws() { return draws; }, get imageDraws() { return imageDraws; },
     blockOther(value) { otherActive = value; },
     async click(detail = {}) { const event = { button: 0, preventDefault() { this.prevented = true; }, ...detail }; await link.emit('click', event); return event; },
@@ -218,4 +222,34 @@ for (const exit of ['hidden', 'Escape', 'reduced', 'forced', 'watchdog']) {
   await app.window.emit('pageshow', { persisted: true });
   assert(!app.home.inert && !app.scenery.inert); assert(!app.controller.active);
 }
-console.log('Passed: detailed museum geometry across six viewports; finite projection and visible camera travel/banking; restored darkroom hover; no transition wall photographs; clicked-word origin and exact masthead docking; 3s navigation; complete Gallery handoff through pagehide; keyboard/native link behavior; duplicate prevention; reduced/forced/load fallbacks; interrupted navigation and Back restoration.');
+// A Projects host has no homepage/scenery nodes and needs no homepage callback.
+app = await harness({ projectPage: true });
+assert((await app.click({ detail: 0 })).prevented);
+assert(app.sources.every(source => source.inert && source.hasAttribute('data-photo-source')));
+app.step(PHOTO_TRANSITION_DURATION); app.step(PHOTO_TRANSITION_DURATION + 16);
+assert.equal(app.navigations.length, 1);
+await app.window.emit('pagehide');
+await app.window.emit('pageshow', { persisted: true });
+assert(!app.controller.active);
+assert(!app.sources[0].inert && !app.sources[1].inert);
+assert(app.sources[2].inert, 'Back must preserve a host element that was already inert');
+assert(app.sources.every(source => !source.hasAttribute('data-photo-source')));
+assert((await app.click()).prevented, 'A restored Projects page can enter the Gallery again');
+
+for (const route of ['', 'polaroid-of-yesterday/', 'world-sensing-music-station/', 'multiverse-all-star-battlefront/', 'vr-for-skill-learning/']) {
+  const html = fs.readFileSync(new URL(`../dist/projects/${route}index.html`, import.meta.url), 'utf8');
+  for (const asset of ['gallery-entry.css', 'gallery-entry.mjs']) {
+    assert.equal(html.split(asset).length - 1, 1, `${route || 'Projects'} must include the shared ${asset} exactly once`);
+  }
+  assert(html.includes('class="project-header__gallery"'), 'Every project header keeps a native Gallery link');
+}
+const entrySource = fs.readFileSync(new URL('../dist/gallery-entry.mjs', import.meta.url), 'utf8')
+  .replace(/^import .*;\r?\n/gm, '')
+  .replace('import.meta.url', JSON.stringify('https://example.test/gallery-entry.mjs'));
+for (const pathname of ['/projects/', '/projects/vr-for-skill-learning/', '/gallery/', '/gallery/cathedrals-of-light/']) {
+  let installs = 0;
+  vm.runInNewContext(entrySource, { URL, location: { pathname },
+    document: { querySelector: () => ({}) }, installPhotoTransition: () => installs++ });
+  assert.equal(installs, pathname.startsWith('/gallery/') ? 0 : 1, 'Only entrances from outside Gallery install the transition');
+}
+console.log('Passed: museum geometry across six viewports; shared 3s Gallery entrance from homepage and five project headers; exact masthead docking; native/keyboard links; duplicate prevention; preference/load fallbacks; interrupted navigation; Back/re-entry and original inert-state restoration.');

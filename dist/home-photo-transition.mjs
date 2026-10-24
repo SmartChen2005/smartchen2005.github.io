@@ -47,14 +47,16 @@ export function photoTransitionFrame(time, width, height, origin, destination) {
   };
 }
 
-export function installPhotoTransition(link, resetHome, otherTransitionActive = () => false) {
+export function installPhotoTransition(link, resetHome = () => {}, otherTransitionActive = () => false) {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const forced = matchMedia('(forced-colors: active)');
   const destination = new URL(link.href, location.href);
   let preview = null, ready = false, mark = null, active = false, navigating = false;
   let frame = 0, timer = 0, layer = null, heading = null;
-  const home = document.querySelector('.homepage');
-  const scenery = document.querySelector('.world-stage');
+  // Capture the host page before appending the preview so this controller can
+  // also leave Projects and other pages without depending on homepage markup.
+  const sources = [...document.querySelectorAll('body > :not(script):not(style):not(link)')];
+  const previousInert = new Map();
 
   function prepare() {
     if (preview || reduce.matches || forced.matches || destination.origin !== location.origin) return;
@@ -120,8 +122,11 @@ export function installPhotoTransition(link, resetHome, otherTransitionActive = 
     if (preview) preview.style.opacity = '';
     delete document.body.dataset.photoTransition;
     document.body.style.removeProperty('--photo-home-opacity');
-    home.inert = false;
-    scenery.inert = false;
+    for (const [source, inert] of previousInert) {
+      source.inert = inert;
+      source.removeAttribute('data-photo-source');
+    }
+    previousInert.clear();
     active = navigating = false;
     resetHome();
   }
@@ -144,8 +149,11 @@ export function installPhotoTransition(link, resetHome, otherTransitionActive = 
     event.preventDefault();
     active = true;
     heading.style.visibility = 'hidden';
-    home.inert = true;
-    scenery.inert = true;
+    for (const source of sources) {
+      previousInert.set(source, source.inert);
+      source.inert = true;
+      source.setAttribute('data-photo-source', '');
+    }
     document.body.dataset.photoTransition = 'opening';
     preview.classList.add('is-revealed');
     layer = document.createElement('div');
@@ -181,7 +189,7 @@ export function installPhotoTransition(link, resetHome, otherTransitionActive = 
       context.clearRect(0, 0, width, height);
       context.strokeStyle = '#111'; context.lineWidth = .8;
       context.globalAlpha = state.roomOpacity;
-      // The first four corners inherit the Photographer's actual on-screen bounds.
+      // The first four corners inherit the clicked Gallery link's on-screen bounds.
       const corner = mix(10, Math.min(r.width, r.height) * .22, state.open);
       context.beginPath();
       for (const [x, y, dx, dy] of [[r.x, r.y, 1, 1], [right, r.y, -1, 1], [r.x, bottom, 1, -1], [right, bottom, -1, -1]]) {
