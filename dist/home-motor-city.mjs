@@ -1,5 +1,5 @@
-import { T, box, cylinder, torus, batch, toon, polygon } from './home-motor-geometry.mjs?rev=20261025-shutter';
-import { motion } from './home-motor-motion.mjs?rev=20261025-shutter';
+import { T, box, cylinder, torus, batch, toon, polygon } from './home-motor-geometry.mjs?rev=20261025-cosmic';
+import { motion } from './home-motor-motion.mjs?rev=20261025-cosmic';
 
 // Neutral source values are separated into three printing inks by the final pass.
 export function createMotorCity({circuit=false}={}){
@@ -74,7 +74,7 @@ export function createMotorCity({circuit=false}={}){
       }
     }
   }
-  for(let row=0;row<210;row++)for(let col=0;col<(circuit?13:7);col++){
+  for(let row=0;row<240;row++)for(let col=0;col<(circuit?13:7);col++){
     const x=(col-(circuit?6:3))*.8+(row%2)*.4,z=-42+row*.9;
     if(Math.abs(x)<half-.2&&motion.rand(row*17+col,5)>.65)b.add(box(.69,.012,.08),M.pave,[x,.022,z]);
   }

@@ -1,15 +1,38 @@
-import { T } from './home-motor-geometry.mjs?rev=20261025-shutter';
-import { motion } from './home-motor-motion.mjs?rev=20261025-shutter';
+import { T } from './home-motor-geometry.mjs?rev=20261025-cosmic';
+import { motion } from './home-motor-motion.mjs?rev=20261025-cosmic';
 export const MOTOR_SPEED=30;
 export const MOTOR_SHUTTER=.032;
-export function raceTravel(shot,t){
-  const length=shot.end-shot.start,local=Math.max(0,Math.min(length,t-shot.start));
-  return MOTOR_SPEED*(.85*local+.15*local*local/length);
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const smooth=(x)=>{x=clamp(x,0,1);return x*x*(3-2*x);};
+const integral=(u,r)=>u<=0?0:u<r?r*((u/r)**3-.5*(u/r)**4):u-r/2;
+const twice=(u,r)=>u<=0?0:u<r?r*r*((u/r)**4/4-(u/r)**5/10):.5*u*u-.5*r*u+.15*r*r;
+export function boostMotion(local){
+  const u=local-.52,r=.18,length=1.8,a=8;
+  return {distance:a*(twice(u,r)-twice(u-length,r)),velocity:a*(integral(u,r)-integral(u-length,r)),
+    acceleration:a*(smooth(u/r)-smooth((u-length)/r)),flame:(local>.52&&local<.75)||(local>1.04&&local<1.20)};
 }
+export function raceTravel(shot,t){
+  const start=shot.travelStart??shot.start,end=shot.travelEnd??shot.end,length=end-start,local=clamp(t-start,0,length);
+  return (shot.travelOffset||0)+MOTOR_SPEED*(.85*local+.15*local*local/length);
+}
+export function driverMotion(shot,t,index){
+  const local=t-shot.start;
+  if(shot.id==='exhaust-exit'||shot.id==='boosted-pass'){
+    const boost=boostMotion(t-shot.travelStart);
+    return index===1?{distance:boost.distance,velocity:boost.velocity,acceleration:boost.acceleration,flame:boost.flame}:
+      {distance:5.3+.18*Math.sin((t-shot.travelStart)*1.7),velocity:.306*Math.cos((t-shot.travelStart)*1.7),acceleration:0,flame:false};
+  }
+  if(shot.mode==='circuit')return index===0?
+    {distance:.4+.35*Math.sin(local*2.2),velocity:.77*Math.cos(local*2.2),acceleration:0,flame:false}:
+    {distance:-.7+.95*local+.18*Math.sin(local*3.4+1),velocity:.95+.612*Math.cos(local*3.4+1),acceleration:0,flame:false};
+  if(shot.id==='bumper-train')return {distance:index===0?.2*Math.sin(local*2):7.1+.35*local,velocity:index===0?.4*Math.cos(local*2):.35,acceleration:0,flame:false};
+  return {distance:0,velocity:0,acceleration:0,flame:false};
+}
+export function cameraTravel(shot,t){return raceTravel(shot,t)+(shot.id==='boosted-pass'?driverMotion(shot,t,1).distance:0);}
 export function raceExposure(shot,t,idle=false){
-  const local=Math.max(0,Math.min(shot.end-shot.start,t-shot.start));
-  return {enabled:!idle,speed:MOTOR_SPEED*(.85+.3*local/(shot.end-shot.start)),shutter:idle?0:MOTOR_SHUTTER,
-    radial:!idle&&['grid','warp'].includes(shot.mode)?.18:0};
+  const start=shot.travelStart??shot.start,end=shot.travelEnd??shot.end,local=clamp(t-start,0,end-start);
+  const speed=MOTOR_SPEED*(.85+.3*local/(end-start))+(shot.id==='boosted-pass'?driverMotion(shot,t,1).velocity:0);
+  return {enabled:!idle,speed,shutter:idle?0:MOTOR_SHUTTER,radial:0};
 }
 export function createSpeedLines(){
   const positions=new Float32Array(72*6),colors=new Float32Array(72*6);

@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Integrate cosmic flight and causal acceleration
+
+- Replaced the green abstract plate with a dual-car curved starfield flight inspired by the user's supplied Entergalactic stills. Added banked rear-attached cyan/magenta ribbons, sparks, a procedural galactic disc, common lighting/depth and a shared glow finish. Rebuilt Grid Tunnel as a curved chase and Warp Stars as a frontal sprint within the same 3D space, retaining the Scenario deterministic motion helpers.
+- Added a low tracking cut after the exhaust shot; the 21-second nine-cut film retains the established city camera compositions. Backfire now begins a smooth Z4 acceleration with integrated displacement continuous through the camera cut. Parallel/following formations have differing instantaneous speeds. The city shutter follows the faster tracking camera correctly.
+- Replaced red/ochre/green accents with cool blue/teal streets, preserved three street inks, and refined E85 swept lamp recesses/projectors, kidney details, lower intakes/splitter, deck lip and cockpit instruments. Native heading, hover/focus/pinning, skew, preferences and other entrances remain.
+- Actual browser evidence, test coverage and limits are recorded in `tools/MOTOR-RACE-QA.md`. Run site, motor/home/state, photo/game entrance checks and the strict dist audit before committing. No additional dependency or external image/model asset.
+
 ### 2026-10-25 — Add racing speed, selective shutter and vehicles in hyperspace
 
 - Preserved the eight compositions/cut timings and native 2D hover sentence. Increased street travel from 9m/s to a 30m/s average, with a small within-shot acceleration, faster wheel rotation, 72 peripheral speed streaks and a faster diagonal pass.
