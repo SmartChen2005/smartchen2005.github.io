@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-24 — Recut the race from reference photographs
+
+- Rebuilt Car Enthusiast as six hard-cut camera setups following the supplied low, wheel-level, inclined overhead, curbside and straightaway references. Added a built circuit, rounded black MINI / silver open Z4 models, color linework and a chequered gantry.
+- Applied the requested Scenario Motion Loops skill to the actual Grid Tunnel and Warp Stars functions. Both passed its renderer's determinism and twelve-second seam checks. The edited homepage race plays once for twelve seconds and freezes.
+- Extended the motorsport regression for exact cuts, shot coverage, both motifs, preferences and responsive projection. Source and browser evidence are recorded in `tools/MOTOR-RACE-QA.md`; homepage controls and other entrances are preserved.
+
 ### 2026-10-24 — Draw the Car Enthusiast racing entrance
 
 - Replaced the oversized wheel montage with authored white-line MINI Cooper S F56 and open-top BMW Z4 E85 geometry on one circuit. The 8.8-second race exchanges the lead three times and moves through front-quarter, side, overhead and chase views, with a linked tachometer, circuit markers and a chequered finish flag.

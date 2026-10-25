@@ -1,23 +1,23 @@
-import { drawMotorRace } from './home-motor-race.mjs?rev=20261024-duel';
+import { drawMotorRace, raceShot } from './home-motor-race.mjs?rev=20261024-directors-cut';
 
 const clamp = value => Math.max(0, Math.min(1, value));
 const smooth = value => { const x = clamp(value); return x * x * (3 - 2 * x); };
-export const MOTOR_DURATION = 8.8;
+export const MOTOR_DURATION = 12;
 
 // A single race, never a loop. Positive gap means the MINI leads.
 export function motorsportFrame(seconds) {
   const t = Math.min(MOTOR_DURATION, Math.max(0, seconds));
   const running = smooth((t - .65) / .65);
-  const settling = smooth((t - 7.65) / 1.15);
-  const shifts = [1.8, 3.35, 5.1, 6.6];
+  const settling = smooth((t - 11.15) / .85);
+  const shifts = [1.8, 3.35, 5.1, 6.6, 9.1];
   const gear = 1 + shifts.filter(shift => t >= shift).length;
   const sinceShift = t - (shifts[gear - 2] ?? .65);
   const rpm = 1100 + running * (3700 + 1900 * (1 - Math.exp(-Math.max(0, sinceShift) * 2.2)));
-  const gap = 1.8 * Math.cos((t - 1.1) * Math.PI / 2.15) * running;
+  const gap = 1.45 * Math.cos((t - 1.1) * Math.PI / 2.15) * running;
   return { t, phase: t < .65 ? 'drawing' : t < 2.5 ? 'launch' : t < 4.65 ? 'overtake'
-    : t < 6.8 ? 'apex' : t < 7.65 ? 'finish' : t < MOTOR_DURATION ? 'settle' : 'idle',
+    : t < 8 ? 'apex' : t < 10.35 ? 'tunnel' : t < 11.15 ? 'finish' : t < MOTOR_DURATION ? 'settle' : 'idle',
     gear, rpm, gap, leader: gap >= 0 ? 'mini' : 'z4', settling,
-    reveal: smooth(t / .8), distance: 3 + 12 * Math.max(0, t - .65),
+    shot: raceShot(t).id, reveal: smooth(t / .38), distance: 3 + 12 * Math.max(0, t - .65),
     idle: t >= MOTOR_DURATION };
 }
 
@@ -26,7 +26,10 @@ export function createMotorsport(canvas) {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const forced = matchMedia('(forced-colors: active)');
   const styles = getComputedStyle(document.documentElement);
-  const palette = { paper: styles.getPropertyValue('--paper').trim(), black: styles.getPropertyValue('--mechanical').trim() };
+  const read = name => styles.getPropertyValue(name)?.trim();
+  const palette = { paper: read('--paper'), black: read('--mechanical'), teal: read('--motor-teal'),
+    amber: read('--motor-amber'), steel: read('--motor-steel'), silver: read('--motor-silver'),
+    asphalt: read('--motor-asphalt'), mini: read('--motor-mini'), red: read('--motor-red') };
   let width = 0, height = 0, band = { top: 0, bottom: 0 };
   let active = false, raf = 0, last = 0, time = 0, exitTimer = 0;
   let input = .5;
@@ -36,6 +39,7 @@ export function createMotorsport(canvas) {
     const frame = motorsportFrame(time);
     canvas.dataset.phase = frame.phase;
     canvas.dataset.leader = frame.leader;
+    canvas.dataset.shot = frame.shot;
     drawMotorRace(ctx, frame, width, height, band, palette, reduced.matches ? .5 : input);
     return frame;
   }
