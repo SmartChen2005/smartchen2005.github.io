@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Gothic and Renaissance architecture across every street
+
+- Replaced the shared timber-house kit in both narrow-lane and city-circuit layouts with Gothic cathedrals/chapels/halls and Renaissance palazzi/domed churches. All six street shots inherit the replacement. Each layout has 54 facades with six twin-tower cathedrals and recurring ecclesiastical landmarks on both sides.
+- Added cached, instanced pointed/round arch mouldings, rose tracery, buttresses/spires, rustication, classical columns, pediments, balustrades and ribbed dome assemblies. Preserved road width, bridge clearance, circuit furniture, camera cuts, car models/physics, palettes, shutter, line-art sky and space shots. Native identity buttons now inherit the existing text contour for readability against bright facades.
+- Extended the motor regression to check style/landmark coverage on both sides, non-overlapping frontage plots, actual geometry motifs, and the driving corridor against every architectural instance's bounds. Browser review and limitations are in `tools/MOTOR-RACE-QA.md`.
+
 ### 2026-10-25 — Brighter Grid tails and stars above the line-drawn street
 
 - Raised the four Grid strokes' brightness and eased their taper; history grows from 0.14s to 0.19s (about 3.4m), retaining thin geometry and camera-safe placement.

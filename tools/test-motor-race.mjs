@@ -31,7 +31,23 @@ const lamps=world.cars[0].children.filter(c=>c.name==='recessed-f56-headlamp');a
 for(const lamp of lamps){assert(lamp.userData.lensRadius<.16);assert(lamp.position.y+lamp.userData.lensRadius*1.13<1.02,'Small lamps stay within the bonnet silhouette');}
 assert(world.cars[0].getObjectByName('f56-roof'));assert(!world.cars[1].getObjectByName('f56-roof'));
 assert(world.cars[1].getObjectByName('e85-seat-base'));assert(world.cars[1].getObjectByName('e85-steering-wheel'));
-assert.equal(world.city.root.userData.buildingCount,60);assert(world.city.root.userData.architecture.includes('half timber'));
+for(const town of [world.city,world.circuit]){
+ const {facades,churchCount,roseWindows,streetHalfWidth}=town.root.userData;
+ assert.equal(town.root.userData.buildingCount,facades.length);assert(facades.length>=50&&facades.length<=60);assert(facades.every(f=>['Gothic','Renaissance'].includes(f.style)));assert(churchCount>=12&&roseWindows>=8,'Ecclesiastical landmarks recur along the whole street');
+ for(const side of [-1,1]){
+  const row=facades.filter(f=>f.side===side).sort((a,b)=>a.z-b.z);
+  assert(new Set(row.map(f=>f.style)).has('Gothic')&&new Set(row.map(f=>f.style)).has('Renaissance'));
+  assert(row.filter(f=>f.kind==='cathedral').length>=3);assert(row.some(f=>f.kind==='domed-church'));
+  for(let i=1;i<row.length;i++)assert(row[i].z-row[i].width/2>row[i-1].z+row[i-1].width/2,'Facades occupy distinct street plots');
+ }
+ const motifs=new Set();town.architecture.updateMatrixWorld(true);
+ town.architecture.traverse(node=>{
+  if(!node.geometry)return;motifs.add(node.geometry.name);node.geometry.computeBoundingBox();
+  const instance=new T.Matrix4(),box=new T.Box3();
+  for(let i=0;i<node.count;i++){node.getMatrixAt(i,instance);box.copy(node.geometry.boundingBox).applyMatrix4(instance);assert(box.min.x>streetHalfWidth+.15||box.max.x< -streetHalfWidth-.15,'Building details leave the entire driving corridor clear');}
+ });
+ for(const name of ['gothic-pointed-arch','gothic-rose-tracery','renaissance-round-arch','renaissance-ribbed-dome'])assert(motifs.has(name));
+}
 assert(world.city.root.userData.streetHalfWidth<world.circuit.root.userData.streetHalfWidth);
 for(let i=0;i<MOTOR_SHOTS.length;i++){
   const s=MOTOR_SHOTS[i];assert.deepEqual(raceCamera(s.start+.01),raceCamera(s.end-.01),'Shot changes are cuts, not camera interpolation');
@@ -100,4 +116,4 @@ let count=0;world.scene.traverse(node=>{if(node.geometry?.attributes?.position){
 const record=()=>{const out=[];return {out,ctx:new Proxy({}, {get:(_,key)=>(...args)=>out.push([key,...args]),set:(_,key,value)=>{out.push([key,value]);return true;}})};};
 const P={fg:'#367f96',fg2:'#e3f0ec',paper:'#e3f0ec'};
 for(const effect of [drawGridTunnel,drawWarpStars]){const a=record(),b=record();effect(a.ctx,960,540,0,P);effect(b.ctx,960,540,MOTION_LOOP,P);assert.deepEqual(a.out,b.out);}
-console.log('Passed: native 2D sentence and lifecycle; nine hard cuts; restrained detailed models and real tires; traditional city; changing parallel spacing; causal boost/continuous progress; shared-space grid/warp/cosmic cars; analytic banked trails; environment shutter; six viewport shapes and Scenario 12s seams; scoped exhaust line art and four restrained, attached Grid strokes.');
+console.log('Passed: native 2D sentence and lifecycle; nine hard cuts; restrained detailed models and real tires; Gothic/Renaissance streets, recurring churches and clear architectural bounds; changing parallel spacing; causal boost/continuous progress; shared-space grid/warp/cosmic cars; analytic banked trails; environment shutter; six viewport shapes and Scenario 12s seams; scoped exhaust line art and four restrained, attached Grid strokes.');

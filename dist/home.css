@@ -155,6 +155,7 @@ body[data-world='cars']:not([data-motor-fallback]) .sentence {
   color: var(--motor-paper);
   text-shadow: -1px -1px 0 var(--motor-ink), 1px -1px 0 var(--motor-ink), -1px 1px 0 var(--motor-ink), 1px 1px 0 var(--motor-ink);
 }
+body[data-world='cars']:not([data-motor-fallback]) .identity { text-shadow: inherit; }
 body[data-world='cars'] { --game-underline: var(--motor-accent); }
 .portrait {
   position: absolute;

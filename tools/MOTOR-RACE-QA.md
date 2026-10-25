@@ -1,4 +1,30 @@
-# Car Enthusiast — brighter tails and a starry street sky, 2026-10-25
+# Car Enthusiast — Gothic and Renaissance street architecture, 2026-10-25
+
+This revision starts from 3359049. The narrow lane and wider city circuit are separately assembled layouts that share building generators/cached geometry. The user's latest direction replaces the former timber-house architecture throughout both layouts, covering all six street shots. The three space setups retain their environment, cars and motion.
+
+## Architecture and preserved behavior
+
+- `home-motor-architecture.mjs` builds 54 frontages in each layout. Six double-width twin-tower cathedrals recur along each street (three on each side). Including chapels and domed churches, the lane has 19 ecclesiastical buildings and the circuit 17. Both Gothic and Renaissance families occur on each side; side/layout phase offsets vary their sequence.
+- Gothic masonry includes pointed extruded arch frames, lancets/mullions, rose-window petal tracery, stepped projecting piers, flying stone members, gables, belfries, pinnacles and spires. Renaissance palazzi use rusticated ground storeys, round arcades, classical columns/capitals, alternating triangular/curved window pediments, cornices, balustrades and urns; churches add ribbed hemispherical domes, drums and lanterns. Closed roof ends and connecting caps avoid detached roof elements. These are stylized original procedural models, not reconstructions of a named monument.
+- Shape profiles and detail geometry are cached; repeated components remain instanced and the existing static-matrix freeze applies. No downloaded model, texture, new package or remote asset. The old timber/shutter-house kit and generic clock tower are removed; a balustraded passage preserves the old underpass clearance.
+- Road widths, cobbles, circuit kerbs/tires/banners, car models, driver/exhaust motion, camera cuts, 21s duration, base palettes, scenery shutter, line-art finish, sky and Grid/Warp effects remain. New architecture participates in both filled and contour rendering through the existing scene pipeline.
+- Bright facade review exposed native buttons' user-agent `text-shadow:none`, which had prevented the heading's existing ink contour from reaching Smart Chen / Car Enthusiast. A cars-preview-only inheritance rule fixes their contrast, with no new background strip, font/metrics changes or input behavior.
+
+## Verification
+
+Passed `node tools/test-motor-race.mjs`, `node tools/test-home.mjs`, `node tools/test-home-state.mjs`, `node tools/test-photo-transition.mjs`, `node tools/test-game-transition.mjs` and `node tools/validate-site.mjs`. Strict published-directory design audit reports zero findings in `tools/motor-race-premium-audit.json`; diff whitespace is clean.
+
+The motor regression checks both styles and recurring cathedral/dome/church coverage on each side, distinct frontage plots, actual pointed/round arch / rose-tracery / dome geometry, and every architectural instance's transformed bounds. All building details remain at least 0.15 model units beyond the driving corridor. Existing geometry finiteness, six viewport shapes, vehicle clearance, boost continuity, native wording, scoped line art, trail attachment, lifecycle and deterministic motifs remain covered.
+
+Chrome inspected all six street setups at 1440×900, the night street and circuit at 390×844, and the space regression after switching styles. Narrow screenshots were recaptured at the verified 390×844 viewport; no horizontal overflow. A separate authoring overview inspected roof/dome/façade joins; its camera override and selector exist only in the removed preview and add no production shot.
+
+On the actual homepage, Tab activated an unpinned car preview, the clock reached the idle finale, Space pinned and Escape cleared while retaining trigger focus. Heading bounds before/during matched exactly: x=184.0625, y=416.17709, width=1071.86462, height=67.64584 at 1440×900. Main had no inert ancestor. Identity buttons now inherit all four existing ink-shadow offsets. No scene/shader/model warning or error was captured in this review. Browser viewport overrides were reset and disposable preview files removed.
+
+Evidence in the task artifact directory: `architecture-opening.png`, `architecture-following.png`, `architecture-circuit.png`, `architecture-night-street.png`, `architecture-boost-tracking.png`, `architecture-finale.png`, `architecture-mobile-night.png`, `architecture-mobile-circuit.png`, and `architecture-study.png` (authoring view). These are desktop-pointer viewport checks, not physical touch / Safari / 60fps guarantees. Previous performance/presentation limits recorded below remain; no new FPS claim is made.
+
+---
+
+## Previous: brighter tails and a starry street sky, 2026-10-25
 
 Follow-up from 7d5735b, still limited to Grid Tunnel and the line-drawn exhaust shot. Grid retains four thin strokes but raises opacity from 0.46 to 0.74, softens the taper exponent from 1.5 to 1.1 and extends analytic history from 0.14s to 0.19s (roughly 3.4m). Existing tests retain rear attachment, four line-only primitives, restrained extent (under 4.2m) and near-plane safety at three moments.
 
