@@ -25,7 +25,7 @@ export function driverMotion(shot,t,index){
   if(shot.mode==='circuit')return index===0?
     {distance:.4+.35*Math.sin(local*2.2),velocity:.77*Math.cos(local*2.2),acceleration:0,flame:false}:
     {distance:-.7+.95*local+.18*Math.sin(local*3.4+1),velocity:.95+.612*Math.cos(local*3.4+1),acceleration:0,flame:false};
-  if(shot.id==='starlit-follow')return {distance:index===0?.14*Math.sin(local*2):7.4+.45*local+.12*Math.sin(local*2.7),velocity:index===0?.28*Math.cos(local*2):.45+.324*Math.cos(local*2.7),acceleration:0,flame:false};
+  if(shot.id==='starlit-lead')return {distance:index===0?7.4+.45*local+.12*Math.sin(local*2.7):.14*Math.sin(local*2),velocity:index===0?.45+.324*Math.cos(local*2.7):.28*Math.cos(local*2),acceleration:0,flame:false};
   if(shot.id==='bumper-train')return {distance:index===0?.2*Math.sin(local*2):7.1+.35*local,velocity:index===0?.4*Math.cos(local*2):.35,acceleration:0,flame:false};
   return {distance:0,velocity:0,acceleration:0,flame:false};
 }

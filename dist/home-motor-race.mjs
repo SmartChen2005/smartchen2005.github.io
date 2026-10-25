@@ -2,21 +2,19 @@ import { T } from './home-motor-geometry.mjs?rev=20261025-cosmic';
 import { createMotorCar, setMotorCarSpace } from './home-motor-cars.mjs?rev=20261025-cosmic';
 import { createMotorCity } from './home-motor-city.mjs?rev=20261025-shockwave';
 import { motorPalette, MOTOR_PALETTES } from './home-motor-palette.mjs?rev=20261025-cosmic';
-import { raceTravel, cameraTravel, driverMotion, raceExposure, createSpeedLines, updateSpeedLines, MOTOR_BACKGROUND_FRAGMENT, MOTOR_COMPOSITE_FRAGMENT } from './home-motor-speed.mjs?rev=20261025-shockwave';
+import { raceTravel, cameraTravel, driverMotion, raceExposure, createSpeedLines, updateSpeedLines, MOTOR_BACKGROUND_FRAGMENT, MOTOR_COMPOSITE_FRAGMENT } from './home-motor-speed.mjs?rev=20261025-seven-cuts';
 import { isFlight, flightPose, flightCamera, createMotorCosmos, SPACE_FINISH_FRAGMENT } from './home-motor-flight.mjs?rev=20261025-stars';
-import { isMotorLineShot, MOTOR_LINE_FRAGMENT } from './home-motor-line.mjs?rev=20261025-shockwave';
-import { createArchitectureBurst } from './home-motor-burst.mjs?rev=20261025-shockwave';
+import { isMotorLineShot, MOTOR_LINE_FRAGMENT } from './home-motor-line.mjs?rev=20261025-seven-cuts';
+import { createArchitectureBurst } from './home-motor-burst.mjs?rev=20261025-seven-cuts';
 export { motorPalette, MOTOR_PALETTES };
 export const MOTOR_SHOTS=[
-  {start:0,end:2.2,id:'starlit-follow',mode:'lane',camera:[.6,1.05,-7.8],target:[0,1.2,7],fov:62,palette:6},
-  {start:2.2,end:4.4,id:'bumper-train',mode:'lane',camera:[.65,.65,-5.5],target:[0,1.35,5],fov:65,palette:1},
-  {start:4.4,end:6.7,id:'city-circuit',mode:'circuit',camera:[4.8,6.5,-10],target:[0,1.3,2],fov:53,palette:2},
+  {start:0,end:2.2,id:'starlit-lead',mode:'lane',camera:[2.35,1.2,15.8],target:[0,1.1,4],fov:62,palette:6},
+  {start:2.2,end:4.4,id:'bumper-train',mode:'lane',camera:[.65,.65,-5.5],target:[0,1.35,5],fov:65,palette:6},
+  {start:4.4,end:6.7,id:'city-circuit',mode:'circuit',camera:[4.8,6.5,-10],target:[0,1.3,2],fov:53,palette:6},
   {start:6.7,end:8.5,id:'grid-tunnel',mode:'grid',camera:[0,0,0],target:[0,0,-1],fov:66,palette:3},
-  {start:8.5,end:12,id:'cosmic-arc',mode:'cosmic',camera:[0,5.8,17],target:[0,-.3,0],fov:58,palette:4},
-  {start:12,end:13.8,id:'hyperspace',mode:'warp',camera:[0,0,0],target:[0,0,-1],fov:67,palette:5},
-  {start:13.8,end:16.4,travelStart:13.8,travelEnd:18.6,travelOffset:-36,id:'exhaust-exit',mode:'lane',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:6},
-  {start:16.4,end:18.6,travelStart:13.8,travelEnd:18.6,travelOffset:-36,id:'boosted-pass',mode:'circuit',camera:[4.3,1.1,6.8],target:[0,.85,0],fov:55,palette:7},
-  {start:18.6,end:21,id:'rally-finale',mode:'circuit',camera:[4.3,2.8,8.6],target:[0,1.4,0],fov:52,palette:7},
+  {start:8.5,end:11.1,travelStart:8.5,travelEnd:13.3,travelOffset:-36,id:'exhaust-exit',mode:'lane',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:6},
+  {start:11.1,end:13.3,travelStart:8.5,travelEnd:13.3,travelOffset:-36,id:'boosted-pass',mode:'circuit',camera:[4.3,1.1,6.8],target:[0,.85,0],fov:55,palette:6},
+  {start:13.3,end:15.7,id:'rally-finale',mode:'circuit',camera:[4.3,2.8,8.6],target:[0,1.4,0],fov:52,palette:6},
 ];
 export const raceShot=t=>MOTOR_SHOTS.find(s=>t<s.end)||MOTOR_SHOTS.at(-1);
 export const raceCamera=(t,input=.5)=>{const s=raceShot(t);return [s.camera[0]+(input-.5)*.12,s.camera[1],s.camera[2]];};
@@ -25,7 +23,7 @@ export function racePosition(seconds,index){
   const z=raceTravel(shot,seconds);
   if(isFlight(shot.mode)){const pose=flightPose(shot.mode,local,index);return {x:pose.position.x,y:pose.position.y,z:pose.position.z,quaternion:pose.quaternion,visible:true,foreground:shot.mode==='cosmic'&&index===0&&local>1.1&&local<2.3};}
   const driver=driverMotion(shot,seconds,index);
-  if(shot.id==='starlit-follow')return {x:index===0?-.6:.55,y:0,z:z+driver.distance,yaw:0,visible:true};
+  if(shot.id==='starlit-lead')return {x:index===0?-.55:.5,y:0,z:z+driver.distance,yaw:0,visible:true};
   if(shot.id==='bumper-train')return {x:index===0?-.35:.1,y:0,z:z+driver.distance,yaw:0,visible:true};
   if(shot.id==='exhaust-exit'||shot.id==='boosted-pass')return {x:index===0?1.05:-1.05,y:0,z:z+driver.distance,yaw:0,visible:true};
   return {x:index===0?-1.6:1.6,y:0,z:z+driver.distance,yaw:0,visible:true};
@@ -70,11 +68,12 @@ export function createMotorScene(){
       const pos=raceCamera(frame.t,input),narrow=world.width<650;
       if(abstract){const view=flightCamera(shot.mode,local,world.width/world.height);camera.position.copy(view.position);camera.up.set(0,1,0);camera.lookAt(view.target);camera.fov=view.fov;sun.position.copy(camera.position).add(new T.Vector3(-7,12,4));sun.target.position.copy(cars[0].position);}
       else {const widening=narrow&&shot.mode==='circuit'?1.25:1;camera.position.set(pos[0],pos[1]*widening,d+pos[2]*widening);camera.up.set(0,1,0);camera.lookAt(shot.target[0],shot.target[1],d+shot.target[2]);camera.fov=shot.fov+(narrow?16:0);sun.position.set(-9,23,d+8);sun.target.position.set(0,0,d);}
-      // Phone crops separate the following silhouettes and retain the exhaust flare.
-      if(narrow&&world.lineArt){
-        const following=shot.id==='starlit-follow';
-        camera.position.set(.15,following?2.1:.7,d-(following?9.8:8.8));
-        camera.lookAt(shot.target[0],following ? .65 : shot.target[1],d+shot.target[2]);camera.fov=following?78:84;
+      // Scope phone reframing to the front lead and low exhaust setups. The
+      // other four street cameras retain their original angle and composition.
+      if(narrow&&shot.id==='starlit-lead'){
+        camera.position.set(.35,2.1,d+18.5);camera.lookAt(0,.65,d+3.8);camera.fov=78;
+      }else if(narrow&&shot.id==='exhaust-exit'){
+        camera.position.set(.15,.7,d-8.8);camera.lookAt(shot.target[0],shot.target[1],d+shot.target[2]);camera.fov=84;
       }
       camera.updateProjectionMatrix();camera.updateMatrixWorld(true);sun.target.updateMatrixWorld();
       cosmos.update(shot.mode,local,camera);

@@ -19,8 +19,8 @@ for (const [width, height, sentenceHeight] of [[1920,1080,90],[1440,900,68],[102
     assert(a.x + a.width <= b.x || b.x + b.width <= a.x || a.y + a.height <= b.y || b.y + b.height <= a.y);
   }
 }
-assert.equal(MOTOR_DURATION,21);
-assert.deepEqual([0,1,21].map(t=>motorsportFrame(t).phase),['opening','city','idle']);
+assert.equal(MOTOR_DURATION,15.7);
+assert.deepEqual([0,1,MOTOR_DURATION].map(t=>motorsportFrame(t).phase),['opening','city','idle']);
 assert(motorsportFrame(100).idle);
 
 const callbacks = new Map(), mediaHandlers = [], forcedHandlers = [], pageHandlers = [], timers = new Map();
@@ -105,4 +105,4 @@ assert(!foregroundCanvas.classList.contains('is-active'),'Graphics failure also 
 assert.equal(document.body.dataset.motorImmersive,undefined,'The car scene never makes the native homepage immersive');
 assert.equal(document.body.dataset.motorFallback,'true');
 delayed.setActive(false);assert.equal(document.body.dataset.motorFallback,undefined);
-console.log('Passed: four uncropped non-overlapping prints; 21s full-screen city phases, settle and restart; finite canvas geometry; stopped idle loop; reduced motion; background suspension.');
+console.log('Passed: four uncropped non-overlapping prints; 15.7s seven-shot city phases, settle and restart; finite canvas geometry; stopped idle loop; reduced motion; background suspension.');

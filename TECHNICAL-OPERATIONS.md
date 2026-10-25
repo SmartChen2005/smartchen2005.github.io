@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Confirmed seven-shot line-art edit and slower architectural drift
+
+- Followed the user's confirmed shot map: removed cosmic arc and Warp Stars, retained Grid Tunnel, and shortened playback from 21s to 15.7s without stretching retained shots. The opening now looks back at the leading MINI and following Z4; the second rear camera and remaining established street angles are preserved.
+- Applied the approved unfilled contour / solid ink / starry-sky finish to all six street setups, including the high circuit and final two shots. Scoped phone reframing to the front opening and exhaust so the new style does not overwrite other cameras.
+- Slowed architectural lift, lateral acceleration and rotation, added a gentle launch, extended the wave's early reach and widened depth-wise scatter. At local 2.55s, mean upward speed drops from 19.38 to 7.67 model units/s, while depth displacement spread grows from 8.99 to 37.53 units. All 6,041 pieces have begun moving by local 1.2s. Vehicle acceleration and deterministic restoration remain.
+- Updated timeline, shot-order, front-leader, style-scope and motion-bound regressions. Actual browser review and evidence are in `tools/MOTOR-RACE-QA.md`.
+
 ### 2026-10-25 — Starlit following opening and architectural boost shock wave
 
 - Replaced the solo opening with two naturally spaced following cars, using the exhaust shot's unfilled contour / solid ground / starry-sky finish. Added a higher rear phone crop so both vehicles remain visible. Native homepage wording, geometry, preview controls and skew are unchanged.

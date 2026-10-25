@@ -1,5 +1,5 @@
-// The opening chase and exhaust shock wave share unfilled hidden-line drawing.
-export const isMotorLineShot=shot=>['starlit-follow','exhaust-exit'].includes(shot.id);
+// All six street setups share the approved unfilled, starry drawing finish.
+export const isMotorLineShot=shot=>['lane','circuit'].includes(shot.mode);
 export const MOTOR_LINE_FRAGMENT=`
 uniform sampler2D source;uniform sampler2D depthSource;
 uniform sampler2D cars;uniform sampler2D carDepth;

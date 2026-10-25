@@ -1,4 +1,4 @@
-import { createMotorsport } from './home-motorsport.mjs?rev=20261025-shockwave';
+import { createMotorsport } from './home-motorsport.mjs?rev=20261025-seven-cuts';
 import { createExhibition } from './home-exhibition.mjs';
 
 // Canvas-only scenery. It never captures input or changes the sentence's layout.

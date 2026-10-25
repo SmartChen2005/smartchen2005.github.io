@@ -1,5 +1,5 @@
-import { createMotorWorld, raceShot } from './home-motor-race.mjs?rev=20261025-shockwave';
-export const MOTOR_DURATION=21;
+import { createMotorWorld, raceShot } from './home-motor-race.mjs?rev=20261025-seven-cuts';
+export const MOTOR_DURATION=15.7;
 const clamp=x=>Math.max(0,Math.min(1,x));
 export function motorsportFrame(seconds){
   const t=Math.min(MOTOR_DURATION,Math.max(0,seconds)),shot=raceShot(t);

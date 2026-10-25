@@ -1,4 +1,24 @@
-# Car Enthusiast — Starlit follow and architectural shock wave, 2026-10-25
+# Car Enthusiast — Confirmed seven-shot line-art edit, 2026-10-25
+
+This revision starts from 2ea2090. The user confirmed the precise edit before implementation: remove original shots 5 (cosmic arc) and 6 (Warp Stars), retain Grid, make the opening frontal with MINI leading, preserve the second rear view, and apply the approved starry line drawing to every remaining street setup. Houses should move more slowly and scatter through a wider area.
+
+## Result and verification
+
+- Seven hard cuts now run for 15.7s: front MINI lead → rear following → high circuit → Grid → exhaust / architectural drift → low tracking → city finale. Retained durations and non-opening camera angles are unchanged. Exhaust/low tracking share the same integrated progress as before, shifted 5.3s earlier. All six streets use palette 6 and the existing unfilled depth/normal contour finish. Grid keeps its shared-depth colors, vehicles, curves and four short rear strokes.
+- The opening camera is ahead of the cars; MINI is over 7m in front of the Z4. The phone crop also stays ahead and shows both front silhouettes. New style selection uses street mode, while special phone cameras remain limited to opening/exhaust; the high circuit and tracking compositions are preserved.
+- The architectural wave reaches farther buildings earlier, with gentler launch/lift/outward acceleration and rotation. Increased depth-wise trajectory variation opens a broader scatter instead of two flat rows. An analytic comparison against the actual 2ea2090 burst module, using matching architecture and seeds, measured mean upward speed at local 2.55s of 7.67 versus 19.38 units/s, maximum 10.18 versus 25.28, and depth displacement spread 37.53 versus 8.99 units. By local 1.2s all 6,041 pieces have begun moving, versus 3,457 previously. These are geometry/motion measurements, not a frame-rate benchmark.
+- Motor regression checks the exact seven-shot order, absent deleted shots, front MINI clearance, retained rear camera, six line-art street setups, lower lift-speed bound, broad depth distribution, early distant coverage, complete restoration and out-of-order determinism. Existing tire/model/architecture bounds, changing relative speed, boost derivatives/cut continuity, six viewport cases and Scenario motif seams still pass.
+- Passed `node tools/test-motor-race.mjs`, `node tools/test-home.mjs`, `node tools/test-home-state.mjs`, `node tools/test-photo-transition.mjs`, `node tools/test-game-transition.mjs`, `node tools/validate-site.mjs`, whitespace checks and strict dist design audit (zero findings).
+
+Chrome reviewed 1440×900 front opening, retained rear view, high circuit, slower scatter and final two street setups. The entire seven-shot preview played through to 15.70s / rally-finale with no warning/error in its logs. At 390×844 the front opening, high circuit and low tracking retained recognizable vehicles and no document overflow. These are desktop-pointer viewport checks, not physical touch, Safari or FPS guarantees.
+
+Actual homepage checks: Tab enters the unpinned `starlit-lead` preview. Before/during native heading bounds match exactly: x=184.0625, y=416.17709, width=1071.86462, height=67.64584 at 1440×900. Main has no inert ancestor. The clock reaches idle / rally-finale, Space pins the preview, and Escape clears it while retaining trigger focus. The span retains matrix(1,0,-0.158384,1,0,0) (-9° skew); no warning/error was captured in the real homepage logs.
+
+Evidence in the task artifact directory: `seven-front-mini.png`, `seven-front-final.png` (clean composition), `seven-rear-follow.png`, `seven-high-circuit.png`, `seven-slow-scatter.png`, `seven-low-tracking.png`, `seven-city-finale.png`, `seven-mobile-front.png`, `seven-mobile-circuit.png`, `seven-mobile-tracking.png`. Disposable preview files are removed before commit and viewport overrides reset.
+
+---
+
+## Previous: Starlit follow and architectural shock wave, 2026-10-25
 
 This revision starts from 840ea2d. The user explicitly replaces the first solo setup with a following pair in the exhaust shot's unfilled starry line style, and asks for a stronger forward surge that blows every building shape into the sky on either side.
 
