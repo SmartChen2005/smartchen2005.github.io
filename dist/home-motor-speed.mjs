@@ -7,7 +7,7 @@ const smooth=(x)=>{x=clamp(x,0,1);return x*x*(3-2*x);};
 const integral=(u,r)=>u<=0?0:u<r?r*((u/r)**3-.5*(u/r)**4):u-r/2;
 const twice=(u,r)=>u<=0?0:u<r?r*r*((u/r)**4/4-(u/r)**5/10):.5*u*u-.5*r*u+.15*r*r;
 export function boostMotion(local){
-  const u=local-.52,r=.18,length=1.8,a=8;
+  const u=local-.52,r=.18,length=.9,a=18;
   return {distance:a*(twice(u,r)-twice(u-length,r)),velocity:a*(integral(u,r)-integral(u-length,r)),
     acceleration:a*(smooth(u/r)-smooth((u-length)/r)),flame:(local>.52&&local<.75)||(local>1.04&&local<1.20)};
 }
@@ -25,6 +25,7 @@ export function driverMotion(shot,t,index){
   if(shot.mode==='circuit')return index===0?
     {distance:.4+.35*Math.sin(local*2.2),velocity:.77*Math.cos(local*2.2),acceleration:0,flame:false}:
     {distance:-.7+.95*local+.18*Math.sin(local*3.4+1),velocity:.95+.612*Math.cos(local*3.4+1),acceleration:0,flame:false};
+  if(shot.id==='starlit-follow')return {distance:index===0?.14*Math.sin(local*2):7.4+.45*local+.12*Math.sin(local*2.7),velocity:index===0?.28*Math.cos(local*2):.45+.324*Math.cos(local*2.7),acceleration:0,flame:false};
   if(shot.id==='bumper-train')return {distance:index===0?.2*Math.sin(local*2):7.1+.35*local,velocity:index===0?.4*Math.cos(local*2):.35,acceleration:0,flame:false};
   return {distance:0,velocity:0,acceleration:0,flame:false};
 }

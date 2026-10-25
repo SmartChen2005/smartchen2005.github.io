@@ -9,6 +9,7 @@ export function createMotorCity({circuit=false}={}){
   const M={stone:toon('#9f9f9f'),plaster:toon('#d1d1d1'),base:toon('#6b6b6b'),roof:toon('#343434'),
     trim:toon('#ededed'),window:toon('#151515'),road:toon('#282828'),pave:toon('#777777'),metal:toon('#191919')};
   const town=createStreetArchitecture(half,M,{circuit});root.add(town.root);
+  const bridgeRoot=new T.Group();bridgeRoot.name='renaissance-overhead-passage';root.add(bridgeRoot);
   const b=batch(root);
   b.add(box(42,.15,230),M.pave,[0,-.12,65]);b.add(box(half*2,.08,230),M.road,[0,-.025,65]);
   for(const side of [-1,1]){
@@ -24,11 +25,13 @@ export function createMotorCity({circuit=false}={}){
     if(Math.abs(x)<half-.2&&motion.rand(row*17+col,5)>.65)b.add(box(.69,.012,.08),M.pave,[x,.022,z]);
   }
   if(!circuit){
+    const bridge=batch(bridgeRoot);
     // A Renaissance balustraded passage retains the original clear underpass.
-    b.add(box(half*2+2.3,1.15,2.8),M.stone,[0,7.2,80]);
-    b.add(box(half*2+2.5,.17,3),M.trim,[0,7.83,80]);
-    for(let x=-half;x<=half;x+=.48){b.add(cylinder(.055,.62,8),M.trim,[x,8.2,78.6]);b.add(cylinder(.085,.12,10),M.stone,[x,8.2,78.6]);}
-    b.add(box(half*2+2.1,.14,.22),M.trim,[0,8.56,78.6]);
+    bridge.add(box(half*2+2.3,1.15,2.8),M.stone,[0,7.2,80]);
+    bridge.add(box(half*2+2.5,.17,3),M.trim,[0,7.83,80]);
+    for(let x=-half;x<=half;x+=.48){bridge.add(cylinder(.055,.62,8),M.trim,[x,8.2,78.6]);bridge.add(cylinder(.085,.12,10),M.stone,[x,8.2,78.6]);}
+    bridge.add(box(half*2+2.1,.14,.22),M.trim,[0,8.56,78.6]);
+    bridge.finish();
   }
   if(circuit)for(const z of [34,113]){
     for(const side of [-1,1])b.add(box(.1,5.2,.1),M.metal,[side*(half-.1),2.6,z]);
@@ -36,5 +39,5 @@ export function createMotorCity({circuit=false}={}){
     for(let row=0;row<2;row++)for(let col=0;col<24;col++)b.add(box(.5,.42,.045),(row+col)%2?M.trim:M.metal,[-5.75+col*.5,4.4+row*.42,z]);
   }
   b.finish();root.userData={buildingCount:town.facades.length,streetHalfWidth:half,architecture:'Gothic cathedrals / pointed lancets / rose tracery / buttresses / Renaissance palazzi / round arcades / pilasters / pediments / ribbed domes',circuit,churchCount:town.churchCount,facades:town.facades,roseWindows:town.roseWindows};
-  return {root,materials:M,architecture:town.root};
+  return {root,materials:M,architecture:town.root,bridge:bridgeRoot};
 }

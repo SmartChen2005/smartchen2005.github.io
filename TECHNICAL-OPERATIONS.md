@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Starlit following opening and architectural boost shock wave
+
+- Replaced the solo opening with two naturally spaced following cars, using the exhaust shot's unfilled contour / solid ground / starry-sky finish. Added a higher rear phone crop so both vehicles remain visible. Native homepage wording, geometry, preview controls and skew are unchanged.
+- Increased early Z4 acceleration from 8 to 18m/s², with a shorter acceleration window and 16.2m/s extra terminal speed. Retained integrated position/velocity continuity into the following camera; offset the shared segment to keep travel inside the built road. Peripheral line echoes grow with the boost.
+- After ignition, all 6,041 lane architectural instances, including walls, arches, spires, domes and overhead passage, lift and spin out towards both sides of the sky. Seeded analytic transforms preserve instancing, avoid a physics loop and restore exactly on restart/cut. Extended motion/restoration tests; actual browser evidence and checks are in `tools/MOTOR-RACE-QA.md`.
+
 ### 2026-10-25 — Gothic and Renaissance architecture across every street
 
 - Replaced the shared timber-house kit in both narrow-lane and city-circuit layouts with Gothic cathedrals/chapels/halls and Renaissance palazzi/domed churches. All six street shots inherit the replacement. Each layout has 54 facades with six twin-tower cathedrals and recurring ecclesiastical landmarks on both sides.

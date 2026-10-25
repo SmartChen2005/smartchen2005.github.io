@@ -65,7 +65,9 @@ for(const [w,h] of [[1920,1080],[1440,900],[1024,600],[390,844],[320,568],[844,3
     assert.equal(world.portals.visible,shot.mode==='grid');assert.equal(world.stars.visible,shot.mode==='warp');
   }
 }
-world.update(motorsportFrame(1));assert.equal(world.cars.filter(c=>c.visible).length,1,'A narrow street can be a solo shot');
+world.update(motorsportFrame(1));assert.equal(world.cars.filter(c=>c.visible).length,2,'The opening is a two-car line-art follow shot');
+assert(world.cars[1].position.z-world.cars[0].position.z>7,'Opening cars follow with physical clearance');assert(world.camera.position.z<world.cars[0].position.z,'The opening sees both cars driving away');
+assert.notEqual(driverMotion(MOTOR_SHOTS[0],1,0).velocity,driverMotion(MOTOR_SHOTS[0],1,1).velocity);
 world.update(motorsportFrame(3));assert(world.cars[1].position.z-world.cars[0].position.z>7,'Following cars have physical clearance');
 world.update(motorsportFrame(5));assert(Math.abs(world.cars[0].position.x-world.cars[1].position.x)>3,'Circuit pairs can run alongside');
 world.update(motorsportFrame(10.25));assert(world.cars[0].getObjectByName('curved-body-with-wheel-arches').layers.isEnabled(2));
@@ -77,6 +79,7 @@ world.update(motorsportFrame(1));const savedLines=world.speedLines.geometry.attr
 updateSpeedLines(world.speedLines,MOTOR_SHOTS[0],.37,0);const speedSeam=world.speedLines.geometry.attributes.position.array.slice();updateSpeedLines(world.speedLines,MOTOR_SHOTS[0],12.37,0);world.speedLines.geometry.attributes.position.array.forEach((v,i)=>assert(Math.abs(v-speedSeam[i])<1e-5));
 world.update(motorsportFrame(21));assert(!world.speedLines.visible);assert(!world.exposure.enabled);
 // A backfire starts acceleration, then relative progress changes continuously through the cut.
+assert(boostMotion(1.4).velocity>13,'A stronger early surge moves the Z4 forward after ignition');
 assert.equal(boostMotion(.5).velocity,0);assert(boostMotion(.63).flame);assert(boostMotion(1.3).velocity>boostMotion(.63).velocity);
 for(let local=.01;local<4.8;local+=.037){const m=boostMotion(local);assert(Math.abs((boostMotion(local+.00001).distance-boostMotion(local-.00001).distance)/.00002-m.velocity)<.00001);}
 assert(racePosition(14.2,0).z>racePosition(14.2,1).z);assert(racePosition(16.1,1).z>racePosition(16.1,0).z);
@@ -99,8 +102,8 @@ world.cosmos.update('warp',12.37,world.camera);world.stars.geometry.attributes.p
 world.update(motorsportFrame(10.25));assert.deepEqual(world.cosmos.trails[0].mesh.geometry.attributes.position.array,savedTrail,'Flight history is analytic, not previous-frame state');
 world.update(motorsportFrame(1));assert(world.cars[0].getObjectByName('curved-body-with-wheel-arches').material.isMeshToonMaterial,'Street inks restore after space');
 assert(world.cars[1].getObjectByName('e85-central-lower-grille'));assert.equal(world.cars[1].children.filter(n=>n.name==='e85-swept-headlamp').length,2);
-// Only the selected exhaust setup changes to line art; the grid adds four short line traces.
-for(const shot of MOTOR_SHOTS){world.update(motorsportFrame((shot.start+shot.end)/2));assert.equal(world.lineArt,shot.id==='exhaust-exit');assert.equal(world.cosmos.gridTraces.filter(t=>t.line.visible).length,shot.mode==='grid'?4:0);}
+// The opening and exhaust share unfilled, starry line art; the grid adds four short line traces.
+for(const shot of MOTOR_SHOTS){world.update(motorsportFrame((shot.start+shot.end)/2));assert.equal(world.lineArt,['starlit-follow','exhaust-exit'].includes(shot.id));assert.equal(world.cosmos.gridTraces.filter(t=>t.line.visible).length,shot.mode==='grid'?4:0);}
 for(const local of [.1,.9,1.7]){
  world.update(motorsportFrame(6.7+local));
  for(const trace of world.cosmos.gridTraces){
@@ -111,9 +114,25 @@ for(const local of [.1,.9,1.7]){
   for(let i=0;i<a.length;i+=3)assert(new T.Vector3(...a.slice(i,i+3)).applyMatrix4(world.camera.matrixWorldInverse).z<-.08,'Traces cannot cross the camera');
  }
 }
+// Every architectural component, including the overhead passage, is swept
+// out/up after ignition. Out-of-order evaluation and leaving the shot restore it.
+const burst=world.architectureBurst,rest=burst.batches.map(b=>b.original.slice());
+world.update(motorsportFrame(14.3));
+for(const [i,b] of burst.batches.entries())assert.deepEqual(b.mesh.instanceMatrix.array,rest[i],'No explosion before ignition');
+world.update(motorsportFrame(16.35));
+const airborne=burst.batches.map(b=>b.mesh.instanceMatrix.array.slice()),instance=new T.Matrix4();let pieces=0;
+for(const b of burst.batches)for(let i=0;i<b.pieces.length;i++){
+ const p=b.pieces[i];b.mesh.getMatrixAt(i,instance);const localCenter=b.mesh.geometry.boundingBox.getCenter(new T.Vector3()),flying=localCenter.applyMatrix4(instance);
+ assert(flying.toArray().every(Number.isFinite));assert(flying.y>p.center.y+1,'Every piece rises into the sky');assert((flying.x-p.center.x)*p.side>1,'Every piece travels outward, away from the roadway');pieces++;
+}
+assert(pieces>1000,'All architectural shapes participate, not just a handful of debris props');
+world.update(motorsportFrame(14.43));world.update(motorsportFrame(16.35));
+for(const [i,b] of burst.batches.entries())assert.deepEqual(b.mesh.instanceMatrix.array,airborne[i],'Airborne assembly is a pure function of shot time');
+world.update(motorsportFrame(1));
+for(const [i,b] of burst.batches.entries()){assert.deepEqual(b.mesh.instanceMatrix.array,rest[i],'Restarting the opening restores every original matrix');assert.equal(b.mesh.frustumCulled,b.culled);}
 assert.deepEqual(motorsportFrame(100),motorsportFrame(21));
 let count=0;world.scene.traverse(node=>{if(node.geometry?.attributes?.position){count++;for(const v of node.geometry.attributes.position.array)assert(Number.isFinite(v));}});assert(count>250);
 const record=()=>{const out=[];return {out,ctx:new Proxy({}, {get:(_,key)=>(...args)=>out.push([key,...args]),set:(_,key,value)=>{out.push([key,value]);return true;}})};};
 const P={fg:'#367f96',fg2:'#e3f0ec',paper:'#e3f0ec'};
 for(const effect of [drawGridTunnel,drawWarpStars]){const a=record(),b=record();effect(a.ctx,960,540,0,P);effect(b.ctx,960,540,MOTION_LOOP,P);assert.deepEqual(a.out,b.out);}
-console.log('Passed: native 2D sentence and lifecycle; nine hard cuts; restrained detailed models and real tires; Gothic/Renaissance streets, recurring churches and clear architectural bounds; changing parallel spacing; causal boost/continuous progress; shared-space grid/warp/cosmic cars; analytic banked trails; environment shutter; six viewport shapes and Scenario 12s seams; scoped exhaust line art and four restrained, attached Grid strokes.');
+console.log('Passed: native 2D sentence and lifecycle; nine hard cuts; restrained detailed models and real tires; Gothic/Renaissance streets, recurring churches and clear architectural bounds; changing parallel spacing; causal boost/continuous progress; shared-space grid/warp/cosmic cars; analytic banked trails; environment shutter; six viewport shapes and Scenario 12s seams; starlit opening follow / exhaust line art, all-piece analytic architectural shock wave and four attached Grid strokes.');

@@ -1,4 +1,27 @@
-# Car Enthusiast — Gothic and Renaissance street architecture, 2026-10-25
+# Car Enthusiast — Starlit follow and architectural shock wave, 2026-10-25
+
+This revision starts from 840ea2d. The user explicitly replaces the first solo setup with a following pair in the exhaust shot's unfilled starry line style, and asks for a stronger forward surge that blows every building shape into the sky on either side.
+
+## Implementation and limits
+
+- The 0–2.2s `starlit-follow` opening has both cars driving away, with more than 7m separation and small independent velocity changes. It shares the solid ink ground, pale hidden-line contours and world-direction sky stars of `exhaust-exit`. A modest lateral stagger and higher 390px rear crop keep the second silhouette identifiable. No paint-filled car/building surfaces are introduced in these two setups.
+- Backfire timing is retained. The Z4's smooth early acceleration rises from 8 to 18m/s²; the shorter 0.9s acceleration window adds up to 16.2m/s. At local 1.4s it already gains over 13m/s. Integrated progress and wheel rotation remain continuous through the 16.4s cut. Moving the shared segment start from -32m to -36m retains road coverage (Z4 z≈168.54m just before its end).
+- `home-motor-burst.mjs` prepares seeded trajectories for all 6,041 existing architectural components across 156 instanced batches, including the overhead bridge. A wave starts after ignition and reaches the farther frontages in sequence. Walls, cornices, arches, roofs, towers and domes translate out/up with increasing displacement and rotate separately. The line renderer reveals the stars behind them. The road and 2D heading stay in place. Peripheral contour echoes strengthen with the actual boost velocity; vehicles retain their sharp contour capture.
+- The effect is limited to the exhaust shot; all original instance matrices and culling flags restore on leaving it or restarting. No frame history, additional renderer, physics dependency, downloaded asset or per-piece scene object. The original Gothic/Renaissance generators, car meshes, Grid/Warp/cosmic sequences, hard-cut timings, reduced-motion finale and input controller remain.
+
+## Verification
+
+Passed motor regression, home lifecycle/state, Gallery/Projects entrance checks, site validation, whitespace check and strict dist audit (zero findings). Motor tests additionally verify the following formation and rear camera, different driver velocities, stronger early acceleration, every architectural piece's finite outward/upward displacement, exact out-of-order determinism and complete matrix/culling restoration. Existing six viewport cases, boost derivative/cut continuity, tire/model constraints and Scenario 12s motif seam checks pass.
+
+Chrome reviewed frozen 1440×900 opening, ignition, shock-wave, airborne/open-sky stages, and the following tracking setup. The boost sequence also played through its native preview controls. At 390×844 the opening camera was raised after the first review to separate the car silhouettes; the final opening and airborne shot fit without document overflow. These are desktop-pointer viewport checks, not physical touch / Safari / FPS guarantees. No new frame-rate claim is made.
+
+On the actual homepage, Tab into Car Enthusiast starts an unpinned `starlit-follow` preview. It reaches the stopped finale; Space pins, Escape clears and retains trigger focus. Before/during heading bounds are identical at x=184.0625, y=416.17709, width=1071.86462, height=67.64584. The completed span transform is matrix(1,0,-0.158384,1,0,0), retaining -9° skew, and main has no inert ancestor. No warning/error was captured in the preview or homepage logs.
+
+Evidence in the task artifact directory: `burst-opening.png`, `burst-backfire.png`, `burst-shockwave.png`, `burst-airborne.png`, `burst-open-sky.png`, `burst-next-tracking.png`, `burst-mobile-opening.png`, `burst-mobile-airborne.png`, and `burst-final.png` (clean final composition). Disposable preview files are removed before commit and viewport overrides reset.
+
+---
+
+## Previous: Gothic and Renaissance street architecture, 2026-10-25
 
 This revision starts from 3359049. The narrow lane and wider city circuit are separately assembled layouts that share building generators/cached geometry. The user's latest direction replaces the former timber-house architecture throughout both layouts, covering all six street shots. The three space setups retain their environment, cars and motion.
 
