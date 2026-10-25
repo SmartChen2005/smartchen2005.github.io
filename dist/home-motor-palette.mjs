@@ -1,5 +1,5 @@
 // The complete chase shares graphite ground, pale contours and amber lanterns.
-export const MOTOR_PALETTES=[{ink:'#3d3d41',accent:'#eac36b',paper:'#f2f1ed'}];
+export const MOTOR_PALETTES=[{ink:'#222226',accent:'#eac36b',paper:'#f2f1ed'}];
 export const motorPalette=index=>MOTOR_PALETTES[((index%MOTOR_PALETTES.length)+MOTOR_PALETTES.length)%MOTOR_PALETTES.length];
 export const THREE_INK_FRAGMENT=`
 uniform sampler2D source;

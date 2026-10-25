@@ -36,13 +36,13 @@ vec3 skyStars(vec2 uv){
  vec3 ray=normalize(farPoint.xyz/farPoint.w-nearPoint.xyz/nearPoint.w);
  vec2 angle=vec2(atan(ray.x,ray.z),asin(clamp(ray.y,-1.,1.)));
  vec2 p=angle*68.,cell=floor(p),offset=vec2(starHash(cell+3.),starHash(cell+17.))*.7+.15,d=fract(p)-offset;
- float r=mix(.045,.095,starHash(cell+29.));
- float pin=(1.-smoothstep(r*.15,r,length(d)))*step(.82,starHash(cell+41.));
- vec3 stars=paper*pin*mix(.30,.95,starHash(cell+71.));
- p=angle*26.;cell=floor(p);d=fract(p)-(vec2(starHash(cell+91.),starHash(cell+107.))*.6+.2);
- float core=exp(-dot(d,d)*1400.);
- float cross=(exp(-abs(d.x)*180.-abs(d.y)*16.)+exp(-abs(d.y)*180.-abs(d.x)*16.))*.23;
- stars+=paper*(core+cross)*step(.94,starHash(cell+139.));return stars;
+ float r=mix(.065,.14,starHash(cell+29.));
+ float pin=(1.-smoothstep(r*.15,r,length(d)))*step(.78,starHash(cell+41.));
+ vec3 stars=paper*pin*mix(.65,1.2,starHash(cell+71.));
+ p=angle*22.;cell=floor(p);d=fract(p)-(vec2(starHash(cell+91.),starHash(cell+107.))*.6+.2);
+ float core=exp(-dot(d,d)*1050.);
+ float cross=(exp(-abs(d.x)*180.-abs(d.y)*16.)+exp(-abs(d.y)*180.-abs(d.x)*16.))*.30;
+ stars+=paper*(core+cross)*step(.91,starHash(cell+139.));return stars;
 }
 float lantern(vec2 uv){
  float nearest=min(texture2D(depthSource,uv).x,texture2D(carDepth,uv).x),depth=texture2D(lampDepth,uv).x;
@@ -60,8 +60,9 @@ void main(){
  float haze=1.-smoothstep(38.,110.,distanceAt(depthSource,vUv));
  float line=mix(min(1.,environmentEdge*.42+echo)*mix(.28,1.,haze),vehicleEdge*.92,visible);
  vec3 background=ink;
- // Only empty sky receives stars. Buildings, road and vehicle interiors keep their flat ground.
- if(depth>.999999&&texture2D(cars,vUv).a<.01)background+=skyStars(vUv);
+ // Uncovered sky receives stars; the dissolving road gradually admits them.
+ // Building and vehicle interiors keep their flat ground.
+ if(texture2D(cars,vUv).a<.01)background+=skyStars(vUv)*(1.-texture2D(source,vUv).a);
  float core=lantern(vUv),halo=0.;
  for(int i=0;i<4;i++){float a=float(i)*1.570796;halo+=lantern(clamp(vUv+vec2(cos(a),sin(a))*texel*7.,texel,1.-texel))*.25;}
  vec3 color=mix(background,paper,clamp(line,0.,1.));color=mix(color,mix(accent,paper,.15),core*.94);color+=accent*halo*.16;

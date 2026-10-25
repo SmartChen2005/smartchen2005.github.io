@@ -1,5 +1,5 @@
 import { T, box, cylinder, sphere, torus, tube, batch, mesh, toon, loft } from './home-motor-geometry.mjs?rev=20261025-curved-cars';
-import { roundFace, skinPoint, surfaceSeam } from './home-motor-curves.mjs?rev=20261025-curved-cars';
+import { roundFace, skinPoint, surfaceSeam, bonnetPoint } from './home-motor-curves.mjs?rev=20261025-curved-cars';
 const PI=Math.PI,TAU=PI*2;
 const outline=(parent,geometry,color,threshold=36)=>{
   const line=new T.LineSegments(new T.EdgesGeometry(geometry,threshold),new T.LineBasicMaterial({color}));parent.add(line);return line;
@@ -50,7 +50,7 @@ export function createMotorCar(kind){
   // turning the bonnet and fenders into a faceted rectangular slab.
   const bodyProfile=[[1,.52],[.999,.70],[.98,.87],[.91,.965],[.72,.996],[0,1],[-.72,.996],[-.91,.965],[-.98,.87],[-.999,.70],[-1,.52],[-.98,.24],[-.83,.075],[-.50,.012],[0,0],[.50,.012],[.83,.075],[.98,.24]];
   const stations=mini?[[-1.98,.73,.93],[-1.80,.83,1.0],[-1.28,.875,1.04],[-.6,.885,1.04],[.3,.88,1.035],[.8,.865,1.025],[1.24,.86,1.0],[1.62,.82,.965],[1.86,.77,.92],[2.02,.71,.855]]
-    :[[-2.09,.73,.80],[-1.83,.85,.91],[-1.3,.89,.96],[-.65,.88,.94],[.25,.86,.935],[.75,.865,.95],[1.22,.88,.985],[1.64,.85,.94],[1.91,.79,.84],[2.10,.71,.78]];
+    :[[-2.09,.73,.86],[-1.83,.85,.93],[-1.3,.89,.96],[-.65,.88,.94],[.25,.86,.935],[.75,.865,.95],[1.22,.88,.985],[1.64,.85,.94],[1.91,.79,.84],[2.10,.71,.78]];
   const relief=(x,y,z,py)=>{
     const crown=Math.exp(-(((Math.abs(x)-.60)/.22)**2))*Math.exp(-(((z-1.45)/.62)**2))*Math.max(0,(py-.7)/.3)*(mini?.055:.025);
     const hollow=mini?0:-Math.sign(x)*.032*Math.exp(-(((z+.25)/.9)**2))*Math.exp(-(((py-.48)/.22)**2));
@@ -109,9 +109,17 @@ export function createMotorCar(kind){
       mesh(lamp,sphere(.046),M.lamp,[0,-.015,.047]).scale.z=.18;root.add(lamp);
       const fog=new T.Group();fog.name='f56-round-fog-lamp';fog.position.set(side*.65,.435,frontZ(side*.65)+.028);fog.rotation.y=side*.26;
       mesh(fog,sphere(.067),M.black).scale.z=.25;mesh(fog,torus(.060,.006),M.chrome,[0,0,.018]);mesh(fog,sphere(.045),M.lamp,[0,0,.02]).scale.z=.2;root.add(fog);
-      const x=side*.64,tailPoints=[[x-.082,.915,0],[x+.082,.915,0],[x+.082,.63,0],[x-.082,.63,0]];
-      roundFace(root,tailPoints,M.tail,{radius:.045,name:'upright-f56-tail-light',stroke:M.chrome,width:.006,surface:rearSurface,facing:-1});
-      lineTube(root,[[x,.67,rearZ(x)-.028],[x,.87,rearZ(x)-.028]],M.chrome,.006);
+      const x=side*.64,tailPoints=[[x-.112,.975,0],[x+.112,.975,0],[x+.112,.605,0],[x-.112,.605,0]];
+      roundFace(root,tailPoints,M.tail,{radius:.065,name:'upright-f56-tail-light',stroke:M.chrome,width:.007,surface:rearSurface,facing:-1});
+      // Mirrored half-flags: outer vertical brake bar, horizontal indicator and
+      // the two diagonal tail-light arms of the actual Union Jack assembly.
+      const flag=new T.Group();flag.name='f56-union-jack-tail';flag.userData.side=side;root.add(flag);
+      const stroke=(name,points,r)=>{const n=lineTube(flag,points.map(([px,y])=>[px,y,rearZ(px)-.035]),M.white,r);n.name=name;};
+      const hub=side*.704,inner=side*.565;
+      stroke('flag-vertical',[[hub,.645],[hub,.935]],.010);
+      stroke('flag-horizontal',[[inner,.79],[hub,.79]],.011);
+      stroke('flag-upper-diagonal',[[inner,.925],[hub,.80]],.008);
+      stroke('flag-lower-diagonal',[[inner,.655],[hub,.78]],.008);
       b.add(cylinder(.062,.11,24),M.darkMetal,[side*.087,.285,-1.98],[PI/2,0,0]);
       b.add(torus(.06,.009),M.chrome,[side*.087,.285,-2.04]);
     }
@@ -132,7 +140,11 @@ export function createMotorCar(kind){
     lineTube(root,[[-.68,.235,frontZ(-.68)],[0,.21,frontZ(0)+.01],[.68,.235,frontZ(.68)]],M.black,.015);
     b.add(box(.42,.105,.025),M.white,[0,.545,2.052]);
     roundFace(root,[[-.21,.65,-2.033],[.21,.65,-2.033],[.21,.53,-2.033],[-.21,.53,-2.033]],M.white,{radius:.008,name:'f56-rear-plate',stroke:M.darkMetal,width:.0045,facing:-1});
-    b.add(cylinder(.036,.012,24),M.chrome,[0,.83,-2.005],[PI/2,0,0]);b.add(torus(.036,.004),M.chrome,[0,.83,-2.015]);
+    b.add(cylinder(.036,.012,24),M.chrome,[0,.84,-2.005],[PI/2,0,0]);b.add(torus(.036,.004),M.chrome,[0,.84,-2.02]);
+    lineTube(root,[[-.11,.84,-2.014],[-.06,.83,-2.021],[.06,.83,-2.021],[.11,.84,-2.014]],M.chrome,.006).name='f56-winged-rear-badge';
+    lineTube(root,[[-.19,.731,-2.02],[0,.74,-2.026],[.19,.731,-2.02]],M.black,.009).name='f56-tailgate-handle';
+    lineTube(root,[[-.21,1.043,-1.705],[.05,1.057,-1.687],[.13,1.03,-1.71]],M.black,.009).name='f56-rear-wiper';
+    lineTube(root,[[-.73,.405,rearZ(-.73)-.02],[-.42,.382,rearZ(-.42)-.026],[0,.37,-2.014],[.42,.382,rearZ(.42)-.026],[.73,.405,rearZ(.73)-.02]],M.darkMetal,.006).name='f56-rounded-rear-bumper';
     lineTube(root,[[-.48,.91,rearZ(-.48)-.022],[-.49,.69,rearZ(-.49)-.022],[-.45,.43,rearZ(-.45)-.022],[0,.40,-2.005],[.45,.43,rearZ(.45)-.022],[.49,.69,rearZ(.49)-.022],[.48,.91,rearZ(.48)-.022]],M.darkMetal,.004);
     b.add(cylinder(.047,.012,24),M.chrome,[0,.98,1.67],[-.35,0,0]);
     for(const side of [-1,1])for(let i=0;i<3;i++)b.add(box(.09-i*.015,.011,.018),M.chrome,[side*(.09+i*.025),.99,1.67+i*.02]);
@@ -182,16 +194,22 @@ export function createMotorCar(kind){
       }
       const fog=new T.Group();fog.name='e85-round-fog-lamp';fog.position.set(side*.67,.505,frontZ(.67)+.026);fog.rotation.y=side*.29;
       mesh(fog,sphere(.06),M.black).scale.z=.3;mesh(fog,torus(.051,.006),M.darkMetal,[0,0,.019]);mesh(fog,sphere(.038),M.glass,[0,0,.022]).scale.z=.25;root.add(fog);
-      const tail=[[side*.29,.77,0],[side*.46,.80,0],[side*.73,.75,0],[side*.75,.665,0],[side*.36,.67,0]];
-      roundFace(root,tail,M.tail,{radius:.028,name:'e85-rounded-rear-lamp',stroke:M.darkMetal,width:.005,surface:rearSurface,facing:-1});
-      lineTube(root,[[side*.36,.715,rearZ(.36)-.027],[side*.52,.73,rearZ(.52)-.027],[side*.69,.712,rearZ(.69)-.027]],M.white,.007);
+      const tail=[[side*.265,.79,0],[side*.36,.86,0],[side*.63,.86,0],[side*.755,.805,0],[side*.775,.68,0],[side*.685,.598,0],[side*.52,.605,0],[side*.45,.668,0],[side*.29,.67,0]];
+      roundFace(root,tail,M.tail,{radius:.039,name:'e85-rounded-rear-lamp',stroke:M.darkMetal,width:.006,surface:rearSurface,facing:-1});
+      for(const [cx,cy,r]of [[.625,.725,.108],[.378,.765,.057]]){
+       const points=Array.from({length:49},(_,i)=>{const a=i/48*TAU,x=side*(cx+Math.cos(a)*r);return [x,cy+Math.sin(a)*r,rearZ(x)-.033];});
+       lineTube(root,points,M.white,.006).name='e85-round-rear-light-chamber';
+       const lens=mesh(root,sphere(r*.72),M.tail,[side*cx,cy,rearZ(side*cx)-.036]);lens.scale.z=.13;lens.name='e85-rear-lens-core';
+      }
       surfaceSeam(root,shell,side,[[.28,.36],[.31,.80],[.36,1.27],[.43,1.73]],M.darkMetal,.004,false,true).name='e85-curved-bonnet-crease';
     }
     roundFace(root,[[-.60,.37,0],[-.52,.415,0],[-.28,.432,0],[.28,.432,0],[.52,.415,0],[.60,.37,0],[.55,.305,0],[-.55,.305,0]],M.black,{radius:.036,name:'e85-central-lower-grille',stroke:M.darkMetal,width:.005,surface:frontSurface});
     lineTube(root,[[-.70,.23,frontZ(-.70)],[0,.205,frontZ(0)+.014],[.70,.23,frontZ(.70)]],M.darkMetal,.009);
-    lineTube(root,[[-.65,.86,-1.93],[0,.88,-2.015],[.65,.86,-1.93]],M.darkMetal,.006);
+    surfaceSeam(root,shell,1,[[-.67,-1.28],[-.65,-1.76],[-.40,-2.025],[0,-2.06],[.40,-2.025],[.65,-1.76],[.67,-1.28]],M.darkMetal,.004,false,true).name='e85-swept-trunk-seam';
+    lineTube(root,[-.22,-.11,0,.11,.22].map(x=>bonnetPoint(shell,x,-1.94,.014)),M.tail,.009).name='e85-central-third-brake-light';
     b.add(box(.43,.105,.025),M.white,[0,.492,2.13]);
-    b.add(box(.43,.13,.035),M.white,[0,.63,-2.11]);
+    roundFace(root,[[-.31,.69,0],[.31,.69,0],[.285,.49,0],[-.285,.49,0]],M.black,{radius:.035,name:'e85-plate-recess',stroke:M.darkMetal,width:.005,surface:p=>{p.z=rearZ(p.x)-.027;return p;},facing:-1});
+    roundFace(root,[[-.215,.652,-2.13],[.215,.652,-2.13],[.215,.526,-2.13],[-.215,.526,-2.13]],M.white,{radius:.009,name:'e85-rear-plate',stroke:M.darkMetal,width:.004,facing:-1});
     lineTube(root,[[-.62,.33,rearZ(.62)-.02],[0,.32,rearZ(0)-.02],[.62,.33,rearZ(.62)-.02]],M.black,.012);
     for(const x of [-.51,-.37]){b.add(cylinder(.055,.14,24),M.darkMetal,[x,.275,-2.07],[PI/2,0,0]);b.add(torus(.054,.009),M.chrome,[x,.275,-2.15]);}
     b.add(cylinder(.049,.012,24),M.badge,[0,.947,1.64],[-.2,0,0]);

@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Bend the star-grid chase and refine both rear identities
+
+- Replaced the final locked pace with integrated out-of-phase driver corrections; retained the causal Z4/MINI ignition delay and continuous final join. Added one shared curved/banked 3D path for vehicles, portals, instanced rail segments and a gradually rising right-quarter camera. The third city camera is now oblique.
+- The temporary road fades from 11.65 to 13.35s using its normal/depth alpha before hiding; stars appear underneath and the grid has no replacement street lamps. Deepened graphite to `#222226` and strengthened the white star field. Scenery shutter now uses the analytic earlier camera including curvature/orbit, with no frame history.
+- Inspected official MINI Union Jack and BMW E85 rear photos. Added mirrored half-flag tail bars, rear badge/handle/wiper/bumper details; rebuilt E85 circular lamp chambers, trunk seam, central brake strip and recessed plate. Reference links and actual checks are in `tools/MOTOR-RACE-QA.md`.
+- Extended derivative, changing-gap, path alignment, ground removal, absent-lamp, rising-camera, viewport visibility and out-of-order determinism checks. Updated design context; no new package or external production asset.
+
 ### 2026-10-25 — Five graphite line-art shots with classic lanterns
 
 - Retained the front MINI lead, made the second camera a solo MINI rear view, changed the third to overhead and joined the 4.6s exhaust shot continuously into a new line-art Grid Tunnel. Total playback remains 17.7s. All active setups use sampled graphite `#3d3d41`, pale contours and amber light; removed the old colored/space rendering branches from the active race module.

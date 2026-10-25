@@ -1,4 +1,29 @@
-# Car Enthusiast — Five-shot graphite lantern chase, 2026-10-25
+# Car Enthusiast — Curved star-grid chase and rear details, 2026-10-25
+
+Started from d8055be on clean master. The five-shot / 17.7s edit, 4.6s exhaust segment, fixed native sentence, hover/focus/pinning controller and first two camera compositions remain. This update replaces the final fixed gap, straight tunnel, persistent road/lamps, vertical third camera and lighter gray.
+
+## Implementation and references
+
+- Both drivers gain analytic, out-of-phase position corrections after the initial surge, with matching first/second derivatives for velocity and acceleration. Z4 still ignites first and MINI responds 0.45s later. Sampling the final shot at 0.01s intervals yields Z4 longitudinal lead from -0.0904m (almost level) to 3.4969m; relative velocity changes sign, ranging from -3.3439 to 3.5814m/s. This is natural small closing/opening, not a forced alternate pass in every shot.
+- `home-motor-path.mjs` defines one C2 world-space centerline, tangent/right/up frame and restrained banking. Cars, portal frames, segmented instanced rails and camera use it. The entrance stays straight through the 11.3s join, then develops S bends, a rise and a dip. Scenario Motion Loops' pure-time phase/recycling approach remains; no simulation/frame-history state.
+- The temporary road normal/depth overlay fades analytically from 11.65 to 13.35s, progressively admitting stars below the cars, then hides completely. The guide creates no street lamps. Existing street lamps only accompany the flying architecture. Grid rails remain beneath/around the cars, without filled road surfaces or colored plates.
+- The final camera rises from 11.85s and settles by 15.1s into a right rear-quarter position, tracking the curved course. Portrait framing pulls back to keep both cars legible. The third shot is now an oblique high city view, retaining MINI left/front and Z4 right/rear. The scenery shutter reprojects the analytic earlier camera including turning/orbiting, rather than only subtracting straight Z travel.
+- Ground is deepened to `#222226`; pale `#f2f1ed` and amber `#eac36b` remain the other two inks. More visible white pins and restrained bright cross glints strengthen the star field while all car/architecture interiors remain unfilled.
+- Inspected official [2018 MINI photographs, including P90289431](https://www.press.bmwgroup.com/global/photo/compilation/T0277249EN/the-new-mini-3-door-the-new-mini-5-door-the-new-mini-convertible?language=en) and [E85 rear photo P0008313](https://www.press.bmwgroup.com/united-kingdom/photo/compilation/T0016112EN_GB/the-new-bmw-z4?language=en_GB) in Chrome. MINI adds mirrored half-flags with vertical/horizontal/diagonal tubes inside the rounded lamp housings, a rear wiper, winged badge, handle and bumper crease. Early E85 now has dominant circular outer lamp chambers and smaller inner chambers, a swept trunk seam, central brake strip and plate recess. The references are not copied into production, and the models remain original stylized line drawings.
+
+## Verification
+
+Motor regression checks analytic driver/camera derivatives, a changing bounded gap, direct-cut and final-join continuity, path frames and car orientation, nonzero lateral/vertical curvature, monotonically vanishing ground, absent guide lamps, camera rise, all-six-viewport car visibility, rear detail coverage, exact restart/restoration and out-of-order curved-geometry/camera determinism. Existing tire thickness/roundness, model bounds, architectural corridor, rigid flying lamps and standalone Scenario motif seams remain covered.
+
+Passed motor, home lifecycle/state, photo/game entrance regressions and site validation. Strict dist design audit reports zero findings. Chrome reviewed desktop slanted city, road dissolve, first bend, upper-quarter chase and rear-model studies; narrow viewports retain both cars with no document overflow. Complete preview playback reaches 17.70s / grid-guide without warning/error. These are desktop browser/viewport checks, not physical touch, Safari or frame-rate benchmarks.
+
+The actual homepage retains identical sentence bounds before/during at 1440×900: x=184.0625, y=416.17709, width=1071.86462, height=67.64584, with no inert ancestor. Tab begins an unpinned preview. The clock reaches idle / grid-guide, Space pins, Escape clears and retains trigger focus, and the span keeps the original -9 degree skew. No warning/error was captured in the actual homepage logs. Temporary review fixtures are removed and viewport overrides reset.
+
+Evidence in the task artifact directory: `orbit-oblique-city.png`, `orbit-ground-dissolve.png`, `orbit-first-bend.png`, `orbit-mobile-second-curve.png`, `orbit-mobile-oblique.png`, `orbit-mini-tail-v1.png`, `orbit-z4-tail-v1.png` and `orbit-final.png`. Rear study controls are authoring-only, not additional production shots.
+
+---
+
+# Previous: Five-shot graphite lantern chase, 2026-10-25
 
 Starting from c87a762 with a clean master, this revision follows the user's five-shot recut and supplied MINI-paint / classic-lantern photographs. No reference image is copied into the published site. The neutral ground is the median of a dark bonnet sample, `#3d3d41`, rather than a manufacturer paint specification. Pale `#f2f1ed` contours and amber `#eac36b` light complete the three base inks.
 
