@@ -1,14 +1,11 @@
-import { T, box, cylinder, sphere, torus, tube, batch, mesh, toon, loft, polygon } from './home-motor-geometry.mjs?rev=20261025-cosmic';
+import { T, box, cylinder, sphere, torus, tube, batch, mesh, toon, loft } from './home-motor-geometry.mjs?rev=20261025-curved-cars';
+import { roundFace, skinPoint, surfaceSeam } from './home-motor-curves.mjs?rev=20261025-curved-cars';
 const PI=Math.PI,TAU=PI*2;
 const outline=(parent,geometry,color,threshold=36)=>{
   const line=new T.LineSegments(new T.EdgesGeometry(geometry,threshold),new T.LineBasicMaterial({color}));parent.add(line);return line;
 };
 const lineTube=(parent,points,material,r=.012)=>mesh(parent,tube(points,r),material);
-// Polygonal glass frames follow their actual edges, without spline overshoot.
-function frameTube(parent,points,material,r){
-  const path=new T.CurvePath();for(let i=0;i<points.length;i++)path.add(new T.LineCurve3(new T.Vector3(...points[i]),new T.Vector3(...points[(i+1)%points.length])));
-  return mesh(parent,new T.TubeGeometry(path,Math.max(32,points.length*12),r,5,false),material);
-}
+const glassPanel=(parent,points,glass,trim,r)=>roundFace(parent,points,glass,{radius:.055,stroke:trim,width:r});
 function wheel(side,M){
   const group=new T.Group();group.name='volumetric-wheel';group.userData={width:.26,radius:.357};
   const profile=[[.245,-.13],[.31,-.127],[.348,-.09],[.357,-.04],[.357,.04],[.348,.09],[.31,.127],[.245,.13]].map(p=>new T.Vector2(...p));
@@ -49,85 +46,101 @@ export function createMotorCar(kind){
   M.glass=new T.MeshPhongMaterial({color:'#727272',transparent:true,opacity:.62,shininess:70,side:T.DoubleSide,depthWrite:true});
   M.black.side=T.DoubleSide;
   const wheels=mini?[-1.26,1.22]:[-1.29,1.22];
-  // A defined shoulder and flatter deck replace the inflated elliptical section.
-  const bodyProfile=[[1,.58],[.99,.81],[.91,.96],[.68,1],[0,1],[-.68,1],[-.91,.96],[-.99,.81],[-1,.58],[-.98,.2],[-.8,.035],[0,0],[.8,.035],[.98,.2]];
-  const stations=mini?[[-1.94,.77,.96],[-1.75,.84,.99],[-1.3,.87,.98],[-.6,.885,1.015],[.35,.88,1.015],[1.1,.85,.98],[1.65,.77,.86],[1.94,.62,.76]]
-    :[[-2.08,.69,.78],[-1.8,.84,.87],[-1.3,.88,.93],[-.6,.885,.915],[.3,.87,.9],[1.1,.845,.86],[1.75,.76,.78],[2.08,.63,.72]];
-  const shell=loft(stations,{rings:56,steps:6,wheelArches:wheels,cockpit:!mini,profile:bodyProfile,archRadius:.38,archCenter:.333});
-  const body=mesh(root,shell,M.paint);body.name='curved-body-with-wheel-arches';outline(root,shell,mini?'#b5b5b5':'#353535',50);
+  // Smooth transverse sections and swept end caps retain a shoulder without
+  // turning the bonnet and fenders into a faceted rectangular slab.
+  const bodyProfile=[[1,.52],[.999,.70],[.98,.87],[.91,.965],[.72,.996],[0,1],[-.72,.996],[-.91,.965],[-.98,.87],[-.999,.70],[-1,.52],[-.98,.24],[-.83,.075],[-.50,.012],[0,0],[.50,.012],[.83,.075],[.98,.24]];
+  const stations=mini?[[-1.98,.73,.93],[-1.80,.83,1.0],[-1.28,.875,1.04],[-.6,.885,1.04],[.3,.88,1.035],[.8,.865,1.025],[1.24,.86,1.0],[1.62,.82,.965],[1.86,.77,.92],[2.02,.71,.855]]
+    :[[-2.09,.73,.80],[-1.83,.85,.91],[-1.3,.89,.96],[-.65,.88,.94],[.25,.86,.935],[.75,.865,.95],[1.22,.88,.985],[1.64,.85,.94],[1.91,.79,.84],[2.10,.71,.78]];
+  const relief=(x,y,z,py)=>{
+    const crown=Math.exp(-(((Math.abs(x)-.60)/.22)**2))*Math.exp(-(((z-1.45)/.62)**2))*Math.max(0,(py-.7)/.3)*(mini?.055:.025);
+    const hollow=mini?0:-Math.sign(x)*.032*Math.exp(-(((z+.25)/.9)**2))*Math.exp(-(((py-.48)/.22)**2));
+    return [hollow,crown];
+  };
+  const nose=mini?.24:.28,tail=mini?.16:.19;
+  const shell=loft(stations.map(s=>[...s,.19]),{rings:96,steps:8,wheelArches:wheels,cockpit:!mini,profile:bodyProfile,smoothProfile:true,noseRound:nose,tailRound:tail,relief,archRadius:.38,archCenter:.333});
+  const body=mesh(root,shell,M.paint);body.name='curved-body-with-wheel-arches';outline(root,shell,mini?'#b5b5b5':'#353535',65);
+  const frontZ=x=>(mini?2.02:2.10)-nose*(x/.9)**2,rearZ=x=>(mini?-1.98:-2.09)+tail*(x/.9)**2;
+  const frontSurface=p=>{p.z=frontZ(p.x)+.018;return p;},rearSurface=p=>{p.z=rearZ(p.x)-.018;return p;};
+  const skin=(side,y,z)=>skinPoint(shell,side,y,z);
   const b=batch(root);
   b.add(box(1.5,.13,2.2),M.black,[0,.22,0]);
   // Sills, bumpers, arch lips and actual fixed brake calipers.
   for(const side of [-1,1]){
-    b.add(box(.12,.12,1.6),M.black,[side*.87,.25,0]);
+    lineTube(root,[[side*.82,.24,.74],[side*.865,.215,0],[side*.83,.25,-.79]],mini?M.black:M.paint,.016);
     for(const z of wheels){
-      b.add(torus(.38,.014,PI),M.black,[side*.89,.333,z],[0,PI/2,0]);
-      b.add(box(.065,.17,.11),M.red,[side*.86,.445,z+.18]);
-      const w=wheel(side,M);w.scale.set(1,.333/.357,.333/.357);w.position.set(side*.86,.333,z);w.userData.radius=.333;root.add(w);
+      b.add(torus(.38,mini?.014:.008,PI),mini?M.black:M.paint,[side*.89,.333,z],[0,PI/2,0]);
+      b.add(box(.065,.17,.11),M.red,[side*(mini?.76:.78),.445,z+.18]);
+      const w=wheel(side,M);w.scale.set(1,.333/.357,.333/.357);w.position.set(side*(mini?.77:.79),.333,z);w.userData.radius=.333;root.add(w);
     }
-    const door=mini?[[side*.89,.95,.28],[side*.905,.68,.2],[side*.88,.42,-.92]]:[[side*.87,.9,.09],[side*.905,.66,-.04],[side*.88,.39,-1.01]];
-    lineTube(root,door,M.darkMetal,.007);
-    b.add(box(.035,.036,.18),M.chrome,[side*.9,.855,mini?-.48:-.76]);
-    b.add(box(.04,.018,.13),M.black,[side*.906,.842,mini?-.48:-.76]);
-    const mirror=mesh(root,sphere(.115),M.paint,[side*1.015,1.015,.29]);mirror.scale.set(.9,.55,1.2);
-    b.add(box(.18,.036,.04),M.black,[side*.88,.99,.28]);
-    b.add(box(.012,.065,.14),M.darkMetal,[side*1.09,1.015,.28]);
+    const door=mini?[[1.005,.47],[.90,.48],[.43,.34],[.40,-.76],[.88,-.86],[1.005,-.82]]:[[.875,.10],[.67,.06],[.48,-.12],[.43,-.60],[.46,-.92],[.66,-1.0],[.885,-.99]];
+    surfaceSeam(root,shell,side,door,M.darkMetal,.004,mini).name=mini?'f56-curved-door-seam':'e85-curved-door-seam';
+    const handle=skin(side,mini?.91:.86,mini?-.48:-.76);
+    const grip=mesh(root,sphere(.06),M.chrome,handle);grip.scale.set(.18,.25,1.5);
+    const mirrorZ=mini?.44:.13,mirrorY=mini?1.035:.99;
+    const mirror=mesh(root,sphere(.115),M.paint,[side*1.0,mirrorY,mirrorZ]);mirror.scale.set(.9,.55,1.2);
+    b.add(box(.15,.026,.035),M.black,[side*.88,mirrorY-.025,mirrorZ]);
     if(!mini){
-      lineTube(root,[[side*.84,.87,1.12],[side*.9,.67,.36],[side*.89,.48,-.75]],M.darkMetal,.008);
-      b.add(box(.021,.12,.28),M.darkMetal,[side*.891,.77,.81],[0,0,.15]);
-      b.add(cylinder(.044,.012,20),M.badge,[side*.91,.87,.67],[0,0,PI/2]);
-      for(let n=0;n<3;n++)b.add(box(.025,.014,.25),M.chrome,[side*.906,.73+n*.035,.82]);
+      surfaceSeam(root,shell,side,[[.89,1.05],[.81,.75],[.65,.35],[.48,-.25],[.43,-.70]],M.darkMetal,.004).name='e85-flame-surface-crease';
+      const badge=skin(side,.79,.72);b.add(cylinder(.044,.012,24),M.badge,badge,[0,0,PI/2]);
     }
   }
   if(mini){
-    const roofGeometry=loft([[-1.36,.63,1.47,1.42],[-1.1,.68,1.53,1.45],[-.5,.69,1.55,1.47],[.16,.65,1.51,1.44]],{rings:24,steps:5});
+    const roofGeometry=loft([[-1.36,.63,1.47,1.42],[-1.1,.68,1.53,1.45],[-.5,.69,1.55,1.47],[.16,.65,1.51,1.44]],{rings:48,steps:8,smoothProfile:true,profile:[[1,.35],[.96,.85],[.65,1],[0,1],[-.65,1],[-.96,.85],[-1,.35],[-.8,0],[0,0],[.8,0]]});
     const roofY=roofGeometry.attributes.position;for(let i=0;i<roofY.count;i++)roofY.setY(i,1+(roofY.getY(i)-1)*.76);roofGeometry.computeVertexNormals();
     mesh(root,roofGeometry,M.roof).name='f56-roof';
     const cab=points=>points.map(([x,y,z])=>[x,1+(y-1)*.76,z]);
     const wind=cab([[-.65,1.47,.18],[.65,1.47,.18],[.77,1.055,.73],[-.77,1.055,.73]]);
-    mesh(root,polygon(wind),M.glass);frameTube(root,wind,M.chrome,.018);
+    glassPanel(root,wind,M.glass,M.chrome,.015);
     const rear=cab([[-.65,1.46,-1.34],[.65,1.46,-1.34],[.78,1.005,-1.73],[-.78,1.005,-1.73]]);
-    mesh(root,polygon(rear),M.glass);frameTube(root,rear,M.black,.019);
+    glassPanel(root,rear,M.glass,M.black,.017);
     for(const side of [-1,1]){
       const win=cab([[side*.66,1.46,-1.24],[side*.66,1.47,.15],[side*.8,1.055,.62],[side*.845,1.02,-1.52]]);
-      mesh(root,polygon(win),M.glass);frameTube(root,win,M.chrome,.013);
+      glassPanel(root,win,M.glass,M.chrome,.011);
       lineTube(root,cab([[side*.69,1.48,-.67],[side*.84,1.03,-.8]]),M.black,.029);
       lineTube(root,[[side*.8,1.01,-1.62],[side*.875,1.01,-.8],[side*.84,1.025,.7]],M.chrome,.017);
-      // Small, recessed oval F56 lamps follow the bonnet instead of standing above it.
-      const lamp=new T.Group();lamp.name='recessed-f56-headlamp';lamp.position.set(side*.55,.81,1.805);lamp.rotation.x=-.43;lamp.rotation.y=side*.15;
-      lamp.userData.lensRadius=.151;
-      const housing=mesh(lamp,sphere(.176),M.paint);housing.scale.set(1,1.13,.17);
-      const lens=mesh(lamp,sphere(.151),M.darkMetal,[0,0,.025]);lens.scale.set(1,1.13,.12);
-      const bezel=mesh(lamp,torus(.163,.009),M.chrome,[0,0,.032]);bezel.scale.y=1.13;
-      mesh(lamp,torus(.133,.005),M.white,[0,0,.038]).scale.y=1.13;
-      mesh(lamp,sphere(.046),M.lamp,[0,-.015,.047]).scale.z=.18;
-      b.add(box(.13,.052,.03),M.lamp,[side*.61,.42,1.89]);root.add(lamp);
-      const tail=mesh(root,box(.16,.28,.055),M.tail,[side*.64,.77,-1.965],[0,side*.25,0]);tail.name='upright-f56-tail-light';
-      b.add(box(.12,.018,.065),M.chrome,[side*.64,.78,-1.995]);
-      b.add(box(.022,.23,.06),M.chrome,[side*.64,.77,-1.995]);
+      surfaceSeam(root,shell,side,[[.77,.73],[.81,1.1],[.75,1.55],[.67,1.8]],M.darkMetal,.004,false,true).name='f56-clamshell-seam';
+      // Restrained oval lamps sit in the rounded clamshell, not on stalks.
+      const lamp=new T.Group();lamp.name='recessed-f56-headlamp';lamp.position.set(side*.56,.815,frontZ(side*.56)-.022);lamp.rotation.x=-.43;lamp.rotation.y=side*.17;
+      lamp.userData.lensRadius=.153;
+      const housing=mesh(lamp,sphere(.175),M.paint);housing.scale.set(1,1.13,.19);
+      const lens=mesh(lamp,sphere(.153),M.darkMetal,[0,0,.025]);lens.scale.set(1,1.13,.13);
+      mesh(lamp,torus(.164,.008),M.chrome,[0,0,.034]).scale.y=1.13;
+      mesh(lamp,torus(.134,.0045),M.white,[0,0,.039]).scale.y=1.13;
+      mesh(lamp,sphere(.046),M.lamp,[0,-.015,.047]).scale.z=.18;root.add(lamp);
+      const fog=new T.Group();fog.name='f56-round-fog-lamp';fog.position.set(side*.65,.435,frontZ(side*.65)+.028);fog.rotation.y=side*.26;
+      mesh(fog,sphere(.067),M.black).scale.z=.25;mesh(fog,torus(.060,.006),M.chrome,[0,0,.018]);mesh(fog,sphere(.045),M.lamp,[0,0,.02]).scale.z=.2;root.add(fog);
+      const x=side*.64,tailPoints=[[x-.082,.915,0],[x+.082,.915,0],[x+.082,.63,0],[x-.082,.63,0]];
+      roundFace(root,tailPoints,M.tail,{radius:.045,name:'upright-f56-tail-light',stroke:M.chrome,width:.006,surface:rearSurface,facing:-1});
+      lineTube(root,[[x,.67,rearZ(x)-.028],[x,.87,rearZ(x)-.028]],M.chrome,.006);
       b.add(cylinder(.062,.11,24),M.darkMetal,[side*.087,.285,-1.98],[PI/2,0,0]);
       b.add(torus(.06,.009),M.chrome,[side*.087,.285,-2.04]);
     }
-    const grille=[[-.48,.68,1.955],[-.37,.8,1.91],[.37,.8,1.91],[.48,.68,1.955],[.34,.47,1.995],[-.34,.47,1.995]];
-    mesh(root,polygon(grille),M.black).name='f56-hex-grille';
-    const grillePath=new T.CurvePath();for(let i=0;i<grille.length;i++)grillePath.add(new T.LineCurve3(new T.Vector3(...grille[i]),new T.Vector3(...grille[(i+1)%grille.length])));
-    mesh(root,new T.TubeGeometry(grillePath,60,.012,5,false),M.chrome);
-    for(let row=0;row<4;row++)for(let col=0;col<12;col++){
-      const x=-.33+col*.06,y=.52+row*.065;
-      b.add(torus(.025,.0035),M.darkMetal,[x+(row%2)*.03,y,1.998],[0,0,PI/6]);
+    const grille=[[-.575,.65,0],[-.36,.79,0],[.36,.79,0],[.575,.65,0],[.49,.47,0],[-.49,.47,0]];
+    roundFace(root,grille,M.black,{radius:.095,name:'f56-hex-grille',stroke:M.chrome,width:.010,surface:frontSurface});
+    // Fine connected mesh is a single line lattice in the colored pass. The
+    // contour pass omits sub-pixel texture and keeps the clear grille silhouette.
+    const lattice=[];
+    for(let row=0;row<7;row++)for(let col=0;col<24;col++){
+      const x=-.438+col*.0381+(row%2)*.01905,y=.513+row*.033;
+      if(Math.abs(x)>.48-Math.max(0,y-.65)*1.4)continue;
+      for(let k=0;k<6;k++)for(const j of [k,k+1]){const a=PI/6+j*TAU/6,px=x+Math.cos(a)*.022; lattice.push(px,y+Math.sin(a)*.022,frontZ(px)+.023);}
     }
-    b.add(box(.46,.055,.19),M.black,[0,1.035,1.15],[-.08,0,0]);
-    b.add(box(.41,.012,.15),M.chrome,[0,1.064,1.16]);
-    b.add(box(1.25,.07,.12),M.black,[0,.3,1.89]);
-    b.add(box(.42,.11,.03),M.white,[0,.43,2.015]);
-    b.add(box(.42,.12,.03),M.white,[0,.59,-1.955]);
+    const grilleMesh=new T.LineSegments(new T.BufferGeometry().setAttribute('position',new T.Float32BufferAttribute(lattice,3)),new T.LineBasicMaterial({color:'#555555'}));grilleMesh.name='f56-fine-honeycomb';root.add(grilleMesh);
+    lineTube(root,[[-.49,.607,frontZ(-.49)+.031],[0,.619,frontZ(0)+.031],[.49,.607,frontZ(.49)+.031]],M.chrome,.008);
+    const scoop=mesh(root,sphere(.1),M.black,[0,1.04,1.12]);scoop.scale.set(2.15,.14,.75);scoop.name='f56-rounded-bonnet-scoop';
+    roundFace(root,[[-.48,.39,0],[-.42,.445,0],[.42,.445,0],[.48,.39,0],[.42,.32,0],[-.42,.32,0]],M.black,{radius:.04,name:'f56-lower-intake',stroke:M.darkMetal,width:.005,surface:frontSurface});
+    lineTube(root,[[-.68,.235,frontZ(-.68)],[0,.21,frontZ(0)+.01],[.68,.235,frontZ(.68)]],M.black,.015);
+    b.add(box(.42,.105,.025),M.white,[0,.545,2.052]);
+    roundFace(root,[[-.21,.65,-2.033],[.21,.65,-2.033],[.21,.53,-2.033],[-.21,.53,-2.033]],M.white,{radius:.008,name:'f56-rear-plate',stroke:M.darkMetal,width:.0045,facing:-1});
+    b.add(cylinder(.036,.012,24),M.chrome,[0,.83,-2.005],[PI/2,0,0]);b.add(torus(.036,.004),M.chrome,[0,.83,-2.015]);
+    lineTube(root,[[-.48,.91,rearZ(-.48)-.022],[-.49,.69,rearZ(-.49)-.022],[-.45,.43,rearZ(-.45)-.022],[0,.40,-2.005],[.45,.43,rearZ(.45)-.022],[.49,.69,rearZ(.49)-.022],[.48,.91,rearZ(.48)-.022]],M.darkMetal,.004);
     b.add(cylinder(.047,.012,24),M.chrome,[0,.98,1.67],[-.35,0,0]);
     for(const side of [-1,1])for(let i=0;i<3;i++)b.add(box(.09-i*.015,.011,.018),M.chrome,[side*(.09+i*.025),.99,1.67+i*.02]);
-    b.add(box(1.25,.045,.22),M.black,[0,1.37,-1.4],[-.1,0,0]);
+    lineTube(root,[[-.60,1.355,-1.39],[0,1.375,-1.43],[.60,1.355,-1.39]],M.black,.022);
   }else{
     // Open E85 cockpit with a lowered tub, two contoured seats and a real dashboard.
     b.add(box(1.42,.14,1.38),M.interior,[0,.55,-.49]);
-    for(const side of [-1,1])b.add(box(.17,.055,1.48),M.paint,[side*.75,.93,-.49]);
+    for(const side of [-1,1])lineTube(root,[[side*.74,.90,.20],[side*.75,.915,-.45],[side*.73,.92,-1.16]],M.paint,.025);
     b.add(box(1.5,.065,.25),M.paint,[0,.945,-1.2]);
     b.add(box(1.48,.055,.17),M.black,[0,.93,.23]);
     lineTube(root,[[-.69,.95,.15],[-.69,.95,-1.1],[.69,.95,-1.1],[.69,.95,.15]],M.black,.015);
@@ -155,39 +168,34 @@ export function createMotorCar(kind){
     }
     root.userData.gaugeNeedles=gaugeNeedles;
     const wind=[[-.76,.92,.35],[.76,.92,.35],[.66,1.235,-.04],[-.66,1.235,-.04]];
-    mesh(root,polygon(wind),M.glass);frameTube(root,wind,M.chrome,.021);
+    glassPanel(root,wind,M.glass,M.chrome,.018);
     for(const side of [-1,1]){
-      const kidney=[[side*.065,.685,2.075],[side*.255,.696,2.075],[side*.285,.52,2.105],[side*.22,.475,2.115],[side*.075,.49,2.11]];
-      mesh(root,polygon(kidney),M.black);lineTube(root,[...kidney,kidney[0]],M.chrome,.015);
-      for(let k=0;k<5;k++)b.add(box(.007,.145,.012),M.chrome,[side*(.1+k*.032),.58,2.115]);
-      // E85 swept lamp recesses, individual projector lenses and outboard bumper cheeks.
-      const lens=[[side*.34,.78,2.06],[side*.43,.82,1.985],[side*.755,.79,1.82],[side*.77,.71,1.92],[side*.39,.725,2.10]];
-      mesh(root,polygon(side===1?[...lens].reverse():lens),M.darkMetal).name='e85-swept-headlamp';
-      frameTube(root,lens,M.chrome,.007);
-      for(const [x,z] of [[.465,2.075],[.625,2.016]]){
-        b.add(torus(.047,.007),M.lamp,[side*x,.78,z],[0,side*.22,0]);
-        const projector=mesh(root,sphere(.035),M.glass,[side*x,.78,z+.006]);projector.scale.z=.3;
+      const kidney=[[side*.055,.712,0],[side*.145,.738,0],[side*.30,.723,0],[side*.326,.665,0],[side*.30,.566,0],[side*.20,.547,0],[side*.066,.566,0]];
+      roundFace(root,kidney,M.black,{radius:.042,name:'e85-rounded-kidney',stroke:M.chrome,width:.009,surface:frontSurface});
+      const slat=new T.CapsuleGeometry(.0035,.127,2,6);
+      for(let k=0;k<6;k++){const x=side*(.09+k*.037);b.add(slat,M.chrome,[x,.643,frontZ(x)+.028]);}
+      const lens=[[side*.345,.757,0],[side*.425,.823,0],[side*.70,.808,0],[side*.78,.753,0],[side*.685,.695,0],[side*.39,.710,0]];
+      roundFace(root,lens,M.darkMetal,{radius:.027,name:'e85-swept-headlamp',stroke:M.chrome,width:.0055,surface:frontSurface});
+      for(const x of [.468,.625]){
+        const projector=new T.Group();projector.position.set(side*x,.758,frontZ(x)+.029);projector.rotation.y=side*.32;
+        mesh(projector,torus(.046,.0055),M.lamp);mesh(projector,sphere(.034),M.glass,[0,0,.006]).scale.z=.3;root.add(projector);
       }
-      const intake=[[side*.38,.46,2.13],[side*.70,.46,2.025],[side*.73,.335,2.025],[side*.40,.34,2.135]];
-      mesh(root,polygon(side===1?[...intake].reverse():intake),M.black).name='e85-lower-bumper-intake';
-      lineTube(root,[[side*.42,.32,2.09],[side*.75,.32,1.99]],M.darkMetal,.009);
-      b.add(box(.27,.06,.045),M.black,[side*.50,.715,-2.09],[0,side*.18,0]);
-      b.add(box(.21,.032,.035),M.tail,[side*.50,.715,-2.12],[0,side*.18,0]);
-      b.add(box(.11,.018,.02),M.white,[side*.50,.704,-2.142]);
-      lineTube(root,[[side*.28,.905,.35],[side*.34,.87,1.05],[side*.43,.80,1.70]],M.darkMetal,.006);
+      const fog=new T.Group();fog.name='e85-round-fog-lamp';fog.position.set(side*.67,.505,frontZ(.67)+.026);fog.rotation.y=side*.29;
+      mesh(fog,sphere(.06),M.black).scale.z=.3;mesh(fog,torus(.051,.006),M.darkMetal,[0,0,.019]);mesh(fog,sphere(.038),M.glass,[0,0,.022]).scale.z=.25;root.add(fog);
+      const tail=[[side*.29,.77,0],[side*.46,.80,0],[side*.73,.75,0],[side*.75,.665,0],[side*.36,.67,0]];
+      roundFace(root,tail,M.tail,{radius:.028,name:'e85-rounded-rear-lamp',stroke:M.darkMetal,width:.005,surface:rearSurface,facing:-1});
+      lineTube(root,[[side*.36,.715,rearZ(.36)-.027],[side*.52,.73,rearZ(.52)-.027],[side*.69,.712,rearZ(.69)-.027]],M.white,.007);
+      surfaceSeam(root,shell,side,[[.28,.36],[.31,.80],[.36,1.27],[.43,1.73]],M.darkMetal,.004,false,true).name='e85-curved-bonnet-crease';
     }
-    mesh(root,polygon([[-.32,.43,2.12],[-.29,.32,2.13],[.29,.32,2.13],[.32,.43,2.12]]),M.black).name='e85-central-lower-grille';
-    for(let i=0;i<3;i++)b.add(box(.55,.009,.015),M.darkMetal,[0,.345+i*.026,2.142]);
-    b.add(box(1.38,.035,.14),M.black,[0,.285,1.99]);
-    b.add(box(1.34,.025,.065),M.paint,[0,.845,-1.94]);
-    lineTube(root,[[-.68,.87,-1.74],[0,.89,-1.89],[.68,.87,-1.74]],M.darkMetal,.006);
-    b.add(box(.43,.105,.025),M.white,[0,.4,2.11]);
+    roundFace(root,[[-.60,.37,0],[-.52,.415,0],[-.28,.432,0],[.28,.432,0],[.52,.415,0],[.60,.37,0],[.55,.305,0],[-.55,.305,0]],M.black,{radius:.036,name:'e85-central-lower-grille',stroke:M.darkMetal,width:.005,surface:frontSurface});
+    lineTube(root,[[-.70,.23,frontZ(-.70)],[0,.205,frontZ(0)+.014],[.70,.23,frontZ(.70)]],M.darkMetal,.009);
+    lineTube(root,[[-.65,.86,-1.93],[0,.88,-2.015],[.65,.86,-1.93]],M.darkMetal,.006);
+    b.add(box(.43,.105,.025),M.white,[0,.492,2.13]);
     b.add(box(.43,.13,.035),M.white,[0,.63,-2.11]);
-    b.add(box(1.05,.095,.04),M.black,[0,.36,-2.105]);
-    lineTube(root,[[-.61,.80,-1.97],[0,.835,-2.02],[.61,.80,-1.97]],M.darkMetal,.008);
+    lineTube(root,[[-.62,.33,rearZ(.62)-.02],[0,.32,rearZ(0)-.02],[.62,.33,rearZ(.62)-.02]],M.black,.012);
     for(const x of [-.51,-.37]){b.add(cylinder(.055,.14,24),M.darkMetal,[x,.275,-2.07],[PI/2,0,0]);b.add(torus(.054,.009),M.chrome,[x,.275,-2.15]);}
-    b.add(cylinder(.049,.012,24),M.badge,[0,.83,1.76],[-.2,0,0]);
-    b.add(cylinder(.044,.014,24),M.badge,[0,.85,-2.06],[PI/2,0,0]);
+    b.add(cylinder(.049,.012,24),M.badge,[0,.947,1.64],[-.2,0,0]);
+    b.add(cylinder(.044,.014,24),M.badge,[0,.81,-2.115],[PI/2,0,0]);
   }
   b.finish();
   const flames=[];

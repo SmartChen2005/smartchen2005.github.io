@@ -6,6 +6,7 @@ import {MOTOR_DURATION,motorsportFrame} from '../dist/home-motorsport.mjs';
 import {raceTravel,cameraTravel,driverMotion,boostMotion,raceExposure,MOTOR_SPEED,updateSpeedLines} from '../dist/home-motor-speed.mjs';
 import {drawGridTunnel,drawWarpStars,MOTION_LOOP} from '../dist/home-motor-motion.mjs';
 import {flightPose,flightCamera,isFlight} from '../dist/home-motor-flight.mjs';
+import {roundPath} from '../dist/home-motor-curves.mjs';
 const world=createMotorScene();
 assert.equal(MOTOR_DURATION,17.7);assert.equal(MOTOR_SHOTS.length,7);
 assert.deepEqual(MOTOR_SHOTS.map(s=>s.id),['starlit-lead','bumper-train','city-circuit','grid-tunnel','exhaust-exit','boosted-pass','rally-finale'],'The approved seven-shot edit removes cosmic arc and Warp Stars');
@@ -41,6 +42,20 @@ const lamps=world.cars[0].children.filter(c=>c.name==='recessed-f56-headlamp');a
 for(const lamp of lamps){assert(lamp.userData.lensRadius<.16);assert(lamp.position.y+lamp.userData.lensRadius*1.13<1.02,'Small lamps stay within the bonnet silhouette');}
 assert(world.cars[0].getObjectByName('f56-roof'));assert(!world.cars[1].getObjectByName('f56-roof'));
 assert(world.cars[1].getObjectByName('e85-seat-base'));assert(world.cars[1].getObjectByName('e85-steering-wheel'));
+for(const car of world.cars){
+ const body=car.getObjectByName('curved-body-with-wheel-arches').geometry;assert(body.userData.smoothProfile,'Body sections interpolate continuously');
+ assert(body.attributes.position.count>6000);for(const v of body.attributes.normal.array)assert(Number.isFinite(v));
+ assert(car.userData.wheels.every(w=>Math.abs(w.position.x)<=.8),'Tires sit within the fenders rather than protruding like a widebody kit');
+}
+const miniGrille=new T.Box3().setFromObject(world.cars[0].getObjectByName('f56-hex-grille'));assert(miniGrille.max.x-miniGrille.min.x>1.1,'F56 retains its broad rounded grille');
+assert(world.cars[0].getObjectByName('f56-fine-honeycomb').isLineSegments,'Fine mesh must not become a solid patch in contour views');
+assert(world.cars[0].getObjectByName('f56-rounded-bonnet-scoop'));
+const kidneys=world.cars[1].children.filter(n=>n.name==='e85-rounded-kidney');assert.equal(kidneys.length,2);
+for(const kidney of kidneys){const b=new T.Box3().setFromObject(kidney);assert((b.max.x-b.min.x)/(b.max.y-b.min.y)>1.25,'E85 kidneys are wider than tall');}
+assert.equal(world.cars[1].children.filter(n=>n.name==='e85-round-fog-lamp').length,2);assert(!world.cars[1].getObjectByName('e85-lower-bumper-intake'),'The standard E85 apron has one broad mouth, not the previous aggressive side slots');
+const fillet=roundPath([[-1,-.5,0],[1,-.5,0],[1,.5,0],[-1,.5,0]],.1).getSpacedPoints(120);
+for(const p of fillet)assert(Math.abs(p.x)<=1+1e-8&&Math.abs(p.y)<=.5+1e-8,'Rounded trim remains inside its authored bounds');
+
 for(const town of [world.city,world.circuit]){
  const {facades,churchCount,roseWindows,streetHalfWidth}=town.root.userData;
  assert.equal(town.root.userData.buildingCount,facades.length);assert(facades.length>=50&&facades.length<=(town.root.userData.circuit?85:60));assert(facades.every(f=>['Gothic','Renaissance'].includes(f.style)));assert(churchCount>=12&&roseWindows>=8,'Ecclesiastical landmarks recur along the whole street');

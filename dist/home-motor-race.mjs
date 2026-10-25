@@ -1,5 +1,5 @@
 import { T } from './home-motor-geometry.mjs?rev=20261025-cosmic';
-import { createMotorCar, setMotorCarSpace } from './home-motor-cars.mjs?rev=20261025-cosmic';
+import { createMotorCar, setMotorCarSpace } from './home-motor-cars.mjs?rev=20261025-curved-cars';
 import { createMotorCity } from './home-motor-city.mjs?rev=20261025-long-exhaust';
 import { motorPalette, MOTOR_PALETTES } from './home-motor-palette.mjs?rev=20261025-cosmic';
 import { raceTravel, cameraTravel, driverMotion, raceExposure, createSpeedLines, updateSpeedLines, MOTOR_BACKGROUND_FRAGMENT, MOTOR_COMPOSITE_FRAGMENT } from './home-motor-speed.mjs?rev=20261025-seven-cuts';

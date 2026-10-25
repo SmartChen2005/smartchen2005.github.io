@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Round and refine the F56 / E85 models from vehicle references
+
+- Rebuilt the body profiles and swept end caps with continuous curvature, gentler wing transitions and E85 flank concavity. Rounded glass/trim panels and projected door/bonnet seams replace sharp polygons or floating lines. Lowered the shell and moved wheel centers inward while preserving physical tire thickness and detailed wheel construction.
+- MINI gains the wider rounded grille, restrained inset oval lamps, round fogs, smoother scoop and hatch details. The standard E85 gains wider rounded kidneys, swept projector lenses, round fogs and one broad lower inlet; removed the exaggerated side slots. Fine MINI honeycomb is retained as a single lattice in the colored pass and omitted from abstract contours to prevent noise.
+- Referenced period MINI/BMW launch pages and inspected front-quarter photographs; links, browser evidence and limitations are recorded in `tools/MOTOR-RACE-QA.md`. Extended model bounds/feature/fillet tests. The seven-shot edit, 17.7s timing, acceleration and native homepage controller remain.
+
 ### 2026-10-25 — Add two seconds to the exhaust shot
 
 - Extended exhaust from 2.6 to 4.6 seconds (8.5–13.1s); tracking shifts to 13.1–15.3s and the finale to 15.3–17.7s. The seven-shot order, cameras, brief backfire windows and slow architectural drift remain.

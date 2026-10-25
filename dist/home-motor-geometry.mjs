@@ -40,7 +40,7 @@ export function toon(color){
   gradient.minFilter=gradient.magFilter=T.NearestFilter;
   return new T.MeshToonMaterial({color,gradientMap:gradient});
 }
-export function loft(stations,{rings=32,steps=3,wheelArches=[],cockpit=false,profile=null,archRadius=.405,archCenter=.35}={}){
+export function loft(stations,{rings=32,steps=3,wheelArches=[],cockpit=false,profile=null,archRadius=.405,archCenter=.35,smoothProfile=false,noseRound=0,tailRound=0,relief=null}={}){
   const values=[],indices=[],sections=[];
   const cat=(a,b,c,d,t)=>.5*(2*b+(-a+c)*t+(2*a-5*b+4*c-d)*t*t+(-a+3*b-3*c+d)*t*t*t);
   for(let i=0;i<stations.length-1;i++)for(let k=0;k<steps;k++){
@@ -52,8 +52,13 @@ export function loft(stations,{rings=32,steps=3,wheelArches=[],cockpit=false,pro
     for(let i=0;i<rings;i++){
       const a=Math.PI*2*i/rings,c=Math.cos(a),s=Math.sin(a);
       if(profile){
-        const q=i/rings*profile.length,k=Math.floor(q),f=q-k,u=profile[k],v=profile[(k+1)%profile.length];
-        values.push(w*(u[0]+(v[0]-u[0])*f),bottom+(top-bottom)*(u[1]+(v[1]-u[1])*f),z);
+        const q=i/rings*profile.length,k=Math.floor(q),f=q-k,u=profile[k],v=profile[(k+1)%profile.length],at=j=>profile[(j+profile.length)%profile.length];
+        const px=smoothProfile?cat(at(k-1)[0],u[0],v[0],at(k+2)[0],f):u[0]+(v[0]-u[0])*f;
+        const py=smoothProfile?cat(at(k-1)[1],u[1],v[1],at(k+2)[1],f):u[1]+(v[1]-u[1])*f;
+        let x=w*px,y=bottom+(top-bottom)*py;
+        if(relief){const delta=relief(x,y,z,py);x+=delta[0];y+=delta[1];}
+        const front=Math.max(0,Math.min(1,(z-1.4)/.62)),rear=Math.max(0,Math.min(1,(-z-1.5)/.5));
+        values.push(x,y,z-noseRound*front*front*(x/.9)**2+tailRound*rear*rear*(x/.9)**2);
       }else values.push(w*Math.sign(c)*Math.pow(Math.abs(c),.52),bottom+(top-bottom)*(.5+.5*Math.sign(s)*Math.pow(Math.abs(s),.75)),z);
     }
   });
@@ -67,8 +72,11 @@ export function loft(stations,{rings=32,steps=3,wheelArches=[],cockpit=false,pro
     const a=n*rings+i,b=(n+1)*rings+i,c=(n+1)*rings+(i+1)%rings,d=n*rings+(i+1)%rings;
     append(a,c,b);append(a,d,c);
   }
-  for(const n of [0,sections.length-1])for(let i=1;i<rings-1;i++){
-    if(n===0)indices.push(0,i+1,i);else indices.push(n*rings,n*rings+i,n*rings+i+1);
+  for(const n of [0,sections.length-1]){
+    if(smoothProfile){
+      const [z,,top,bottom=.24]=sections[n],center=values.length/3;values.push(0,bottom+(top-bottom)*.55,z);
+      for(let i=0;i<rings;i++){const a=n*rings+i,b=n*rings+(i+1)%rings;if(n===0)indices.push(center,b,a);else indices.push(center,a,b);}
+    }else for(let i=1;i<rings-1;i++){if(n===0)indices.push(0,i+1,i);else indices.push(n*rings,n*rings+i,n*rings+i+1);}
   }
   // Snap the cut boundary to the actual circular arch instead of leaving the
   // sampled loft's zigzag triangle edge visible around a close-up tire.
@@ -85,7 +93,7 @@ export function loft(stations,{rings=32,steps=3,wheelArches=[],cockpit=false,pro
     values[n]=Math.sign(x)*Math.max(Math.abs(x),.86);values[n+1]=archCenter+(y-archCenter)*archRadius/length;values[n+2]=wheel+(z-wheel)*archRadius/length;
   }
   const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.Float32BufferAttribute(values,3));
-  geometry.setIndex(indices);geometry.computeVertexNormals();return geometry;
+  geometry.setIndex(indices);geometry.computeVertexNormals();geometry.userData={rings,sectionZ:sections.map(s=>s[0]),smoothProfile,noseRound,tailRound};return geometry;
 }
 export function polygon(points){
   const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(points.flat(),3));

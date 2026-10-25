@@ -1,4 +1,26 @@
-# Car Enthusiast — Exhaust shot +2 seconds, 2026-10-25
+# Car Enthusiast — F56 / E85 curved surfacing, 2026-10-25
+
+Starting from 22d9dc5, the user asks for closer F56 / E85 front and body shapes with less angular surfacing. This revision changes vehicle geometry and trim; seven-shot order, 17.7s duration, 4.6s exhaust shot, camera poses, speed laws, architectural drift, palettes and native heading/controller remain.
+
+## References and modeling
+
+- Period primary references: [2014 MINI Hardtop / F56 launch](https://www.press.bmwgroup.com/usa/article/detail/T0157784EN_US/introducing-the-new-mini-the-new-original?language=en_US) and [2002 BMW Z4 launch](https://www.press.bmwgroup.com/united-kingdom/article/detail/T0016055EN_GB/new-bmw-z4-roadster?language=en_GB). Also checked the [BMW Classic E85/E86 identity](https://www.bmwgroup-classic.com/en/models/bmw-classics/product-description-page.ad-1307-1.bmw-z4-e85-e86.html). The standard early E85 roadster is the front-apron reference, rather than Z4 M / E89 / G29.
+- Actual photographs inspected in Chrome: [F56 front quarter](https://www.ausmotive.com/pics/2013/MINI-F56-Cooper-S-13.jpg), [BMW official E85 image P0008701](https://mediapool.bmwgroup.com/download/edown/pressclub/public?actEvent=zoomImage&dokNo=P0008701&filename=P0008701.JPG), and [larger silver E85 front/side](https://www.supercars.net/blog/wp-content/uploads/2016/03/2003_BMW_Z430i1-900x768.jpg). References are not imported as production assets.
+- `loft` gains opt-in smooth periodic profiles and swept end caps. Both body shells use 96 samples per section, curved noses/tails and restrained wing crowns; E85 includes a shallow concave flank. Legacy defaults remain available. Tire radius/thickness, spokes, brakes and tread stay; wheel centers move from ±0.86m to ±0.77 / ±0.79m to sit within the fenders.
+- `home-motor-curves.mjs` uses bounded quadratic corner fillets for glass, grille/kidney/lamp/plate outlines. Seams are sampled over the actual skin, including the nose sweep, instead of bridging only a few floating control points. MINI receives broader rounded grille, oval recessed lamps, round fogs, rounded scoop, clamshell and hatch seams. E85 receives lower/wider rounded kidneys and slats, swept twin-projector housings, round fogs, one broad mouth and curved rear lamps; the former side intake slots are removed.
+- Fine MINI honeycomb is one connected line lattice in the colored Grid view. Existing contour capture omits line objects, so its abstract street front stays clean rather than a noisy white grid. Rounded plate borders keep the rear plate legible against the parallel tail surface. These remain original stylized models, not CAD scans.
+
+## Verification
+
+Motor regression passes smooth-body flags and finite normals/vertices, lower wheel-center bounds, wide F56 grille, E85 kidney proportions / fog pairs / absent side slots, and bounded fillets. Existing cabin/roof height, actual tire thickness, roadway clearance, boost continuity, six viewport cases, exact native wording and deterministic Scenario motifs pass. Home lifecycle/state, photo/game entrances, site validation and strict dist design audit pass (zero findings).
+
+Chrome compared old 22d9dc5 geometry and new geometry at the same production t=16.5 camera. Separate authoring front-quarter views inspected surfacing without changing production cameras. Reviewed the actual paired finale, rear following, colored Grid, and 390×844 front opening (no document overflow). Dense grille texture was simplified for contours and rear plate placement/border corrected during this review. Production evidence: `curves-pair-before.png`, `curves-final-pair.png`, `curves-rear.png`, `curves-grid.png`, `curves-mobile-front.png` in the task artifact directory. Earlier v1 authoring captures are intermediate studies, not the final result. The preview finished at 17.70s / rally-finale with no warning/error. On the actual homepage, Tab starts an unpinned preview, the clock reaches idle, Space pins, and Escape clears while keeping car-trigger focus. Native heading bounds match before/during at x=184.0625, y=416.17709, width=1071.86462, height=67.64584 (1440×900); main has no inert ancestor and the span retains -9° skew. Homepage logs were clean.
+
+No frame-rate, Safari, physical touch-device or exact production-car dimensional guarantee is added. Temporary model comparison controls and the original-model module are removed before commit; viewport overrides are reset.
+
+---
+
+## Previous: Exhaust shot +2 seconds, 2026-10-25
 
 Starting from 4f67036, the user requests exactly two more seconds in the exhaust shot. It now runs 8.5–13.1s (4.6s); tracking and finale shift to 13.1–15.3s and 15.3–17.7s. Seven-shot order and other shot lengths remain. The brief flames, acceleration law, slow/wide architectural trajectories and native sentence/controller remain.
 
