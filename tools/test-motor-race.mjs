@@ -7,9 +7,17 @@ import {raceTravel,cameraTravel,driverMotion,boostMotion,raceExposure,MOTOR_SPEE
 import {drawGridTunnel,drawWarpStars,MOTION_LOOP} from '../dist/home-motor-motion.mjs';
 import {flightPose,flightCamera,isFlight} from '../dist/home-motor-flight.mjs';
 const world=createMotorScene();
-assert.equal(MOTOR_DURATION,15.7);assert.equal(MOTOR_SHOTS.length,7);
+assert.equal(MOTOR_DURATION,17.7);assert.equal(MOTOR_SHOTS.length,7);
 assert.deepEqual(MOTOR_SHOTS.map(s=>s.id),['starlit-lead','bumper-train','city-circuit','grid-tunnel','exhaust-exit','boosted-pass','rally-finale'],'The approved seven-shot edit removes cosmic arc and Warp Stars');
 const boostShot=MOTOR_SHOTS.find(s=>s.id==='exhaust-exit'),boostTime=local=>boostShot.start+local,tracking=MOTOR_SHOTS.find(s=>s.id==='boosted-pass');assert(world.ready,'No font fetch delays native hover');
+assert(Math.abs(boostShot.end-boostShot.start-4.6)<1e-9,'The exhaust shot gains exactly two seconds');
+assert.equal(tracking.start,13.1);assert.equal(MOTOR_SHOTS.at(-1).start,15.3);
+for(let t=boostShot.start;t<tracking.end;t+=.1){
+ const shot=raceShot(t),town=shot.mode==='lane'?world.city:world.circuit,[start,end]=town.root.userData.roadRange;
+ for(const i of [0,1]){const z=racePosition(t,i).z;assert(z-2.5>start&&z+2.5<end,'Extended boost travel stays on the modeled roadway');}
+ const farFacade=Math.max(...town.root.userData.facades.map(f=>f.z+f.width/2));assert(racePosition(t,1).z<farFacade,'Street architecture covers the faster car throughout the added time');
+}
+
 const html=fs.readFileSync(new URL('../dist/index.html',import.meta.url),'utf8');
 assert.equal(html.match(/<h1 class="sentence">([\s\S]*?)<\/h1>/)[1].replace(/<[^>]*>/g,''),'Smart Chen is a (game) designer, filmmaker, and car enthusiast.');
 assert(!html.includes('motor-dialog'));assert(html.includes('motor-foreground" aria-hidden="true"'));
@@ -35,7 +43,7 @@ assert(world.cars[0].getObjectByName('f56-roof'));assert(!world.cars[1].getObjec
 assert(world.cars[1].getObjectByName('e85-seat-base'));assert(world.cars[1].getObjectByName('e85-steering-wheel'));
 for(const town of [world.city,world.circuit]){
  const {facades,churchCount,roseWindows,streetHalfWidth}=town.root.userData;
- assert.equal(town.root.userData.buildingCount,facades.length);assert(facades.length>=50&&facades.length<=60);assert(facades.every(f=>['Gothic','Renaissance'].includes(f.style)));assert(churchCount>=12&&roseWindows>=8,'Ecclesiastical landmarks recur along the whole street');
+ assert.equal(town.root.userData.buildingCount,facades.length);assert(facades.length>=50&&facades.length<=(town.root.userData.circuit?85:60));assert(facades.every(f=>['Gothic','Renaissance'].includes(f.style)));assert(churchCount>=12&&roseWindows>=8,'Ecclesiastical landmarks recur along the whole street');
  for(const side of [-1,1]){
   const row=facades.filter(f=>f.side===side).sort((a,b)=>a.z-b.z);
   assert(new Set(row.map(f=>f.style)).has('Gothic')&&new Set(row.map(f=>f.style)).has('Renaissance'));
@@ -82,7 +90,7 @@ world.update(motorsportFrame(MOTOR_DURATION));assert(!world.speedLines.visible);
 // A backfire starts acceleration, then relative progress changes continuously through the cut.
 assert(boostMotion(1.4).velocity>13,'A stronger early surge moves the Z4 forward after ignition');
 assert.equal(boostMotion(.5).velocity,0);assert(boostMotion(.63).flame);assert(boostMotion(1.3).velocity>boostMotion(.63).velocity);
-for(let local=.01;local<4.8;local+=.037){const m=boostMotion(local);assert(Math.abs((boostMotion(local+.00001).distance-boostMotion(local-.00001).distance)/.00002-m.velocity)<.00001);}
+for(let local=.01;local<tracking.end-boostShot.start;local+=.037){const m=boostMotion(local);assert(Math.abs((boostMotion(local+.00001).distance-boostMotion(local-.00001).distance)/.00002-m.velocity)<.00001);}
 assert(racePosition(boostTime(.4),0).z>racePosition(boostTime(.4),1).z);assert(racePosition(boostTime(2.3),1).z>racePosition(boostTime(2.3),0).z);
 for(const i of [0,1])assert(Math.abs(racePosition(tracking.start-.00001,i).z-racePosition(tracking.start,i).z)<.001,'Camera cut preserves integrated driver progress');
 assert(Math.abs(racePosition(boostTime(2.1),0).x-racePosition(boostTime(2.1),1).x)>2,'Passing cars have lateral clearance');

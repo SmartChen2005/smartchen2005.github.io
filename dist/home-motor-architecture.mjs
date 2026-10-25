@@ -21,7 +21,7 @@ function rosePetal(r){return cached(`rose:${r}`,()=>{const g=torus(r,.028).clone
 function dome(r){return cached(`dome:${r}`,()=>{const g=new T.SphereGeometry(r,28,14,0,TAU,0,PI/2);g.name='renaissance-ribbed-dome';return g;});}
 function domeRib(r){return cached(`rib:${r}`,()=>{const p=[];for(let i=0;i<=20;i++){const a=i/20*PI/2;p.push(new T.Vector3(r*Math.cos(a),r*Math.sin(a),0));}return new T.TubeGeometry(new T.CatmullRomCurve3(p),24,.028,5,false);});}
 
-export function createStreetArchitecture(half,M,{circuit=false}={}){
+export function createStreetArchitecture(half,M,{circuit=false,blocks=30}={}){
   const root=new T.Group();root.name='gothic-renaissance-street-architecture';const b=batch(root),facades=[];
   let churchCount=0,roseWindows=0;
   function facade(side,front,z){
@@ -146,8 +146,8 @@ export function createStreetArchitecture(half,M,{circuit=false}={}){
     }
     b.add(cylinder(.36,.8,12),M.stone,[center[0],12.7,z]);b.add(cylinder(.45,.55,8,0),M.roof,[center[0],13.36,z]);f.cross(13.97,0,4.25);
   }
-  for(const side of [-1,1])for(let n=0;n<30;n++){
-    const landmark=side===1?(circuit?6:7):(circuit?3:4),span=n%10===landmark&&n<29?2:1;
+  for(const side of [-1,1])for(let n=0;n<blocks;n++){
+    const landmark=side===1?(circuit?6:7):(circuit?3:4),span=n%10===landmark&&n<blocks-1?2:1;
     const width=7.15*span-.45,z=-43+n*7.15+(span-1)*3.575,front=side*(half+1.03),code=(n+(side===1?3:0)+(circuit?2:0))%8;
     let style,kind,height;
     if(span===2){style='Gothic';kind='cathedral';height=18.8;cathedral(side,front,z,width);churchCount++;}

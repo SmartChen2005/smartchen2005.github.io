@@ -1,4 +1,18 @@
-# Car Enthusiast — Confirmed seven-shot line-art edit, 2026-10-25
+# Car Enthusiast — Exhaust shot +2 seconds, 2026-10-25
+
+Starting from 4f67036, the user requests exactly two more seconds in the exhaust shot. It now runs 8.5–13.1s (4.6s); tracking and finale shift to 13.1–15.3s and 15.3–17.7s. Seven-shot order and other shot lengths remain. The brief flames, acceleration law, slow/wide architectural trajectories and native sentence/controller remain.
+
+The shared travel interval extends across exhaust and tracking. The circuit is lengthened with the same procedural Gothic/Renaissance kit: 44 block slots, 80 facades, 25 churches/chapels and road range [-50,280]. The lane retains its 54 facades and original range. Z4 reaches z≈260.94 just before the final tracking cut; tests sample every 0.1s across the combined segment, checking vehicle extents against roadway limits and architectural frontage coverage. Continuous progress and exposure/velocity derivative tests pass through the shifted cut.
+
+Chrome inspected t=13.05 exhaust tail and t=15.2 tracking tail at 1440×900, and the exhaust tail at 390×844. The extra time shows continued vehicle travel and drifting debris. The narrow tail exposed a filled border smear from contour echo UV clamping; outside-frame shutter samples now contribute zero, and a fresh narrow screenshot confirms its removal. The 8.5–15.29 preview segment played through with no warning/error in its logs. Existing desktop-pointer, physical-device and FPS limitations remain; no new performance claim.
+
+Passed motor regression, home lifecycle/state, Gallery/Projects entrances, site validation, whitespace checks and strict dist audit (zero findings). The actual homepage reaches idle / rally-finale on the new clock; Space pins and Escape clears while retaining car-trigger focus, with no warning/error in its logs. Temporary previews are removed and viewport overrides reset before completion.
+
+Evidence in the task artifact directory: `length-exhaust-end.png`, `length-tracking-end.png`, `length-mobile-exhaust-end.png` (after edge fix), `length-final.png` (clean extended-tail composition).
+
+---
+
+## Previous: Confirmed seven-shot line-art edit, 2026-10-25
 
 This revision starts from 2ea2090. The user confirmed the precise edit before implementation: remove original shots 5 (cosmic arc) and 6 (Warp Stars), retain Grid, make the opening frontal with MINI leading, preserve the second rear view, and apply the approved starry line drawing to every remaining street setup. Houses should move more slowly and scatter through a wider area.
 

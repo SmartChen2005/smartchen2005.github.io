@@ -23,6 +23,12 @@ float contour(sampler2D normals,sampler2D depth,vec2 uv){
  }
  return edge;
 }
+float echoContour(vec2 uv){
+ // A shutter sample outside the image contributes no stroke. Clamping it would
+ // stretch a border contour into a filled band during the extended chase.
+ float inside=step(texel.x,uv.x)*step(texel.y,uv.y)*step(uv.x,1.-texel.x)*step(uv.y,1.-texel.y);
+ return inside*contour(source,depthSource,clamp(uv,texel,1.-texel));
+}
 float starHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 vec3 skyStars(vec2 uv){
  // World directions keep the sky stable as the chase translates through town.
@@ -44,8 +50,8 @@ void main(){
  if(moving&&depth<.999999){vec4 world=inverseViewProjection*vec4(vUv*2.-1.,depth*2.-1.,1.);world/=world.w;vec4 past=previousViewProjection*world;velocity=vUv-(past.xy/past.w*.5+.5);velocity*=min(1.,mix(.045,.09,burst)/max(length(velocity),.00001));}
  // Peripheral shutter echoes lengthen with the boost; cars and text stay sharp.
  float peripheral=smoothstep(.12,.4,abs(vUv.x-.5));
- float echo=contour(source,depthSource,clamp(vUv+velocity*.3,texel,1.-texel))*mix(.06,.17,burst)*peripheral;
- echo+=contour(source,depthSource,clamp(vUv+velocity*.65,texel,1.-texel))*.11*burst*peripheral;
+ float echo=echoContour(vUv+velocity*.3)*mix(.06,.17,burst)*peripheral;
+ echo+=echoContour(vUv+velocity*.65)*.11*burst*peripheral;
  float visible=step(texture2D(carDepth,vUv).x,depth+.00003)*texture2D(cars,vUv).a;
  float haze=1.-smoothstep(38.,110.,distanceAt(depthSource,vUv));
  float line=mix(min(1.,environmentEdge*.42+echo)*mix(.28,1.,haze),vehicleEdge*.92,visible);

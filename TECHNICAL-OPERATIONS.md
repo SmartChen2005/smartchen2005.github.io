@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Add two seconds to the exhaust shot
+
+- Extended exhaust from 2.6 to 4.6 seconds (8.5–13.1s); tracking shifts to 13.1–15.3s and the finale to 15.3–17.7s. The seven-shot order, cameras, brief backfire windows and slow architectural drift remain.
+- Extended the circuit's same Gothic/Renaissance kit to 44 block slots / 80 frontages, with road, kerbs and cobbles through z=280, so the longer integrated boost stays within the built environment. Lane architecture remains unchanged. Added roadway/frontage coverage regression across the entire boost segment.
+- Reject outside-frame contour echo samples to avoid a clamped border smear exposed by the new narrow-screen tail. Motor/home/state, entrance regressions, site validation, strict audit and actual tail/cut browser checks pass; evidence is in `tools/MOTOR-RACE-QA.md`.
+
 ### 2026-10-25 — Confirmed seven-shot line-art edit and slower architectural drift
 
 - Followed the user's confirmed shot map: removed cosmic arc and Warp Stars, retained Grid Tunnel, and shortened playback from 21s to 15.7s without stretching retained shots. The opening now looks back at the leading MINI and following Z4; the second rear camera and remaining established street angles are preserved.

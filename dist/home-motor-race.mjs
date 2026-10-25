@@ -1,10 +1,10 @@
 import { T } from './home-motor-geometry.mjs?rev=20261025-cosmic';
 import { createMotorCar, setMotorCarSpace } from './home-motor-cars.mjs?rev=20261025-cosmic';
-import { createMotorCity } from './home-motor-city.mjs?rev=20261025-shockwave';
+import { createMotorCity } from './home-motor-city.mjs?rev=20261025-long-exhaust';
 import { motorPalette, MOTOR_PALETTES } from './home-motor-palette.mjs?rev=20261025-cosmic';
 import { raceTravel, cameraTravel, driverMotion, raceExposure, createSpeedLines, updateSpeedLines, MOTOR_BACKGROUND_FRAGMENT, MOTOR_COMPOSITE_FRAGMENT } from './home-motor-speed.mjs?rev=20261025-seven-cuts';
 import { isFlight, flightPose, flightCamera, createMotorCosmos, SPACE_FINISH_FRAGMENT } from './home-motor-flight.mjs?rev=20261025-stars';
-import { isMotorLineShot, MOTOR_LINE_FRAGMENT } from './home-motor-line.mjs?rev=20261025-seven-cuts';
+import { isMotorLineShot, MOTOR_LINE_FRAGMENT } from './home-motor-line.mjs?rev=20261025-long-exhaust';
 import { createArchitectureBurst } from './home-motor-burst.mjs?rev=20261025-seven-cuts';
 export { motorPalette, MOTOR_PALETTES };
 export const MOTOR_SHOTS=[
@@ -12,9 +12,9 @@ export const MOTOR_SHOTS=[
   {start:2.2,end:4.4,id:'bumper-train',mode:'lane',camera:[.65,.65,-5.5],target:[0,1.35,5],fov:65,palette:6},
   {start:4.4,end:6.7,id:'city-circuit',mode:'circuit',camera:[4.8,6.5,-10],target:[0,1.3,2],fov:53,palette:6},
   {start:6.7,end:8.5,id:'grid-tunnel',mode:'grid',camera:[0,0,0],target:[0,0,-1],fov:66,palette:3},
-  {start:8.5,end:11.1,travelStart:8.5,travelEnd:13.3,travelOffset:-36,id:'exhaust-exit',mode:'lane',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:6},
-  {start:11.1,end:13.3,travelStart:8.5,travelEnd:13.3,travelOffset:-36,id:'boosted-pass',mode:'circuit',camera:[4.3,1.1,6.8],target:[0,.85,0],fov:55,palette:6},
-  {start:13.3,end:15.7,id:'rally-finale',mode:'circuit',camera:[4.3,2.8,8.6],target:[0,1.4,0],fov:52,palette:6},
+  {start:8.5,end:13.1,travelStart:8.5,travelEnd:15.3,travelOffset:-36,id:'exhaust-exit',mode:'lane',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:6},
+  {start:13.1,end:15.3,travelStart:8.5,travelEnd:15.3,travelOffset:-36,id:'boosted-pass',mode:'circuit',camera:[4.3,1.1,6.8],target:[0,.85,0],fov:55,palette:6},
+  {start:15.3,end:17.7,id:'rally-finale',mode:'circuit',camera:[4.3,2.8,8.6],target:[0,1.4,0],fov:52,palette:6},
 ];
 export const raceShot=t=>MOTOR_SHOTS.find(s=>t<s.end)||MOTOR_SHOTS.at(-1);
 export const raceCamera=(t,input=.5)=>{const s=raceShot(t);return [s.camera[0]+(input-.5)*.12,s.camera[1],s.camera[2]];};
