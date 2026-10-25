@@ -61,6 +61,14 @@ export function updateFlightTrail(mesh,mode,local,index,offset=0){
   }
   mesh.geometry.attributes.position.needsUpdate=true;
 }
+export function updateGridTrace(line,local,index,offset){
+  const positions=line.geometry.attributes.position.array,count=positions.length/3;
+  for(let i=0;i<count;i++){
+    const pose=flightPose('grid',local-(1-i/(count-1))*.14,index);
+    v(offset,.69,-2.13).applyQuaternion(pose.quaternion).add(pose.position).toArray(positions,i*3);
+  }
+  line.geometry.attributes.position.needsUpdate=true;
+}
 export function createMotorCosmos(){
   const root=new T.Group();root.name='shared-depth-cosmos';
   const sky=new T.Mesh(new T.SphereGeometry(140,24,12),new T.ShaderMaterial({side:T.BackSide,depthWrite:false,vertexShader:'varying vec3 dir;void main(){dir=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec3 dir;void main(){vec3 d=normalize(dir);float cloud=pow(max(0.,1.-abs(d.y+.15)),8.);gl_FragColor=vec4(vec3(.0015,.002,.014)+vec3(.012,.002,.026)*cloud,1.);}'}));root.add(sky);
@@ -72,6 +80,13 @@ export function createMotorCosmos(){
   const map=starMap(),stars=new T.Points(starsGeo,new T.PointsMaterial({size:.75,map,transparent:true,vertexColors:true,blending:T.AdditiveBlending,depthWrite:false}));root.add(stars);
   const sparksGeo=new T.BufferGeometry();sparksGeo.setAttribute('position',new T.BufferAttribute(new Float32Array(220*3),3).setUsage(T.DynamicDrawUsage));const sparkColors=[];for(let i=0;i<220;i++)new T.Color(i%2?'#dd80ff':'#90f1ff').toArray(sparkColors,i*3);sparksGeo.setAttribute('color',new T.Float32BufferAttribute(sparkColors,3));const sparks=new T.Points(sparksGeo,new T.PointsMaterial({size:.16,map,transparent:true,opacity:.85,vertexColors:true,blending:T.AdditiveBlending,depthWrite:false}));sparks.frustumCulled=false;root.add(sparks);
   const trails=[];for(let i=0;i<2;i++)for(const offset of [-.53,.53,0]){const mesh=ribbon(i===0?'#59eaff':'#df62ff',offset===0?.42:.055);root.add(mesh);trails.push({mesh,index:i,offset});}
+  const gridTraces=[];
+  for(let index=0;index<2;index++)for(const offset of [-.5,.5]){
+    const count=40,geo=new T.BufferGeometry(),colors=new Float32Array(count*3),color=new T.Color(index===0?'#a6e5ef':'#d5bde9');
+    for(let i=0;i<count;i++)color.clone().multiplyScalar(Math.pow(i/(count-1),1.5)).toArray(colors,i*3);
+    geo.setAttribute('position',new T.BufferAttribute(new Float32Array(count*3),3).setUsage(T.DynamicDrawUsage));geo.setAttribute('color',new T.BufferAttribute(colors,3));
+    const line=new T.Line(geo,new T.LineBasicMaterial({vertexColors:true,transparent:true,opacity:.46,blending:T.AdditiveBlending,depthWrite:false}));line.name='restrained-grid-tail';line.frustumCulled=false;root.add(line);gridTraces.push({line,index,offset});
+  }
   const portals=new T.Group();portals.name='Grid Tunnel';root.add(portals);
   const mats=['#459cac','#8bf2f1','#8f7cce'].map(color=>new T.LineBasicMaterial({color,transparent:true,opacity:.65}));
   for(let i=0;i<34;i++){
@@ -84,7 +99,8 @@ export function createMotorCosmos(){
   const warpGeo=new T.BufferGeometry();warpGeo.setAttribute('position',new T.BufferAttribute(new Float32Array(192*6),3).setUsage(T.DynamicDrawUsage));
   const warp=new T.LineSegments(warpGeo,new T.LineBasicMaterial({color:'#8fcce4',transparent:true,opacity:.58,blending:T.AdditiveBlending,depthWrite:false}));warp.frustumCulled=false;warp.name='Warp Stars';root.add(warp);
   const lights=['#40dcff','#d84cff'].map(color=>{const light=new T.PointLight(color,28,14,1.6);root.add(light);return light;});
-  return {root,portals,stars:warp,trails,galaxy,update(mode,local,camera){
+  return {root,portals,stars:warp,trails,gridTraces,galaxy,update(mode,local,camera){
+    gridTraces.forEach(trace=>trace.line.visible=mode==='grid');
     root.visible=isFlight(mode);portals.visible=mode==='grid';warp.visible=mode==='warp';if(!root.visible)return;
     sky.position.copy(camera.position);galaxy.visible=sparks.visible=mode==='cosmic';
     if(sparks.visible){const arr=sparksGeo.attributes.position.array;for(let i=0;i<220;i++){const age=motion.rand(i,61)*2.8,pose=flightPose(mode,local-age,i%2);v((motion.rand(i,62)-.5)*1.3,.1+(motion.rand(i,63)-.5)*.6,-2.3).applyQuaternion(pose.quaternion).add(pose.position).toArray(arr,i*3);}sparksGeo.attributes.position.needsUpdate=true;}stars.position.copy(camera.position).multiplyScalar(.3);
@@ -95,6 +111,7 @@ export function createMotorCosmos(){
     const a=warpGeo.attributes.position.array;
     for(let i=0;i<192;i++){const p=motion.phase(local,1,motion.rand(i,1)),theta=motion.rand(i,2)*Math.PI*2,depth=4+(1-p)*85,r=4+motion.rand(i,3)*24,x=Math.cos(theta)*r,y=Math.sin(theta)*r,tail=Math.min(2+p*14,depth*.72);a.set([x,y,-depth,x,y,-depth+tail],i*6);}
     warpGeo.attributes.position.needsUpdate=true;warp.position.copy(camera.position);warp.quaternion.copy(camera.quaternion);
+    for(const trace of gridTraces)if(trace.line.visible)updateGridTrace(trace.line,local,trace.index,trace.offset);
     for(const trail of trails){trail.mesh.visible=mode!=='grid';if(trail.mesh.visible)updateFlightTrail(trail.mesh,mode,local,trail.index,trail.offset);}
     lights.forEach((light,index)=>{const pose=flightPose(mode,local,index);light.position.copy(v(index===0?-1:1,1.5,-1.4).applyQuaternion(pose.quaternion).add(pose.position));});
   }};

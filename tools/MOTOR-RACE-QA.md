@@ -1,4 +1,21 @@
-# Car Enthusiast — shared cosmic flight and causal boost, 2026-10-25
+# Car Enthusiast — two selected shots, 2026-10-25
+
+This follow-up starts at b4a1865 and changes only the user's selected Grid Tunnel chase and exhaust/acceleration setup. All nine cut times, 21s duration, driver progress, desktop cameras, models, native 2D heading and identity controller remain. The earlier baseline record below is historical; this scoped note supersedes its filled rendering only for `exhaust-exit`.
+
+- Grid adds exactly four `Line` strokes, two from each banked rear chassis. A 0.14s / roughly 2.5m analytic history and tapered vertex intensity keep them short and restrained. Existing broad cosmic ribbons remain hidden in Grid. There are no new filled trail meshes, accumulated prior frames or extra effects in other shots.
+- `home-motor-line.mjs` selects only `exhaust-exit`. Separate normal/depth captures produce silhouettes and structural contours; the final image uses one solid ink ground and pale strokes, without original object paint/shading. Car lines are stronger than architectural lines. Depth/normal occlusion prevents background lines passing through cars. Planar depth second differences have a quantization floor and normal guard, avoiding false filled roads. One faint peripheral echo suggests speed while keeping the main sentence clear. Exhaust cones are also contours; brief flame windows and actual Z4 acceleration are unchanged.
+- The desktop composition is preserved. This shot alone gets a more distant, centered phone crop so neither the Z4 rear nor its flare is cut off. Other cameras/styles remain unchanged. The normal pass restores visibility, fog, override material, camera layers and shadow-update behavior before the following colored shot.
+- Motor regression now verifies exact line-style scope, four line-only Grid traces, rear attachment, short extent and camera-safe placement at three moments, alongside existing motion/boost/lifecycle tests.
+
+Chrome inspected the two setups at 1440×900 and 390×844, including visible backfire and subsequent lead change, and checked the transition into the unchanged colored tracking shot. No horizontal overflow was observed; these are viewport checks with desktop pointer settings. Preview controls and baseline copies are disposable and removed before commit.
+
+A frozen t=17.5 tracking shot rendered after the new line pass was compared with independently loaded b4a1865 code in the same browser/viewport. All 3,888,000 RGB channels were identical (zero changed channels, mean difference 0). In the new t=14.43 drawing, blank sky (720,80), road (720,800) and rear body (1090,540) all sampled RGB [23,36,44], checking that surfaces retain the same flat background rather than material fills. Evidence: `line-exhaust.png`, `line-after-boost.png`, `line-grid-traces.png`, `line-mobile-exhaust.png`, `line-mobile-grid.png`, `line-unchanged-{before,after}.png` and `line-scope-comparison.json` in the task artifact directory. This pixel comparison covers that unchanged setup, not a claim of image-diffing every other frame.
+
+Passed motor/home/state, Gallery/Projects entrance regressions and site validation; strict dist audit has zero findings. On the actual homepage, Tab preview remained unpinned, Space pinned, Escape cleared while keeping focus, and the clock stopped at the finale. The native heading rectangle exactly matched its pre-preview bounds and retained the original -9-degree skew, with no inert ancestor or captured scene warning/error. No FPS or physical touch-device guarantee is added. Existing practical limits from the baseline record still apply.
+
+---
+
+## Baseline: shared cosmic flight and causal boost, 2026-10-25
 
 This follow-up starts from published 7233b8e. It preserves the native 2D sentence, hover/focus controller, click/tap/keyboard pinning, skew and established city compositions. The user supplied two Entergalactic reference stills and requested a curved dual-car starfield flight, less disconnected Grid/Warp cars, cooler street palettes, more E85 detail and physically intuitive changes of speed.
 

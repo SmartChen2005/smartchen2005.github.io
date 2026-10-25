@@ -83,9 +83,21 @@ world.cosmos.update('warp',12.37,world.camera);world.stars.geometry.attributes.p
 world.update(motorsportFrame(10.25));assert.deepEqual(world.cosmos.trails[0].mesh.geometry.attributes.position.array,savedTrail,'Flight history is analytic, not previous-frame state');
 world.update(motorsportFrame(1));assert(world.cars[0].getObjectByName('curved-body-with-wheel-arches').material.isMeshToonMaterial,'Street inks restore after space');
 assert(world.cars[1].getObjectByName('e85-central-lower-grille'));assert.equal(world.cars[1].children.filter(n=>n.name==='e85-swept-headlamp').length,2);
+// Only the selected exhaust setup changes to line art; the grid adds four short line traces.
+for(const shot of MOTOR_SHOTS){world.update(motorsportFrame((shot.start+shot.end)/2));assert.equal(world.lineArt,shot.id==='exhaust-exit');assert.equal(world.cosmos.gridTraces.filter(t=>t.line.visible).length,shot.mode==='grid'?4:0);}
+for(const local of [.1,.9,1.7]){
+ world.update(motorsportFrame(6.7+local));
+ for(const trace of world.cosmos.gridTraces){
+  assert(trace.line.isLine&&!trace.line.isMesh,'A grid tail is a stroke, never a filled ribbon');
+  const a=trace.line.geometry.attributes.position.array,pose=flightPose('grid',local,trace.index),origin=new T.Vector3(trace.offset,.69,-2.13).applyQuaternion(pose.quaternion).add(pose.position);
+  assert(new T.Vector3(...a.slice(-3)).distanceTo(origin)<1e-5,'Grid traces attach to each banked rear chassis');
+  assert(new T.Vector3(...a.slice(0,3)).distanceTo(origin)<3.1,'Grid tails remain restrained');
+  for(let i=0;i<a.length;i+=3)assert(new T.Vector3(...a.slice(i,i+3)).applyMatrix4(world.camera.matrixWorldInverse).z<-.08,'Traces cannot cross the camera');
+ }
+}
 assert.deepEqual(motorsportFrame(100),motorsportFrame(21));
 let count=0;world.scene.traverse(node=>{if(node.geometry?.attributes?.position){count++;for(const v of node.geometry.attributes.position.array)assert(Number.isFinite(v));}});assert(count>250);
 const record=()=>{const out=[];return {out,ctx:new Proxy({}, {get:(_,key)=>(...args)=>out.push([key,...args]),set:(_,key,value)=>{out.push([key,value]);return true;}})};};
 const P={fg:'#367f96',fg2:'#e3f0ec',paper:'#e3f0ec'};
 for(const effect of [drawGridTunnel,drawWarpStars]){const a=record(),b=record();effect(a.ctx,960,540,0,P);effect(b.ctx,960,540,MOTION_LOOP,P);assert.deepEqual(a.out,b.out);}
-console.log('Passed: native 2D sentence and lifecycle; nine hard cuts; restrained detailed models and real tires; traditional city; changing parallel spacing; causal boost/continuous progress; shared-space grid/warp/cosmic cars; analytic banked trails; environment shutter; six viewport shapes and Scenario 12s seams.');
+console.log('Passed: native 2D sentence and lifecycle; nine hard cuts; restrained detailed models and real tires; traditional city; changing parallel spacing; causal boost/continuous progress; shared-space grid/warp/cosmic cars; analytic banked trails; environment shutter; six viewport shapes and Scenario 12s seams; scoped exhaust line art and four restrained, attached Grid strokes.');

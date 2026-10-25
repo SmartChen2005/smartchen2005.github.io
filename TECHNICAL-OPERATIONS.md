@@ -96,6 +96,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Restrained Grid traces and a single line-drawn exhaust shot
+
+- Limited visible changes to the two user-selected setups. Grid gains four short tapered rear strokes. The exhaust/acceleration shot becomes pale contour drawing over one solid dark background, with normal/depth occlusion and no material fills; its phone crop pulls back enough to show the flare. Desktop composition, vehicle progress/backfire and all shot boundaries are preserved.
+- `home-motor-line.mjs` owns the scoped contour finish. Normal-pass visibility, fog, override material, layers and shadow-update state restore before other shots render. Added tests for exact style scope and short, attached, camera-safe Grid traces. Design/browser evidence and a pixel-identical unchanged-shot comparison live in `tools/MOTOR-RACE-QA.md`.
+
 ### 2026-10-25 — Integrate cosmic flight and causal acceleration
 
 - Replaced the green abstract plate with a dual-car curved starfield flight inspired by the user's supplied Entergalactic stills. Added banked rear-attached cyan/magenta ribbons, sparks, a procedural galactic disc, common lighting/depth and a shared glow finish. Rebuilt Grid Tunnel as a curved chase and Warp Stars as a frontal sprint within the same 3D space, retaining the Scenario deterministic motion helpers.

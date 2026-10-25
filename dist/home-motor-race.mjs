@@ -3,7 +3,8 @@ import { createMotorCar, setMotorCarSpace } from './home-motor-cars.mjs?rev=2026
 import { createMotorCity } from './home-motor-city.mjs?rev=20261025-cosmic';
 import { motorPalette, MOTOR_PALETTES } from './home-motor-palette.mjs?rev=20261025-cosmic';
 import { raceTravel, cameraTravel, driverMotion, raceExposure, createSpeedLines, updateSpeedLines, MOTOR_BACKGROUND_FRAGMENT, MOTOR_COMPOSITE_FRAGMENT } from './home-motor-speed.mjs?rev=20261025-cosmic';
-import { isFlight, flightPose, flightCamera, createMotorCosmos, SPACE_FINISH_FRAGMENT } from './home-motor-flight.mjs?rev=20261025-cosmic';
+import { isFlight, flightPose, flightCamera, createMotorCosmos, SPACE_FINISH_FRAGMENT } from './home-motor-flight.mjs?rev=20261025-lines';
+import { isMotorLineShot, MOTOR_LINE_FRAGMENT } from './home-motor-line.mjs?rev=20261025-lines';
 export { motorPalette, MOTOR_PALETTES };
 export const MOTOR_SHOTS=[
   {start:0,end:2.2,id:'medieval-solo',mode:'lane',camera:[2.6,1.35,7.6],target:[0,1.55,0],fov:51,palette:0},
@@ -46,7 +47,7 @@ export function createMotorScene(){
     resize(w,h){world.width=w;world.height=h;perspective.aspect=w/h;perspective.updateProjectionMatrix();},
     update(frame,input=.5){
       const shot=raceShot(frame.t),local=Math.max(0,Math.min(shot.end-shot.start,frame.t-shot.start)),d=cameraTravel(shot,frame.t);
-      world.shot=shot;world.exposure=raceExposure(shot,frame.t,frame.idle);world.palette=motorPalette(shot.palette);world.camera=perspective;
+      world.shot=shot;world.lineArt=isMotorLineShot(shot);world.exposure=raceExposure(shot,frame.t,frame.idle);world.palette=motorPalette(shot.palette);world.camera=perspective;
       const camera=world.camera,abstract=isFlight(shot.mode);
       scene.background=new T.Color(abstract?'#02031a':'#bdbdbd');scene.fog=abstract?null:new T.Fog('#bdbdbd',30,110);
       hemi.color.set(abstract?'#a1a8ff':'#ffffff');hemi.groundColor.set(abstract?'#241142':'#484848');hemi.intensity=abstract?1.8:1.6;sun.color.set(abstract?'#e8ceff':'#ffffff');sun.intensity=abstract?2.4:2.1;sun.castShadow=!abstract;
@@ -66,6 +67,8 @@ export function createMotorScene(){
       const pos=raceCamera(frame.t,input),narrow=world.width<650;
       if(abstract){const view=flightCamera(shot.mode,local,world.width/world.height);camera.position.copy(view.position);camera.up.set(0,1,0);camera.lookAt(view.target);camera.fov=view.fov;sun.position.copy(camera.position).add(new T.Vector3(-7,12,4));sun.target.position.copy(cars[0].position);}
       else {const widening=narrow&&shot.mode==='circuit'?1.25:1;camera.position.set(pos[0],pos[1]*widening,d+pos[2]*widening);camera.up.set(0,1,0);camera.lookAt(shot.target[0],shot.target[1],d+shot.target[2]);camera.fov=shot.fov+(narrow?16:0);sun.position.set(-9,23,d+8);sun.target.position.set(0,0,d);}
+      // The phone crop stays behind the cars, pulled back enough to retain the exhaust flare.
+      if(narrow&&world.lineArt){camera.position.set(.15,.7,d-8.8);camera.lookAt(shot.target[0],shot.target[1],d+shot.target[2]);camera.fov=84;}
       camera.updateProjectionMatrix();camera.updateMatrixWorld(true);sun.target.updateMatrixWorld();
       cosmos.update(shot.mode,local,camera);
       updateSpeedLines(speedLines,shot,frame.t,d,frame.idle);
@@ -93,6 +96,8 @@ export function createMotorWorld(canvas,{foreground=null}={}){
   const finish=material(MOTOR_COMPOSITE_FRAGMENT,{...inks,background:{value:blurred.texture},cars:{value:vehicles.texture},environmentDepth:{value:environment.depthTexture},vehicleDepth:{value:vehicles.depthTexture}});
   const space=material(SPACE_FINISH_FRAGMENT,{source:{value:environment.texture},texel:{value:new T.Vector2(1,1)}});
   const spaceCutout=material(SPACE_FINISH_FRAGMENT.replace('varying vec2 vUv;','varying vec2 vUv;uniform sampler2D mask;').replace('#include <colorspace_fragment>','#include <colorspace_fragment>\n float alpha=texture2D(mask,vUv).a;gl_FragColor*=alpha;'),{...space.uniforms,mask:{value:vehicles.texture}});
+  const normalMaterial=new T.MeshNormalMaterial({side:T.DoubleSide});normalMaterial.toneMapped=false;
+  const lineArt=material(MOTOR_LINE_FRAGMENT,{...inks,source:{value:environment.texture},depthSource:{value:environment.depthTexture},cars:{value:vehicles.texture},carDepth:{value:vehicles.depthTexture},texel:{value:new T.Vector2()},inverseViewProjection:shutter.uniforms.inverseViewProjection,previousViewProjection:shutter.uniforms.previousViewProjection,moving:shutter.uniforms.moving});
   if(foreground)foreground.hidden=true;
   const front=foreground?.getContext('2d'),previousWorld=new T.Matrix4(),previousView=new T.Matrix4(),currentVP=new T.Matrix4();
   function fullScreen(mat,target=null){quad.material=mat;renderer.setRenderTarget(target);renderer.render(composite,flatCamera);}
@@ -101,12 +106,19 @@ export function createMotorWorld(canvas,{foreground=null}={}){
     renderer.setClearColor(0,0);renderer.setRenderTarget(vehicles);renderer.render(scene,camera);
     scene.background=background;camera.layers.set(0);renderer.shadowMap.autoUpdate=true;
   }
+  function normalPass(scene,camera,layer,target){
+    const hidden=[],background=scene.background,fog=scene.fog,override=scene.overrideMaterial;
+    scene.traverse(node=>{if(node.isLine||node.isPoints||node.name==='contact-shadow'){hidden.push([node,node.visible]);node.visible=false;}});
+    scene.background=null;scene.fog=null;scene.overrideMaterial=normalMaterial;camera.layers.set(layer);renderer.shadowMap.autoUpdate=false;
+    try{renderer.setClearColor(0,0);renderer.setRenderTarget(target);renderer.render(scene,camera);}
+    finally{scene.background=background;scene.fog=fog;scene.overrideMaterial=override;camera.layers.set(0);renderer.shadowMap.autoUpdate=true;for(const [node,visible] of hidden)node.visible=visible;}
+  }
   const world={available:true,ready:true,model,renderer,
     resize(w,h){
       const ratio=Math.min(globalThis.devicePixelRatio||1,1.5,Math.sqrt(2600000/(w*h)));
       renderer.setPixelRatio(ratio);renderer.setSize(w,h,false);model.resize(w,h);
       const size=new T.Vector2();renderer.getDrawingBufferSize(size);environment.setSize(size.x,size.y);vehicles.setSize(size.x,size.y);blurred.setSize(Math.ceil(size.x*.65),Math.ceil(size.y*.65));
-      space.uniforms.texel.value.set(1/size.x,1/size.y);spaceCutout.uniforms.texel.value.copy(space.uniforms.texel.value);
+      lineArt.uniforms.texel.value.set(1/size.x,1/size.y);space.uniforms.texel.value.set(1/size.x,1/size.y);spaceCutout.uniforms.texel.value.copy(space.uniforms.texel.value);
       if(foreground){foreground.width=size.x;foreground.height=size.y;}
     },
     paint(frame,input){
@@ -118,6 +130,10 @@ export function createMotorWorld(canvas,{foreground=null}={}){
       if(['lane','circuit'].includes(shot.mode))previousWorld.elements[14]-=exposure.speed*exposure.shutter;
       previousView.copy(previousWorld).invert();shutter.uniforms.previousViewProjection.value.multiplyMatrices(camera.projectionMatrix,previousView);
       shutter.uniforms.radialStretch.value=exposure.radial;shutter.uniforms.moving.value=exposure.enabled;
+      if(model.lineArt){
+        if(foreground)foreground.hidden=true;
+        normalPass(scene,camera,0,environment);normalPass(scene,camera,1,vehicles);fullScreen(lineArt);return;
+      }
       if(isFlight(shot.mode)){
         camera.layers.set(0);renderer.setRenderTarget(environment);renderer.render(scene,camera);
         const crossing=model.cars.some(car=>car.getObjectByName('curved-body-with-wheel-arches').layers.isEnabled(2));
