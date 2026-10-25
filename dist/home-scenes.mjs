@@ -1,10 +1,10 @@
-import { createMotorsport } from './home-motorsport.mjs?rev=20261024-pop-city';
+import { createMotorsport } from './home-motorsport.mjs?rev=20261024-rally-cut';
 import { createExhibition } from './home-exhibition.mjs';
 
 // Canvas-only scenery. It never captures input or changes the sentence's layout.
-export function createScenes(canvas, { motor: motorCanvas, exhibition: galleryRoot, dismissCars }) {
+export function createScenes(canvas, { motor: motorCanvas, exhibition: galleryRoot, foreground }) {
   const context = canvas.getContext('2d');
-  const motor = createMotorsport(motorCanvas, { dismiss: dismissCars });
+  const motor = createMotorsport(motorCanvas, { foreground });
   const gallery = createExhibition(galleryRoot);
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const colors = getComputedStyle(document.documentElement);

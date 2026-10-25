@@ -17,15 +17,9 @@
   --ink: #292a27;
   --focus: #65685e;
   --mechanical: #080808;
-  --motor-pop-cyan: #00d9ff;
-  --motor-pop-pink: #ff278f;
-  --motor-pop-yellow: #ffe600;
-  --motor-pop-blue: #2345f5;
-  --motor-pop-coral: #ff5b36;
-  --motor-pop-lime: #98ef16;
-  --motor-pop-cream: #fff1c9;
-  --motor-pop-ink: #17132c;
-  --motor-pop-purple: #4d269d;
+  --motor-ink: #171d24;
+  --motor-accent: #b67550;
+  --motor-paper: #eae2cf;
   --game-underline: #A2CFFE;
   --gallery-paper: #fff;
   --gallery-ink: #111;
@@ -88,7 +82,7 @@ body { margin: 0; background: var(--paper); color: var(--ink); }
 .identity-cars > span { transform-origin: 50% 75%; transition: transform 250ms ease; }
 body[data-world='cars'] .identity-cars > span { transform: skewX(-9deg); }
 
-/* All scenery is temporary, inert, and behind the single sentence. */
+/* Decorative background worlds never capture input. */
 .world-stage { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .kinetic-scene { position: absolute; inset: 0; width: 100%; height: 100%; visibility: hidden; }
 body[data-world='games'] .kinetic-scene { visibility: visible; }
@@ -97,13 +91,11 @@ body[data-world='games'] .kinetic-scene { visibility: visible; }
   background-color: var(--mechanical);
 }
 .motor-scene.is-active { visibility: visible; opacity: 1; }
-body[data-motor-immersive] { overflow: hidden; }
-body[data-motor-immersive] .homepage { visibility: hidden; }
-.motor-dialog { position: fixed; inset: 0; z-index: 6; pointer-events: none; }
-.motor-dialog[hidden] { display: none; }
-.motor-close { position: absolute; top: max(20px, env(safe-area-inset-top)); right: max(20px, env(safe-area-inset-right)); width: 46px; height: 46px; padding: 0 0 4px; border: 2px solid var(--motor-pop-ink); border-radius: 50%; background: var(--motor-pop-yellow); color: var(--motor-pop-ink); font: 32px/1 Arial, sans-serif; cursor: pointer; pointer-events: auto; }
-.motor-close:focus-visible { outline: 3px solid var(--motor-pop-cream); outline-offset: 4px; }
-body[data-motor-fallback] .motor-scene { visibility: hidden; }
+/* Vehicle pixels can cross the 2D sentence without taking its input or layout. */
+.motor-foreground { position: fixed; inset: 0; z-index: 4; width: 100%; height: 100%; pointer-events: none; visibility: hidden; opacity: 0; }
+.motor-foreground.is-active { visibility: visible; opacity: 1; }
+.motor-foreground.is-exiting { visibility: visible; opacity: 0; transition: opacity 380ms ease-out; }
+body[data-motor-fallback] .motor-scene, body[data-motor-fallback] .motor-foreground { visibility: hidden; }
 body[data-motor-fallback] .sentence { color: var(--ink); }
 .motor-scene.is-exiting { visibility: visible; opacity: 0; transition: opacity 380ms ease-out; }
 .photo-scene { position: absolute; inset: 0; visibility: hidden; }
@@ -159,7 +151,11 @@ body[data-world='photo'] .gallery-print.is-ready img {
   visibility: hidden;
 }
 body[data-car-exit] .sentence-mat { visibility: visible; }
-body[data-world='cars'] .sentence { color: var(--paper); }
+body[data-world='cars']:not([data-motor-fallback]) .sentence {
+  color: var(--motor-paper);
+  text-shadow: -1px -1px 0 var(--motor-ink), 1px -1px 0 var(--motor-ink), -1px 1px 0 var(--motor-ink), 1px 1px 0 var(--motor-ink);
+}
+body[data-world='cars'] { --game-underline: var(--motor-accent); }
 .portrait {
   position: absolute;
   z-index: 1;
@@ -214,7 +210,7 @@ body[data-photo-transition] .identity-photo::before, body[data-photo-transition]
 }
 @media (forced-colors: active) {
   :root { scrollbar-color: auto; }
-  .world-stage { display: none; }
-  body[data-world='cars'] .sentence { color: CanvasText; }
+  .world-stage, .motor-foreground { display: none; }
+  body[data-world='cars']:not([data-motor-fallback]) .sentence { color: CanvasText; text-shadow: none; }
   .identity:focus-visible { outline-color: Highlight; }
 }

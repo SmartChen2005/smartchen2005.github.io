@@ -1,108 +1,99 @@
-import { T, box, cylinder, sphere, torus, tube, batch, mesh, toon } from './home-motor-geometry.mjs?rev=20261024-pop-city';
-import { motion } from './home-motor-motion.mjs?rev=20261024-pop-city';
-export const POP_COLORS={cyan:'#00d9ff',pink:'#ff278f',yellow:'#ffe600',blue:'#2345f5',coral:'#ff5b36',lime:'#98ef16',cream:'#fff1c9',ink:'#17132c',purple:'#4d269d'};
-export function popPalette(index,source=POP_COLORS){
-  const c={...POP_COLORS,...source};
-  return [
-    {sky:c.cyan,walls:[c.pink,c.yellow,c.cyan],roof:c.blue,road:c.purple,pave:c.yellow,trim:c.cream,accent:c.lime,ink:c.ink},
-    {sky:c.pink,walls:[c.cyan,c.yellow,c.coral],roof:c.blue,road:c.blue,pave:c.cream,trim:c.yellow,accent:c.cyan,ink:c.ink},
-    {sky:c.yellow,walls:[c.blue,c.pink,c.cyan],roof:c.coral,road:c.purple,pave:c.cyan,trim:c.cream,accent:c.lime,ink:c.ink},
-    {sky:c.coral,walls:[c.yellow,c.cyan,c.pink],roof:c.blue,road:c.blue,pave:c.pink,trim:c.cream,accent:c.yellow,ink:c.ink},
-  ][((index%4)+4)%4];
-}
-function mansard(){
-  const p=[[-2.9,0,-4.6],[2.9,0,-4.6],[2.9,0,4.6],[-2.9,0,4.6],[-1.8,2,-3.8],[1.8,2,-3.8],[1.8,2,3.8],[-1.8,2,3.8]];
-  const ids=[0,4,5,0,5,1,1,5,6,1,6,2,2,6,7,2,7,3,3,7,4,3,4,0,4,7,6,4,6,5];
-  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p.flat(),3));g.setIndex(ids);g.computeVertexNormals();return g;
-}
-export function createMotorCity(){
-  const root=new T.Group();root.name='European-pop-boulevard';
-  const M={walls:[toon('#ff278f'),toon('#ffe600'),toon('#fff1c9')],roof:toon('#2345f5'),pave:toon('#ffe600'),
-    road:toon('#4d269d'),trim:toon('#fff1c9'),ink:toon('#17132c'),window:toon('#203359'),accent:toon('#98ef16'),
-    white:toon('#fff1c9'),pink:toon('#ff278f'),water:toon('#00d9ff'),lamp:new T.MeshBasicMaterial({color:'#ffe600'})};
-  let buildingCount=0;
-  const b=batch(root),roofGeo=mansard(),floor=new T.Mesh(box(70,.16,410),M.pave);floor.position.set(0,-.13,120);floor.receiveShadow=true;root.add(floor);
-  b.add(box(13,.08,410),M.road,[0,-.025,120]);
+import { T, box, cylinder, torus, batch, toon, polygon } from './home-motor-geometry.mjs?rev=20261024-rally-cut';
+import { motion } from './home-motor-motion.mjs?rev=20261024-rally-cut';
+
+// Neutral source values are separated into three printing inks by the final pass.
+export function createMotorCity({circuit=false}={}){
+  const root=new T.Group();root.name=circuit?'old-town-circuit':'medieval-narrow-lane';
+  const half=circuit?6.1:3.1;
+  const M={stone:toon('#bdbdbd'),plaster:toon('#d9d9d9'),timber:toon('#242424'),roof:toon('#414141'),
+    trim:toon('#ececec'),window:toon('#141414'),road:toon('#282828'),pave:toon('#777777'),
+    metal:toon('#191919'),shutter:toon('#626262'),sign:toon('#b0b0b0')};
+  const b=batch(root),gables=new Map();let buildingCount=0;
+  b.add(box(42,.15,230),M.pave,[0,-.12,65]);
+  b.add(box(half*2,.08,230),M.road,[0,-.025,65]);
   for(const side of [-1,1]){
-    b.add(box(.18,.17,410),M.trim,[side*6.6,.035,120]);
-    for(let z=-70;z<310;z+=3.7){
-      b.add(box(.08,.007,.8),M.trim,[side*5.9,.026,z]);
-      if(Math.floor(z/3.7)%2===0)b.add(box(.12,.007,1.4),M.trim,[0,.026,z]);
-    }
-    for(let n=0;n<32;n++){
-      const z=-65+n*11;if(side===-1&&z>68&&z<101)continue;
-      buildingCount++;
-      const levels=3+Math.floor(motion.rand(n,side+8)*3),height=2.2+levels*1.8,x=side*11.25,front=side*8.31;
-      const wall=M.walls[(n+(side===1?1:0))%3];
-      b.add(box(5.8,height,10.2),wall,[x,height/2,z]);
-      b.add(roofGeo,M.roof,[x,height,z]);
-      // Layered stone cornices and pilasters, rather than generic box towers.
-      for(const y of [.18,2.35,height-.18,height+.05])b.add(box(.24,.15,10.7),M.trim,[front-side*.06,y,z]);
-      for(const zz of [-4.95,4.95])b.add(box(.16,height,.17),M.trim,[front-side*.055,height/2,z+zz]);
-      for(let row=0;row<levels;row++){
-        const y=3.15+row*1.8;
-        b.add(box(.16,.1,10.35),M.trim,[front-side*.04,y-.8,z]);
-        for(let col=0;col<4;col++){
-          const zz=z-3.8+col*2.5;
-          b.add(box(.07,1.17,.91),M.trim,[front-side*.08,y,zz]);
-          b.add(box(.08,1.04,.73),M.window,[front-side*.13,y,zz]);
-          b.add(box(.09,1.05,.035),M.trim,[front-side*.19,y,zz]);
-          b.add(box(.09,.035,.75),M.trim,[front-side*.19,y+.07,zz]);
-          b.add(box(.55,.09,1.14),M.trim,[front-side*.24,y-.64,zz]);
-          if(row===0||row===levels-1||n%3===0){
-            // Continuous little wrought-iron balcony rails, six vertical balusters.
-            for(let bar=0;bar<6;bar++)b.add(box(.035,.39,.025),M.ink,[front-side*.49,y-.42,zz-.47+bar*.19]);
-            for(const yy of [y-.21,y-.56])b.add(box(.035,.025,1.04),M.ink,[front-side*.49,yy,zz]);
-          }
+    b.add(box(.18,.18,230),M.trim,[side*(half+.04),.025,65]);
+    for(let n=0;n<30;n++){
+      const z=-43+n*7.15,front=side*(half+1.03),x=front+side*2.1;
+      const height=4.7+Math.floor(motion.rand(n,side+12)*3)*1.5,wide=6.7;
+      const wall=n%3===0?M.stone:M.plaster;buildingCount++;
+      b.add(box(4.2,height,wide),wall,[x,height/2,z]);
+      // Triangular street gables, steep tiled roofs and exposed timber infill.
+      const rise=2.2+(n%3)*.25;
+      if(!gables.has(rise))gables.set(rise,polygon([[0,0,-wide/2],[0,0,wide/2],[0,rise,0]]));
+      b.add(gables.get(rise),wall,[front,height,z],[0,side===1?0:Math.PI,0]);
+      const pitch=Math.atan2(rise,wide/2),slope=Math.hypot(rise,wide/2);
+      for(const q of [-1,1])b.add(box(4.65,.13,slope+.3),M.roof,[x,height+rise/2,z+q*wide/4],[q*pitch,0,0]);
+      b.add(box(.5,1.7,.48),M.stone,[x+side*.7,height+1.25,z+1.3]);
+      for(const yy of [.25,2.22,height-.08])b.add(box(.15,.14,wide+.1),M.trim,[front-side*.045,yy,z]);
+      if(n%3!==0){
+        for(const zz of [-3.1,0,3.1])b.add(box(.13,height,.14),M.timber,[front-side*.08,height/2,z+zz]);
+        for(let yy=2.25;yy<height;yy+=1.8)b.add(box(.14,.13,wide),M.timber,[front-side*.09,yy,z]);
+        for(const q of [-1,1])b.add(box(.11,Math.hypot(1.45,1.4),.11),M.timber,[front-side*.1,3.075,z+q*2.2],[Math.atan2(-q*1.4,1.45),0,0]);
+        for(const q of [-1,1])b.add(box(.12,Math.hypot(rise,3.3),.12),M.timber,[front-side*.11,height+rise/2,z+q*1.65],[Math.atan2(-q*3.3,rise),0,0]);
+        b.add(box(.13,rise,.12),M.timber,[front-side*.11,height+rise/2,z]);
+      }
+      // Deep window recesses, paired shutters, mullions and stone sills.
+      for(let yy=3.25;yy<height-.35;yy+=1.8)for(const zz of [-2.1,0,2.1]){
+        b.add(box(.08,1.1,.83),M.window,[front-side*.055,yy,z+zz]);
+        for(const q of [-1,1]){
+          b.add(box(.1,1.2,.07),M.trim,[front-side*.11,yy,z+zz+q*.45]);
+          b.add(box(.12,1.08,.29),M.shutter,[front-side*.16,yy,z+zz+q*.64],[0,q*.15,0]);
+          for(let slat=0;slat<5;slat++)b.add(box(.13,.027,.26),M.timber,[front-side*.18,yy-.41+slat*.2,z+zz+q*.64]);
         }
+        b.add(box(.13,.045,.86),M.trim,[front-side*.12,yy,z+zz]);
+        b.add(box(.13,1.1,.04),M.trim,[front-side*.12,yy,z+zz]);
+        b.add(box(.36,.12,1.04),M.trim,[front-side*.17,yy-.62,z+zz]);
       }
-      for(let col=0;col<3;col++){
-        const zz=z-3.35+col*3.35;
-        b.add(box(.09,1.68,1.14),M.window,[front-side*.09,.95,zz]);
-        b.add(torus(.62,.065,Math.PI),M.trim,[front-side*.15,1.75,zz],[0,Math.PI/2,0]);
-        for(const q of [-1,1])b.add(box(.14,1.7,.1),M.trim,[front-side*.13,.92,zz+q*.61]);
-        b.add(box(.13,.035,1.15),M.trim,[front-side*.14,.98,zz]);
-        b.add(box(.13,1.45,.025),M.trim,[front-side*.14,.87,zz]);
-        if((n+col)%3===0){
-          for(let stripe=0;stripe<7;stripe++)b.add(box(1.04,.075,.21),stripe%2?M.white:M.pink,[front-side*.56,2.12,zz-.64+stripe*.21],[0,0,-side*.23]);
-          b.add(box(.08,.21,1.5),M.pink,[front-side*1.03,1.91,zz]);
-        }
+      // Arched stone doors with individual voussoirs and a leaded shop window.
+      const door=z-1.55;
+      b.add(box(.09,1.65,1.3),M.window,[front-side*.06,.9,door]);
+      b.add(cylinder(.65,.09,24),M.window,[front-side*.06,1.7,door],[0,0,Math.PI/2]);
+      for(let k=0;k<=8;k++){
+        const a=Math.PI*k/8;
+        b.add(box(.16,.2,.26),M.stone,[front-side*.17,1.68+Math.sin(a)*.75,door+Math.cos(a)*.75],[a-Math.PI/2,0,0]);
       }
-      // Dormers punctuate the steep mansard, with chimney stacks on top.
-      for(const zz of [-3.1,0,3.1]){
-        b.add(box(.75,.97,.85),M.trim,[front+side*.48,height+.62,z+zz]);
-        b.add(box(.08,.67,.54),M.window,[front+side*.08,height+.61,z+zz]);
-        b.add(box(.98,.13,1.05),M.roof,[front+side*.4,height+1.15,z+zz]);
+      for(const q of [-1,1])b.add(box(.18,1.65,.17),M.stone,[front-side*.14,.85,door+q*.75]);
+      b.add(box(.12,.045,1.18),M.timber,[front-side*.14,1.55,door]);
+      for(const q of [-1,0,1])b.add(box(.13,1.6,.035),M.shutter,[front-side*.15,.85,door+q*.3]);
+      b.add(box(.08,1.35,1.45),M.window,[front-side*.07,1.08,z+1.5]);
+      for(const q of [-1,0,1])b.add(box(.13,1.4,.045),M.trim,[front-side*.13,1.08,z+1.5+q*.5]);
+      b.add(box(.14,.06,1.6),M.trim,[front-side*.13,1.1,z+1.5]);
+      if(n%2===0){
+        b.add(box(.85,.045,.05),M.metal,[front-side*.42,2.8,z+.3]);
+        b.add(box(.065,.65,.6),M.sign,[front-side*.78,2.42,z+.3]);
+        b.add(torus(.2,.025),M.timber,[front-side*.82,2.42,z+.3],[0,Math.PI/2,0]);
+        b.add(box(.5,.045,.045),M.metal,[front-side*.25,3.2,z+2.9]);
+        b.add(box(.29,.42,.29),M.metal,[front-side*.49,2.95,z+2.9]);
+        b.add(box(.3,.26,.2),M.trim,[front-side*.49,2.96,z+2.9]);
+        b.add(cylinder(.23,.22,4,0),M.metal,[front-side*.49,3.27,z+2.9],[0,Math.PI/4,0]);
       }
-      b.add(box(.45,2,.6),M.trim,[x+side*.9,height+1.5,z+2.4]);
-    }
-    const arm=tube([[0,0,0],[0,3.55,0],[-side*.15,3.95,0],[-side*.76,4.05,0],[-side*.88,3.7,0]],.035);
-    for(let z=-55;z<290;z+=17){
-      b.add(arm,M.ink,[side*7.2,0,z]);b.add(cylinder(.14,.26),M.ink,[side*7.2,.13,z]);
-      b.add(box(.34,.46,.34),M.ink,[side*6.33,3.5,z]);b.add(box(.23,.3,.23),M.lamp,[side*6.33,3.5,z]);
-      b.add(cylinder(.24,.23,4,0),M.ink,[side*6.33,3.84,z],[0,Math.PI/4,0]);
-    }
-    for(let z=-44;z<290;z+=26){
-      b.add(cylinder(.11,2.6,9),M.ink,[side*7.35,1.3,z]);
-      for(let k=0;k<4;k++)b.add(sphere(.85),M.accent,[side*(7.35+Math.sin(k*2.1)*.4),2.9+k*.15,z+Math.cos(k*2.1)*.44],[0,0,0],[1.1,.95,1.2]);
+      if(circuit){
+        for(let k=0;k<5;k++)b.add(box(.48,.055,1.34),k%2?M.trim:M.shutter,[side*(half-.28),.055,z-2.8+k*1.35]);
+        if(n%3===0)for(let k=0;k<4;k++)for(let row=0;row<2;row++)b.add(torus(.3,.105),M.metal,[side*(half+.4),.32+row*.35,z-1.4+k*.64],[Math.PI/2,0,0]);
+      }
     }
   }
-  // A small European square: fountain, paving medallion, clock tower and roof spire.
-  b.add(cylinder(5,.08,48),M.trim,[-13,.025,83]);
-  b.add(cylinder(2.2,.35,48),M.ink,[-13,.21,83]);
-  b.add(cylinder(1.98,.15,48),M.water,[-13,.42,83]);
-  b.add(torus(2.11,.11),M.trim,[-13,.44,83],[Math.PI/2,0,0]);
-  b.add(cylinder(.24,2.2,18),M.trim,[-13,1.2,83]);
-  b.add(cylinder(1.02,.19,36),M.trim,[-13,1.9,83]);b.add(sphere(.3),M.water,[-13,2.55,83]);
-  b.add(box(3.5,16,3.5),M.walls[0],[-21,8,87]);
-  for(const y of [1,11.5,14.5,16])b.add(box(3.85,.2,3.85),M.trim,[-21,y,87]);
-  b.add(cylinder(3,4,4,0),M.roof,[-21,18,87],[0,Math.PI/4,0]);
-  b.add(cylinder(.09,2,8),M.ink,[-21,20.4,87]);
-  b.add(cylinder(1.04,.05,40),M.lamp,[-19.22,13,87],[0,0,Math.PI/2]);
-  b.add(box(.07,.75,.045),M.ink,[-19.18,13.27,87],[Math.PI*.12,0,0]);
-  b.add(box(.07,.035,.57),M.ink,[-19.18,13,87.2]);
-  b.finish();root.userData={buildingCount,windows:'arched / sash',architecture:'mansard / cornice / balcony / cafe / streetlamp / fountain'};
-  return {root,materials:M,apply(p){
-    M.walls.forEach((m,i)=>m.color.set(p.walls[i]));M.roof.color.set(p.roof);M.road.color.set(p.road);M.pave.color.set(p.pave);M.trim.color.set(p.trim);M.accent.color.set(p.accent);M.pink.color.set(p.walls[0]);
-  }};
+  for(let row=0;row<210;row++)for(let col=0;col<(circuit?13:7);col++){
+    const x=(col-(circuit?6:3))*.8+(row%2)*.4,z=-42+row*.9;
+    if(Math.abs(x)<half-.2&&motion.rand(row*17+col,5)>.65)b.add(box(.69,.012,.08),M.pave,[x,.022,z]);
+  }
+  b.add(box(3.1,16,3.1),M.stone,[-half-3.2,8,105]);
+  for(const y of [10,13,15.8])b.add(box(3.4,.2,3.4),M.trim,[-half-3.2,y,105]);
+  b.add(cylinder(2.7,5,4,0),M.roof,[-half-3.2,18.4,105],[0,Math.PI/4,0]);
+  b.add(cylinder(.88,.08,32),M.trim,[-half-3.2,13.4,103.4],[Math.PI/2,0,0]);
+  b.add(box(.05,.65,.1),M.metal,[-half-3.2,13.55,103.34]);
+  b.add(box(.5,.05,.1),M.metal,[-half-3.05,13.4,103.34]);
+  if(!circuit){
+    b.add(box(half*2+2.3,1.15,2.8),M.stone,[0,7.2,80]);
+    b.add(box(half*2+2.5,.17,3),M.trim,[0,7.83,80]);
+    for(let x=-half;x<=half;x+=.48)b.add(box(.07,.7,.08),M.timber,[x,8.2,78.6]);
+  }
+  if(circuit)for(const z of [34,113]){
+    for(const side of [-1,1])b.add(box(.1,5.2,.1),M.metal,[side*(half-.1),2.6,z]);
+    b.add(box(half*2,.08,.08),M.metal,[0,5.2,z]);
+    for(let row=0;row<2;row++)for(let col=0;col<24;col++)b.add(box(.5,.42,.045),(row+col)%2?M.trim:M.metal,[-5.75+col*.5,4.4+row*.42,z]);
+  }
+  b.finish();root.userData={buildingCount,streetHalfWidth:half,architecture:'steep gables / half timber / stone arches / shutters / clock tower',circuit};
+  return {root,materials:M};
 }

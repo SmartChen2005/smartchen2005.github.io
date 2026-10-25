@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Restore the native 2D heading and recut the three-ink rally
+
+- Restored Car Enthusiast hover/focus, its original skew and unchanged native sentence geometry. Removed the immersive modal, inert/hidden homepage behavior, 3D sentence module, glyph JSON and FontTools generator. Vehicle foreground pixels can cross the 2D heading without capturing input.
+- Replaced rainbow facades with traditional half-timber/gabled European lanes and a separate urban circuit. Eight independent hard cuts use at most three inks each; pure Grid Tunnel and Warp Stars omit all cars, roads and buildings. Solo, following, parallel, diagonal and short exhaust-backfire setups replace forced alternating passes.
+- Refined MINI cabin/headlights/grille and retained volumetric wheels and the detailed open E85. Three-ink rendering and cutout composition share one renderer. Scene performance limits are 1.5 DPR / 2.6M pixels and a 1024px shadow map.
+- Run `node tools/test-motor-race.mjs`, `node tools/test-home.mjs`, `node tools/test-home-state.mjs`, `node tools/test-photo-transition.mjs`, `node tools/test-game-transition.mjs` and `node tools/validate-site.mjs`. Updated browser evidence, Scenario loop checks and limitations are in `tools/MOTOR-RACE-QA.md`; published-directory audit in `tools/motor-race-premium-audit.json`.
+
 ### 2026-10-24 — Build the full-screen pop-art European city chase
 
 - Replaced the split canvas/HUD with a full-viewport Three.js scene using the existing local library, four saturated print palettes and eight hard cuts. Added 61 European facades, balconies, mansard roofs, cafe awnings, lamps, trees and a fountain/clock square.
