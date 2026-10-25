@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-24 — Build the full-screen pop-art European city chase
+
+- Replaced the split canvas/HUD with a full-viewport Three.js scene using the existing local library, four saturated print palettes and eight hard cuts. Added 61 European facades, balconies, mansard roofs, cafe awnings, lamps, trees and a fountain/clock square.
+- Rebuilt the black MINI and silver open Z4 as detailed original models with curved arch/body geometry, recognizable trim, open interior and volumetric tires/rims/brakes. The exact homepage sentence is extruded from the existing Instrument Serif font and becomes physical underpass and drive-over street typography.
+- The immersive entrance is deliberate click/tap/keyboard activation, with Close/Escape, focus restoration, static reduced motion, forced-color/native fallback and graphics-failure recovery. Original homepage/other entrance behavior is preserved; the bottom telemetry area is removed.
+- `tools/render-motor-type.py` regenerates the checked-in glyph JSON when fonts change (FontTools required only for that authoring command). Run the existing site, homepage/state, motorsport and both entrance regressions. Geometry, browser evidence and limitations are recorded in `tools/MOTOR-RACE-QA.md`.
+
 ### 2026-10-24 — Recut the race from reference photographs
 
 - Rebuilt Car Enthusiast as six hard-cut camera setups following the supplied low, wheel-level, inclined overhead, curbside and straightaway references. Added a built circuit, rounded black MINI / silver open Z4 models, color linework and a chequered gantry.

@@ -1,4 +1,4 @@
-import { createScenes } from './home-scenes.mjs?rev=20261024-directors-cut';
+import { createScenes } from './home-scenes.mjs?rev=20261024-pop-city';
 import { installGameTransition } from './home-game-transition.mjs';
 import { installPhotoTransition } from './home-photo-transition.mjs?rev=20261024-shared-entry';
 import { createBusinessCard } from './home-business-card.mjs';
@@ -38,6 +38,7 @@ portrait.addEventListener('transitionend', event => {
 retirePortrait();
 const scenes = createScenes(document.querySelector('.kinetic-scene'), {
   motor: document.querySelector('.motor-scene'), exhibition: document.querySelector('.photo-scene'),
+  dismissCars: () => clear(),
 });
 let pinned = 'name', hovered = null, focused = null;
 let nameCardOpen = true, cardKeyboard = false;
@@ -65,7 +66,7 @@ function render() {
 }
 for (const identity of identities) {
   identity.addEventListener('pointerenter', () => {
-    if (!hover.matches) return;
+    if (!hover.matches || identity.dataset.identity === 'cars') return;
     hovered = identity.dataset.identity;
     render();
   });
@@ -75,7 +76,7 @@ for (const identity of identities) {
     scenes.point((event.clientX - rect.left) / rect.width, (event.clientY - rect.top) / rect.height);
   });
   identity.addEventListener('focus', () => {
-    if (!identity.matches(':focus-visible')) return;
+    if (!identity.matches(':focus-visible') || identity.dataset.identity === 'cars') return;
     focused = identity.dataset.identity;
     render();
   });
@@ -106,7 +107,7 @@ document.addEventListener('keydown', (event) => {
   clear();
   if (fromCard) nameTrigger.focus({ preventScroll: true });
 });
-document.addEventListener('pointerdown', (event) => { if (!event.target.closest('.identity, .business-card-dock')) clear(); });
+document.addEventListener('pointerdown', (event) => { if (!event.target.closest('.identity, .business-card-dock, .motor-dialog')) clear(); });
 document.addEventListener('pointermove', (event) => {
   if (pinned && !event.target.closest('.identity')) scenes.point(event.clientX / innerWidth, event.clientY / innerHeight);
 });

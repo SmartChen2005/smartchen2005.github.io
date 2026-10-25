@@ -61,12 +61,14 @@ dispatch(name, 'pointerenter');
 assert.equal(world(), 'name'); assert(dock.hidden, 'Hover alone must only reveal the portrait');
 dispatch(name, 'pointerleave'); assert.equal(world(), '');
 dispatch(name, 'click'); assert(!dock.hidden); assert.equal(name.attributes['aria-pressed'], 'true');
-for (const target of [games, photo, cars, games]) {
+for (const target of [games, photo, games]) {
   dispatch(target, 'pointerenter');
   assert.equal(world(), target.dataset.identity); assert(dock.hidden);
   dispatch(target, 'pointerleave');
   assert.equal(world(), 'name'); assert(!dock.hidden, 'Leaving a temporary preview must restore portrait AND card');
 }
+dispatch(cars, 'pointerenter'); assert.equal(world(), 'name', 'Fullscreen cars require deliberate activation, not a hover that hides its own target');
+dispatch(cars, 'pointerleave');
 assert.equal(photo.handlers.click, undefined, 'The identity controller must leave Photographer clicks to its transition installer');
 assert.equal(photoBlocksGame(), false);
 gameController.active = true;

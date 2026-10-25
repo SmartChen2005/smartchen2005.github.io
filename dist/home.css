@@ -17,13 +17,15 @@
   --ink: #292a27;
   --focus: #65685e;
   --mechanical: #080808;
-  --motor-teal: #77d3d1;
-  --motor-amber: #efbd7a;
-  --motor-steel: #4b6571;
-  --motor-silver: #c5cdd4;
-  --motor-asphalt: #10151b;
-  --motor-mini: #11171a;
-  --motor-red: #dd6458;
+  --motor-pop-cyan: #00d9ff;
+  --motor-pop-pink: #ff278f;
+  --motor-pop-yellow: #ffe600;
+  --motor-pop-blue: #2345f5;
+  --motor-pop-coral: #ff5b36;
+  --motor-pop-lime: #98ef16;
+  --motor-pop-cream: #fff1c9;
+  --motor-pop-ink: #17132c;
+  --motor-pop-purple: #4d269d;
   --game-underline: #A2CFFE;
   --gallery-paper: #fff;
   --gallery-ink: #111;
@@ -95,6 +97,14 @@ body[data-world='games'] .kinetic-scene { visibility: visible; }
   background-color: var(--mechanical);
 }
 .motor-scene.is-active { visibility: visible; opacity: 1; }
+body[data-motor-immersive] { overflow: hidden; }
+body[data-motor-immersive] .homepage { visibility: hidden; }
+.motor-dialog { position: fixed; inset: 0; z-index: 6; pointer-events: none; }
+.motor-dialog[hidden] { display: none; }
+.motor-close { position: absolute; top: max(20px, env(safe-area-inset-top)); right: max(20px, env(safe-area-inset-right)); width: 46px; height: 46px; padding: 0 0 4px; border: 2px solid var(--motor-pop-ink); border-radius: 50%; background: var(--motor-pop-yellow); color: var(--motor-pop-ink); font: 32px/1 Arial, sans-serif; cursor: pointer; pointer-events: auto; }
+.motor-close:focus-visible { outline: 3px solid var(--motor-pop-cream); outline-offset: 4px; }
+body[data-motor-fallback] .motor-scene { visibility: hidden; }
+body[data-motor-fallback] .sentence { color: var(--ink); }
 .motor-scene.is-exiting { visibility: visible; opacity: 0; transition: opacity 380ms ease-out; }
 .photo-scene { position: absolute; inset: 0; visibility: hidden; }
 body[data-world='photo'] .photo-scene { visibility: visible; }

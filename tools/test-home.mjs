@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import { exhibitionLayout } from '../dist/home-exhibition.mjs';
 import { motorsportFrame, MOTOR_DURATION } from '../dist/home-motorsport.mjs';
-import { drawMotorRace, raceShot } from '../dist/home-motor-race.mjs';
+import { raceShot } from '../dist/home-motor-race.mjs';
 
 // The wall must never crop, overlap or cross the sentence, even on short screens.
 for (const [width, height, sentenceHeight] of [[1920,1080,90],[1440,900,68],[1024,600,50],[701,450,35],[390,844,180],[320,568,200],[844,390,40]]) {
@@ -19,11 +19,9 @@ for (const [width, height, sentenceHeight] of [[1920,1080,90],[1440,900,68],[102
     assert(a.x + a.width <= b.x || b.x + b.width <= a.x || a.y + a.height <= b.y || b.y + b.height <= a.y);
   }
 }
-assert.equal(MOTOR_DURATION,12);
-assert.deepEqual([0,1.3,3.2,5.4,8.8,10.6,11.5,12].map(t => motorsportFrame(t).phase),
-  ['drawing','launch','overtake','apex','tunnel','finish','settle','idle']);
-assert(motorsportFrame(1.81).rpm < motorsportFrame(1.79).rpm, 'A gear change must unload RPM');
-assert(motorsportFrame(100).idle, 'The main sequence must not loop');
+assert.equal(MOTOR_DURATION,16);
+assert.deepEqual([0,1,16].map(t=>motorsportFrame(t).phase),['opening','city','idle']);
+assert(motorsportFrame(100).idle);
 
 const callbacks = new Map(), mediaHandlers = [], forcedHandlers = [], pageHandlers = [], timers = new Map();
 let id = 0, now = 0, drawings = 0;
@@ -43,7 +41,7 @@ const motorCanvas = { getContext: () => context, dataset: {}, classList: classLi
 const prints = Array.from({length:4},()=>({style:{},classList:classList(),querySelector:()=>({complete:true,naturalWidth:6000,getAttribute:name=>name==='width'?'6000':'4000'})}));
 const gallery = { querySelectorAll:()=>prints };
 const sandbox = {
-  document, console, Math, drawMotorRace, raceShot, innerWidth:1440,innerHeight:900,devicePixelRatio:1.5,
+  document, console, Math, raceShot, createMotorWorld:()=>({available:true,ready:true,resize(){},paint(frame){assert(Number.isFinite(frame.t));drawings++;}}), innerWidth:1440,innerHeight:900,devicePixelRatio:1.5,
   matchMedia:query=>query.includes('forced-colors')?forced:media,
   getComputedStyle:()=>({getPropertyValue:key=>({'--paper':'#f5f5f3','--ink':'#292a27','--mechanical':'#080808'})[key]}),
   requestAnimationFrame:fn=>{callbacks.set(++id,fn);return id;}, cancelAnimationFrame:key=>callbacks.delete(key),
@@ -61,12 +59,12 @@ function step(count=1) {
   for(let i=0;i<count;i++) { now+=16; const pending=[...callbacks.values()];callbacks.clear();pending.forEach(fn=>fn(now));assert(callbacks.size<=1,'Duplicate animation loops'); }
 }
 scene.setWorld('games');step(240);scene.point(1,0);step(120);assert.equal(callbacks.size,1);
-scene.setWorld('cars');step(75);assert.equal(motorCanvas.dataset.phase,'launch');
-step(700);assert.equal(motorCanvas.dataset.phase,'idle');
+scene.setWorld('cars');step(75);assert.equal(motorCanvas.dataset.phase,'city');
+step(950);assert.equal(motorCanvas.dataset.phase,'idle');
 assert.equal(callbacks.size,0,'The race must stop requesting frames when it finishes');
 scene.setWorld('');assert.equal(callbacks.size,0);assert.equal(document.body.dataset.carExit,'true');
 for(const fn of timers.values())fn();timers.clear();assert.equal(document.body.dataset.carExit,undefined);
-scene.setWorld('cars');assert.equal(motorCanvas.dataset.phase,'drawing','Re-entry restarts the sequence');
+scene.setWorld('cars');assert.equal(motorCanvas.dataset.phase,'opening','Re-entry restarts the sequence');
 scene.setWorld('');
 scene.setWorld('photo');
 assert(!motorCanvas.classList.contains('is-exiting'), 'Switching identities cancels the car exit');
@@ -94,4 +92,15 @@ pageHandlers.forEach(fn=>fn());mediaHandlers.forEach(fn=>fn());scene.setWorld('p
 assert.equal(callbacks.size,0,'Focus and visibility events must not restart the captured hover simulation');
 scene.releaseGame();scene.setWorld('games');assert.equal(callbacks.size,1);
 scene.setWorld('');assert.equal(callbacks.size,0);
-console.log('Passed: four uncropped non-overlapping prints; 12s hard-cut race phases, shifts, settle and restart; finite canvas geometry; stopped idle loop; reduced motion; background suspension.');
+const delayedWorld={available:true,ready:false,resize(){},paint(){}};
+const delayedCanvas={dataset:{},classList:classList()};
+const delayed=sandbox.createMotorsport(delayedCanvas,{worldFactory:()=>delayedWorld});
+delayed.resize(1440,900);delayed.setActive(true);step(30);
+assert.equal(delayedCanvas.dataset.phase,undefined,'The movie clock waits for local glyphs instead of starting behind a loading frame');
+delayedWorld.ready=true;step();assert.equal(delayedCanvas.dataset.phase,'opening');
+delayedWorld.available=false;delayedWorld.onUnavailable();
+assert.equal(callbacks.size,0,'A lost graphics context stops the movie');
+assert.equal(document.body.dataset.motorImmersive,undefined,'Graphics failure restores native homepage input');
+assert.equal(document.body.dataset.motorFallback,'true');
+delayed.setActive(false);assert.equal(document.body.dataset.motorFallback,undefined);
+console.log('Passed: four uncropped non-overlapping prints; 16s full-screen city phases, settle and restart; finite canvas geometry; stopped idle loop; reduced motion; background suspension.');
