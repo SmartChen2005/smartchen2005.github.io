@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Five graphite line-art shots with classic lanterns
+
+- Retained the front MINI lead, made the second camera a solo MINI rear view, changed the third to overhead and joined the 4.6s exhaust shot continuously into a new line-art Grid Tunnel. Total playback remains 17.7s. All active setups use sampled graphite `#3d3d41`, pale contours and amber light; removed the old colored/space rendering branches from the active race module.
+- Lowered bodywork/cabins/trim by 6% around the axle while preserving round, thick tires. MINI responds 0.45s after Z4 boost, with a delayed tracking camera and bounded lead. Added a procedural classic lantern kit, depth-masked amber pass and shared rigid flight anchors so posts/glass/frames scatter together with buildings.
+- Added recycled roadway, portals and lamp rows using Scenario analytic phase helpers. The far-first grid reveal shares camera, travel, scenery flight and vehicle state through the final join. Added timing/derivative, screen-space formation, join continuity, road coverage, rigid lamp flight/reset and deterministic reveal checks. Design/browser evidence is recorded in `tools/MOTOR-RACE-QA.md`.
+- Required checks: motor, home lifecycle/state, photo/game entrances, site validation and strict dist design audit, accompanied by native homepage interactions and desktop/narrow browser review. No new dependency or external production asset.
+
 ### 2026-10-25 — Round and refine the F56 / E85 models from vehicle references
 
 - Rebuilt the body profiles and swept end caps with continuous curvature, gentler wing transitions and E85 flank concavity. Rounded glass/trim panels and projected door/bonnet seams replace sharp polygons or floating lines. Lowered the shell and moved wheel centers inward while preserving physical tire thickness and detailed wheel construction.

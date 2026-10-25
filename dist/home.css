@@ -17,9 +17,9 @@
   --ink: #292a27;
   --focus: #65685e;
   --mechanical: #080808;
-  --motor-ink: #101c2c;
-  --motor-accent: #8198b6;
-  --motor-paper: #e8eff5;
+  --motor-ink: #3d3d41;
+  --motor-accent: #eac36b;
+  --motor-paper: #f2f1ed;
   --game-underline: #A2CFFE;
   --gallery-paper: #fff;
   --gallery-ink: #111;
@@ -88,7 +88,7 @@ body[data-world='cars'] .identity-cars > span { transform: skewX(-9deg); }
 body[data-world='games'] .kinetic-scene { visibility: visible; }
 .motor-scene {
   position: absolute; inset: 0; width: 100%; height: 100%; visibility: hidden; opacity: 0;
-  background-color: var(--mechanical);
+  background-color: var(--motor-ink);
 }
 .motor-scene.is-active { visibility: visible; opacity: 1; }
 /* Vehicle pixels can cross the 2D sentence without taking its input or layout. */

@@ -1,12 +1,12 @@
-// All six street setups share the approved unfilled, starry drawing finish.
-export const isMotorLineShot=shot=>['lane','circuit'].includes(shot.mode);
+// All five setups share the approved unfilled, starry drawing finish.
+export const isMotorLineShot=shot=>['lane','circuit','tunnel'].includes(shot.mode);
 export const MOTOR_LINE_FRAGMENT=`
 uniform sampler2D source;uniform sampler2D depthSource;
-uniform sampler2D cars;uniform sampler2D carDepth;
+uniform sampler2D cars;uniform sampler2D carDepth;uniform sampler2D lampSource;uniform sampler2D lampDepth;
 uniform vec2 texel;uniform vec3 ink;uniform vec3 paper;uniform vec3 accent;
 uniform mat4 inverseViewProjection;uniform mat4 previousViewProjection;
 uniform float burst;uniform bool moving;varying vec2 vUv;
-float distanceAt(sampler2D depth,vec2 uv){float z=texture2D(depth,uv).x;return .08*150./(150.-z*(150.-.08));}
+float distanceAt(sampler2D depth,vec2 uv){float z=texture2D(depth,uv).x;return .08*180./(180.-z*(180.-.08));}
 float contour(sampler2D normals,sampler2D depth,vec2 uv){
  vec4 center=texture2D(normals,uv);float z=texture2D(depth,uv).x,edge=0.;
  for(int i=0;i<2;i++){
@@ -38,11 +38,15 @@ vec3 skyStars(vec2 uv){
  vec2 p=angle*68.,cell=floor(p),offset=vec2(starHash(cell+3.),starHash(cell+17.))*.7+.15,d=fract(p)-offset;
  float r=mix(.045,.095,starHash(cell+29.));
  float pin=(1.-smoothstep(r*.15,r,length(d)))*step(.82,starHash(cell+41.));
- vec3 stars=mix(accent,paper,starHash(cell+57.))*pin*mix(.45,1.25,starHash(cell+71.));
+ vec3 stars=paper*pin*mix(.30,.95,starHash(cell+71.));
  p=angle*26.;cell=floor(p);d=fract(p)-(vec2(starHash(cell+91.),starHash(cell+107.))*.6+.2);
  float core=exp(-dot(d,d)*1400.);
  float cross=(exp(-abs(d.x)*180.-abs(d.y)*16.)+exp(-abs(d.y)*180.-abs(d.x)*16.))*.23;
  stars+=paper*(core+cross)*step(.94,starHash(cell+139.));return stars;
+}
+float lantern(vec2 uv){
+ float nearest=min(texture2D(depthSource,uv).x,texture2D(carDepth,uv).x),depth=texture2D(lampDepth,uv).x;
+ return texture2D(lampSource,uv).a*step(depth,nearest+.000003);
 }
 void main(){
  float environmentEdge=contour(source,depthSource,vUv);float vehicleEdge=contour(cars,carDepth,vUv);
@@ -58,6 +62,9 @@ void main(){
  vec3 background=ink;
  // Only empty sky receives stars. Buildings, road and vehicle interiors keep their flat ground.
  if(depth>.999999&&texture2D(cars,vUv).a<.01)background+=skyStars(vUv);
- gl_FragColor=vec4(mix(background,paper,clamp(line,0.,1.)),1.);
+ float core=lantern(vUv),halo=0.;
+ for(int i=0;i<4;i++){float a=float(i)*1.570796;halo+=lantern(clamp(vUv+vec2(cos(a),sin(a))*texel*7.,texel,1.-texel))*.25;}
+ vec3 color=mix(background,paper,clamp(line,0.,1.));color=mix(color,mix(accent,paper,.15),core*.94);color+=accent*halo*.16;
+ gl_FragColor=vec4(color,1.);
  #include <colorspace_fragment>
 }`;

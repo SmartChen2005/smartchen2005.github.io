@@ -1,3 +1,4 @@
+import {createStreetLanterns} from './home-motor-lanterns.mjs?rev=20261025-graphite';
 import { T, box, cylinder, torus, batch, toon } from './home-motor-geometry.mjs?rev=20261025-cosmic';
 import { motion } from './home-motor-motion.mjs?rev=20261025-cosmic';
 import { createStreetArchitecture } from './home-motor-architecture.mjs?rev=20261025-long-exhaust';
@@ -10,7 +11,7 @@ export function createMotorCity({circuit=false}={}){
     trim:toon('#ededed'),window:toon('#151515'),road:toon('#282828'),pave:toon('#777777'),metal:toon('#191919')};
   const town=createStreetArchitecture(half,M,{circuit,blocks});root.add(town.root);
   const bridgeRoot=new T.Group();bridgeRoot.name='renaissance-overhead-passage';root.add(bridgeRoot);
-  const b=batch(root);
+  const road=new T.Group();root.add(road);const b=batch(road);
   b.add(box(42,.15,length),M.pave,[0,-.12,center]);b.add(box(half*2,.08,length),M.road,[0,-.025,center]);
   for(const side of [-1,1]){
     b.add(box(.18,.18,length),M.trim,[side*(half+.04),.025,center]);
@@ -39,5 +40,6 @@ export function createMotorCity({circuit=false}={}){
     for(let row=0;row<2;row++)for(let col=0;col<24;col++)b.add(box(.5,.42,.045),(row+col)%2?M.trim:M.metal,[-5.75+col*.5,4.4+row*.42,z]);
   }
   b.finish();root.userData={buildingCount:town.facades.length,streetHalfWidth:half,architecture:'Gothic cathedrals / pointed lancets / rose tracery / buttresses / Renaissance palazzi / round arcades / pilasters / pediments / ribbed domes',circuit,roadRange:[-50,length-50],churchCount:town.churchCount,facades:town.facades,roseWindows:town.roseWindows};
-  return {root,materials:M,architecture:town.root,bridge:bridgeRoot};
+  const lamps=createStreetLanterns(half,{end:circuit?265:168});root.add(lamps);
+  return {root,road,lamps,materials:M,architecture:town.root,bridge:bridgeRoot};
 }

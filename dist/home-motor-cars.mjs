@@ -209,6 +209,8 @@ export function createMotorCar(kind){
   const shadow=mesh(root,new T.CircleGeometry(1,48),new T.MeshBasicMaterial({color:'#10122e',transparent:true,opacity:.25,depthWrite:false}),[0,.009,0],[-PI/2,0,0]);shadow.name='contact-shadow';shadow.scale.set(.95,2.02,1);shadow.castShadow=false;
   root.userData.materials=M;
   root.userData.wheels=root.children.filter(c=>c.name==='volumetric-wheel');
+  const lowered=new T.Group();lowered.name='lowered-bodywork';lowered.scale.y=.94;lowered.position.y=.333*(1-.94);
+  for(const child of [...root.children])if(!root.userData.wheels.includes(child)&&child.name!=='contact-shadow')lowered.add(child);root.add(lowered);root.userData.bodyCompression=.94;
   return root;
 }
 export const MOTOR_MODELS=['mini','z4'];

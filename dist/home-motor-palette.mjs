@@ -1,14 +1,5 @@
-// Street shots use three printing inks; cosmic palettes also guide native text.
-export const MOTOR_PALETTES=[
-  {ink:'#101c2c',accent:'#8198b6',paper:'#e8eff5'},
-  {ink:'#151f29',accent:'#829da6',paper:'#e8edf0'},
-  {ink:'#111c30',accent:'#577ec2',paper:'#e9edf8'},
-  {ink:'#060b24',accent:'#5adce8',paper:'#eff6ff'},
-  {ink:'#060a25',accent:'#a189ff',paper:'#f1f4ff'},
-  {ink:'#04091d',accent:'#69d5f5',paper:'#edf6ff'},
-  {ink:'#10242c',accent:'#5e96a3',paper:'#e6f0f1'},
-  {ink:'#152039',accent:'#7e8ec0',paper:'#edf0f8'},
-];
+// The complete chase shares graphite ground, pale contours and amber lanterns.
+export const MOTOR_PALETTES=[{ink:'#3d3d41',accent:'#eac36b',paper:'#f2f1ed'}];
 export const motorPalette=index=>MOTOR_PALETTES[((index%MOTOR_PALETTES.length)+MOTOR_PALETTES.length)%MOTOR_PALETTES.length];
 export const THREE_INK_FRAGMENT=`
 uniform sampler2D source;

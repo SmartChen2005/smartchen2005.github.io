@@ -1,4 +1,28 @@
-# Car Enthusiast — F56 / E85 curved surfacing, 2026-10-25
+# Car Enthusiast — Five-shot graphite lantern chase, 2026-10-25
+
+Starting from c87a762 with a clean master, this revision follows the user's five-shot recut and supplied MINI-paint / classic-lantern photographs. No reference image is copied into the published site. The neutral ground is the median of a dark bonnet sample, `#3d3d41`, rather than a manufacturer paint specification. Pale `#f2f1ed` contours and amber `#eac36b` light complete the three base inks.
+
+## Implementation
+
+- Timeline: front MINI lead 0–2.2s; retained low rear camera with MINI alone 2.2–4.4s; true overhead with MINI left/front and Z4 right/rear 4.4–6.7s; exhaust/overtake/flight 6.7–11.3s; continuous line-art Grid guide 11.3–17.7s. Exhaust retains its previous 4.6s duration. Camera, target, travel, ground and vehicle progress match across the last join; only the guide's far-first reveal develops. Early camera changes remain direct cuts.
+- Rounded body/cabin/trim groups compress vertically to 94% around axle height; tires retain full circular diameter and physical thickness. MINI responds 0.45s after Z4 ignition, reaches the same additional 16.2m/s terminal speed and limits the final Z4 lead to about 1.99m. The camera responds at a 0.60s offset so both cars remain in view. Flames, needles and wheel spin follow the corresponding driver law.
+- The Gothic/Renaissance kits gain a procedural classic lantern row: fluted posts, plinth/collars, tapered four-sided glass, sloping frames, roofs and finials. Amber emitters have a separate depth mask, restrained glow and car/building occlusion. Every part of one lamp shares a flight anchor/seed, keeping the warm pane attached as the entire lamp flies with the architecture.
+- The new `home-motor-guide.mjs` uses Scenario Motion Loops phase/recycling helpers in the actual vehicle space. Aligned 1.8m roadway, 7m portals and 14m lamp periods avoid a reset. A separate time/depth envelope reveals distant frames before near frames. All active views use the same contour finish; old colored/cosmic branches are no longer imported by the race renderer. Archived helpers remain available without reintroducing their deleted shots.
+- The active pipeline captures environment normals/depth, cars normals/depth and amber emitters/depth, then composes one contour view. Scenery shutter is analytic and car/text edges remain sharp. No new package, remote production asset, physics loop or previous-frame history.
+
+## Verification and browser evidence
+
+Passed `node tools/test-motor-race.mjs`, `node tools/test-home.mjs`, `node tools/test-home-state.mjs`, `node tools/test-photo-transition.mjs`, `node tools/test-game-transition.mjs` and `node tools/validate-site.mjs`. Strict published-directory design audit reports zero findings. Added exact five-shot order, circular tires after lowering, six viewport projections, solo rear visibility, overhead screen-space order, delayed flame/velocity derivatives, bounded lead, camera derivative, exact last-join continuity, recycled road coverage, far-first guide reveal, rigid whole-lamp flight, finite geometry, deterministic out-of-order updates and exact burst/culling restoration. Standalone Scenario Grid/Warp twelve-second seam checks remain, although Warp is not in this edit.
+
+Chrome reviewed 1440×900 front, solo rear, overhead, airborne buildings/lamps and guide; 390×844 overhead and final guide remain legible with no horizontal document overflow. Complete preview playback reaches 17.70s / grid-guide. No warning/error was captured in the preview or actual homepage logs. These are desktop browser viewport checks, not physical touch, Safari or frame-rate measurements.
+
+On the actual homepage, Tab starts an unpinned preview; the clock reaches idle / grid-guide, Space pins and Escape clears while retaining trigger focus. Native heading bounds match exactly before/during: x=184.0625, y=416.17709, width=1071.86462, height=67.64584 at 1440×900. Main has no inert ancestor, and the car span retains matrix(1,0,-0.158384,1,0,0), the original -9° skew. Resting content, portrait/card and other entrances remain.
+
+Evidence in the task artifact directory: `graphite-front.png`, `graphite-solo-rear.png`, `graphite-overhead.png`, `graphite-flying-lanterns.png`, `graphite-grid-guide.png`, `graphite-mobile-overhead.png`, `graphite-mobile-guide.png` and `graphite-final.png`. Disposable review fixtures are removed and viewport overrides reset before commit. Models remain original stylized geometry rather than dimensional CAD reproductions.
+
+---
+
+# Previous: F56 / E85 curved surfacing, 2026-10-25
 
 Starting from 22d9dc5, the user asks for closer F56 / E85 front and body shapes with less angular surfacing. This revision changes vehicle geometry and trim; seven-shot order, 17.7s duration, 4.6s exhaust shot, camera poses, speed laws, architectural drift, palettes and native heading/controller remain.
 

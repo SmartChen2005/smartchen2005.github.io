@@ -105,4 +105,4 @@ assert(!foregroundCanvas.classList.contains('is-active'),'Graphics failure also 
 assert.equal(document.body.dataset.motorImmersive,undefined,'The car scene never makes the native homepage immersive');
 assert.equal(document.body.dataset.motorFallback,'true');
 delayed.setActive(false);assert.equal(document.body.dataset.motorFallback,undefined);
-console.log('Passed: four uncropped non-overlapping prints; 17.7s seven-shot city phases, settle and restart; finite canvas geometry; stopped idle loop; reduced motion; background suspension.');
+console.log('Passed: four uncropped non-overlapping prints; 17.7s five-shot city phases, settle and restart; finite canvas geometry; stopped idle loop; reduced motion; background suspension.');
