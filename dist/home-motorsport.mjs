@@ -1,4 +1,4 @@
-import { createMotorWorld, raceShot } from './home-motor-race.mjs?rev=20261024-rally-cut';
+import { createMotorWorld, raceShot } from './home-motor-race.mjs?rev=20261025-shutter';
 export const MOTOR_DURATION=16;
 const clamp=x=>Math.max(0,Math.min(1,x));
 export function motorsportFrame(seconds){
@@ -8,7 +8,7 @@ export function motorsportFrame(seconds){
 export function createMotorsport(canvas,{foreground=null,worldFactory=createMotorWorld}={}){
   const reduced=matchMedia('(prefers-reduced-motion: reduce)'),forced=matchMedia('(forced-colors: active)');
   const world=worldFactory(canvas,{foreground}),layers=[canvas,foreground].filter(Boolean);
-  let active=false,raf=0,last=0,time=0,width=0,height=0,exitTimer=0,input=.5;
+  let active=false,raf=0,last=0,time=0,width=0,height=0,exitTimer=0,input=.5,lastPalette=null;
   function unavailable(){
     cancelAnimationFrame(raf);raf=0;document.body.dataset.motorFallback='true';layers.forEach(c=>c.classList.remove('is-active'));
   }
@@ -20,7 +20,7 @@ export function createMotorsport(canvas,{foreground=null,worldFactory=createMoto
     const frame=motorsportFrame(time);canvas.dataset.phase=frame.phase;canvas.dataset.shot=frame.shot;
     world.paint(frame,reduced.matches?.5:input);
     const palette=world.model?.palette;
-    if(palette)for(const key of ['ink','accent','paper'])document.body.style.setProperty(`--motor-${key}`,palette[key]);
+    if(palette&&palette!==lastPalette){for(const key of ['ink','accent','paper'])document.body.style.setProperty(`--motor-${key}`,palette[key]);lastPalette=palette;}
     return frame;
   }
   function tick(now){

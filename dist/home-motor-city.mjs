@@ -1,5 +1,5 @@
-import { T, box, cylinder, torus, batch, toon, polygon } from './home-motor-geometry.mjs?rev=20261024-rally-cut';
-import { motion } from './home-motor-motion.mjs?rev=20261024-rally-cut';
+import { T, box, cylinder, torus, batch, toon, polygon } from './home-motor-geometry.mjs?rev=20261025-shutter';
+import { motion } from './home-motor-motion.mjs?rev=20261025-shutter';
 
 // Neutral source values are separated into three printing inks by the final pass.
 export function createMotorCity({circuit=false}={}){
@@ -78,7 +78,7 @@ export function createMotorCity({circuit=false}={}){
     const x=(col-(circuit?6:3))*.8+(row%2)*.4,z=-42+row*.9;
     if(Math.abs(x)<half-.2&&motion.rand(row*17+col,5)>.65)b.add(box(.69,.012,.08),M.pave,[x,.022,z]);
   }
-  b.add(box(3.1,16,3.1),M.stone,[-half-3.2,8,105]);
+  b.add(box(3.1,16,3.1),M.shutter,[-half-3.2,8,105]);
   for(const y of [10,13,15.8])b.add(box(3.4,.2,3.4),M.trim,[-half-3.2,y,105]);
   b.add(cylinder(2.7,5,4,0),M.roof,[-half-3.2,18.4,105],[0,Math.PI/4,0]);
   b.add(cylinder(.88,.08,32),M.trim,[-half-3.2,13.4,103.4],[Math.PI/2,0,0]);

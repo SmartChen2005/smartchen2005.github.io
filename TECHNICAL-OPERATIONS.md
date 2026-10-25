@@ -96,6 +96,14 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Add racing speed, selective shutter and vehicles in hyperspace
+
+- Preserved the eight compositions/cut timings and native 2D hover sentence. Increased street travel from 9m/s to a 30m/s average, with a small within-shot acceleration, faster wheel rotation, 72 peripheral speed streaks and a faster diagonal pass.
+- Added a depth-reprojected, seventeen-sample centered shutter for scenery, with a separate sharp vehicle/depth composition. The blur mixes the existing three inks and has no prior-frame history. Reduced motion/final idle remove shutter displacement and moving streaks; the foreground vehicle canvas is only presented during its crossing shot.
+- Grid Tunnel now contains a rear chase and Warp Stars a frontal two-car sprint. Grid flow is faster; 192 star streaks retain deterministic twelve-second closure and stop before crossing the camera. Buildings and roads remain absent from these two abstract shots.
+- Refined the bodies with flatter decks/shoulders, smaller real-width rolling tires, non-bulging window frames, lower MINI roof and lower E85 windshield/roll hoops. Existing detailed rims, brakes, open cockpit, palettes, traditional city, natural formations and backfire remain.
+- Validation and real-browser evidence/limits are recorded in `tools/MOTOR-RACE-QA.md`. Run site, motor/home/state, photo/game entrance checks and scoped strict design audit before committing. No changes to the Gallery/Projects entrance or portrait assets.
+
 ### 2026-10-25 — Restore the native 2D heading and recut the three-ink rally
 
 - Restored Car Enthusiast hover/focus, its original skew and unchanged native sentence geometry. Removed the immersive modal, inert/hidden homepage behavior, 3D sentence module, glyph JSON and FontTools generator. Vehicle foreground pixels can cross the 2D heading without capturing input.

@@ -1,4 +1,4 @@
-import { createScenes } from './home-scenes.mjs?rev=20261024-rally-cut';
+import { createScenes } from './home-scenes.mjs?rev=20261025-shutter';
 import { installGameTransition } from './home-game-transition.mjs';
 import { installPhotoTransition } from './home-photo-transition.mjs?rev=20261024-shared-entry';
 import { createBusinessCard } from './home-business-card.mjs';

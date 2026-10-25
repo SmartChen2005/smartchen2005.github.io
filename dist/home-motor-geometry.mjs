@@ -40,7 +40,7 @@ export function toon(color){
   gradient.minFilter=gradient.magFilter=T.NearestFilter;
   return new T.MeshToonMaterial({color,gradientMap:gradient});
 }
-export function loft(stations,{rings=32,steps=3,wheelArches=[],cockpit=false}={}){
+export function loft(stations,{rings=32,steps=3,wheelArches=[],cockpit=false,profile=null,archRadius=.405,archCenter=.35}={}){
   const values=[],indices=[],sections=[];
   const cat=(a,b,c,d,t)=>.5*(2*b+(-a+c)*t+(2*a-5*b+4*c-d)*t*t+(-a+3*b-3*c+d)*t*t*t);
   for(let i=0;i<stations.length-1;i++)for(let k=0;k<steps;k++){
@@ -51,12 +51,15 @@ export function loft(stations,{rings=32,steps=3,wheelArches=[],cockpit=false}={}
   sections.forEach(([z,w,top,bottom=.24])=>{
     for(let i=0;i<rings;i++){
       const a=Math.PI*2*i/rings,c=Math.cos(a),s=Math.sin(a);
-      values.push(w*Math.sign(c)*Math.pow(Math.abs(c),.52),bottom+(top-bottom)*(.5+.5*Math.sign(s)*Math.pow(Math.abs(s),.75)),z);
+      if(profile){
+        const q=i/rings*profile.length,k=Math.floor(q),f=q-k,u=profile[k],v=profile[(k+1)%profile.length];
+        values.push(w*(u[0]+(v[0]-u[0])*f),bottom+(top-bottom)*(u[1]+(v[1]-u[1])*f),z);
+      }else values.push(w*Math.sign(c)*Math.pow(Math.abs(c),.52),bottom+(top-bottom)*(.5+.5*Math.sign(s)*Math.pow(Math.abs(s),.75)),z);
     }
   });
   const append=(a,b,c)=>{
     const x=(values[a*3]+values[b*3]+values[c*3])/3,y=(values[a*3+1]+values[b*3+1]+values[c*3+1])/3,z=(values[a*3+2]+values[b*3+2]+values[c*3+2])/3;
-    if(Math.abs(x)>.56&&wheelArches.some(w=>Math.hypot(z-w,y-.35)<.405))return;
+    if(Math.abs(x)>.56&&wheelArches.some(w=>Math.hypot(z-w,y-archCenter)<archRadius))return;
     if(cockpit&&Math.abs(x)<.76&&y>.8&&z>-1.24&&z<.23)return;
     indices.push(a,b,c);
   };
@@ -76,10 +79,10 @@ export function loft(stations,{rings=32,steps=3,wheelArches=[],cockpit=false}={}
   }
   const boundary=new Set();for(const e of edges.values())if(e.count===1){boundary.add(e.a);boundary.add(e.b);}
   for(const index of boundary){
-    const n=index*3,x=values[n],y=values[n+1],z=values[n+2];if(Math.abs(x)<.56||y>.81)continue;
-    const wheel=wheelArches.find(w=>Math.hypot(z-w,y-.35)<.51);if(wheel===undefined)continue;
-    const length=Math.hypot(z-wheel,y-.35);if(length<.001)continue;
-    values[n]=Math.sign(x)*.885;values[n+1]=.35+(y-.35)*.405/length;values[n+2]=wheel+(z-wheel)*.405/length;
+    const n=index*3,x=values[n],y=values[n+1],z=values[n+2];if(Math.abs(x)<.76||y>.81)continue;
+    const wheel=wheelArches.find(w=>Math.hypot(z-w,y-archCenter)<archRadius+.105);if(wheel===undefined)continue;
+    const length=Math.hypot(z-wheel,y-archCenter);if(length<.001)continue;
+    values[n]=Math.sign(x)*Math.max(Math.abs(x),.86);values[n+1]=archCenter+(y-archCenter)*archRadius/length;values[n+2]=wheel+(z-wheel)*archRadius/length;
   }
   const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.Float32BufferAttribute(values,3));
   geometry.setIndex(indices);geometry.computeVertexNormals();return geometry;
