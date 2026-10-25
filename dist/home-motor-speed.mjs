@@ -6,8 +6,8 @@ const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 const smooth=(x)=>{x=clamp(x,0,1);return x*x*(3-2*x);};
 const integral=(u,r)=>u<=0?0:u<r?r*((u/r)**3-.5*(u/r)**4):u-r/2;
 const twice=(u,r)=>u<=0?0:u<r?r*r*((u/r)**4/4-(u/r)**5/10):.5*u*u-.5*r*u+.15*r*r;
-export function boostMotion(local){
-  const u=local-.52,r=.18,length=.9,a=18;
+export function boostMotion(local,{a=18,length=.9}={}){
+  const u=local-.52,r=.18;
   return {distance:a*(twice(u,r)-twice(u-length,r)),velocity:a*(integral(u,r)-integral(u-length,r)),
     acceleration:a*(smooth(u/r)-smooth((u-length)/r)),flame:(local>.52&&local<.75)||(local>1.04&&local<1.20)};
 }
@@ -19,13 +19,13 @@ export function raceTravel(shot,t){
 export function pursuitMotion(local,index){
  const u=local-2.25,r=1.6,x=clamp(u/r,0,1),e=x*x*x*(10+x*(-15+6*x));
  const de=u>0&&u<r?30*x*x*(1-x)*(1-x)/r:0,dd=u>0&&u<r?(60*x-180*x*x+120*x*x*x)/(r*r):0;
- const f=1.2*Math.sin(u*1.55)+.38*Math.sin(u*2.75),df=1.86*Math.cos(u*1.55)+1.045*Math.cos(u*2.75),ddf=-2.883*Math.sin(u*1.55)-2.87375*Math.sin(u*2.75),scale=index===0?.72:index===1?-.60:.06;
+ const f=.32*Math.sin(u*1.2)+.10*Math.sin(u*2.1),df=.384*Math.cos(u*1.2)+.21*Math.cos(u*2.1),ddf=-.4608*Math.sin(u*1.2)-.441*Math.sin(u*2.1),scale=index===0?.72:index===1?-.60:.06;
  return {distance:scale*e*f,velocity:scale*(de*f+e*df),acceleration:scale*(dd*f+2*de*df+e*ddf)};
 }
 export function driverMotion(shot,t,index){
   const local=t-shot.start;
   if(shot.id==='exhaust-exit'||shot.id==='grid-guide'){
-    const q=t-shot.travelStart,m=boostMotion(q-(index===0?.45:0)),p=pursuitMotion(q,index);
+    const q=t-shot.travelStart,m=boostMotion(q-(index===0?.45:0),index===0?{a:17.5,length:16.2/17.5}:{}),p=pursuitMotion(q,index);
     return {distance:m.distance+(index===0?5.3:0)+p.distance,velocity:m.velocity+p.velocity,acceleration:m.acceleration+p.acceleration,flame:m.flame};
   }
   if(shot.id==='city-circuit')return index===0?

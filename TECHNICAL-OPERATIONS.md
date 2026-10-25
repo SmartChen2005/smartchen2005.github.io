@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Separate hover preview from click playback and smooth the grid entry
+
+- Hover/focus now stops inside the first setup at 2.18s. Click/Enter/Space starts the complete film and hides the sentence without changing layout; completion/Escape/failure restore it, with keyboard focus restoration. The first camera places both cars below/right of the native sentence. Movie/preview lifecycle regressions preserve one RAF and graphics/preference/background handling.
+- Advanced grid/path/road/camera entry by about 0.5s. Replaced the straight temporary plane with curved strips, instanced paving and kerbs on the grid centerline; world-depth alpha dissolves far paving first. Anchored growing portals to the floor, removing floating bars in front of the cars.
+- Integrated each offset lane's actual arc distance, so inner lines naturally gain progress at equal road speed. Softened MINI's delayed acceleration slightly and reduced unrelated pace oscillations. Extended route inversion, constant road speed, lane advantage, first-shot text clearance and portal anchoring checks.
+- Updated design/QA records; browser evidence and actual validation are in `tools/MOTOR-RACE-QA.md`. No added dependency or external production asset.
+
 ### 2026-10-25 — Bend the star-grid chase and refine both rear identities
 
 - Replaced the final locked pace with integrated out-of-phase driver corrections; retained the causal Z4/MINI ignition delay and continuous final join. Added one shared curved/banked 3D path for vehicles, portals, instanced rail segments and a gradually rising right-quarter camera. The third city camera is now oblique.

@@ -10,7 +10,7 @@ function identity(id, tagName = 'BUTTON') {
     keyboardFocus: false,
     addEventListener(type, fn) { this.handlers[type] = fn; },
     setAttribute(key, value) { this.attributes[key] = value; },
-    matches() { return this.keyboardFocus; }, focus() {},
+    matches(selector) { return selector===':hover'?false:this.keyboardFocus; }, focus() {},
     getBoundingClientRect: () => ({ left: 150, top: 330, width: 140, height: 60 }) };
 }
 const name = identity('name'), games = identity('games', 'A'), photo = identity('photo', 'A'), cars = identity('cars');
@@ -22,9 +22,9 @@ const portrait = { style: style(), isConnected: true, hidden: false, offsetHeigh
 const anchor = { before() { portrait.isConnected = true; } };
 const dock = { hidden: true, contains: () => false };
 const sentence = { getBoundingClientRect: () => ({ top: 330, bottom: 390 }) };
-const nodes = { '.composition': composition, '.portrait-full': portrait, '.identity-name': name,
+const nodes = { '.identity-cars': cars, '.composition': composition, '.portrait-full': portrait, '.identity-name': name,
   '.identity-games': games, '.identity-photo': photo, '.business-card-dock': dock, '.sentence': sentence };
-let cardOpen = false, keyboardEntries = 0, navigate, navigatePhoto, photoBlocksGame;
+let cardOpen = false, keyboardEntries = 0, navigate, navigatePhoto, photoBlocksGame, playback,plays=0;
 const gameController = { active: false }, photoController = { active: false };
 const sandbox = {
   document: { body: { dataset: {} }, documentElement: { style: style() }, fonts: { ready: { then() {} } },
@@ -35,7 +35,7 @@ const sandbox = {
   getComputedStyle: () => ({ width: '282px' }), innerWidth: 1280, innerHeight: 720,
   clearTimeout() {}, setTimeout: () => 1,
   ResizeObserver: class { observe() {} },
-  createScenes: () => ({ setWorld() {}, resize() {}, point() {} }),
+  createScenes: (_,options) => {playback=options.onMotorPlayback;return {setWorld(){},resize(){},point(){},playCars(){plays++;playback(true,'start');},stopCars(){playback(false,'cancel');}};},
   createBusinessCard: () => ({ show(keyboard) {
     if (!cardOpen && keyboard) keyboardEntries++;
     cardOpen = true; dock.hidden = false;
@@ -79,7 +79,8 @@ dispatch(cars, 'pointerenter');
 assert.equal(world(), 'name', 'Identity previews must not replace an active Photographer transition');
 photoController.active = false;
 dispatch(cars, 'pointerleave');
-dispatch(cars, 'click'); assert(dock.hidden); assert.equal(world(), 'cars');
+dispatch(cars, 'click'); assert(dock.hidden); assert.equal(world(), 'cars');assert.equal(plays,1);assert.equal(sandbox.document.body.dataset.motorPlaying,'true');
+dispatch(games,'pointerenter');assert.equal(world(),'cars','An active film cannot switch to a hover world');playback(false,'complete');assert.equal(sandbox.document.body.dataset.motorPlaying,undefined);assert.equal(world(),'','Completion restores the normal page when no trigger is hovered');
 dispatch(name, 'pointerenter'); assert(dock.hidden, 'Clicking another identity must clear the old card selection');
 dispatch(name, 'pointerleave');
 dispatch(name, 'click', 0); assert(!dock.hidden); assert.equal(keyboardEntries, 1);
@@ -90,4 +91,6 @@ dispatch(name, 'click'); events.get('keydown')({ key: 'Escape' }); assert(dock.h
 dispatch(name, 'click'); events.get('pointerdown')({ target: { closest: () => null } }); assert(dock.hidden);
 dispatch(name, 'click'); navigate(); assert(dock.hidden); assert.equal(world(), '');
 dispatch(name, 'click'); navigatePhoto(); assert(dock.hidden); assert.equal(world(), '');
-console.log('Passed: expanded arrival; first click closes; portrait-only hover; click pins portrait and card; all temporary previews restore both; explicit selection/dismissal clears both; keyboard restoration preserves focus; Photographer transition integration, mutual exclusion and restoration.');
+dispatch(cars,'click',0);assert.equal(sandbox.document.body.dataset.motorPlaying,'true');events.get('keydown')({key:'Escape'});assert.equal(sandbox.document.body.dataset.motorPlaying,undefined);assert.equal(world(),'');
+dispatch(cars,'click',0);playback(false,'complete');assert.equal(world(),'cars','Keyboard completion restores the car preview and trigger');assert.equal(sandbox.document.body.dataset.motorPlaying,undefined);
+console.log('Passed: expanded arrival; first click closes; portrait-only hover; click pins portrait and card; all temporary previews restore both; click-only movie lock / complete / cancel / keyboard return; explicit selection/dismissal clears both; keyboard restoration preserves focus; Photographer transition integration, mutual exclusion and restoration.');

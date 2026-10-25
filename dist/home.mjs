@@ -1,4 +1,4 @@
-import { createScenes } from './home-scenes.mjs?rev=20261025-orbit';
+import { createScenes } from './home-scenes.mjs?rev=20261025-preview';
 import { installGameTransition } from './home-game-transition.mjs';
 import { installPhotoTransition } from './home-photo-transition.mjs?rev=20261024-shared-entry';
 import { createBusinessCard } from './home-business-card.mjs';
@@ -36,9 +36,19 @@ portrait.addEventListener('transitionend', event => {
   if (event.propertyName === 'height' && !portraitActive) retirePortrait();
 });
 retirePortrait();
+let motorPlaying=false, motorKeyboard=false;
+const carTrigger=document.querySelector('.identity-cars');
+function motorPlayback(next,reason){
+  motorPlaying=next;
+  if(next)document.body.dataset.motorPlaying='true';else delete document.body.dataset.motorPlaying;
+  if(!next&&reason==='complete'){
+    pinned=null;hovered=hover.matches&&carTrigger.matches(':hover')?'cars':null;focused=motorKeyboard?'cars':null;render();
+    if(motorKeyboard)carTrigger.focus({preventScroll:true});motorKeyboard=false;
+  }
+}
 const scenes = createScenes(document.querySelector('.kinetic-scene'), {
   motor: document.querySelector('.motor-scene'), exhibition: document.querySelector('.photo-scene'),
-  foreground: document.querySelector('.motor-foreground'),
+  foreground: document.querySelector('.motor-foreground'), onMotorPlayback: motorPlayback,
 });
 let pinned = 'name', hovered = null, focused = null;
 let nameCardOpen = true, cardKeyboard = false;
@@ -53,7 +63,7 @@ const transitioning = () => gameTransition.active || photoTransition.active;
 
 function render() {
   if (transitioning()) return;
-  const active = hovered ?? focused ?? pinned ?? '';
+  const active = motorPlaying?'cars':hovered ?? focused ?? pinned ?? '';
   setPortrait(active === 'name');
   composition.dataset.active = active;
   document.body.dataset.world = active;
@@ -94,17 +104,21 @@ for (const identity of identities) {
     }
     nameCardOpen = false;
     cardKeyboard = false;
+    if(identity.dataset.identity==='cars'){
+      pinned='cars';hovered=null;focused=null;motorKeyboard=event.detail===0;render();scenes.playCars();return;
+    }
     pinned = pinned === identity.dataset.identity ? null : identity.dataset.identity;
     hovered = null;
     focused = null;
     render();
   });
 }
-function clear() { nameCardOpen = false; pinned = null; hovered = null; focused = null; render(); }
+function clear() { scenes.stopCars(); nameCardOpen = false; pinned = null; hovered = null; focused = null; render(); }
 document.addEventListener('keydown', (event) => {
   if (event.key !== 'Escape') return;
-  const fromCard = cardDock.contains(document.activeElement);
+  const fromCard = cardDock.contains(document.activeElement), fromMotor=motorPlaying&&motorKeyboard;
   clear();
+  if(fromMotor)carTrigger.focus({preventScroll:true});
   if (fromCard) nameTrigger.focus({ preventScroll: true });
 });
 document.addEventListener('pointerdown', (event) => { if (!event.target.closest('.identity, .business-card-dock')) clear(); });

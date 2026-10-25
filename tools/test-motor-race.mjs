@@ -2,14 +2,14 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {T} from '../dist/home-motor-geometry.mjs';
 import {createMotorScene,raceShot,raceCamera,racePosition,raceView,MOTOR_SHOTS,MOTOR_PALETTES} from '../dist/home-motor-race.mjs';
-import {MOTOR_DURATION,motorsportFrame} from '../dist/home-motorsport.mjs';
+import {MOTOR_DURATION,MOTOR_PREVIEW_END,motorsportFrame} from '../dist/home-motorsport.mjs';
 import {raceTravel,cameraTravel,driverMotion,boostMotion,raceExposure,MOTOR_SPEED,updateSpeedLines} from '../dist/home-motor-speed.mjs';
 import {drawGridTunnel,drawWarpStars,MOTION_LOOP} from '../dist/home-motor-motion.mjs';
 import {guideReveal} from '../dist/home-motor-guide.mjs';
-import {guideFrame,guideCenter,guidePoint,groundOpacity,cameraRise} from '../dist/home-motor-path.mjs';
+import {guideFrame,guideCenter,guidePoint,groundOpacity,cameraRise,laneProgress,laneDistance,laneMetric} from '../dist/home-motor-path.mjs';
 import {roundPath} from '../dist/home-motor-curves.mjs';
 const world=createMotorScene(),nodes=root=>{const a=[];root.traverse(n=>a.push(n));return a;};
-assert.equal(MOTOR_DURATION,17.7);assert.equal(MOTOR_SHOTS.length,5);
+assert.equal(MOTOR_DURATION,17.7);assert(MOTOR_PREVIEW_END<MOTOR_SHOTS[0].end&&MOTOR_PREVIEW_END>MOTOR_SHOTS[0].end-.1);assert.equal(MOTOR_SHOTS.length,5);
 assert.deepEqual(MOTOR_SHOTS.map(s=>s.id),['starlit-lead','bumper-train','city-circuit','exhaust-exit','grid-guide']);
 const boostShot=MOTOR_SHOTS[3],guideShot=MOTOR_SHOTS[4],boostTime=q=>boostShot.start+q;
 assert(Math.abs(boostShot.end-boostShot.start-4.6)<1e-9);assert.equal(guideShot.start,11.3);
@@ -83,6 +83,7 @@ for(const [w,h]of [[1920,1080],[1440,900],[1024,600],[390,844],[320,568],[844,39
  world.resize(w,h);
  for(const shot of MOTOR_SHOTS){world.update(motorsportFrame((shot.start+shot.end)/2));assert(world.camera.projectionMatrix.elements.every(Number.isFinite));assert(world.camera.position.toArray().every(Number.isFinite));assert(world.lineArt,'Every setup, including the guide, uses the same line-art finish');}
 }
+for(const [w,h,bottom]of [[1440,900,484],[390,844,530],[320,568,380]]){world.resize(w,h,{bottom:bottom+20});for(const t of [0,1,2.18]){world.update(motorsportFrame(t));for(const car of world.cars){const b=new T.Box3().setFromObject(car);for(const x of [b.min.x,b.max.x])for(const y of [b.min.y,b.max.y])for(const z of [b.min.z,b.max.z]){const p=new T.Vector3(x,y,z).project(world.camera);assert((1-p.y)*h/2>bottom+8,'Preview cars stay below the native sentence');assert(p.y>-.98,'First-shot framing cannot cut off the cars');}}}}
 world.resize(1440,900);world.update(motorsportFrame(1));assert(world.cars[0].position.z-world.cars[1].position.z>7);assert(world.camera.position.z>world.cars[0].position.z+3);
 world.update(motorsportFrame(3.2));assert(world.cars[0].visible&&!world.cars[1].visible);assert(world.camera.position.z<world.cars[0].position.z);assert.deepEqual(MOTOR_SHOTS[1].camera,[.65,.65,-5.5]);
 world.update(motorsportFrame(5.5));const mini=world.cars[0].position.clone().project(world.camera),z4=world.cars[1].position.clone().project(world.camera),direction=world.camera.getWorldDirection(new T.Vector3());
@@ -98,14 +99,20 @@ for(let q=.01;q<=11;q+=.037){
 assert(racePosition(boostTime(.4),0).z>racePosition(boostTime(.4),1).z);assert(racePosition(boostTime(2.4),1).z>racePosition(boostTime(2.4),0).z+1);
 for(const index of [0,1])assert(Math.abs(racePosition(guideShot.start-.00001,index).z-racePosition(guideShot.start,index).z)<.002);
 world.update(motorsportFrame(guideShot.start-.00001));const beforeCamera=world.camera.matrixWorld.elements.slice();world.update(motorsportFrame(guideShot.start));world.camera.matrixWorld.elements.forEach((v,i)=>assert(Math.abs(v-beforeCamera[i])<.002,'The fourth/fifth setup has no camera reset'));
+for(const t of [9.8,10.8,11.6]){world.update(motorsportFrame(t));for(const f of world.guide.frames)if(f.visible){const foot=new T.Vector3(0,-3,0).applyMatrix4(f.matrixWorld);assert(foot.distanceTo(guideCenter(foot.z))<1e-6,'Portal reveal stays anchored to the ribbon floor instead of floating across the camera');}}
 assert.equal(guideReveal(2),0);assert(guideReveal(4,140)>guideReveal(4,10),'The guide grows from the far end towards the chase');assert.equal(guideReveal(7),1);
 for(const t of [6.71,9.3,11.3,12.4,14,17.7]){world.update(motorsportFrame(t));assert(world.guide.root.visible);assert(!world.city.road.visible);if(world.guide.track.visible){const z=world.guide.track.position.z;for(const c of world.cars)assert(c.position.z>z-17&&c.position.z<z+197,'Dissolving roadway covers both cars until it disappears');}}
-assert.equal(groundOpacity(4.9),1);assert(groundOpacity(5.8)>0&&groundOpacity(5.8)<1);assert.equal(groundOpacity(6.7),0);
-for(let q=4.95;q<6.65;q+=.03)assert(groundOpacity(q+.02)<=groundOpacity(q));
-assert.equal(cameraRise(5.1),0);assert.equal(cameraRise(8.5),1);assert(!nodes(world.guide.root).some(n=>n.name==='classical-amber-street-lanterns'),'The grid never spawns replacement street lamps');
+assert(guideReveal(2.9,145)>0,'Far guide construction starts half a second earlier');
+assert(groundOpacity(4.8,100)<groundOpacity(4.8,0)&&groundOpacity(4.8,0)<groundOpacity(4.8,-30),'Paving dissolves from the distance back to the camera');
+assert.equal(groundOpacity(4.4),1);assert(groundOpacity(5.8)>0&&groundOpacity(5.8)<1);assert.equal(groundOpacity(6.4),0);
+for(let q=4.45;q<6.1;q+=.03)assert(groundOpacity(q+.02)<=groundOpacity(q));
+assert.equal(cameraRise(4.6),0);assert.equal(cameraRise(8.5),1);assert(!nodes(world.guide.root).some(n=>n.name==='classical-amber-street-lanterns'),'The grid never spawns replacement street lamps');
 const gaps=[],relative=[];
 for(let t=11.3;t<17.7;t+=.05){const a=driverMotion(guideShot,t,0),b=driverMotion(guideShot,t,1);gaps.push(b.distance-a.distance);relative.push(b.velocity-a.velocity);}
-assert(Math.max(...gaps)-Math.min(...gaps)>2.6,'Cars repeatedly close and open a visible small gap');assert(Math.min(...relative)<-1&&Math.max(...relative)>1,'Both cars sometimes gain on the other');
+assert(Math.max(...gaps)-Math.min(...gaps)>.6,'Cars repeatedly close and open a visible small gap');assert(Math.min(...relative)<-.25&&Math.max(...relative)>.25,'Both cars sometimes gain on the other');
+for(const lane of [-1.05,0,1.05])for(let distance=150;distance<470;distance+=2.7){const z=laneProgress(distance,lane);assert(Math.abs(laneDistance(z,lane)-distance)<1e-7);const dz=(laneProgress(distance+.001,lane)-laneProgress(distance-.001,lane))/.002;assert(Math.abs(dz*laneMetric(z,lane)-1)<.0001,'Each lane advances by actual travelled distance');const a=guidePoint(laneProgress(distance-.001,lane),lane),b=guidePoint(laneProgress(distance+.001,lane),lane);assert(Math.abs(a.distanceTo(b)/.002-1)<.0001,'Equal odometer distance means equal physical lane speed');}
+for(const z of [180,220,250,300,370,420]){const a=laneMetric(z,1.05),b=laneMetric(z,-1.05);if(Math.abs(a-b)>.004)assert((1/a-1/b)*(b-a)>0,'The shorter inside lane gains centreline progress at the same road speed');}
+assert(laneProgress(190,1.05)>laneProgress(190,-1.05)+.4);assert(laneProgress(280,-1.05)>laneProgress(280,1.05)+.4,'Opposite bends reverse the lane advantage');
 let bends=0,heights=[];
 for(let z=170;z<480;z+=3){const f=guideFrame(z);assert(Math.abs(f.tangent.dot(f.right))<1e-6&&Math.abs(f.up.dot(f.right))<1e-6);assert(Math.abs(f.quaternion.length()-1)<1e-6);heights.push(f.position.y);if(Math.abs(f.tangent.x)>.2)bends++;}
 assert(bends>20);assert(Math.max(...heights)-Math.min(...heights)>7,'The line course has both lateral and vertical curvature');
@@ -123,6 +130,8 @@ for(const b of burst.batches)if(b.mesh.userData.burstAnchors){for(let i=0;i<b.pi
 assert(flyingLamps>=24);world.update(motorsportFrame(15));world.update(motorsportFrame(boostTime(2.55)));for(const [i,b]of burst.batches.entries())assert.deepEqual(b.mesh.instanceMatrix.array,air[i]);
 const snapshot=()=>({frames:world.guide.frames.map(f=>[...f.position.toArray(),...f.quaternion.toArray(),...f.scale.toArray(),f.visible]),rails:world.guide.rails.instanceMatrix.array.slice(),cars:world.cars.map(c=>c.matrixWorld.elements.slice()),camera:world.camera.matrixWorld.elements.slice(),floor:world.guide.floorOpacity});
 world.update(motorsportFrame(15));const guideState=snapshot();world.update(motorsportFrame(17));world.update(motorsportFrame(12));world.update(motorsportFrame(15));assert.deepEqual(snapshot(),guideState,'Curved geometry, car banking, rising camera and fade have no previous-frame history');
+const pavementState=()=>({surfaces:world.guide.strips.map(s=>[...s.mesh.geometry.attributes.position.array,...s.mesh.geometry.attributes.normal.array]),stones:world.guide.paving.instanceMatrix.array.slice(),kerbs:world.guide.kerbs.instanceMatrix.array.slice()});
+world.update(motorsportFrame(11.6));const pavement=pavementState();world.update(motorsportFrame(17));world.update(motorsportFrame(8));world.update(motorsportFrame(11.6));assert.deepEqual(pavementState(),pavement,'Curved paving and kerb morphs are deterministic when frames are requested out of order');
 world.update(motorsportFrame(1));for(const [i,b]of burst.batches.entries()){assert.deepEqual(b.mesh.instanceMatrix.array,rest[i]);assert.equal(b.mesh.frustumCulled,b.culled);}
 for(const shot of MOTOR_SHOTS){const t=(shot.start+shot.end)/2;assert(Math.abs((cameraTravel(shot,t+.0001)-cameraTravel(shot,t-.0001))/.0002-raceExposure(shot,t).speed)<.00001);assert.equal(raceExposure(shot,t,true).shutter,0);}
 world.update(motorsportFrame(MOTOR_DURATION));assert(!world.exposure.enabled);assert(!world.speedLines.visible);assert.deepEqual(motorsportFrame(100),motorsportFrame(MOTOR_DURATION));

@@ -1,4 +1,27 @@
-# Car Enthusiast — Curved star-grid chase and rear details, 2026-10-25
+# Car Enthusiast — First-shot preview, click film and natural grid entry, 2026-10-25
+
+Started from a3f1869 on clean master. The latest user instruction explicitly changes interaction: the sentence remains for hover/focus preview, but disappears during deliberate full playback. Vehicle art, five cameras, 17.7s film, 4.6s exhaust, graphite/white/amber inks and rear details remain.
+
+## Changes
+
+- `home-motorsport.mjs` now separates first-shot preview from full playback. Hover/focus advances to 2.18s / starlit-lead and stops its RAF; it never enters the second setup. Click/tap/Enter/Space restarts the complete film. The playback callback lets `home.mjs` set the sentence's scoped visibility, without removing layout or making main inert. Completion returns to the first-shot preview if hovered/focused, otherwise the quiet page. Escape cancels and restores keyboard trigger focus; graphics/preference handling clears playback visibility.
+- Reframed the first camera up/left, putting vehicles below/right of the unchanged sentence. A measured phone sentence band can shift the camera farther up to keep wrapped text clear. Bounds/projection tests cover the complete preview interval, including a tall sentence on a short phone viewport.
+- Moved guide/path/paving/camera entry about 0.5s earlier without shortening the requested exhaust duration or film. The former straight road now consists of dynamic curved surface strips, instanced stones and kerbs following the guide's own frame. Kerbs widen towards the grid; a world-depth mask dissolves distant paving before nearby paving, gradually revealing stars. The central-road fade runs 11.15–12.8s, with a depth-dependent lead/lag. Growing portal frames are anchored at the floor, preventing a floating horizontal bar across the cars during reveal.
+- Each actual offset lane has a cached Simpson-integrated arc table and monotone Hermite inversion. The same travelled distance therefore means equal physical road speed; an inside lane reaches farther around a bend because its route is shorter. Opposite bends reverse the gain. Tables prepare before playback, avoiding a cold-cache calculation in the transition. Wheel rotation uses the same travelled distance, while camera progress follows the center lane. MINI retains its 0.45s response but uses a slightly softer, longer ramp; both reach 16.2m/s extra terminal speed. Reduced minor throttle corrections keep the lane geometry responsible for the cornering gain.
+
+## Actual verification
+
+Passed motor, home lifecycle/state, photo/game entrance regressions, site validation and strict dist audit (zero findings). Added first-shot stop / full-play / restore / cancel behavior, movie world locking, route inversion, constant actual lane speed, opposite inner-lane gains, first-camera text clearance and floor-anchored reveal checks. Existing path/cut continuity, stopped/reduced-motion/background handling, geometry/tyres, six viewports, deterministic out-of-order state and Scenario motif seams remain covered.
+
+Chrome verified the actual homepage at 1440×900: keyboard focus starts an unpinned preview that reaches preview-hold / starlit-lead with the sentence visible. Space hides the sentence and starts film mode from the beginning. Both keyboard and actual mouse playback complete and restore the first preview; after a mouse launch the trigger is still hovered and the main sentence is visible. Escape during playback restores the sentence and car-trigger focus. Native sentence bounds remain x=184.0625, y=416.17709, width=1071.86462, height=67.64584; main has no inert ancestor. No warning/error was captured.
+
+Reviewed the shared curved road at 11.6s, fading paving at 12.3s and full preview playback through 17.70s / grid-guide. A temporary layer selector isolated the reveal and led to the floor-anchor correction; it is not part of the product. At 390×844 the held native preview has vehicles below the sentence and no horizontal overflow. These are desktop browser viewport checks, not physical touch, Safari or FPS measurements.
+
+Evidence in the task artifact directory: `preview-first-framing.png`, `preview-curved-road-transition.png`, `preview-last-pavement.png`, `preview-native-film-no-sentence.png`, `preview-mobile-hold.png`, `preview-final.png`. Review fixtures are removed and temporary viewport overrides reset before commit.
+
+---
+
+# Previous: Curved star-grid chase and rear details, 2026-10-25
 
 Started from d8055be on clean master. The five-shot / 17.7s edit, 4.6s exhaust segment, fixed native sentence, hover/focus/pinning controller and first two camera compositions remain. This update replaces the final fixed gap, straight tunnel, persistent road/lamps, vertical third camera and lighter gray.
 

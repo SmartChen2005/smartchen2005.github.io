@@ -1,10 +1,10 @@
-import { createMotorsport } from './home-motorsport.mjs?rev=20261025-orbit';
+import { createMotorsport } from './home-motorsport.mjs?rev=20261025-preview';
 import { createExhibition } from './home-exhibition.mjs';
 
 // Canvas-only scenery. It never captures input or changes the sentence's layout.
-export function createScenes(canvas, { motor: motorCanvas, exhibition: galleryRoot, foreground }) {
+export function createScenes(canvas, { motor: motorCanvas, exhibition: galleryRoot, foreground, onMotorPlayback }) {
   const context = canvas.getContext('2d');
-  const motor = createMotorsport(motorCanvas, { foreground });
+  const motor = createMotorsport(motorCanvas, { foreground, onPlayback: onMotorPlayback });
   const gallery = createExhibition(galleryRoot);
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const colors = getComputedStyle(document.documentElement);
@@ -165,5 +165,5 @@ export function createScenes(canvas, { motor: motorCanvas, exhibition: galleryRo
       balls: balls.map(ball => ({ ...ball, trail: ball.trail.map(point => ({ ...point })) })) };
   }
   function releaseGame() { captured = false; world = ''; start(); }
-  return { setWorld, resize, point, captureGame, releaseGame };
+  return { setWorld, resize, point, captureGame, releaseGame, playCars(){setWorld('cars');motor.play();}, stopCars(){motor.stop();} };
 }

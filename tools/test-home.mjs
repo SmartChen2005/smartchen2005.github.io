@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import { exhibitionLayout } from '../dist/home-exhibition.mjs';
-import { motorsportFrame, MOTOR_DURATION } from '../dist/home-motorsport.mjs';
+import { motorsportFrame, MOTOR_DURATION, MOTOR_PREVIEW_END } from '../dist/home-motorsport.mjs';
 import { raceShot } from '../dist/home-motor-race.mjs';
 
 // The wall must never crop, overlap or cross the sentence, even on short screens.
@@ -24,7 +24,7 @@ assert.deepEqual([0,1,MOTOR_DURATION].map(t=>motorsportFrame(t).phase),['opening
 assert(motorsportFrame(100).idle);
 
 const callbacks = new Map(), mediaHandlers = [], forcedHandlers = [], pageHandlers = [], timers = new Map();
-let id = 0, now = 0, drawings = 0;
+let id = 0, now = 0, drawings = 0;const painted=[];
 const media = { matches: false, addEventListener: (_, fn) => mediaHandlers.push(fn) };
 const forced = { matches: false, addEventListener: (_, fn) => forcedHandlers.push(fn) };
 const document = { hidden: false, body: { dataset: {} }, documentElement: {}, addEventListener: (type, fn) => {
@@ -41,7 +41,7 @@ const motorCanvas = { getContext: () => context, dataset: {}, classList: classLi
 const prints = Array.from({length:4},()=>({style:{},classList:classList(),querySelector:()=>({complete:true,naturalWidth:6000,getAttribute:name=>name==='width'?'6000':'4000'})}));
 const gallery = { querySelectorAll:()=>prints };
 const sandbox = {
-  document, console, Math, raceShot, createMotorWorld:()=>({available:true,ready:true,resize(){},paint(frame){assert(Number.isFinite(frame.t));drawings++;}}), innerWidth:1440,innerHeight:900,devicePixelRatio:1.5,
+  document, console, Math, raceShot, createMotorWorld:()=>({available:true,ready:true,resize(){},paint(frame){assert(Number.isFinite(frame.t));drawings++;painted.push({...frame});}}), innerWidth:1440,innerHeight:900,devicePixelRatio:1.5,
   matchMedia:query=>query.includes('forced-colors')?forced:media,
   getComputedStyle:()=>({getPropertyValue:key=>({'--paper':'#f5f5f3','--ink':'#292a27','--mechanical':'#080808'})[key]}),
   requestAnimationFrame:fn=>{callbacks.set(++id,fn);return id;}, cancelAnimationFrame:key=>callbacks.delete(key),
@@ -60,7 +60,8 @@ function step(count=1) {
 }
 scene.setWorld('games');step(240);scene.point(1,0);step(120);assert.equal(callbacks.size,1);
 scene.setWorld('cars');step(75);assert.equal(motorCanvas.dataset.phase,'city');
-step(1300);assert.equal(motorCanvas.dataset.phase,'idle');
+step(300);assert.equal(motorCanvas.dataset.phase,'preview-hold');assert.equal(motorCanvas.dataset.shot,'starlit-lead');assert.equal(callbacks.size,0,'Hover stops within the first camera');
+scene.playCars();assert.equal(motorCanvas.dataset.playback,'film');assert.equal(motorCanvas.dataset.phase,'opening');step(1300);assert(painted.some(f=>f.shot==='grid-guide'));assert.equal(motorCanvas.dataset.phase,'preview-hold');
 assert.equal(callbacks.size,0,'The race must stop requesting frames when it finishes');
 scene.setWorld('');assert.equal(callbacks.size,0);assert.equal(document.body.dataset.carExit,'true');
 for(const fn of timers.values())fn();timers.clear();assert.equal(document.body.dataset.carExit,undefined);
@@ -71,13 +72,14 @@ assert(!motorCanvas.classList.contains('is-exiting'), 'Switching identities canc
 assert.equal(document.body.dataset.carExit, undefined);
 scene.setWorld('photo');assert.equal(callbacks.size,0);assert(prints.every(p=>p.style.width));
 scene.setWorld('cars');media.matches=true;mediaHandlers.forEach(fn=>fn());
-assert.equal(callbacks.size,0);assert.equal(motorCanvas.dataset.phase,'idle');
+assert.equal(callbacks.size,0);assert.equal(motorCanvas.dataset.phase,'preview-hold');
 const before=drawings;scene.setWorld('games');assert(drawings>before);assert.equal(callbacks.size,0);
 media.matches=false;mediaHandlers.forEach(fn=>fn());assert.equal(callbacks.size,1);
 scene.setWorld('cars');step(30);
 forced.matches=true;forcedHandlers.forEach(fn=>fn());
 assert.equal(callbacks.size,0,'Forced colors suspend the car drawing');
 forced.matches=false;forcedHandlers.forEach(fn=>fn());assert.equal(callbacks.size,1);
+scene.playCars();
 document.hidden=true;pageHandlers.forEach(fn=>fn());assert.equal(callbacks.size,0);
 const hiddenPhase=motorCanvas.dataset.phase;step(60);assert.equal(motorCanvas.dataset.phase,hiddenPhase);
 document.hidden=false;pageHandlers.forEach(fn=>fn());assert.equal(callbacks.size,1,'Visible unfinished race resumes once');
@@ -95,14 +97,16 @@ scene.setWorld('');assert.equal(callbacks.size,0);
 const delayedWorld={available:true,ready:false,resize(){},paint(){}};
 const delayedCanvas={dataset:{},classList:classList()};
 const foregroundCanvas={dataset:{},classList:classList()};
-const delayed=sandbox.createMotorsport(delayedCanvas,{foreground:foregroundCanvas,worldFactory:()=>delayedWorld});
+const playbackEvents=[];
+const delayed=sandbox.createMotorsport(delayedCanvas,{foreground:foregroundCanvas,worldFactory:()=>delayedWorld,onPlayback:(state,reason)=>playbackEvents.push([state,reason])});
 delayed.resize(1440,900);delayed.setActive(true);step(30);
 assert.equal(delayedCanvas.dataset.phase,undefined,'The movie clock waits until the graphics world is ready');
 delayedWorld.ready=true;step();assert.equal(delayedCanvas.dataset.phase,'opening');
-delayedWorld.available=false;delayedWorld.onUnavailable();
+delayed.play();assert.equal(playbackEvents.at(-1)[0],true);
+delayedWorld.available=false;delayedWorld.onUnavailable();assert.equal(playbackEvents.at(-1)[0],false);assert.equal(playbackEvents.at(-1)[1],'unavailable','Graphics failure clears full-play state so the sentence can restore');
 assert.equal(callbacks.size,0,'A lost graphics context stops the movie');
 assert(!foregroundCanvas.classList.contains('is-active'),'Graphics failure also retires the transparent foreground');
 assert.equal(document.body.dataset.motorImmersive,undefined,'The car scene never makes the native homepage immersive');
 assert.equal(document.body.dataset.motorFallback,'true');
 delayed.setActive(false);assert.equal(document.body.dataset.motorFallback,undefined);
-console.log('Passed: four uncropped non-overlapping prints; 17.7s five-shot city phases, settle and restart; finite canvas geometry; stopped idle loop; reduced motion; background suspension.');
+console.log('Passed: four uncropped non-overlapping prints; first-shot hover hold; deliberate 17.7s film, completion and restart; finite canvas geometry; stopped idle loop; reduced motion; background suspension.');
