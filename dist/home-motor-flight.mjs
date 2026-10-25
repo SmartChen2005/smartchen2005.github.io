@@ -64,7 +64,7 @@ export function updateFlightTrail(mesh,mode,local,index,offset=0){
 export function updateGridTrace(line,local,index,offset){
   const positions=line.geometry.attributes.position.array,count=positions.length/3;
   for(let i=0;i<count;i++){
-    const pose=flightPose('grid',local-(1-i/(count-1))*.14,index);
+    const pose=flightPose('grid',local-(1-i/(count-1))*.19,index);
     v(offset,.69,-2.13).applyQuaternion(pose.quaternion).add(pose.position).toArray(positions,i*3);
   }
   line.geometry.attributes.position.needsUpdate=true;
@@ -83,9 +83,9 @@ export function createMotorCosmos(){
   const gridTraces=[];
   for(let index=0;index<2;index++)for(const offset of [-.5,.5]){
     const count=40,geo=new T.BufferGeometry(),colors=new Float32Array(count*3),color=new T.Color(index===0?'#a6e5ef':'#d5bde9');
-    for(let i=0;i<count;i++)color.clone().multiplyScalar(Math.pow(i/(count-1),1.5)).toArray(colors,i*3);
+    for(let i=0;i<count;i++)color.clone().multiplyScalar(Math.pow(i/(count-1),1.1)).toArray(colors,i*3);
     geo.setAttribute('position',new T.BufferAttribute(new Float32Array(count*3),3).setUsage(T.DynamicDrawUsage));geo.setAttribute('color',new T.BufferAttribute(colors,3));
-    const line=new T.Line(geo,new T.LineBasicMaterial({vertexColors:true,transparent:true,opacity:.46,blending:T.AdditiveBlending,depthWrite:false}));line.name='restrained-grid-tail';line.frustumCulled=false;root.add(line);gridTraces.push({line,index,offset});
+    const line=new T.Line(geo,new T.LineBasicMaterial({vertexColors:true,transparent:true,opacity:.74,blending:T.AdditiveBlending,depthWrite:false}));line.name='restrained-grid-tail';line.frustumCulled=false;root.add(line);gridTraces.push({line,index,offset});
   }
   const portals=new T.Group();portals.name='Grid Tunnel';root.add(portals);
   const mats=['#459cac','#8bf2f1','#8f7cce'].map(color=>new T.LineBasicMaterial({color,transparent:true,opacity:.65}));

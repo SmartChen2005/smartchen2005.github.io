@@ -1,4 +1,4 @@
-import { createMotorWorld, raceShot } from './home-motor-race.mjs?rev=20261025-lines';
+import { createMotorWorld, raceShot } from './home-motor-race.mjs?rev=20261025-stars';
 export const MOTOR_DURATION=21;
 const clamp=x=>Math.max(0,Math.min(1,x));
 export function motorsportFrame(seconds){

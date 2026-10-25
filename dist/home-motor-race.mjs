@@ -3,8 +3,8 @@ import { createMotorCar, setMotorCarSpace } from './home-motor-cars.mjs?rev=2026
 import { createMotorCity } from './home-motor-city.mjs?rev=20261025-cosmic';
 import { motorPalette, MOTOR_PALETTES } from './home-motor-palette.mjs?rev=20261025-cosmic';
 import { raceTravel, cameraTravel, driverMotion, raceExposure, createSpeedLines, updateSpeedLines, MOTOR_BACKGROUND_FRAGMENT, MOTOR_COMPOSITE_FRAGMENT } from './home-motor-speed.mjs?rev=20261025-cosmic';
-import { isFlight, flightPose, flightCamera, createMotorCosmos, SPACE_FINISH_FRAGMENT } from './home-motor-flight.mjs?rev=20261025-lines';
-import { isMotorLineShot, MOTOR_LINE_FRAGMENT } from './home-motor-line.mjs?rev=20261025-lines';
+import { isFlight, flightPose, flightCamera, createMotorCosmos, SPACE_FINISH_FRAGMENT } from './home-motor-flight.mjs?rev=20261025-stars';
+import { isMotorLineShot, MOTOR_LINE_FRAGMENT } from './home-motor-line.mjs?rev=20261025-stars';
 export { motorPalette, MOTOR_PALETTES };
 export const MOTOR_SHOTS=[
   {start:0,end:2.2,id:'medieval-solo',mode:'lane',camera:[2.6,1.35,7.6],target:[0,1.55,0],fov:51,palette:0},

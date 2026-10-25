@@ -96,6 +96,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Brighter Grid tails and stars above the line-drawn street
+
+- Raised the four Grid strokes' brightness and eased their taper; history grows from 0.14s to 0.19s (about 3.4m), retaining thin geometry and camera-safe placement.
+- Added stable directional stars and a few glints to the empty sky of the line-drawn exhaust shot. Depth/vehicle masks protect the drawing and flat surface interiors. Cameras, car motion, flame timing and all other setups retain their previous behavior. Browser evidence and actual checks are recorded in `tools/MOTOR-RACE-QA.md`.
+
 ### 2026-10-25 — Restrained Grid traces and a single line-drawn exhaust shot
 
 - Limited visible changes to the two user-selected setups. Grid gains four short tapered rear strokes. The exhaust/acceleration shot becomes pale contour drawing over one solid dark background, with normal/depth occlusion and no material fills; its phone crop pulls back enough to show the flare. Desktop composition, vehicle progress/backfire and all shot boundaries are preserved.

@@ -91,7 +91,7 @@ for(const local of [.1,.9,1.7]){
   assert(trace.line.isLine&&!trace.line.isMesh,'A grid tail is a stroke, never a filled ribbon');
   const a=trace.line.geometry.attributes.position.array,pose=flightPose('grid',local,trace.index),origin=new T.Vector3(trace.offset,.69,-2.13).applyQuaternion(pose.quaternion).add(pose.position);
   assert(new T.Vector3(...a.slice(-3)).distanceTo(origin)<1e-5,'Grid traces attach to each banked rear chassis');
-  assert(new T.Vector3(...a.slice(0,3)).distanceTo(origin)<3.1,'Grid tails remain restrained');
+  assert(new T.Vector3(...a.slice(0,3)).distanceTo(origin)<4.2,'Grid tails remain restrained');
   for(let i=0;i<a.length;i+=3)assert(new T.Vector3(...a.slice(i,i+3)).applyMatrix4(world.camera.matrixWorldInverse).z<-.08,'Traces cannot cross the camera');
  }
 }

@@ -1,4 +1,16 @@
-# Car Enthusiast — two selected shots, 2026-10-25
+# Car Enthusiast — brighter tails and a starry street sky, 2026-10-25
+
+Follow-up from 7d5735b, still limited to Grid Tunnel and the line-drawn exhaust shot. Grid retains four thin strokes but raises opacity from 0.46 to 0.74, softens the taper exponent from 1.5 to 1.1 and extends analytic history from 0.14s to 0.19s (roughly 3.4m). Existing tests retain rear attachment, four line-only primitives, restrained extent (under 4.2m) and near-plane safety at three moments.
+
+The exhaust drawing gains procedural pin stars and sparse larger glints in the empty sky. Star placement comes from world directions reconstructed with the current inverse view-projection, keeping translation through town from scrolling a screen overlay. Environment depth plus vehicle coverage masks keep stars behind the architecture/vehicles and off the road; the flat ink ground, contour shader, flame/acceleration timing and camera compositions remain. The sky uses the existing paper/accent inks; no external image or new asset dependency.
+
+Chrome inspected both updates at 1440×900 and 390×844. No narrow horizontal overflow was observed. Evidence: `stars-exhaust.png`, `stars-grid-traces.png`, `stars-mobile-exhaust.png`, `stars-mobile-grid.png` and `stars-mask-comparison.json` in the task artifact directory. Compared with the prior t=14.43 screenshot, a sky crop changes 14,729 RGB channels; blank road (100×60) and rear-body (30×10) patches remain pixel-identical, RGB [23,36,44]. Mixed crops containing contour edges are not identical (road MAD 0.329, rear-body MAD 1.14); no whole-frame or every-stroke pixel-equivalence claim is made.
+
+Passed motor regression, home lifecycle/state checks, site validation and strict dist audit (zero findings). The actual homepage still enters an unpinned preview by Tab, reaches the stopped finale and exits through Escape. Preview shader/model logs are clean. An existing `ViewTransition opt-in disabled` abort appeared when navigating from the disposable preview into the homepage; shared transition code is unchanged. These are viewport checks with desktop pointer settings, not physical touch/FPS guarantees. Preview controls are removed before commit and viewport overrides reset.
+
+---
+
+## Previous two-shot line revision, 2026-10-25
 
 This follow-up starts at b4a1865 and changes only the user's selected Grid Tunnel chase and exhaust/acceleration setup. All nine cut times, 21s duration, driver progress, desktop cameras, models, native 2D heading and identity controller remain. The earlier baseline record below is historical; this scoped note supersedes its filled rendering only for `exhaust-exit`.
 
