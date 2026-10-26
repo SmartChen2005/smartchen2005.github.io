@@ -1,4 +1,12 @@
-# Car Enthusiast — Shared narrow street width, 2026-10-25
+# Car Enthusiast — Another 0.4s off each middle shot, 2026-10-25
+
+Started from f9c06ee on clean master. Shot boundaries are now 0 / 1 / 2.4 / 3.9 / 8.5 / 18.2 / 19.85s: second shot 1.4s, third shot 1.5s. Every later shot shifts earlier by 0.8s with the same shot-local movement and durations. Shared road width, vehicle geometry, hover continuation, 4.6s exhaust, loop and front space pass remain.
+
+Motor/home regressions, site validation and strict dist audit (zero findings) passed. Existing solo-rear/oblique and street-bound regression samples now use the relevant shot end rather than the previous absolute timestamps. No new low-impact tests, dependency or author fixture. The actual homepage keyboard preview and Space activation were checked in Chrome; film hides the sentence, complete playback restores the moving first-shot preview and native trigger focus, with no warning/error captured. Timeline boundaries were reviewed in the diff; the controlled-clock regression covers preview/full-play completion. No live wall-clock timing claim.
+
+---
+
+# Previous: Shared narrow street width, 2026-10-25
 
 Started from 03914e0 on clean master. All street views now share the third shot's 4.6m two-car carriageway, rather than retaining 6.2m in the other street kit.
 

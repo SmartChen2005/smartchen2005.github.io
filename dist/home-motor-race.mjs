@@ -11,11 +11,11 @@ import {createOpeningStreet,openingCar,OPENING_SPEED} from './home-motor-opening
 export {motorPalette,MOTOR_PALETTES};
 export const MOTOR_SHOTS=[
  {start:0,end:1,id:'starlit-lead',mode:'lane',camera:[2.35,1.2,15.8],target:[-3.2,2.4,4],fov:62,palette:0},
- {start:1,end:2.8,id:'bumper-train',mode:'lane',camera:[.65,.65,-5.5],target:[0,1.35,5],fov:65,palette:0},
- {start:2.8,end:4.7,id:'city-circuit',mode:'circuit',camera:[1.9,13.5,-7.5],target:[0,.2,2.6],fov:54,palette:0},
- {start:4.7,end:9.3,travelStart:4.7,travelEnd:20.65,travelRamp:11,travelOffset:-36,id:'exhaust-exit',mode:'lane',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:0},
- {start:9.3,end:19,travelStart:4.7,travelEnd:20.65,travelRamp:11,travelOffset:-36,id:'grid-guide',mode:'tunnel',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:0},
- {start:19,end:20.65,travelStart:4.7,travelEnd:20.65,travelRamp:11,travelOffset:-36,id:'space-pass',mode:'space',camera:[0,.8,50],target:[0,.8,0],fov:48,palette:0},
+ {start:1,end:2.4,id:'bumper-train',mode:'lane',camera:[.65,.65,-5.5],target:[0,1.35,5],fov:65,palette:0},
+ {start:2.4,end:3.9,id:'city-circuit',mode:'circuit',camera:[1.9,13.5,-7.5],target:[0,.2,2.6],fov:54,palette:0},
+ {start:3.9,end:8.5,travelStart:3.9,travelEnd:19.85,travelRamp:11,travelOffset:-36,id:'exhaust-exit',mode:'lane',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:0},
+ {start:8.5,end:18.2,travelStart:3.9,travelEnd:19.85,travelRamp:11,travelOffset:-36,id:'grid-guide',mode:'tunnel',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:0},
+ {start:18.2,end:19.85,travelStart:3.9,travelEnd:19.85,travelRamp:11,travelOffset:-36,id:'space-pass',mode:'space',camera:[0,.8,50],target:[0,.8,0],fov:48,palette:0},
 ];
 export const raceShot=t=>MOTOR_SHOTS.find(s=>t<s.end)||MOTOR_SHOTS.at(-1);
 export const raceCamera=(t,input=.5)=>{const s=raceShot(t);return [s.camera[0]+(input-.5)*.12,s.camera[1],s.camera[2]];};

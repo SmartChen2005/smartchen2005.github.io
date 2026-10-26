@@ -96,6 +96,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Trim the second and third shots again
+
+- Shortened both middle street setups by another 0.4s: solo MINI rear is 1.4s and oblique city pair is 1.5s. Later setups move 0.8s earlier; full duration is 19.85s.
+- Kept later choreography and the shared 4.6m road intact. Motor/home regressions, site validation and strict dist audit passed; native browser playback/restoration is recorded in `tools/MOTOR-RACE-QA.md`.
+
 ### 2026-10-25 — One narrow carriageway across street cameras
 
 - Added one shared 2.3m road half-width for both city layouts and the dissolving exit. All street cameras now use the same 4.6m narrow two-car corridor, with matching building/lantern/bridge/kerb placement. Paving marks stay within its edges.

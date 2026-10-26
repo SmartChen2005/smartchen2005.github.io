@@ -9,10 +9,10 @@ import {guideReveal} from '../dist/home-motor-guide.mjs';
 import {guideFrame,guideCenter,guidePoint,groundOpacity,cameraRise,laneProgress,laneDistance,laneMetric,LOOP_START,LOOP_END,LOOP_RADIUS,LOOP_SHIFT,LOOP_RIGHT,GUIDE_EXIT,loopViewWeight} from '../dist/home-motor-path.mjs';
 import {roundPath} from '../dist/home-motor-curves.mjs';
 const world=createMotorScene(),nodes=root=>{const a=[];root.traverse(n=>a.push(n));return a;};
-assert.equal(MOTOR_DURATION,20.65);assert.equal(MOTOR_CLICK_LEAD,MOTOR_SHOTS[0].end);assert.equal(MOTOR_SHOTS.length,6);
+assert.equal(MOTOR_DURATION,19.85);assert.equal(MOTOR_CLICK_LEAD,MOTOR_SHOTS[0].end);assert.equal(MOTOR_SHOTS.length,6);
 assert.deepEqual(MOTOR_SHOTS.map(s=>s.id),['starlit-lead','bumper-train','city-circuit','exhaust-exit','grid-guide','space-pass']);
 const boostShot=MOTOR_SHOTS[3],guideShot=MOTOR_SHOTS[4],boostTime=q=>boostShot.start+q;
-assert(Math.abs(boostShot.end-boostShot.start-4.6)<1e-9);assert.equal(guideShot.start,9.3);
+assert(Math.abs(boostShot.end-boostShot.start-4.6)<1e-9);assert.equal(guideShot.start,8.5);
 const html=fs.readFileSync(new URL('../dist/index.html',import.meta.url),'utf8');
 assert.equal(html.match(/<h1 class="sentence">([\s\S]*?)<\/h1>/)[1].replace(/<[^>]*>/g,''),'Smart Chen is a (game) designer, filmmaker, and car enthusiast.');
 assert(!html.includes('motor-dialog'));assert(html.includes('motor-foreground" aria-hidden="true"'));assert(!world.scene.getObjectByName('physical-homepage-sentence'));
@@ -86,8 +86,8 @@ for(const [w,h]of [[1920,1080],[1440,900],[1024,600],[390,844],[320,568],[844,39
 for(const [w,h,bottom]of [[1440,900,484],[390,844,530],[320,568,380]]){world.resize(w,h,{bottom:bottom+20});for(const t of [0,8,120]){world.update(openingFrame(t));for(const car of world.cars){const b=new T.Box3().setFromObject(car);for(const x of [b.min.x,b.max.x])for(const y of [b.min.y,b.max.y])for(const z of [b.min.z,b.max.z]){const p=new T.Vector3(x,y,z).project(world.camera);assert((1-p.y)*h/2>bottom+8,'Preview cars stay below the native sentence');assert(p.y>-.98,'First-shot framing cannot cut off the cars');}}}}
 world.resize(1440,900);world.update(openingFrame(1));assert(world.cars[0].position.z-world.cars[1].position.z>7);assert(world.camera.position.z>world.cars[0].position.z+3);
 world.update(motorsportFrame(2));assert(world.cars[0].visible&&!world.cars[1].visible);assert(world.camera.position.z<world.cars[0].position.z);assert.deepEqual(MOTOR_SHOTS[1].camera,[.65,.65,-5.5]);
-for(const [w,h]of [[390,844],[320,568]]){world.resize(w,h);world.update(motorsportFrame(2.7));const b=new T.Box3().setFromObject(world.cars[0]);for(const x of [b.min.x,b.max.x])for(const y of [b.min.y,b.max.y])for(const z of [b.min.z,b.max.z]){const p=new T.Vector3(x,y,z).project(world.camera);assert(Math.abs(p.x)<.98&&Math.abs(p.y)<.98,'Solo MINI remains complete in the narrow rear camera');}}world.resize(1440,900);
-world.update(motorsportFrame(4.3));const mini=world.cars[0].position.clone().project(world.camera),z4=world.cars[1].position.clone().project(world.camera),direction=world.camera.getWorldDirection(new T.Vector3());
+for(const [w,h]of [[390,844],[320,568]]){world.resize(w,h);world.update(motorsportFrame(MOTOR_SHOTS[1].end-.1));const b=new T.Box3().setFromObject(world.cars[0]);for(const x of [b.min.x,b.max.x])for(const y of [b.min.y,b.max.y])for(const z of [b.min.z,b.max.z]){const p=new T.Vector3(x,y,z).project(world.camera);assert(Math.abs(p.x)<.98&&Math.abs(p.y)<.98,'Solo MINI remains complete in the narrow rear camera');}}world.resize(1440,900);
+world.update(motorsportFrame(MOTOR_SHOTS[2].end-.1));const mini=world.cars[0].position.clone().project(world.camera),z4=world.cars[1].position.clone().project(world.camera),direction=world.camera.getWorldDirection(new T.Vector3());
 assert(mini.x<z4.x&&mini.y>z4.y,'Overhead MINI is on screen left/front; Z4 right/rear');assert(direction.y<-.65&&direction.y>-.93,'Third setup is an oblique high camera, not a vertical overhead');
 world.update(motorsportFrame(boostTime(.63)));assert(world.cars[1].userData.flames.every(f=>f.visible));assert(world.cars[0].userData.flames.every(f=>!f.visible));
 world.update(motorsportFrame(boostTime(1.08)));assert(world.cars[0].userData.flames.every(f=>f.visible),'MINI responds 0.45s after the Z4');
@@ -143,7 +143,7 @@ world.update(motorsportFrame(2));for(const b of world.openingStreet.batches){ass
 // Emulate the renderer's lazy instance-bound calculation, including a long hover.
 const cullWorld=createMotorScene();cullWorld.resize(1440,900);cullWorld.update(openingFrame(120));
 for(const b of cullWorld.openingStreet.batches)if(b.mesh.boundingSphere===null)b.mesh.computeBoundingSphere();
-for(const t of [1.01,2,2.7]){
+for(const t of [1.01,2,MOTOR_SHOTS[1].end-.1]){
  cullWorld.update(motorsportFrame(t));const frustum=new T.Frustum().setFromProjectionMatrix(new T.Matrix4().multiplyMatrices(cullWorld.camera.projectionMatrix,cullWorld.camera.matrixWorldInverse));let visible=0;
  for(const {mesh} of cullWorld.openingStreet.batches){const cached=frustum.intersectsObject(mesh);mesh.computeBoundingSphere();assert.equal(cached,frustum.intersectsObject(mesh),'Restored street bounds cannot retain the recycled preview positions');if(cached)visible++;}
  assert(visible>160,'Second-shot architecture and road remain inside the visible street');
