@@ -24,7 +24,7 @@ export function pursuitMotion(local,index){
 }
 export function driverMotion(shot,t,index){
   const local=t-shot.start;
-  if(shot.id==='exhaust-exit'||shot.id==='grid-guide'){
+  if(shot.id==='exhaust-exit'||shot.id==='grid-guide'||shot.id==='space-pass'){
     const q=t-shot.travelStart,m=boostMotion(q-(index===0?.45:0),index===0?{a:17.5,length:16.2/17.5}:{}),p=pursuitMotion(q,index);
     return {distance:m.distance+(index===0?5.3:0)+p.distance,velocity:m.velocity+p.velocity,acceleration:m.acceleration+p.acceleration,flame:m.flame};
   }
@@ -35,7 +35,7 @@ export function driverMotion(shot,t,index){
   if(shot.id==='bumper-train')return {distance:index===0?.2*Math.sin(local*2):7.1+.35*local,velocity:index===0?.4*Math.cos(local*2):.35,acceleration:0,flame:false};
   return {distance:0,velocity:0,acceleration:0,flame:false};
 }
-export const cameraBoost=(shot,t)=>{if(!['exhaust-exit','grid-guide'].includes(shot.id))return {distance:0,velocity:0};const q=t-shot.travelStart,b=boostMotion(q-.60),p=pursuitMotion(q,2);return {distance:b.distance+p.distance,velocity:b.velocity+p.velocity};};
+export const cameraBoost=(shot,t)=>{if(!['exhaust-exit','grid-guide','space-pass'].includes(shot.id))return {distance:0,velocity:0};const q=t-shot.travelStart,b=boostMotion(q-.60),p=pursuitMotion(q,2);return {distance:b.distance+p.distance,velocity:b.velocity+p.velocity};};
 export function cameraTravel(shot,t){return raceTravel(shot,t)+cameraBoost(shot,t).distance;}
 export function raceExposure(shot,t,idle=false){
   const start=shot.travelStart??shot.start,end=shot.travelEnd??shot.end,length=shot.travelRamp??end-start,local=clamp(t-start,0,length);

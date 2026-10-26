@@ -1,5 +1,5 @@
-// All five setups share the approved unfilled, starry drawing finish.
-export const isMotorLineShot=shot=>['lane','circuit','tunnel'].includes(shot.mode);
+// All six setups share the approved unfilled, starry drawing finish.
+export const isMotorLineShot=shot=>['lane','circuit','tunnel','space'].includes(shot.mode);
 export const MOTOR_LINE_FRAGMENT=`
 uniform sampler2D source;uniform sampler2D depthSource;
 uniform sampler2D cars;uniform sampler2D carDepth;uniform sampler2D lampSource;uniform sampler2D lampDepth;

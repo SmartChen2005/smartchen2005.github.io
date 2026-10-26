@@ -31,7 +31,7 @@ export function guideFrame(p){
  const quaternion=new T.Quaternion().setFromRotationMatrix(new T.Matrix4().makeBasis(right,up,tangent));
  return {position,tangent,right,up,quaternion,bank};
 }
-export const loopViewWeight=p=>ease((p-325)/60)*(1-ease((p-LOOP_END-12)/50));
+export const loopViewWeight=p=>ease((p-325)/60)*(1-ease((p-LOOP_END+16)/44));
 export function guidePoint(z,x=0,y=0){const f=guideFrame(z);return f.position.addScaledVector(f.right,x).addScaledVector(f.up,y);}
 export const groundOpacity=(local,distance=0)=>1-ease((local-4.45+Math.max(-30,Math.min(100,distance))*.006)/1.65);
 export const cameraRise=local=>ease((local-4.65)/3.25);

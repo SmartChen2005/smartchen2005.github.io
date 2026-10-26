@@ -1,20 +1,21 @@
 import {T} from './home-motor-geometry.mjs?rev=20261025-cosmic';
-import {createMotorCar} from './home-motor-cars.mjs?rev=20261025-loop';
-import {createMotorCity} from './home-motor-city.mjs?rev=20261025-loop';
-import {motorPalette,MOTOR_PALETTES} from './home-motor-palette.mjs?rev=20261025-loop';
-import {raceTravel,cameraTravel,driverMotion,raceExposure,createSpeedLines,updateSpeedLines} from './home-motor-speed.mjs?rev=20261025-loop';
-import {isMotorLineShot,MOTOR_LINE_FRAGMENT} from './home-motor-line.mjs?rev=20261025-loop';
-import {createArchitectureBurst} from './home-motor-burst.mjs?rev=20261025-loop';
-import {createMotorGuide} from './home-motor-guide.mjs?rev=20261025-loop';
-import {guideFrame,guidePoint,cameraRise,laneProgress,prepareGuideRoutes,ease,ROAD_FADE_GLSL,loopViewWeight,LOOP_ENTRY,LOOP_RADIUS,LOOP_SHIFT,LOOP_END,LOOP_FORWARD,LOOP_RIGHT} from './home-motor-path.mjs?rev=20261025-loop';
-import {createOpeningStreet,openingCar,OPENING_SPEED} from './home-motor-opening.mjs?rev=20261025-loop';
+import {createMotorCar} from './home-motor-cars.mjs?rev=20261025-flypast';
+import {createMotorCity} from './home-motor-city.mjs?rev=20261025-flypast';
+import {motorPalette,MOTOR_PALETTES} from './home-motor-palette.mjs?rev=20261025-flypast';
+import {raceTravel,cameraTravel,driverMotion,raceExposure,createSpeedLines,updateSpeedLines} from './home-motor-speed.mjs?rev=20261025-flypast';
+import {isMotorLineShot,MOTOR_LINE_FRAGMENT} from './home-motor-line.mjs?rev=20261025-flypast';
+import {createArchitectureBurst} from './home-motor-burst.mjs?rev=20261025-flypast';
+import {createMotorGuide} from './home-motor-guide.mjs?rev=20261025-flypast';
+import {guideFrame,guidePoint,cameraRise,laneProgress,prepareGuideRoutes,ease,ROAD_FADE_GLSL,loopViewWeight,LOOP_ENTRY,LOOP_RADIUS,LOOP_SHIFT,LOOP_END,LOOP_FORWARD,LOOP_RIGHT} from './home-motor-path.mjs?rev=20261025-flypast';
+import {createOpeningStreet,openingCar,OPENING_SPEED} from './home-motor-opening.mjs?rev=20261025-flypast';
 export {motorPalette,MOTOR_PALETTES};
 export const MOTOR_SHOTS=[
  {start:0,end:1,id:'starlit-lead',mode:'lane',camera:[2.35,1.2,15.8],target:[-3.2,2.4,4],fov:62,palette:0},
  {start:1,end:3.2,id:'bumper-train',mode:'lane',camera:[.65,.65,-5.5],target:[0,1.35,5],fov:65,palette:0},
  {start:3.2,end:5.5,id:'city-circuit',mode:'circuit',camera:[5.3,13.5,-7.5],target:[0,.2,2.6],fov:54,palette:0},
- {start:5.5,end:10.1,travelStart:5.5,travelEnd:20.5,travelRamp:11,travelOffset:-36,id:'exhaust-exit',mode:'lane',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:0},
- {start:10.1,end:20.5,travelStart:5.5,travelEnd:20.5,travelRamp:11,travelOffset:-36,id:'grid-guide',mode:'tunnel',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:0},
+ {start:5.5,end:10.1,travelStart:5.5,travelEnd:21.45,travelRamp:11,travelOffset:-36,id:'exhaust-exit',mode:'lane',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:0},
+ {start:10.1,end:19.8,travelStart:5.5,travelEnd:21.45,travelRamp:11,travelOffset:-36,id:'grid-guide',mode:'tunnel',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:0},
+ {start:19.8,end:21.45,travelStart:5.5,travelEnd:21.45,travelRamp:11,travelOffset:-36,id:'space-pass',mode:'space',camera:[0,.8,50],target:[0,.8,0],fov:48,palette:0},
 ];
 export const raceShot=t=>MOTOR_SHOTS.find(s=>t<s.end)||MOTOR_SHOTS.at(-1);
 export const raceCamera=(t,input=.5)=>{const s=raceShot(t);return [s.camera[0]+(input-.5)*.12,s.camera[1],s.camera[2]];};
@@ -31,12 +32,20 @@ export function raceView(t,width=1440,height=900,input=.5,sentenceBottom=0,openi
  const shot=raceShot(t),distance=cameraTravel(shot,t),d=openingTime!==null?0:['exhaust-exit','grid-guide'].includes(shot.id)?laneProgress(distance):distance,narrow=width<650,p=raceCamera(t,input),widen=narrow&&shot.mode==='circuit'?1.22:1;
  let position=new T.Vector3(p[0],p[1]*widen,d+p[2]*widen),target=new T.Vector3(shot.target[0],shot.target[1],d+shot.target[2]),fov=shot.fov+(narrow?16:0),up=new T.Vector3(0,1,0);
  if(narrow&&shot.id==='starlit-lead'){position.set(.35,2.1,d+18.5);target.set(-1.7,5.15+Math.max(0,sentenceBottom/height+.02-.64)*25,d+3.8);fov=78;}
+ if(narrow&&shot.id==='bumper-train'){position.set(.15,.7,d-7.5);target.set(-.35,1,d+1);fov=78;}
  if(['exhaust-exit','grid-guide'].includes(shot.id)){
   const r=cameraRise(t-shot.travelStart),pose=guideFrame(d+7*r),x=narrow?.15+.55*r:.8+8.2*r,y=narrow?.7+9.8*r:.58+7*r,rear=narrow?8.8+13*r:5.1+7*r;
   position=pose.position.clone().addScaledVector(pose.right,x+(input-.5)*.12).addScaledVector(pose.up,y).addScaledVector(pose.tangent,-rear);
   target=guidePoint(d+2+6*r,0,1.3-.5*r);up=pose.up.clone().lerp(new T.Vector3(0,1,0),.65*r).normalize();fov=narrow?84-17*r:61-7*r;
   const wide=loopViewWeight(d),center=LOOP_ENTRY.clone().addScaledVector(LOOP_RIGHT,LOOP_SHIFT/2).add(new T.Vector3(0,LOOP_RADIUS,0)),eye=center.clone().addScaledVector(LOOP_RIGHT,narrow?100:62).addScaledVector(LOOP_FORWARD,narrow?-40:-48).add(new T.Vector3(0,narrow?22:26,0));
   position.lerp(eye,wide);target.lerp(center.clone().lerp(guidePoint(d+8),.16+.68*ease((d-LOOP_END)/45)),wide);up.lerp(new T.Vector3(0,1,0),wide).normalize();fov+=(narrow?60-fov:46-fov)*wide;
+ }
+ if(shot.mode==='space'){
+  // A fixed camera between the two actual outgoing lanes faces their noses.
+  // MINI's +right lane projects screen-right; the slightly leading Z4 passes left first.
+  const a=racePosition(shot.start,0),b=racePosition(shot.start,1),pose=guideFrame((a.progress+b.progress)/2);
+  position=new T.Vector3((a.x+b.x)/2,(a.y+b.y)/2+.72,(a.z+b.z)/2).addScaledVector(pose.tangent,50);
+  target=position.clone().addScaledVector(pose.tangent,-50);up=pose.up;fov=narrow?72:48;
  }
  return {position,target,up,fov};
 }

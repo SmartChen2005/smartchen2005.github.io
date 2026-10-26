@@ -1,5 +1,5 @@
-import { createMotorWorld, raceShot } from './home-motor-race.mjs?rev=20261025-loop';
-export const MOTOR_DURATION=20.5;
+import { createMotorWorld, raceShot } from './home-motor-race.mjs?rev=20261025-flypast';
+export const MOTOR_DURATION=21.45;
 export const MOTOR_CLICK_LEAD=1;
 export function openingFrame(time,idle=false){return {t:0,shot:'starlit-lead',phase:'preview',idle,openingTime:time};}
 const clamp=x=>Math.max(0,Math.min(1,x));

@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Restore second-shot streets and add the front space pass
+
+- Fixed stale instanced-mesh culling spheres: derive the original street bounds before recycling the hover, rather than letting the renderer cache a recycled layout. Long hover → second shot now restores both transforms and valid visibility. Narrow solo-rear framing also keeps the whole MINI in view.
+- Return from the loop exterior camera about half a second earlier. At 19.8s, after both cars clear the final portal, directly cut to a fixed camera between the outgoing lanes. Z4 passes screen-left slightly before MINI passes screen-right. This shot contains only cars/stars and ends at 21.45s; the physical trajectories and 4.6s exhaust remain intact.
+- Added lazy-renderer-bound reproduction, restored-frustum, phone rear-bounds, earlier-camera and actual front-to-behind flypast/side-order regressions. Passed home/motor/state, photo/game transition checks, site validation and strict dist audit. Browser evidence and limitations are recorded in `tools/MOTOR-RACE-QA.md`.
+
 ### 2026-10-25 — Endless street preview and a 360-degree grid loop
 
 - Narrowed MINI headlamp assemblies by 9% and raised roof/glass/pillars about 3cm. Added camera-relative frontage/lamp/paving recycling for the continuously moving hover. Activation inherits live preview progress, hides the sentence and cuts to the next setup after one second.

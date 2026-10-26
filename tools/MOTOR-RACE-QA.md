@@ -1,4 +1,24 @@
-# Car Enthusiast — Endless street preview and a 360-degree grid loop, 2026-10-25
+# Car Enthusiast — Second-shot visibility and a front space pass, 2026-10-25
+
+Started from 499dbd8 on clean master. The user-reported empty second street is reproduced and fixed; the approved car proportions, line art, endless preview, one-second click continuation, exhaust and full loop remain.
+
+## Changes and reproduction
+
+- The renderer lazily cached instanced-mesh bounding spheres from the recycled hover geometry. Restoring instance matrices alone left those spheres behind the second camera. After a 120s preview, a renderer-style bound prime and the 3.1s second camera, the pre-fix diagnostic found 0 visible street batches versus 176 with fresh resting bounds. `createOpeningStreet` now computes the original resting spheres before any recycling. Culling is disabled during recycling and returns to valid original bounds afterward; no per-frame sphere rebuild is needed. Phone solo-rear framing also moves slightly back/centers its target so the full MINI remains visible.
+- Loop exterior-camera return begins around 17.95s and finishes around 18.82s, earlier than the former approximately 18.5–19.5s return. The complete inverted loop still fits at the apex.
+- The grid shot ends at 19.8s, after both cars have left the final portal. A direct cut introduces `space-pass` through 21.45s: a fixed front-facing camera sits between the same outgoing lanes, about 50m ahead at the cut. MINI approaches screen-right and the slightly leading Z4 screen-left, then each passes behind the camera. Their real integrated path/driver positions continue through the cut. No city, lamps or grid are rendered in this shot. Existing graphite/white stars and unfilled car contours remain.
+
+## Actual verification
+
+Passed `node tools/test-motor-race.mjs`, `node tools/test-home.mjs`, `node tools/test-home-state.mjs`, `node tools/test-photo-transition.mjs`, `node tools/test-game-transition.mjs` and `node tools/validate-site.mjs`. Strict dist audit reports zero findings. New checks emulate lazy renderer sphere calculation after a long preview and compare restored visibility with rebuilt spheres at 1.01/2/3.1s. Phone rear bounds, earlier loop-camera return, outgoing pose continuity, no final scenery, fixed-camera position, front-to-behind passage and screen-right MINI / screen-left Z4 with staggered passage are covered. Existing loop, physical lane distance, preferences, lifecycle and deterministic recycling checks remain.
+
+Chrome 1440×900 reviewed the second street after a rendered 120s hover, earlier loop return, front space approach at 20.6s and the cars passing either side of the camera at 20.78s. The actual homepage keyboard preview keeps the sentence visible; Space hides it, complete playback restores a moving first-shot preview with car-trigger focus, and no warning/error was captured. At 390×844 the front approach retains the side order and no overflow. These are desktop Chrome viewport checks, not physical touch, Safari or FPS measurements.
+
+Evidence: `flypast-second-street-fixed.png`, `flypast-earlier-loop-return.png`, `flypast-front-space.png`, `flypast-between-cars.png`, `flypast-mobile-front.png` and `flypast-mobile-street.png` in the task artifact directory. Author fixtures are removed and viewport overrides reset before commit.
+
+---
+
+# Previous: Endless street preview and a 360-degree grid loop, 2026-10-25
 
 Started from 313388e on clean master. MINI receives small proportion corrections; the approved line art, graphite/white/amber palette, five setups and 4.6s exhaust segment remain.
 

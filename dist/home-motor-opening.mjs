@@ -16,7 +16,8 @@ export function createOpeningStreet(city){
    if(kind==='lamp')anchor=mesh.userData.burstAnchors[i].center[2];
    pieces.push({matrix:matrix.clone(),anchor,follow:kind==='road'&&size.z>10});
   }
-  mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);batches.push({mesh,pieces,period,rest:mesh.instanceMatrix.array.slice(),culled:mesh.frustumCulled});
+  // Cache bounds in the resting street, before a renderer can derive them from a recycled hover.
+  mesh.computeBoundingSphere();mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);batches.push({mesh,pieces,period,rest:mesh.instanceMatrix.array.slice(),culled:mesh.frustumCulled});
  });
  return {batches,update(enabled,distance=0){
   if(!enabled){if(active)for(const b of batches){b.mesh.instanceMatrix.array.set(b.rest);b.mesh.instanceMatrix.needsUpdate=true;b.mesh.frustumCulled=b.culled;}active=false;return;}
