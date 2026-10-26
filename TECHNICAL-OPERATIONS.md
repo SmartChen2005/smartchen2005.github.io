@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — One narrow carriageway across street cameras
+
+- Added one shared 2.3m road half-width for both city layouts and the dissolving exit. All street cameras now use the same 4.6m narrow two-car corridor, with matching building/lantern/bridge/kerb placement. Paving marks stay within its edges.
+- The road keeps its width during the existing far-to-near dissolve instead of expanding into the larger abstract grid. Vehicle motion, cameras and the 20.65s edit retain their approved state.
+- Motor/home checks, site validation and strict dist audit passed. Desktop and narrow browser evidence is recorded in `tools/MOTOR-RACE-QA.md`.
+
 ### 2026-10-25 — Smaller MINI lamps and a tighter city edit
 
 - Reduced the complete MINI headlamp assemblies another 5%, preserving the earlier narrower oval proportions. Third-shot road width is now 4.6m; car centers move to ±1.05m, the camera stays within the corridor, and architecture/lanterns/kerbs/banners fit the tighter width.

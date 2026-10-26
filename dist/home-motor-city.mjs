@@ -1,3 +1,4 @@
+import {MOTOR_ROAD_HALF} from './home-motor-road.mjs?rev=20261025-road';
 import {createStreetLanterns} from './home-motor-lanterns.mjs?rev=20261025-graphite';
 import { T, box, cylinder, torus, batch, toon } from './home-motor-geometry.mjs?rev=20261025-cosmic';
 import { motion } from './home-motor-motion.mjs?rev=20261025-cosmic';
@@ -6,7 +7,7 @@ import { createStreetArchitecture } from './home-motor-architecture.mjs?rev=2026
 // Neutral masonry values still print through each shot's existing three inks.
 export function createMotorCity({circuit=false}={}){
   const root=new T.Group();root.name=circuit?'gothic-renaissance-circuit':'gothic-renaissance-narrow-lane';
-  const half=circuit?2.3:3.1,blocks=circuit?44:30,length=circuit?330:230,center=length/2-50;
+  const half=MOTOR_ROAD_HALF,blocks=circuit?44:30,length=circuit?330:230,center=length/2-50;
   const M={stone:toon('#9f9f9f'),plaster:toon('#d1d1d1'),base:toon('#6b6b6b'),roof:toon('#343434'),
     trim:toon('#ededed'),window:toon('#151515'),road:toon('#282828'),pave:toon('#777777'),metal:toon('#191919')};
   const town=createStreetArchitecture(half,M,{circuit,blocks});root.add(town.root);
@@ -23,7 +24,7 @@ export function createMotorCity({circuit=false}={}){
   }
   for(let row=0;row<(circuit?350:240);row++)for(let col=0;col<(circuit?13:7);col++){
     const x=(col-(circuit?6:3))*.8+(row%2)*.4,z=-42+row*.9;
-    if(Math.abs(x)<half-.2&&motion.rand(row*17+col,5)>.65)b.add(box(.69,.012,.08),M.pave,[x,.022,z]);
+    if(Math.abs(x)+.345<half-.1&&motion.rand(row*17+col,5)>.65)b.add(box(.69,.012,.08),M.pave,[x,.022,z]);
   }
   if(!circuit){
     const bridge=batch(bridgeRoot);

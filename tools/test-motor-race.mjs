@@ -71,7 +71,7 @@ for(const town of [world.city,world.circuit]){
  });
  for(const name of ['gothic-pointed-arch','gothic-rose-tracery','renaissance-round-arch','renaissance-ribbed-dome'])assert(motifs.has(name));
 }
-assert.equal(world.circuit.root.userData.streetHalfWidth,2.3);
+assert.deepEqual([world.city.root.userData.streetHalfWidth,world.circuit.root.userData.streetHalfWidth,world.guide.strips[1].half],[2.3,2.3,2.3]);
 
 for(const car of world.cars){assert.equal(car.userData.bodyCompression,.94);assert(car.getObjectByName('lowered-bodywork'));}
 for(const town of [world.city,world.circuit]){

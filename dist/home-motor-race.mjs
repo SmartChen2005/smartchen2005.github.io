@@ -1,13 +1,13 @@
 import {T} from './home-motor-geometry.mjs?rev=20261025-cosmic';
-import {createMotorCar} from './home-motor-cars.mjs?rev=20261025-tighten';
-import {createMotorCity} from './home-motor-city.mjs?rev=20261025-tighten';
-import {motorPalette,MOTOR_PALETTES} from './home-motor-palette.mjs?rev=20261025-tighten';
-import {raceTravel,cameraTravel,driverMotion,raceExposure,createSpeedLines,updateSpeedLines} from './home-motor-speed.mjs?rev=20261025-tighten';
-import {isMotorLineShot,MOTOR_LINE_FRAGMENT} from './home-motor-line.mjs?rev=20261025-tighten';
-import {createArchitectureBurst} from './home-motor-burst.mjs?rev=20261025-tighten';
-import {createMotorGuide} from './home-motor-guide.mjs?rev=20261025-tighten';
-import {guideFrame,guidePoint,cameraRise,laneProgress,prepareGuideRoutes,ease,ROAD_FADE_GLSL,loopViewWeight,LOOP_ENTRY,LOOP_RADIUS,LOOP_SHIFT,LOOP_END,LOOP_FORWARD,LOOP_RIGHT} from './home-motor-path.mjs?rev=20261025-tighten';
-import {createOpeningStreet,openingCar,OPENING_SPEED} from './home-motor-opening.mjs?rev=20261025-tighten';
+import {createMotorCar} from './home-motor-cars.mjs?rev=20261025-road';
+import {createMotorCity} from './home-motor-city.mjs?rev=20261025-road';
+import {motorPalette,MOTOR_PALETTES} from './home-motor-palette.mjs?rev=20261025-road';
+import {raceTravel,cameraTravel,driverMotion,raceExposure,createSpeedLines,updateSpeedLines} from './home-motor-speed.mjs?rev=20261025-road';
+import {isMotorLineShot,MOTOR_LINE_FRAGMENT} from './home-motor-line.mjs?rev=20261025-road';
+import {createArchitectureBurst} from './home-motor-burst.mjs?rev=20261025-road';
+import {createMotorGuide} from './home-motor-guide.mjs?rev=20261025-road';
+import {guideFrame,guidePoint,cameraRise,laneProgress,prepareGuideRoutes,ease,ROAD_FADE_GLSL,loopViewWeight,LOOP_ENTRY,LOOP_RADIUS,LOOP_SHIFT,LOOP_END,LOOP_FORWARD,LOOP_RIGHT} from './home-motor-path.mjs?rev=20261025-road';
+import {createOpeningStreet,openingCar,OPENING_SPEED} from './home-motor-opening.mjs?rev=20261025-road';
 export {motorPalette,MOTOR_PALETTES};
 export const MOTOR_SHOTS=[
  {start:0,end:1,id:'starlit-lead',mode:'lane',camera:[2.35,1.2,15.8],target:[-3.2,2.4,4],fov:62,palette:0},

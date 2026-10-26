@@ -1,4 +1,16 @@
-# Car Enthusiast — Smaller lamps, two-car city road and shorter middle shots, 2026-10-25
+# Car Enthusiast — Shared narrow street width, 2026-10-25
+
+Started from 03914e0 on clean master. All street views now share the third shot's 4.6m two-car carriageway, rather than retaining 6.2m in the other street kit.
+
+`home-motor-road.mjs` owns the common 2.3m half-width. Both city layouts and the dissolving guide road use it. Facades, lanterns, kerbs, bridge and banners derive their placement from that width; paving marks are restricted inside it. During the existing road dissolve, street edges stay at this width until disappearing rather than spreading towards the wider abstract grid. Cars, six camera setups, 20.65s timing and hover/click behavior retain their approved state.
+
+Passed motor/home regressions, site validation and strict dist audit (zero findings). Existing architecture-corridor, thick tire, long-hover restoration, deterministic paving, six-viewport, loop and flypast checks remain; the existing width assertion now covers both city kits and the guide street. No new implementation-mirroring test suite or dependency.
+
+Chrome 1440×900 reviewed the long-hover frontal street, solo rear street, exhaust pair and road dissolve. Both cars remain clear of the narrower street edges. At 390×844 the frontal preview is readable with no document overflow. No warning/error was captured. These are desktop Chrome viewport checks, not physical-device or FPS measurements. Evidence: `road-first-shared-width.png`, `road-exhaust-shared-width.png`, `road-grid-dissolve.png`, `road-mobile-preview.png`. Temporary author fixture is removed and viewport override reset before commit.
+
+---
+
+# Previous: Smaller lamps, two-car city road and shorter middle shots, 2026-10-25
 
 Started from d14ecfb on clean master. This is a small proportion/width/edit adjustment, retaining the existing line drawing, driving law, hover/click behavior, loop and final space pass.
 
