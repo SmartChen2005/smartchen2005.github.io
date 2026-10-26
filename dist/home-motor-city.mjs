@@ -6,7 +6,7 @@ import { createStreetArchitecture } from './home-motor-architecture.mjs?rev=2026
 // Neutral masonry values still print through each shot's existing three inks.
 export function createMotorCity({circuit=false}={}){
   const root=new T.Group();root.name=circuit?'gothic-renaissance-circuit':'gothic-renaissance-narrow-lane';
-  const half=circuit?6.1:3.1,blocks=circuit?44:30,length=circuit?330:230,center=length/2-50;
+  const half=circuit?2.3:3.1,blocks=circuit?44:30,length=circuit?330:230,center=length/2-50;
   const M={stone:toon('#9f9f9f'),plaster:toon('#d1d1d1'),base:toon('#6b6b6b'),roof:toon('#343434'),
     trim:toon('#ededed'),window:toon('#151515'),road:toon('#282828'),pave:toon('#777777'),metal:toon('#191919')};
   const town=createStreetArchitecture(half,M,{circuit,blocks});root.add(town.root);
@@ -37,7 +37,7 @@ export function createMotorCity({circuit=false}={}){
   if(circuit)for(const z of [34,113]){
     for(const side of [-1,1])b.add(box(.1,5.2,.1),M.metal,[side*(half-.1),2.6,z]);
     b.add(box(half*2,.08,.08),M.metal,[0,5.2,z]);
-    for(let row=0;row<2;row++)for(let col=0;col<24;col++)b.add(box(.5,.42,.045),(row+col)%2?M.trim:M.metal,[-5.75+col*.5,4.4+row*.42,z]);
+    for(let row=0;row<2;row++)for(let col=0;col<24;col++)b.add(box(half*2/24,.42,.045),(row+col)%2?M.trim:M.metal,[-half+(col+.5)*half*2/24,4.4+row*.42,z]);
   }
   b.finish();root.userData={buildingCount:town.facades.length,streetHalfWidth:half,architecture:'Gothic cathedrals / pointed lancets / rose tracery / buttresses / Renaissance palazzi / round arcades / pilasters / pediments / ribbed domes',circuit,roadRange:[-50,length-50],churchCount:town.churchCount,facades:town.facades,roseWindows:town.roseWindows};
   const lamps=createStreetLanterns(half,{end:circuit?265:168});root.add(lamps);

@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Smaller MINI lamps and a tighter city edit
+
+- Reduced the complete MINI headlamp assemblies another 5%, preserving the earlier narrower oval proportions. Third-shot road width is now 4.6m; car centers move to ±1.05m, the camera stays within the corridor, and architecture/lanterns/kerbs/banners fit the tighter width.
+- Shortened the second and third setups by 0.4s each, to 1.8s and 1.9s. The later choreography shifts earlier by 0.8s and full duration becomes 20.65s; boost, loop and flypast local timing remain intact.
+- Passed motor/home lifecycle and state checks, site validation and strict dist audit. Actual desktop/narrow visual review and evidence are recorded in `tools/MOTOR-RACE-QA.md`.
+
 ### 2026-10-25 — Restore second-shot streets and add the front space pass
 
 - Fixed stale instanced-mesh culling spheres: derive the original street bounds before recycling the hover, rather than letting the renderer cache a recycled layout. Long hover → second shot now restores both transforms and valid visibility. Narrow solo-rear framing also keeps the whole MINI in view.

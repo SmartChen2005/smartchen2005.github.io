@@ -101,7 +101,7 @@ export function createMotorCar(kind){
       surfaceSeam(root,shell,side,[[.77,.73],[.81,1.1],[.75,1.55],[.67,1.8]],M.darkMetal,.004,false,true).name='f56-clamshell-seam';
       // Restrained oval lamps sit in the rounded clamshell, not on stalks.
       const lamp=new T.Group();lamp.name='recessed-f56-headlamp';lamp.position.set(side*.56,.815,frontZ(side*.56)-.022);lamp.rotation.x=-.43;lamp.rotation.y=side*.17;
-      lamp.userData.lensRadius=.153;lamp.scale.x=.91;lamp.userData.widthScale=.91;
+      lamp.userData.lensRadius=.153;lamp.scale.set(.91*.95,.95,.95);lamp.userData.widthScale=.91*.95;
       const housing=mesh(lamp,sphere(.175),M.paint);housing.scale.set(1,1.13,.19);
       const lens=mesh(lamp,sphere(.153),M.darkMetal,[0,0,.025]);lens.scale.set(1,1.13,.13);
       mesh(lamp,torus(.164,.008),M.chrome,[0,0,.034]).scale.y=1.13;

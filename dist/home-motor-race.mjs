@@ -1,21 +1,21 @@
 import {T} from './home-motor-geometry.mjs?rev=20261025-cosmic';
-import {createMotorCar} from './home-motor-cars.mjs?rev=20261025-flypast';
-import {createMotorCity} from './home-motor-city.mjs?rev=20261025-flypast';
-import {motorPalette,MOTOR_PALETTES} from './home-motor-palette.mjs?rev=20261025-flypast';
-import {raceTravel,cameraTravel,driverMotion,raceExposure,createSpeedLines,updateSpeedLines} from './home-motor-speed.mjs?rev=20261025-flypast';
-import {isMotorLineShot,MOTOR_LINE_FRAGMENT} from './home-motor-line.mjs?rev=20261025-flypast';
-import {createArchitectureBurst} from './home-motor-burst.mjs?rev=20261025-flypast';
-import {createMotorGuide} from './home-motor-guide.mjs?rev=20261025-flypast';
-import {guideFrame,guidePoint,cameraRise,laneProgress,prepareGuideRoutes,ease,ROAD_FADE_GLSL,loopViewWeight,LOOP_ENTRY,LOOP_RADIUS,LOOP_SHIFT,LOOP_END,LOOP_FORWARD,LOOP_RIGHT} from './home-motor-path.mjs?rev=20261025-flypast';
-import {createOpeningStreet,openingCar,OPENING_SPEED} from './home-motor-opening.mjs?rev=20261025-flypast';
+import {createMotorCar} from './home-motor-cars.mjs?rev=20261025-tighten';
+import {createMotorCity} from './home-motor-city.mjs?rev=20261025-tighten';
+import {motorPalette,MOTOR_PALETTES} from './home-motor-palette.mjs?rev=20261025-tighten';
+import {raceTravel,cameraTravel,driverMotion,raceExposure,createSpeedLines,updateSpeedLines} from './home-motor-speed.mjs?rev=20261025-tighten';
+import {isMotorLineShot,MOTOR_LINE_FRAGMENT} from './home-motor-line.mjs?rev=20261025-tighten';
+import {createArchitectureBurst} from './home-motor-burst.mjs?rev=20261025-tighten';
+import {createMotorGuide} from './home-motor-guide.mjs?rev=20261025-tighten';
+import {guideFrame,guidePoint,cameraRise,laneProgress,prepareGuideRoutes,ease,ROAD_FADE_GLSL,loopViewWeight,LOOP_ENTRY,LOOP_RADIUS,LOOP_SHIFT,LOOP_END,LOOP_FORWARD,LOOP_RIGHT} from './home-motor-path.mjs?rev=20261025-tighten';
+import {createOpeningStreet,openingCar,OPENING_SPEED} from './home-motor-opening.mjs?rev=20261025-tighten';
 export {motorPalette,MOTOR_PALETTES};
 export const MOTOR_SHOTS=[
  {start:0,end:1,id:'starlit-lead',mode:'lane',camera:[2.35,1.2,15.8],target:[-3.2,2.4,4],fov:62,palette:0},
- {start:1,end:3.2,id:'bumper-train',mode:'lane',camera:[.65,.65,-5.5],target:[0,1.35,5],fov:65,palette:0},
- {start:3.2,end:5.5,id:'city-circuit',mode:'circuit',camera:[5.3,13.5,-7.5],target:[0,.2,2.6],fov:54,palette:0},
- {start:5.5,end:10.1,travelStart:5.5,travelEnd:21.45,travelRamp:11,travelOffset:-36,id:'exhaust-exit',mode:'lane',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:0},
- {start:10.1,end:19.8,travelStart:5.5,travelEnd:21.45,travelRamp:11,travelOffset:-36,id:'grid-guide',mode:'tunnel',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:0},
- {start:19.8,end:21.45,travelStart:5.5,travelEnd:21.45,travelRamp:11,travelOffset:-36,id:'space-pass',mode:'space',camera:[0,.8,50],target:[0,.8,0],fov:48,palette:0},
+ {start:1,end:2.8,id:'bumper-train',mode:'lane',camera:[.65,.65,-5.5],target:[0,1.35,5],fov:65,palette:0},
+ {start:2.8,end:4.7,id:'city-circuit',mode:'circuit',camera:[1.9,13.5,-7.5],target:[0,.2,2.6],fov:54,palette:0},
+ {start:4.7,end:9.3,travelStart:4.7,travelEnd:20.65,travelRamp:11,travelOffset:-36,id:'exhaust-exit',mode:'lane',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:0},
+ {start:9.3,end:19,travelStart:4.7,travelEnd:20.65,travelRamp:11,travelOffset:-36,id:'grid-guide',mode:'tunnel',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:0},
+ {start:19,end:20.65,travelStart:4.7,travelEnd:20.65,travelRamp:11,travelOffset:-36,id:'space-pass',mode:'space',camera:[0,.8,50],target:[0,.8,0],fov:48,palette:0},
 ];
 export const raceShot=t=>MOTOR_SHOTS.find(s=>t<s.end)||MOTOR_SHOTS.at(-1);
 export const raceCamera=(t,input=.5)=>{const s=raceShot(t);return [s.camera[0]+(input-.5)*.12,s.camera[1],s.camera[2]];};
@@ -24,7 +24,7 @@ export function racePosition(t,index,openingTime=null){
  if(shot.id==='starlit-lead'&&openingTime!==null){const p=openingCar(openingTime,index);return {x:index===0?-.55:.5,y:0,z:p.offset,distance:p.distance,yaw:0,visible:true};}
  if(shot.id==='starlit-lead')return {x:index===0?-.55:.5,y:0,z:z+driver.distance,yaw:0,visible:true};
  if(shot.id==='bumper-train')return {x:-.35,y:0,z:z+driver.distance,yaw:0,visible:index===0};
- if(shot.id==='city-circuit')return {x:index===0?1.5:-1.5,y:0,z:z+driver.distance,yaw:0,visible:true};
+ if(shot.id==='city-circuit')return {x:index===0?1.05:-1.05,y:0,z:z+driver.distance,yaw:0,visible:true};
  const lane=index===0?1.05:-1.05,distance=z+driver.distance,progress=laneProgress(distance,lane),pose=guideFrame(progress),point=guidePoint(progress,index===0?1.05:-1.05);
  return {x:point.x,y:point.y,z:point.z,progress,distance,quaternion:pose.quaternion.toArray(),yaw:Math.atan2(pose.tangent.x,pose.tangent.z),visible:true};
 }

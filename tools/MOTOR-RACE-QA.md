@@ -1,4 +1,18 @@
-# Car Enthusiast — Second-shot visibility and a front space pass, 2026-10-25
+# Car Enthusiast — Smaller lamps, two-car city road and shorter middle shots, 2026-10-25
+
+Started from d14ecfb on clean master. This is a small proportion/width/edit adjustment, retaining the existing line drawing, driving law, hover/click behavior, loop and final space pass.
+
+- MINI headlamp assemblies scale uniformly to 95% of the previous size, in addition to the earlier 91% horizontal proportion. Other vehicle geometry is unchanged.
+- Third-shot road is 4.6m wide instead of 12.2m. MINI/Z4 centers shift from ±1.5m to ±1.05m; architecture, lantern rows, kerbs, tire barriers and chequered banner span follow the width. Camera X moves from 5.3m to 1.9m so it stays within the narrow corridor while retaining the oblique high view.
+- Shot boundaries are 0 / 1 / 2.8 / 4.7 / 9.3 / 19 / 20.65s. Second and third durations each shrink by 0.4s. Later local choreography is preserved, including the full 4.6s exhaust and loop/space sequence. Existing time-sensitive tests sample the corresponding shot-local moments after the 0.8s shift.
+
+Passed motor, home lifecycle/state, site validation and strict dist audit (zero findings). Existing geometry, street restoration, deterministic paving, physical lane speed, loop framing, flypast side/order and preference checks remain. No additional low-impact implementation-mirroring tests or dependency were added.
+
+Chrome desktop review at 1440×900 covers the narrowed third street with both cars and close front lamp proportions; the edit runs to its new 20.65s end. Narrow 390×844 review confirms both cars remain visible in the third shot without document overflow. No warning/error was captured. These are desktop viewport reviews, not physical-device or FPS measurements. Evidence: `tighten-third-road.png`, `tighten-mini-headlamps.png`, `tighten-mobile-third.png`. Author fixture is removed and viewport override reset before commit.
+
+---
+
+# Previous: Second-shot visibility and a front space pass, 2026-10-25
 
 Started from 499dbd8 on clean master. The user-reported empty second street is reproduced and fixed; the approved car proportions, line art, endless preview, one-second click continuation, exhaust and full loop remain.
 
