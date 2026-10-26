@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-25 — Endless street preview and a 360-degree grid loop
+
+- Narrowed MINI headlamp assemblies by 9% and raised roof/glass/pillars about 3cm. Added camera-relative frontage/lamp/paving recycling for the continuously moving hover. Activation inherits live preview progress, hides the sentence and cuts to the next setup after one second.
+- Added a C2 left/up approach, full 22m-radius vertical loop, laterally separated exit and open-star departure. Path frames remain continuous at vertical tangents; cars, portals and rails share the same loop and actual lane-distance motion. Exterior/portrait cameras reveal the entire stunt, with modest grid stroke/contrast support.
+- Film timing is now 20.5s: the opening shortens by 1.2s and the final stunt extends by 4s; the exhaust remains 4.6s. Existing acceleration ramp is preserved before terminal cruise. Full playback returns to moving preview only when still hovered/focused.
+- Extended infinite-preview bounds/restoration, exact click handoff/one-second cut, loop inversion/tangent/exit, complete-loop viewport coverage and determinism checks. Actual browser evidence, checks and limits are recorded in `tools/MOTOR-RACE-QA.md`. No new dependency or external production asset.
+
 ### 2026-10-25 — Separate hover preview from click playback and smooth the grid entry
 
 - Hover/focus now stops inside the first setup at 2.18s. Click/Enter/Space starts the complete film and hides the sentence without changing layout; completion/Escape/failure restore it, with keyboard focus restoration. The first camera places both cars below/right of the native sentence. Movie/preview lifecycle regressions preserve one RAF and graphics/preference/background handling.

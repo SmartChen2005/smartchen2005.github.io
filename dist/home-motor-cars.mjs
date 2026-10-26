@@ -86,9 +86,9 @@ export function createMotorCar(kind){
   }
   if(mini){
     const roofGeometry=loft([[-1.36,.63,1.47,1.42],[-1.1,.68,1.53,1.45],[-.5,.69,1.55,1.47],[.16,.65,1.51,1.44]],{rings:48,steps:8,smoothProfile:true,profile:[[1,.35],[.96,.85],[.65,1],[0,1],[-.65,1],[-.96,.85],[-1,.35],[-.8,0],[0,0],[.8,0]]});
-    const roofY=roofGeometry.attributes.position;for(let i=0;i<roofY.count;i++)roofY.setY(i,1+(roofY.getY(i)-1)*.76);roofGeometry.computeVertexNormals();
+    const roofY=roofGeometry.attributes.position;for(let i=0;i<roofY.count;i++)roofY.setY(i,1+(roofY.getY(i)-1)*.82);roofGeometry.computeVertexNormals();
     mesh(root,roofGeometry,M.roof).name='f56-roof';
-    const cab=points=>points.map(([x,y,z])=>[x,1+(y-1)*.76,z]);
+    const cab=points=>points.map(([x,y,z])=>[x,1+(y-1)*.82,z]);
     const wind=cab([[-.65,1.47,.18],[.65,1.47,.18],[.77,1.055,.73],[-.77,1.055,.73]]);
     glassPanel(root,wind,M.glass,M.chrome,.015);
     const rear=cab([[-.65,1.46,-1.34],[.65,1.46,-1.34],[.78,1.005,-1.73],[-.78,1.005,-1.73]]);
@@ -101,7 +101,7 @@ export function createMotorCar(kind){
       surfaceSeam(root,shell,side,[[.77,.73],[.81,1.1],[.75,1.55],[.67,1.8]],M.darkMetal,.004,false,true).name='f56-clamshell-seam';
       // Restrained oval lamps sit in the rounded clamshell, not on stalks.
       const lamp=new T.Group();lamp.name='recessed-f56-headlamp';lamp.position.set(side*.56,.815,frontZ(side*.56)-.022);lamp.rotation.x=-.43;lamp.rotation.y=side*.17;
-      lamp.userData.lensRadius=.153;
+      lamp.userData.lensRadius=.153;lamp.scale.x=.91;lamp.userData.widthScale=.91;
       const housing=mesh(lamp,sphere(.175),M.paint);housing.scale.set(1,1.13,.19);
       const lens=mesh(lamp,sphere(.153),M.darkMetal,[0,0,.025]);lens.scale.set(1,1.13,.13);
       mesh(lamp,torus(.164,.008),M.chrome,[0,0,.034]).scale.y=1.13;
@@ -148,7 +148,7 @@ export function createMotorCar(kind){
     lineTube(root,[[-.48,.91,rearZ(-.48)-.022],[-.49,.69,rearZ(-.49)-.022],[-.45,.43,rearZ(-.45)-.022],[0,.40,-2.005],[.45,.43,rearZ(.45)-.022],[.49,.69,rearZ(.49)-.022],[.48,.91,rearZ(.48)-.022]],M.darkMetal,.004);
     b.add(cylinder(.047,.012,24),M.chrome,[0,.98,1.67],[-.35,0,0]);
     for(const side of [-1,1])for(let i=0;i<3;i++)b.add(box(.09-i*.015,.011,.018),M.chrome,[side*(.09+i*.025),.99,1.67+i*.02]);
-    lineTube(root,[[-.60,1.355,-1.39],[0,1.375,-1.43],[.60,1.355,-1.39]],M.black,.022);
+    lineTube(root,[[-.60,1.383,-1.39],[0,1.405,-1.43],[.60,1.383,-1.39]],M.black,.022);
   }else{
     // Open E85 cockpit with a lowered tub, two contoured seats and a real dashboard.
     b.add(box(1.42,.14,1.38),M.interior,[0,.55,-.49]);

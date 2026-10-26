@@ -5,7 +5,7 @@ uniform sampler2D source;uniform sampler2D depthSource;
 uniform sampler2D cars;uniform sampler2D carDepth;uniform sampler2D lampSource;uniform sampler2D lampDepth;
 uniform vec2 texel;uniform vec3 ink;uniform vec3 paper;uniform vec3 accent;
 uniform mat4 inverseViewProjection;uniform mat4 previousViewProjection;
-uniform float burst;uniform bool moving;varying vec2 vUv;
+uniform float burst;uniform float loopFocus;uniform bool moving;varying vec2 vUv;
 float distanceAt(sampler2D depth,vec2 uv){float z=texture2D(depth,uv).x;return .08*180./(180.-z*(180.-.08));}
 float contour(sampler2D normals,sampler2D depth,vec2 uv){
  vec4 center=texture2D(normals,uv);float z=texture2D(depth,uv).x,edge=0.;
@@ -57,8 +57,8 @@ void main(){
  float echo=echoContour(vUv+velocity*.3)*mix(.06,.17,burst)*peripheral;
  echo+=echoContour(vUv+velocity*.65)*.11*burst*peripheral;
  float visible=step(texture2D(carDepth,vUv).x,depth+.00003)*texture2D(cars,vUv).a;
- float haze=1.-smoothstep(38.,110.,distanceAt(depthSource,vUv));
- float line=mix(min(1.,environmentEdge*.42+echo)*mix(.28,1.,haze),vehicleEdge*.92,visible);
+ float haze=max(1.-smoothstep(38.,110.,distanceAt(depthSource,vUv)),loopFocus*.65);
+ float line=mix(min(1.,environmentEdge*.42*(1.+loopFocus*.6)+echo)*mix(.28,1.,haze),vehicleEdge*.92,visible);
  vec3 background=ink;
  // Uncovered sky receives stars; the dissolving road gradually admits them.
  // Building and vehicle interiors keep their flat ground.

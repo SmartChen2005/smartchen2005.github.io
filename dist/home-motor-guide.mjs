@@ -1,6 +1,6 @@
 import {T,box,batch,toon} from './home-motor-geometry.mjs?rev=20261025-cosmic';
 import {motion} from './home-motor-motion.mjs?rev=20261025-cosmic';
-import {guideFrame,groundOpacity} from './home-motor-path.mjs?rev=20261025-preview';
+import {guideFrame,groundOpacity,GUIDE_EXIT} from './home-motor-path.mjs?rev=20261025-loop';
 const smooth=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);};
 export function guideReveal(local,distance=145){return smooth((local-2.85-(1-Math.min(1,Math.max(0,distance)/145))*1.2)/1.25);}
 export function createMotorGuide(){
@@ -17,15 +17,15 @@ export function createMotorGuide(){
  const paving=new T.InstancedMesh(box(.68,.012,.07),ink,stones.length),kerbs=new T.InstancedMesh(box(.15,.14,1),ink,93*2);
  for(const m of [paving,kerbs]){m.frustumCulled=false;m.instanceMatrix.setUsage(T.DynamicDrawUsage);track.add(m);}
  track.traverse(n=>n.layers.set(2));
- for(let i=0;i<29;i++){
+ for(let i=0;i<46;i++){
   const group=new T.Group(),parts=batch(group);
   for(const y of [-3,3])parts.add(box(10,.014,.018),ink,[0,y,0]);
   for(const x of [-5,5])parts.add(box(.016,6,.018),ink,[x,0,0]);
-  parts.finish();grid.add(group);frames.push(group);
+  parts.finish();group.traverse(n=>{if(n.isInstancedMesh){n.userData.fine=n.geometry;n.userData.bold=n.geometry.clone();n.userData.bold.scale(n.geometry.parameters.width===10?1:3.5,n.geometry.parameters.height===6?1:3.5,3.5);}});grid.add(group);frames.push(group);
  }
  const offsets=[];for(const x of [-5,-2.5,0,2.5,5])for(const y of [0,6])offsets.push([x,y]);
  for(const side of [-1,1])for(const y of [1.5,3,4.5])offsets.push([side*5,y]);
- const segments=56,rails=new T.InstancedMesh(box(.012,.012,1),ink,segments*offsets.length);rails.name='curving-grid-rails';rails.instanceMatrix.setUsage(T.DynamicDrawUsage);rails.frustumCulled=false;grid.add(rails);
+ const segments=90,rails=new T.InstancedMesh(box(.012,.012,1),ink,segments*offsets.length);rails.name='curving-grid-rails';rails.instanceMatrix.setUsage(T.DynamicDrawUsage);rails.frustumCulled=false;grid.add(rails);
  const dummy=new T.Object3D(),axis=new T.Vector3(0,0,1),zero=new T.Vector3(),unit=new T.Vector3(1,1,1);
  return {root,track,grid,frames,rails,strips,paving,kerbs,floorOpacity:1,reveal:0,update(local,travel,active){
   root.visible=active;if(!active)return;
@@ -37,12 +37,12 @@ export function createMotorGuide(){
    stones.forEach(({row,col},i)=>{const p=rowPoses[row],melt=1-groundOpacity(local,p.position.z-travel);dummy.position.copy(p.position).addScaledVector(p.right,((col-3)*.8+(row%2)*.4)*(1+.2*melt)).addScaledVector(p.up,.022);dummy.position.z-=base;dummy.quaternion.copy(p.quaternion);dummy.scale.set(1+.45*melt,1,1);dummy.updateMatrix();paving.setMatrixAt(i,dummy.matrix);});paving.instanceMatrix.needsUpdate=true;
    let k=0;for(const side of [-1,1])for(let j=0;j<93;j++){const a=poses[j],b=poses[j+1],melt=1-groundOpacity(local,a.position.z-travel),width=3.13+1.87*melt,A=a.position.clone().addScaledVector(a.right,side*width).addScaledVector(a.up,.015),B=b.position.clone().addScaledVector(b.right,side*width).addScaledVector(b.up,.015),v=B.clone().sub(A);dummy.position.copy(A).add(B).multiplyScalar(.5);dummy.position.z-=base;dummy.quaternion.setFromUnitVectors(axis,v.clone().normalize());dummy.scale.set(1,1,v.length()+.015);dummy.updateMatrix();kerbs.setMatrixAt(k++,dummy.matrix);}kerbs.instanceMatrix.needsUpdate=true;
   }
-  const base=travel-motion.phase(travel,7)*7,reveal=guideReveal(local);this.reveal=reveal;
-  frames.forEach((f,i)=>{const z=base+i*7-28,k=guideReveal(local,z-travel),pose=guideFrame(z);f.position.copy(pose.position).addScaledVector(pose.up,3*k);f.quaternion.copy(pose.quaternion);f.visible=k>.015;f.scale.set(Math.max(.001,k),Math.max(.001,k),1);});
-  const first=travel-motion.phase(travel,3.5)*3.5-28,poses=Array.from({length:segments+1},(_,j)=>guideFrame(first+j*3.5));let index=0;
+  const fixed=travel>=320&&travel<GUIDE_EXIT+60,base=fixed?308:travel-motion.phase(travel,7)*7,reveal=guideReveal(local);this.reveal=reveal;
+  frames.forEach((f,i)=>{const z=base+i*7-28,k=guideReveal(local,z-travel),pose=guideFrame(z);f.position.copy(pose.position).addScaledVector(pose.up,3*k);f.quaternion.copy(pose.quaternion);f.userData.progress=z;f.visible=k>.015&&z<=GUIDE_EXIT&&(fixed||z-travel<180);f.traverse(n=>{if(n.isInstancedMesh)n.geometry=z>=350?n.userData.bold:n.userData.fine;});f.scale.set(Math.max(.001,k),Math.max(.001,k),1);});
+  const first=fixed?280:travel-motion.phase(travel,3.5)*3.5-28,poses=Array.from({length:segments+1},(_,j)=>guideFrame(Math.min(GUIDE_EXIT,first+j*3.5)));let index=0;
   for(const [x,y]of offsets)for(let j=0;j<segments;j++){
    const z=first+j*3.5,k=guideReveal(local,z-travel),a=poses[j].position.clone().addScaledVector(poses[j].right,x).addScaledVector(poses[j].up,y),b=poses[j+1].position.clone().addScaledVector(poses[j+1].right,x).addScaledVector(poses[j+1].up,y),v=b.clone().sub(a);
-   if(k>.015){dummy.position.copy(a).add(b).multiplyScalar(.5);dummy.quaternion.setFromUnitVectors(axis,v.clone().normalize());dummy.scale.set(k,k,v.length());}
+   if(k>.015&&z<GUIDE_EXIT&&(fixed||z-travel<180)){dummy.position.copy(a).add(b).multiplyScalar(.5);dummy.quaternion.setFromUnitVectors(axis,v.clone().normalize());const stroke=z>=350?3.5:1;dummy.scale.set(k*stroke,k*stroke,v.length());}
    else{dummy.position.copy(zero);dummy.quaternion.identity();dummy.scale.copy(unit).multiplyScalar(0);}
    dummy.updateMatrix();rails.setMatrixAt(index++,dummy.matrix);
   }

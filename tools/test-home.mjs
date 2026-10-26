@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import { exhibitionLayout } from '../dist/home-exhibition.mjs';
-import { motorsportFrame, MOTOR_DURATION, MOTOR_PREVIEW_END } from '../dist/home-motorsport.mjs';
+import { motorsportFrame, MOTOR_DURATION, MOTOR_CLICK_LEAD } from '../dist/home-motorsport.mjs';
 import { raceShot } from '../dist/home-motor-race.mjs';
 
 // The wall must never crop, overlap or cross the sentence, even on short screens.
@@ -19,7 +19,7 @@ for (const [width, height, sentenceHeight] of [[1920,1080,90],[1440,900,68],[102
     assert(a.x + a.width <= b.x || b.x + b.width <= a.x || a.y + a.height <= b.y || b.y + b.height <= a.y);
   }
 }
-assert.equal(MOTOR_DURATION,17.7);
+assert.equal(MOTOR_DURATION,20.5);
 assert.deepEqual([0,1,MOTOR_DURATION].map(t=>motorsportFrame(t).phase),['opening','city','idle']);
 assert(motorsportFrame(100).idle);
 
@@ -59,20 +59,21 @@ function step(count=1) {
   for(let i=0;i<count;i++) { now+=16; const pending=[...callbacks.values()];callbacks.clear();pending.forEach(fn=>fn(now));assert(callbacks.size<=1,'Duplicate animation loops'); }
 }
 scene.setWorld('games');step(240);scene.point(1,0);step(120);assert.equal(callbacks.size,1);
-scene.setWorld('cars');step(75);assert.equal(motorCanvas.dataset.phase,'city');
-step(300);assert.equal(motorCanvas.dataset.phase,'preview-hold');assert.equal(motorCanvas.dataset.shot,'starlit-lead');assert.equal(callbacks.size,0,'Hover stops within the first camera');
-scene.playCars();assert.equal(motorCanvas.dataset.playback,'film');assert.equal(motorCanvas.dataset.phase,'opening');step(1300);assert(painted.some(f=>f.shot==='grid-guide'));assert.equal(motorCanvas.dataset.phase,'preview-hold');
-assert.equal(callbacks.size,0,'The race must stop requesting frames when it finishes');
+scene.setWorld('cars');step(75);assert.equal(motorCanvas.dataset.phase,'preview');
+step(300);assert.equal(motorCanvas.dataset.phase,'preview');assert.equal(motorCanvas.dataset.shot,'starlit-lead');assert.equal(callbacks.size,1,'Hover keeps the first shot moving');
+const hovering=painted.at(-1).openingTime;scene.playCars();assert.equal(motorCanvas.dataset.playback,'film');assert.equal(motorCanvas.dataset.phase,'opening');assert.equal(painted.at(-1).openingTime,hovering,'Click inherits the exact hover progress');
+step(60);assert.equal(motorCanvas.dataset.shot,'starlit-lead');step(4);assert.equal(motorCanvas.dataset.shot,'bumper-train','Next camera cuts one second after click');step(1300);assert(painted.some(f=>f.shot==='grid-guide'));assert.equal(motorCanvas.dataset.phase,'preview');
+assert.equal(callbacks.size,1,'Completing the film returns to the continuously moving hover');
 scene.setWorld('');assert.equal(callbacks.size,0);assert.equal(document.body.dataset.carExit,'true');
 for(const fn of timers.values())fn();timers.clear();assert.equal(document.body.dataset.carExit,undefined);
-scene.setWorld('cars');assert.equal(motorCanvas.dataset.phase,'opening','Re-entry restarts the sequence');
+scene.setWorld('cars');assert.equal(motorCanvas.dataset.phase,'preview','Re-entry restarts the preview');
 scene.setWorld('');
 scene.setWorld('photo');
 assert(!motorCanvas.classList.contains('is-exiting'), 'Switching identities cancels the car exit');
 assert.equal(document.body.dataset.carExit, undefined);
 scene.setWorld('photo');assert.equal(callbacks.size,0);assert(prints.every(p=>p.style.width));
 scene.setWorld('cars');media.matches=true;mediaHandlers.forEach(fn=>fn());
-assert.equal(callbacks.size,0);assert.equal(motorCanvas.dataset.phase,'preview-hold');
+assert.equal(callbacks.size,0);assert.equal(motorCanvas.dataset.phase,'preview');
 const before=drawings;scene.setWorld('games');assert(drawings>before);assert.equal(callbacks.size,0);
 media.matches=false;mediaHandlers.forEach(fn=>fn());assert.equal(callbacks.size,1);
 scene.setWorld('cars');step(30);
@@ -101,7 +102,7 @@ const playbackEvents=[];
 const delayed=sandbox.createMotorsport(delayedCanvas,{foreground:foregroundCanvas,worldFactory:()=>delayedWorld,onPlayback:(state,reason)=>playbackEvents.push([state,reason])});
 delayed.resize(1440,900);delayed.setActive(true);step(30);
 assert.equal(delayedCanvas.dataset.phase,undefined,'The movie clock waits until the graphics world is ready');
-delayedWorld.ready=true;step();assert.equal(delayedCanvas.dataset.phase,'opening');
+delayedWorld.ready=true;step();assert.equal(delayedCanvas.dataset.phase,'preview');
 delayed.play();assert.equal(playbackEvents.at(-1)[0],true);
 delayedWorld.available=false;delayedWorld.onUnavailable();assert.equal(playbackEvents.at(-1)[0],false);assert.equal(playbackEvents.at(-1)[1],'unavailable','Graphics failure clears full-play state so the sentence can restore');
 assert.equal(callbacks.size,0,'A lost graphics context stops the movie');
@@ -109,4 +110,4 @@ assert(!foregroundCanvas.classList.contains('is-active'),'Graphics failure also 
 assert.equal(document.body.dataset.motorImmersive,undefined,'The car scene never makes the native homepage immersive');
 assert.equal(document.body.dataset.motorFallback,'true');
 delayed.setActive(false);assert.equal(document.body.dataset.motorFallback,undefined);
-console.log('Passed: four uncropped non-overlapping prints; first-shot hover hold; deliberate 17.7s film, completion and restart; finite canvas geometry; stopped idle loop; reduced motion; background suspension.');
+console.log('Passed: four uncropped non-overlapping prints; endless first-shot hover; continuous click handoff / 1s cut; 20.5s film and completion; finite canvas geometry; single animation loop; reduced motion; background suspension.');

@@ -1,4 +1,27 @@
-# Car Enthusiast — First-shot preview, click film and natural grid entry, 2026-10-25
+# Car Enthusiast — Endless street preview and a 360-degree grid loop, 2026-10-25
+
+Started from 313388e on clean master. MINI receives small proportion corrections; the approved line art, graphite/white/amber palette, five setups and 4.6s exhaust segment remain.
+
+## Changes
+
+- MINI lamp width is 91% of the previous width; the roof/cabin rises about 3cm. Tires keep their circular diameter and depth, and Z4 geometry is unchanged.
+- Hover/focus now runs an unbounded first-camera clock. Camera-relative recycling keeps whole frontages, paving and lantern assemblies together and near the origin; it does not accumulate previous-frame state. Raw wheel distance keeps advancing. A click inherits the current preview pose and street matrices, then cuts after one second. The complete edit is 20.5s: 0–1 / 1–3.2 / 3.2–5.5 / 5.5–10.1 / 10.1–20.5. Native text stays visible for preview, hides for deliberate playback and restores afterward. Reduced motion still uses a static preview.
+- After the existing bends, the shared vehicle/portal/rail route turns up and left into a 22m-radius vertical loop. C2 approach/exit curves and stable local frames carry both cars through a complete inversion. A smooth 12m lateral shift separates the exit from the entrance. Actual offset-lane arc length still determines cornering gain; the existing boost law reaches its original terminal speed before the added stunt.
+- The camera pulls outside to show the whole loop, follows the exit and returns to chase framing before the cars leave the final portal for the stars. Portrait framing has a dedicated wider view. Distant loop contours and portal cross sections gain restrained contrast/thickness during the exterior view, without an extra ink. Scenario Motion Loops' pure-time/recycling method remains; no new package, production asset or simulation history.
+
+## Actual verification
+
+Passed `node tools/test-home.mjs`, `node tools/test-motor-race.mjs`, `node tools/test-home-state.mjs`, `node tools/test-photo-transition.mjs`, `node tools/test-game-transition.mjs` and `node tools/validate-site.mjs`. Strict published-directory design audit reports zero findings. Added indefinite first-shot movement, exact click handoff, simulated one-second cut, moving-preview restoration, bounded/reversible/out-of-order street matrices through 100000s, continuous loop joins/frames, actual car inversion, complete-loop desktop/phone framing and open-star departure checks. Existing geometry, six viewport visibility, inner-lane gain, delayed acceleration, flying architecture and preference/background handling remain covered.
+
+Chrome reviewed the actual homepage at 1440×900: keyboard focus remained in preview/starlit-lead after 71.566s with the sentence visible. Space started film mode with the sentence hidden; full playback completed and returned to a moving preview with native trigger focus. No warning/error was captured. Exact one-second switching is verified by the controlled RAF regression rather than a live wall-clock measurement.
+
+Reviewed the MINI front, left/up approach, inverted apex, exit and 20.5s open-star departure. At 390×844 both the complete loop and long-running preview fit without horizontal overflow; the preview cars remain below the sentence. These are desktop Chrome viewport checks, not physical touch, Safari or FPS measurements.
+
+Evidence in the task artifact directory: `loop-mini-preview.png`, `loop-mobile-endless-preview.png`, `loop-mobile-apex.png`, `loop-left-up-approach.png`, `loop-open-star-exit.png` and `loop-final.png`. Review fixtures are removed and viewport overrides reset before commit.
+
+---
+
+# Previous: First-shot preview, click film and natural grid entry, 2026-10-25
 
 Started from a3f1869 on clean master. The latest user instruction explicitly changes interaction: the sentence remains for hover/focus preview, but disappears during deliberate full playback. Vehicle art, five cameras, 17.7s film, 4.6s exhaust, graphite/white/amber inks and rear details remain.
 

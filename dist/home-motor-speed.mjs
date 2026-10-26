@@ -12,8 +12,8 @@ export function boostMotion(local,{a=18,length=.9}={}){
     acceleration:a*(smooth(u/r)-smooth((u-length)/r)),flame:(local>.52&&local<.75)||(local>1.04&&local<1.20)};
 }
 export function raceTravel(shot,t){
-  const start=shot.travelStart??shot.start,end=shot.travelEnd??shot.end,length=end-start,local=clamp(t-start,0,length);
-  return (shot.travelOffset||0)+MOTOR_SPEED*(.85*local+.15*local*local/length);
+  const start=shot.travelStart??shot.start,end=shot.travelEnd??shot.end,length=shot.travelRamp??end-start,local=Math.max(0,t-start);
+  const ramp=Math.min(local,length);return (shot.travelOffset||0)+MOTOR_SPEED*(.85*ramp+.15*ramp*ramp/length+1.15*Math.max(0,local-length));
 }
 // Integrated, gently out-of-phase corrections: the gap breathes after the surge.
 export function pursuitMotion(local,index){
@@ -38,8 +38,8 @@ export function driverMotion(shot,t,index){
 export const cameraBoost=(shot,t)=>{if(!['exhaust-exit','grid-guide'].includes(shot.id))return {distance:0,velocity:0};const q=t-shot.travelStart,b=boostMotion(q-.60),p=pursuitMotion(q,2);return {distance:b.distance+p.distance,velocity:b.velocity+p.velocity};};
 export function cameraTravel(shot,t){return raceTravel(shot,t)+cameraBoost(shot,t).distance;}
 export function raceExposure(shot,t,idle=false){
-  const start=shot.travelStart??shot.start,end=shot.travelEnd??shot.end,local=clamp(t-start,0,end-start);
-  const baseSpeed=MOTOR_SPEED*(.85+.3*local/(end-start)),speed=baseSpeed+cameraBoost(shot,t).velocity;
+  const start=shot.travelStart??shot.start,end=shot.travelEnd??shot.end,length=shot.travelRamp??end-start,local=clamp(t-start,0,length);
+  const baseSpeed=MOTOR_SPEED*(.85+.3*local/length),speed=baseSpeed+cameraBoost(shot,t).velocity;
   return {enabled:!idle,speed,baseSpeed,shutter:idle?0:MOTOR_SHUTTER,radial:0};
 }
 export function createSpeedLines(){

@@ -1,4 +1,4 @@
-import { createScenes } from './home-scenes.mjs?rev=20261025-preview';
+import { createScenes } from './home-scenes.mjs?rev=20261025-loop';
 import { installGameTransition } from './home-game-transition.mjs';
 import { installPhotoTransition } from './home-photo-transition.mjs?rev=20261024-shared-entry';
 import { createBusinessCard } from './home-business-card.mjs';
