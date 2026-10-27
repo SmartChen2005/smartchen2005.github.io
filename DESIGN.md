@@ -16,6 +16,10 @@ FIG. 008 adds a separate `editions/2026-10-27-sx70/` edition (9 payload hashes, 
 
 FIG. 005 now uses `editions/2026-10-27-gallery-small/` (6 payloads, native source pinned to `b63438b`). The first isolation omitted the native `destination-out` ellipse behind the wordmark and enlarged its final destination to 62% of the frame. The intermediate `2026-10-27-gallery` edition restored the native treatment. The user's follow-up explicitly asks for a much smaller logo throughout the animation: the current adapter applies one `brandScale=.4` to the complete mark/lettering and its white clearance at every frame. Native tracing, title fade, placement and museum geometry remain. The masthead stays centered in this isolated study. `tools/figures-lab/gallery-lab.mjs` owns this scale; verify with the freezer's `--gallery-small` profile. All earlier editions remain intact.
 
+## Projects directory watermark (2026-10-27)
+
+Only `/projects/` has a faint, stationary background watermark reading **WORK IN PROGRESS, / NOT FINAL**. `dist/projects/projects.css` owns its locally hosted Montserrat Bold Italic face, uppercase lettering, slight diagonal angle and 8.5% opacity. The user selected this free alternative to Gotham; the variable italic font and SIL OFL are preserved in `dist/assets/fonts/`, sourced from Google Fonts (`google/fonts`, `ofl/montserrat`) on 2026-10-27. Keep it behind all content, non-interactive and hidden from assistive technology, print and forced colors. Preserve the black background and existing foreground/header geometry.
+
 ## Shared Projects header (2026-10-27)
 
 The Projects directory and all five project landing pages share one right-aligned navigation: **VegShark.com / Projects / The Gallery**. VegShark.com returns to the portfolio homepage; Projects returns to the project directory. Remove the former left Smart Chen brand and inconsistent Home/Projects order. Keep the exact mixed-case VegShark.com spelling. The Gallery uses its existing uppercase wordmark and the same decorative `gallery/assets/mobius-outline.svg`, with no new logo geometry or animation.

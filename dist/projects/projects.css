@@ -1,0 +1,28 @@
+@font-face {
+  font-family: "Montserrat";
+  src: url("../assets/fonts/montserrat-italic-variable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+.projects-directory { isolation: isolate; }
+.project-watermark {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+.project-watermark > span {
+  color: #f4f4ee;
+  opacity: .085;
+  font: italic 700 clamp(28px, 7vw, 132px)/1.2 "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  text-transform: uppercase;
+  text-align: center;
+  transform: rotate(-12deg);
+  filter: blur(.35px);
+}
+@media (forced-colors: active), print { .project-watermark { display: none; } }
