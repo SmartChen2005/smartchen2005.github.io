@@ -9,6 +9,6 @@ export function projectHeader({ base = '../../', current = false, theme = 'dark'
   </header>`;
 }
 
-export const projectHeaderAssets = base => `<link rel="stylesheet" href="${base}project-header.css?v=20261019c">
+export const projectHeaderAssets = base => `<link rel="stylesheet" href="${base}project-header.css?v=20261027-aligned">
   <link rel="stylesheet" href="${base}gallery-entry.css?rev=20261024-shared-entry">
   <script type="module" src="${base}gallery-entry.mjs?rev=20261024-shared-entry"></script>`;
