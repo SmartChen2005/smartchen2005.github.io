@@ -1,4 +1,14 @@
-# Car Enthusiast — Another 0.4s off each middle shot, 2026-10-25
+# Car Enthusiast — Ground-level second camera, 2026-10-27
+
+Started from dc58115 on clean master. The solo MINI rear camera now sits 18cm above the road, down from 65cm desktop / 70cm phone. Following distances (5.5m / 7.5m), upward targets, FOV, timing, shared road width and other camera setups retain their approved values.
+
+Passed motor/home regressions, site validation and strict dist audit (zero findings). The existing expected camera pose was updated; the existing phone vehicle-bounds check still passes. No new low-impact tests or dependency.
+
+Chrome 1440×900 reviewed the low rear stance and playback through the complete second setup (1–2.399s). Chrome 390×844 reviewed the end at 2.3s: the MINI remains complete with no document overflow. No warning/error was captured. These are desktop viewport checks, not physical-device or FPS measurements. Evidence: `low-second-desktop.png` and `low-second-mobile.png` in the task artifact directory. Temporary author fixture is removed and viewport override reset before commit.
+
+---
+
+# Previous: Another 0.4s off each middle shot, 2026-10-25
 
 Started from f9c06ee on clean master. Shot boundaries are now 0 / 1 / 2.4 / 3.9 / 8.5 / 18.2 / 19.85s: second shot 1.4s, third shot 1.5s. Every later shot shifts earlier by 0.8s with the same shot-local movement and durations. Shared road width, vehicle geometry, hover continuation, 4.6s exhaust, loop and front space pass remain.
 

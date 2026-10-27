@@ -96,6 +96,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-27 — Lower the second-shot chase camera
+
+- Lowered the solo MINI rear camera from 65cm desktop / 70cm phone to 18cm above the road. Existing following distances and upward targets retain the complete vehicle while strengthening the ground-level perspective.
+- Motor/home regressions, site validation and strict dist audit passed. Chrome desktop and narrow viewport review covered the low view and the full second-shot movement; evidence is in `tools/MOTOR-RACE-QA.md`.
+
 ### 2026-10-25 — Trim the second and third shots again
 
 - Shortened both middle street setups by another 0.4s: solo MINI rear is 1.4s and oblique city pair is 1.5s. Later setups move 0.8s earlier; full duration is 19.85s.
