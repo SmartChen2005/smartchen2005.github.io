@@ -38,7 +38,7 @@ export const studies = [
   },
   {
     id: '005', title: 'Into The Gallery', kind: 'Motion / Transition', location: 'Homepage + Projects → The Gallery',
-    image: 'gallery-entrance-refined.jpg', alt: 'The museum entrance with white clearance behind its smaller Gallery wordmark.', experiment: 'gallery-entrance', edition: '2026-10-27-gallery',
+    image: 'gallery-entrance-small.jpg', alt: 'The museum entrance with a small Gallery wordmark and white clearance.', experiment: 'gallery-entrance', edition: '2026-10-27-gallery-small',
     world: 'photo', action: 'photo', first: '2026-10-14', revised: '2026-10-24',
     description: 'A viewfinder opens into an imagined museum, then resolves into the real Gallery masthead.',
     perspective: 'Entering a collection becomes a spatial journey. The opening frame, architecture, and destination belong to one continuous movement.',

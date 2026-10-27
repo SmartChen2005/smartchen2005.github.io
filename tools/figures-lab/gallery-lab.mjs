@@ -5,6 +5,10 @@ const stage=document.querySelector('.lab-stage');
 const canvas=document.querySelector('#gallery-lines');
 const brand=document.querySelector('.gallery-brand');
 const title=brand.querySelector('span');
+// The complete logo stays deliberately small throughout the entrance.
+const brandScale=.4;
+brand.style.transform=`scale(${brandScale})`;
+brand.style.transformOrigin='center';
 const paths=createGalleryArchitecture();
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 let animation=0;
@@ -36,7 +40,7 @@ function paint(time){
   // develops. The white document shows through this oval.
   const b=state.brand;
   ctx.save();ctx.globalCompositeOperation='destination-out';ctx.globalAlpha=state.titleOpacity;
-  ctx.beginPath();ctx.ellipse(b.x+b.width/2,b.y+b.height/2,b.width*.37,b.height*.49,0,0,Math.PI*2);ctx.fill();ctx.restore();
+  ctx.beginPath();ctx.ellipse(b.x+b.width/2,b.y+b.height/2,b.width*brandScale*.37,b.height*brandScale*.49,0,0,Math.PI*2);ctx.fill();ctx.restore();
   Object.assign(brand.style,{left:`${b.x}px`,top:`${b.y}px`,width:`${b.width}px`,height:`${b.height}px`,opacity:String(state.brandOpacity)});
   title.style.fontSize=`${state.titleSize}px`;title.style.opacity=String(state.titleOpacity);
   strokes.forEach(path=>{path.style.strokeDasharray='1';path.style.strokeDashoffset=String(1-state.trace);});

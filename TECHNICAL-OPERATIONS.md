@@ -96,6 +96,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-27 — Make the complete Gallery logo much smaller
+
+- At the user's follow-up request, scaled the entire archived Gallery logo to 40% of its previous size throughout the animation, including its mark, lettering and white clearance. Updated the thumbnail to match.
+- Added the six-payload `2026-10-27-gallery-small` edition while preserving every earlier edition. Verify it with `node tools/freeze-figures-edition.mjs --gallery-small`. Archive checks now cover all four editions, including superseded ones, and 78 payload hashes.
+
 ### 2026-10-27 — Refine catalogue plates and restore the native Gallery wordmark treatment
 
 - Re-rendered the preserved SX-70 model as a larger, clearer 960×840 plate. Re-captured Personal Card with its real hover reflection and updated the Gallery thumbnail to show the native white clearance. Prior thumbnails remain in the archive.

@@ -1,4 +1,4 @@
-import { studies, experimentURL, studyEdition } from './catalogue.mjs?rev=20261027-plates';
+import { studies, experimentURL, studyEdition } from './catalogue.mjs?rev=20261027-small-gallery';
 
 const dialog = document.querySelector('.study-dialog');
 const close = document.querySelector('#close-study');

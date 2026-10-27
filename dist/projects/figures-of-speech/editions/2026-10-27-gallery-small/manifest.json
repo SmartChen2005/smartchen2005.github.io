@@ -1,0 +1,52 @@
+{
+  "edition": "2026-10-27-gallery-small",
+  "sourceCommit": "b63438bbc2230cf68135f58109e9a2ce840b1ace",
+  "preserved": "2026-10-27",
+  "description": "Small-logo Gallery entrance: the complete mark, lettering and white clearance use 40% scale throughout. Earlier editions remain intact.",
+  "studies": [
+    {
+      "slug": "gallery-entrance",
+      "kind": "gallery",
+      "title": "Into The Gallery"
+    }
+  ],
+  "files": [
+    {
+      "path": "runtime/home-gallery-architecture.mjs",
+      "sha256": "3028d358ee5135cd05989eded365a0a47b1aa673dce4d980d5ca2f8c380d79b9",
+      "source": {
+        "path": "dist/home-gallery-architecture.mjs",
+        "sha256": "3028d358ee5135cd05989eded365a0a47b1aa673dce4d980d5ca2f8c380d79b9"
+      }
+    },
+    {
+      "path": "runtime/gallery/assets/mobius-outline.svg",
+      "sha256": "e144a471c3b3d2af3d0b7912ff420e11d514c63d10271dd7f45b77c838a02b13",
+      "source": {
+        "path": "dist/gallery/assets/mobius-outline.svg",
+        "sha256": "e144a471c3b3d2af3d0b7912ff420e11d514c63d10271dd7f45b77c838a02b13"
+      }
+    },
+    {
+      "path": "runtime/photo-frame.mjs",
+      "sha256": "e61936f7adf988e9bad57222875822601716c67628cf8a01fd935ad7a2ab9d39",
+      "source": {
+        "path": "dist/home-photo-transition.mjs",
+        "sha256": "6e3c8da24679f88b2e5b0738c320099458127d576d22269355a74ecf15de9f14",
+        "adaptation": "Preserved native frame calculations; live page navigation installer excluded."
+      }
+    },
+    {
+      "path": "gallery-lab.css",
+      "sha256": "0bd91e6c4e4315d332690da9dce022515b91778137ef1691f9e2cb0ffb895bfc"
+    },
+    {
+      "path": "gallery-lab.mjs",
+      "sha256": "e78f66e5a800c4d71f8e1c00ea0a3c136246fba6cf41faf8df89905f6310957f"
+    },
+    {
+      "path": "gallery-entrance/index.html",
+      "sha256": "e1e920a9da2ba49d42e80b723e7317dfdc8d4806da603938947d13164154ca03"
+    }
+  ]
+}

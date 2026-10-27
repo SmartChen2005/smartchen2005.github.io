@@ -16,10 +16,11 @@ assert(!studies.some(study=>study.id==='003'),'The merged entrance must not rema
 assert(!/<iframe\b/.test(html),'The index must not boot hidden rendering contexts');
 assert(!/Try interaction|Open full page|id="start-preview"|id="reset-preview"/.test(html),'No extra interaction gate or live-page control may remain');
 assert(html.includes('Open in New Page'),'The independent experiment must have a new-page link');
-const manifests=[...new Set(studies.map(studyEdition))].map(name=>JSON.parse(fs.readFileSync(path.join(archive,'editions',name,'manifest.json'),'utf8')));
+const manifests=fs.readdirSync(path.join(archive,'editions'),{withFileTypes:true}).filter(entry=>entry.isDirectory()).map(entry=>JSON.parse(fs.readFileSync(path.join(archive,'editions',entry.name,'manifest.json'),'utf8')));
 assert.equal(manifests.find(item=>item.edition==='2026-10-27').sourceCommit,'e6bb1c9aa2798b7ddacddb74840fc948d857c61a');
 assert.equal(manifests.find(item=>item.edition==='2026-10-27-sx70').sourceCommit,'1de028bb51c96eebaf8e44bf7cb12f8f1e8d394e');
 assert.equal(manifests.find(item=>item.edition==='2026-10-27-gallery').sourceCommit,'2d4eba468c170080f4c85943b3e862853c95f9ff');
+assert.equal(manifests.find(item=>item.edition==='2026-10-27-gallery-small').sourceCommit,'b63438bbc2230cf68135f58109e9a2ce840b1ace');
 function editionFiles(directory,prefix=''){
   return fs.readdirSync(directory,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?editionFiles(path.join(directory,entry.name),`${prefix}${entry.name}/`):[`${prefix}${entry.name}`]);
 }

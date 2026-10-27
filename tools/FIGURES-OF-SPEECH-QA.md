@@ -1,5 +1,12 @@
 # Figures of Speech — 2026-10-27
 
+## Much smaller Gallery logo
+
+- Applied a uniform 0.4 scale to the complete logo at every animation frame and the same factor to its white clearance. The earlier correction had retained the large native in-flight logo; this follow-up intentionally reduces it as well as the settled mark.
+- At 1280px, actual browser geometry measured 264px in-flight width (previously 660px) and about 93.3px settled width (previously 233.2px). The real mid-animation thumbnail is re-captured from this version.
+- Preserved this change in `2026-10-27-gallery-small`, pinned to source `b63438b`. Earlier editions and thumbnails remain intact. Archive integrity checks now include superseded editions as well as current study destinations.
+- Desktop and 390px browser checks confirmed the 0.4 transform in the actual archive iframe, with settled visible widths of about 71.7px and 63.4px respectively. Child Escape closes the frame with zero contexts remaining and no horizontal overflow. Site validation, 78 hashes/dependency closure, new edition verification, syntax/whitespace checks and strict dist audit all pass.
+
 ## Catalogue plate and Gallery presentation correction
 
 - The new camera plate is a 960×840 native-model rendering with a 1920×1680 canvas backing, rather than enlargement of the earlier 260×240 screenshot. Its model occupies about 59% of the plate width versus about 44% previously. The capture fixture is `tools/figures-lab/camera-plate.html`; it imports the preserved camera model. Live cursor dimensions and interaction are unchanged.
