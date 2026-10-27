@@ -1,0 +1,64 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+
+// An existing edition is verified, never regenerated from evolving site code.
+const edition='2026-10-27';
+const sourceCommit='e6bb1c9aa2798b7ddacddb74840fc948d857c61a';
+const output=`dist/projects/figures-of-speech/editions/${edition}`;
+const digest=buffer=>crypto.createHash('sha256').update(buffer).digest('hex');
+const refreshDraft=process.argv.includes('--refresh-draft');
+if(refreshDraft){
+  const committed=execFileSync('git',['ls-tree','HEAD',`${output}/manifest.json`],{encoding:'utf8'}).trim();
+  if(committed)throw new Error('A committed edition cannot be refreshed. Create a new edition instead.');
+}
+if(fs.existsSync(`${output}/manifest.json`)&&!refreshDraft){
+  const manifest=JSON.parse(fs.readFileSync(`${output}/manifest.json`,'utf8'));
+  for(const file of manifest.files)if(digest(fs.readFileSync(`${output}/${file.path}`))!==file.sha256)throw new Error(`Preserved edition changed: ${file.path}`);
+  console.log(`Verified immutable edition ${edition}; ${manifest.files.length} files.`);process.exit(0);
+}
+const tracked=name=>execFileSync('git',['show',`${sourceCommit}:dist/${name}`],{maxBuffer:40*1024*1024});
+const files=[],seen=new Set();
+function write(name,content,source=null){fs.mkdirSync(path.dirname(`${output}/${name}`),{recursive:true});fs.writeFileSync(`${output}/${name}`,content);files.push({path:name,sha256:digest(Buffer.from(content)),...(source?{source}: {})});}
+function copy(name){
+  if(seen.has(name))return;seen.add(name);
+  const bytes=tracked(name);let content=bytes;
+  if(/\.(?:mjs|js|css)$/.test(name)){
+    let text=bytes.toString('utf8');
+    const refs=new Set();
+    text=text.replace(/(['"])((?:\.\.?\/|\/)[^'"\n]+?\.(?:mjs|js|css|webp|png|jpg|ttf|otf|pdf))(\?[^'"\n]*)?\1/g,(all,quote,url,query='')=>{
+      const resolved=new URL(url,`https://edition.local/${name}`).pathname.slice(1);refs.add(resolved);
+      if(!url.startsWith('/'))return all;
+      let relative=path.posix.relative(path.posix.dirname(name),resolved);if(!relative.startsWith('.'))relative=`./${relative}`;
+      if(/\.(?:mjs|js)$/.test(name)&&url.startsWith('/assets/'))return `new URL(${quote}${relative}${query}${quote},import.meta.url).href`;
+      return `${quote}${relative}${query}${quote}`;
+    });
+    for(const match of text.matchAll(/url\(['"]?([^)'"?]+\.(?:ttf|otf|woff2?|webp|jpg|png))/g))refs.add(new URL(match[1],`https://edition.local/${name}`).pathname.slice(1));
+    content=text;write(`runtime/${name}`,content,{path:`dist/${name}`,sha256:digest(bytes)});for(const ref of refs)copy(ref);
+  }else write(`runtime/${name}`,content,{path:`dist/${name}`,sha256:digest(bytes)});
+}
+for(const name of ['home-business-card.mjs','home-business-card.css','home-exhibition.mjs','home-game-transition.mjs','home-gallery-architecture.mjs','home-motorsport.mjs','construction.mjs','construction.css','assets/fonts/instrument-serif-regular.ttf','assets/fonts/OFL.txt','assets/fonts/SourceHanSans-LICENSE.txt','assets/fonts/Anton-OFL.txt','assets/fonts/Archivo-OFL.txt','assets/hongyi-chen-resume.pdf','gallery/assets/mobius-outline.svg','vendor/three/LICENSE'])copy(name);
+const homepage=tracked('index.html').toString('utf8');
+const photos=[...homepage.matchAll(/<figure class="gallery-print">[\s\S]*?<\/figure>/g)].map(match=>match[0]);
+for(const photo of photos)copy(photo.match(/src="([^"]+)"/)[1]);
+const fieldSource=tracked('home-scenes.mjs');
+const gameField=fieldSource.toString('utf8').replace(/^import .*;\r?\n/gm,'').replace('export function createScenes','export function createGameField').replace(/  const motor = createMotorsport\([^\n]+/,'  const motor = {resize(){},setActive(){},stop(){},play(){},point(){}};').replace(/  const gallery = createExhibition\([^\n]+/,'  const gallery = {resize(){}};');
+write('runtime/game-field.mjs',gameField,{path:'dist/home-scenes.mjs',sha256:digest(fieldSource),adaptation:'Extracted game field; unused motor and photography integrations removed.'});
+const photoSource=tracked('home-photo-transition.mjs');
+write('runtime/photo-frame.mjs',photoSource.toString('utf8').split('export function installPhotoTransition')[0].replace(/^import .*;\r?\n/gm,'').replace(/^const architecture = .*;\r?\n/gm,''),{path:'dist/home-photo-transition.mjs',sha256:digest(photoSource),adaptation:'Preserved frame calculations; live page navigation installer excluded.'});
+for(const name of ['lab.css','lab.mjs'])write(name,fs.readFileSync(`tools/figures-lab/${name}`));
+const resources=markup=>markup.replace(/(src|href)="((?:assets|photography-preview)\/[^"#]+)"/g,'$1="../runtime/$2"');
+const card=resources(homepage.match(/<div id="business-card"[\s\S]*?(?=<\/body>)/)[0]);
+const definitions=[
+  {slug:'personal-card',kind:'card',title:'Personal Card',css:'home-business-card.css',markup:card},
+  {slug:'game-designer',kind:'games',title:'Game Designer',markup:'<canvas id="game-field" class="lab-canvas" aria-hidden="true"></canvas><canvas id="game-compression" class="lab-canvas" aria-hidden="true" hidden></canvas><button id="game-trigger" class="lab-trigger" type="button">(game) designer</button><p class="lab-help">Move to influence the field. Click the word to converge.</p>'},
+  {slug:'filmmaker',kind:'photo',title:'Filmmaker',markup:`<div class="photo-scene">${photos.map(resources).join('')}</div><div class="lab-controls"><button id="replay" type="button">Replay development</button></div>`},
+  {slug:'gallery-entrance',kind:'gallery',title:'Into The Gallery',markup:'<canvas id="gallery-lines" class="lab-canvas" role="img" aria-label="Animated museum entrance"></canvas><div class="gallery-brand"><img src="../runtime/gallery/assets/mobius-outline.svg" alt=""><span>The Gallery</span></div><div class="lab-controls"><button id="replay" type="button">Replay</button></div>'},
+  {slug:'car-enthusiast',kind:'cars',title:'Car Enthusiast',markup:'<div class="scene-window"><canvas id="motor" role="button" tabindex="0" aria-label="Play the preserved car film"></canvas><canvas id="motor-foreground" class="motor-foreground" aria-hidden="true"></canvas></div><div class="lab-controls"><button id="play-film" type="button">Play film</button></div>'},
+  {slug:'under-construction',kind:'construction',title:'Under Construction',css:'construction.css',markup:'<section class="maintenance scene-window" aria-label="Interactive 404 construction scene"><canvas id="maintenance-scene" role="application" aria-label="Add and move construction objects. Enter adds; arrow keys move; R rotates; brackets select." tabindex="0"></canvas><div id="scene-fallback" class="scene-fallback" hidden><p>404</p><h1>Site under construction</h1><p>This experiment needs WebGL.</p></div><div class="scene-footer"><p id="scene-help" class="scene-help" aria-hidden="true">DRAG TO MOVE</p><div class="scene-controls" role="group" aria-label="Arrange the construction scene"><button id="add-objects" type="button" aria-label="Add one object" disabled><span class="footer-label">+ ADD</span></button><button id="clear-objects" type="button" disabled><span class="footer-label">CLEAR</span></button></div></div><p id="scene-status" class="sr-only" role="status" aria-live="polite"></p></section>'},
+];
+for(const study of definitions)write(`${study.slug}/index.html`,`<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="robots" content="noindex"><title>${study.title} — Preserved ${edition}</title>${study.css?`<link rel="stylesheet" href="../runtime/${study.css}">`:''}<link rel="stylesheet" href="../lab.css"><script type="module" src="../lab.mjs"></script></head><body data-lab="${study.kind}"><main class="lab-stage" aria-label="${study.title}">${study.markup}<p id="lab-error" class="lab-fallback" role="status" hidden>This preserved experiment could not load. Reload this page to try again.</p></main><noscript>This experiment needs JavaScript.</noscript></body></html>\n`);
+fs.writeFileSync(`${output}/manifest.json`,JSON.stringify({edition,sourceCommit,preserved:'2026-10-27',description:'Independent component edition. Original implementation and resources are pinned; adapters remove surrounding website context and navigation.',studies:definitions.map(({slug,kind,title})=>({slug,kind,title})),files},null,2)+'\n');
+console.log(`Preserved ${definitions.length} independent studies in ${files.length} files (${edition}).`);

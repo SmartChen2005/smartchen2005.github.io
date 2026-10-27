@@ -1,0 +1,4 @@
+# Preserve original payload bytes and existing source whitespace across checkouts.
+# Editable extraction templates outside this directory retain normal checks.
+dist/projects/figures-of-speech/editions/** -text -whitespace
+dist/projects/figures-of-speech/editions/**/*.pdf -diff

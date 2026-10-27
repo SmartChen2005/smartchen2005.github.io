@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-27 — Isolate and preserve the Figures of Speech experiments
+
+- Merged Game Designer and its entrance into one study, kept the two film/gallery studies separate, and moved Figures of Speech immediately below Polaroid of Yesterday.
+- Replaced live homepage/404 embeds with six independent experiments on white pages. The dialog starts its component automatically; Open in New Page points to the same preserved component. New thumbnails come from the isolated experiments; earlier captures remain unused as provenance.
+- Added a 2026-10-27 edition with 57 hashed payload files pinned to source commit e6bb1c9. Code, fonts, photos, textures, résumé and vendor modules all resolve within the edition. Rendering the index never rewrites an edition. The freezer verifies existing editions; future changes require a new edition. Byte-preservation attributes prevent Windows line-ending conversion from invalidating its hashes.
+- Verification: site and strengthened archive checks, frozen dependency closure/hashes, source/render parity, source regression checks and real desktop/narrow component interactions. Details are in `tools/FIGURES-OF-SPEECH-QA.md`.
+
 ### 2026-10-27 — Open the Figures of Speech design archive
 
 - Added a Projects entry and a print-catalogue-inspired square grid of seven existing motion/interface studies, with original site thumbnails, locations, recorded dates, design commentary and a chronological view.

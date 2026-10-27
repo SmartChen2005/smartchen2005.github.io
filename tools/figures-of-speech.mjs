@@ -3,7 +3,7 @@
 export const studies = [
   {
     id: '001', title: 'Personal Card', kind: 'Object / Material', location: 'Homepage / Smart Chen',
-    image: 'personal-card.jpg', alt: 'The silver Smart Chen contact card with its engraved name.',
+    image: 'personal-card-isolated.jpg', alt: 'The silver Smart Chen contact card, isolated on white.', experiment: 'personal-card',
     world: 'card', first: '2026-09-29', revised: '2026-10-14',
     description: 'A contact card treated as a physical object: circular-grained metal, engraved lettering, and one moving studio light.',
     perspective: 'Identity is carried by material as well as information. Cursor movement and device tilt reveal the finish without moving the grain itself.',
@@ -16,30 +16,21 @@ export const studies = [
     ],
   },
   {
-    id: '002', title: 'Game Designer', kind: 'Interaction / Hover', location: 'Homepage / (game) designer',
-    image: 'game-hover.jpg', alt: 'Small balls and platforms from the homepage physics experiment.',
+    id: '002', title: 'Game Designer', kind: 'Interaction / Motion', location: 'Homepage / (game) designer',
+    image: 'game-designer-isolated.jpg', alt: 'The standalone game design physics field and its trigger on white.', experiment: 'game-designer',
     world: 'games', first: '2026-09-28', revised: '2026-09-28',
-    description: 'A field of balls and platforms turns a word in the introduction into a small physical system.',
-    perspective: 'The interaction introduces game design through behavior: gravity, collision, and response become part of the sentence.',
-    instruction: 'Move within the preview to change the field. Activate “(game) designer” to enter Projects.',
-    history: [['2026-09-28', '4c3f1a3', 'The recorded homepage mechanics establish the interactive field.']],
-  },
-  {
-    id: '003', title: 'Into Projects', kind: 'Motion / Transition', location: 'Homepage → Projects',
-    image: 'game-enter.jpg', alt: 'The physical field converging toward the middle of the screen.',
-    world: 'games', action: 'games', first: '2026-09-28', revised: '2026-09-28',
-    description: 'The active physics field contracts toward a point before the Projects directory appears.',
-    perspective: 'Navigation continues the system already on screen. Existing motion passes into the transition instead of restarting as a separate effect.',
-    instruction: 'Use “Play transition” to enter Projects. Replay returns to the starting field.',
-    history: [['2026-09-28', '4c3f1a3', 'The recorded homepage mechanics include the Projects entrance.']],
+    description: 'A field of balls and platforms responds to movement, then contracts toward a point when the word is activated.',
+    perspective: 'Gravity, collision, and response introduce game design through behavior. The click animation inherits the field already in motion.',
+    instruction: 'Move to influence the field. Click “(game) designer” to play the contraction; the experiment then resets.',
+    history: [['2026-09-28', '4c3f1a3', 'The interactive field and its converging entrance are recorded together.']],
   },
   {
     id: '004', title: 'Filmmaker', kind: 'Interaction / Hover', location: 'Homepage / filmmaker',
-    image: 'filmmaker.jpg', alt: 'Four photographs arranged around the introduction with viewfinder corners.',
+    image: 'filmmaker-isolated.jpg', alt: 'Four developing photographs and viewfinder corners on white.', experiment: 'filmmaker',
     world: 'photo', first: '2026-09-28', revised: '2026-10-23',
     description: 'Photographs and viewfinder corners form a temporary exhibition around the homepage introduction.',
     perspective: 'Framing connects the written identity to looking, image making, and the work collected in The Gallery.',
-    instruction: 'Explore the photograph preview. Activate “filmmaker” to travel into The Gallery.',
+    instruction: 'Watch the photographs develop. Click a print or Replay development to see the process again.',
     history: [
       ['2026-09-28', '4c3f1a3', 'Photography is part of the recorded interactive homepage.'],
       ['2026-10-23', '613b029', 'The written identity changes from photographer to filmmaker.'],
@@ -47,11 +38,11 @@ export const studies = [
   },
   {
     id: '005', title: 'Into The Gallery', kind: 'Motion / Transition', location: 'Homepage + Projects → The Gallery',
-    image: 'gallery-enter.jpg', alt: 'The imagined museum architecture drawn during the Gallery entrance.',
+    image: 'gallery-entrance-isolated.jpg', alt: 'The isolated museum entrance animation on white.', experiment: 'gallery-entrance',
     world: 'photo', action: 'photo', first: '2026-10-14', revised: '2026-10-24',
     description: 'A viewfinder opens into an imagined museum, then resolves into the real Gallery masthead.',
     perspective: 'Entering a collection becomes a spatial journey. The opening frame, architecture, and destination belong to one continuous movement.',
-    instruction: 'Use “Play transition” to enter The Gallery. Replay starts the journey again.',
+    instruction: 'The preserved entrance plays on opening. Click the drawing or Replay to see it again.',
     history: [
       ['2026-10-14', '0f00edf', 'The architectural museum entrance is introduced.'],
       ['2026-10-14', '15ad6b7', 'The handoff into the real Gallery is refined.'],
@@ -60,11 +51,11 @@ export const studies = [
   },
   {
     id: '006', title: 'Car Enthusiast', kind: 'Motion / Film', location: 'Homepage / car enthusiast',
-    image: 'car-enthusiast.jpg', alt: 'The MINI and BMW Z4 racing through a pale line-art tunnel.',
+    image: 'car-enthusiast-isolated.jpg', alt: 'The preserved MINI and BMW Z4 film presented on its own.', experiment: 'car-enthusiast',
     world: 'cars', action: 'cars', first: '2026-10-24', revised: '2026-10-27',
     description: 'A MINI Cooper S and BMW Z4 move from a narrow city street into an abstract star-grid chase.',
     perspective: 'The identity unfolds through vehicle character, camera placement, and editing. A continuous street preview becomes a complete short film.',
-    instruction: 'Use “Play film” for the full sequence. Replay restores the moving street preview.',
+    instruction: 'The street preview is already moving. Click the scene or Play film for the full sequence.',
     history: [
       ['2026-10-24', '0305c56', 'The MINI and Z4 line-art race is introduced.'],
       ['2026-10-25', '313388e', 'Hover preview and full playback become separate states.'],
@@ -75,7 +66,7 @@ export const studies = [
   },
   {
     id: '007', title: 'Under Construction', kind: 'Interface / Playground', location: '404 / Unavailable pages',
-    image: 'under-construction.jpg', alt: 'The interactive 404 construction site and its movable objects.',
+    image: 'under-construction-isolated.jpg', alt: 'The standalone 404 construction experiment with its own controls.', experiment: 'under-construction',
     world: '404', first: '2026-10-09', revised: '2026-10-09',
     description: 'The 404 page becomes a construction site where objects can be added, moved, and rotated.',
     perspective: 'An unavailable destination still offers something to explore. Construction is both the message and the interaction.',
@@ -87,4 +78,5 @@ export const studies = [
   },
 ];
 
-export const contextURL = study => study.world === '404' ? '../../404.html' : `../../?study=${study.world}`;
+export const preservedEdition = '2026-10-27';
+export const experimentURL = study => `editions/${preservedEdition}/${study.experiment}/`;

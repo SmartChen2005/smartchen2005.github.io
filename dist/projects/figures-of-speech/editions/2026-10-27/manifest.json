@@ -1,0 +1,466 @@
+{
+  "edition": "2026-10-27",
+  "sourceCommit": "e6bb1c9aa2798b7ddacddb74840fc948d857c61a",
+  "preserved": "2026-10-27",
+  "description": "Independent component edition. Original implementation and resources are pinned; adapters remove surrounding website context and navigation.",
+  "studies": [
+    {
+      "slug": "personal-card",
+      "kind": "card",
+      "title": "Personal Card"
+    },
+    {
+      "slug": "game-designer",
+      "kind": "games",
+      "title": "Game Designer"
+    },
+    {
+      "slug": "filmmaker",
+      "kind": "photo",
+      "title": "Filmmaker"
+    },
+    {
+      "slug": "gallery-entrance",
+      "kind": "gallery",
+      "title": "Into The Gallery"
+    },
+    {
+      "slug": "car-enthusiast",
+      "kind": "cars",
+      "title": "Car Enthusiast"
+    },
+    {
+      "slug": "under-construction",
+      "kind": "construction",
+      "title": "Under Construction"
+    }
+  ],
+  "files": [
+    {
+      "path": "runtime/home-business-card.mjs",
+      "sha256": "84962903941628b5e6cdf560e9eb4f858499f4910e94c00d4a4da34232abe902",
+      "source": {
+        "path": "dist/home-business-card.mjs",
+        "sha256": "84962903941628b5e6cdf560e9eb4f858499f4910e94c00d4a4da34232abe902"
+      }
+    },
+    {
+      "path": "runtime/home-card-perlage.mjs",
+      "sha256": "e047ed2aa3ef7ffa948fc877becc44a9a9e359a0de79f6c80fdf4c37bccc4d9e",
+      "source": {
+        "path": "dist/home-card-perlage.mjs",
+        "sha256": "e047ed2aa3ef7ffa948fc877becc44a9a9e359a0de79f6c80fdf4c37bccc4d9e"
+      }
+    },
+    {
+      "path": "runtime/home-card-orientation.mjs",
+      "sha256": "751abf995718c0c614307c45a121eebb698e6db4c304bc6cdd6faf8c369a78bf",
+      "source": {
+        "path": "dist/home-card-orientation.mjs",
+        "sha256": "751abf995718c0c614307c45a121eebb698e6db4c304bc6cdd6faf8c369a78bf"
+      }
+    },
+    {
+      "path": "runtime/home-business-card.css",
+      "sha256": "2b2887a66f129d4fb05a2176fa1b9d88a3cf47919933c35f92e8e57e665e19bf",
+      "source": {
+        "path": "dist/home-business-card.css",
+        "sha256": "2b2887a66f129d4fb05a2176fa1b9d88a3cf47919933c35f92e8e57e665e19bf"
+      }
+    },
+    {
+      "path": "runtime/assets/fonts/source-han-sans-sc-name.otf",
+      "sha256": "7c043482539288921d32e1093c33b74b9626fd80c114ef963966c0d24f02c4f7",
+      "source": {
+        "path": "dist/assets/fonts/source-han-sans-sc-name.otf",
+        "sha256": "7c043482539288921d32e1093c33b74b9626fd80c114ef963966c0d24f02c4f7"
+      }
+    },
+    {
+      "path": "runtime/home-exhibition.mjs",
+      "sha256": "c6fca7b087e05eaca38a69d5abff82f88fac7cd048da0608bf00d03252eaebad",
+      "source": {
+        "path": "dist/home-exhibition.mjs",
+        "sha256": "c6fca7b087e05eaca38a69d5abff82f88fac7cd048da0608bf00d03252eaebad"
+      }
+    },
+    {
+      "path": "runtime/home-game-transition.mjs",
+      "sha256": "6c731e146168d4b9dbea06b620c69f30e423db36db04a7140d90107cb935e1de",
+      "source": {
+        "path": "dist/home-game-transition.mjs",
+        "sha256": "6c731e146168d4b9dbea06b620c69f30e423db36db04a7140d90107cb935e1de"
+      }
+    },
+    {
+      "path": "runtime/home-gallery-architecture.mjs",
+      "sha256": "3028d358ee5135cd05989eded365a0a47b1aa673dce4d980d5ca2f8c380d79b9",
+      "source": {
+        "path": "dist/home-gallery-architecture.mjs",
+        "sha256": "3028d358ee5135cd05989eded365a0a47b1aa673dce4d980d5ca2f8c380d79b9"
+      }
+    },
+    {
+      "path": "runtime/home-motorsport.mjs",
+      "sha256": "d7cb519f2bbc79e60b1271a89e3e1b5c27c1ad7fbc5114d10357eb6d0003df8c",
+      "source": {
+        "path": "dist/home-motorsport.mjs",
+        "sha256": "d7cb519f2bbc79e60b1271a89e3e1b5c27c1ad7fbc5114d10357eb6d0003df8c"
+      }
+    },
+    {
+      "path": "runtime/home-motor-race.mjs",
+      "sha256": "630228db6ebfcc561bf8d03c8a8e870dfb783df3b2359cf1871d2c3511bbc663",
+      "source": {
+        "path": "dist/home-motor-race.mjs",
+        "sha256": "630228db6ebfcc561bf8d03c8a8e870dfb783df3b2359cf1871d2c3511bbc663"
+      }
+    },
+    {
+      "path": "runtime/home-motor-geometry.mjs",
+      "sha256": "10edd8c5ab59e6311032c261f1eac8923d154ee779de11b59f0171a49a31d4d7",
+      "source": {
+        "path": "dist/home-motor-geometry.mjs",
+        "sha256": "10edd8c5ab59e6311032c261f1eac8923d154ee779de11b59f0171a49a31d4d7"
+      }
+    },
+    {
+      "path": "runtime/vendor/three/three.module.min.js",
+      "sha256": "e2b5ee6bccd38fd6d8a2428546b83c5f2426d84b152ef82be8055556e3b40eb6",
+      "source": {
+        "path": "dist/vendor/three/three.module.min.js",
+        "sha256": "e2b5ee6bccd38fd6d8a2428546b83c5f2426d84b152ef82be8055556e3b40eb6"
+      }
+    },
+    {
+      "path": "runtime/vendor/three/three.core.min.js",
+      "sha256": "61ba0df005b05991361d040d8ff670e1aadfd0ce7aeebd1fdb0725957a8957de",
+      "source": {
+        "path": "dist/vendor/three/three.core.min.js",
+        "sha256": "61ba0df005b05991361d040d8ff670e1aadfd0ce7aeebd1fdb0725957a8957de"
+      }
+    },
+    {
+      "path": "runtime/home-motor-cars.mjs",
+      "sha256": "1aacb75ea427cd4dda7cf2222f592097ad4a5eff9b4a083e84ff58ebf12ca700",
+      "source": {
+        "path": "dist/home-motor-cars.mjs",
+        "sha256": "1aacb75ea427cd4dda7cf2222f592097ad4a5eff9b4a083e84ff58ebf12ca700"
+      }
+    },
+    {
+      "path": "runtime/home-motor-curves.mjs",
+      "sha256": "5313235964ce1f24648a8805f3462d296249a1cbe9c46fd20c908c5e382ca3ee",
+      "source": {
+        "path": "dist/home-motor-curves.mjs",
+        "sha256": "5313235964ce1f24648a8805f3462d296249a1cbe9c46fd20c908c5e382ca3ee"
+      }
+    },
+    {
+      "path": "runtime/home-motor-city.mjs",
+      "sha256": "6f4c07bdac961d780b7e00a8143c0961e1c62d1d8b1559de1a848a778cea0dc2",
+      "source": {
+        "path": "dist/home-motor-city.mjs",
+        "sha256": "6f4c07bdac961d780b7e00a8143c0961e1c62d1d8b1559de1a848a778cea0dc2"
+      }
+    },
+    {
+      "path": "runtime/home-motor-road.mjs",
+      "sha256": "4e9c5c37f9b67451ac38c3b738853192927de309b133c2743fd09b8031fe1312",
+      "source": {
+        "path": "dist/home-motor-road.mjs",
+        "sha256": "4e9c5c37f9b67451ac38c3b738853192927de309b133c2743fd09b8031fe1312"
+      }
+    },
+    {
+      "path": "runtime/home-motor-lanterns.mjs",
+      "sha256": "e25d68d340bf6795457eb0796d07a2ad2159007b9aad3f03a30b2421a81c0f7c",
+      "source": {
+        "path": "dist/home-motor-lanterns.mjs",
+        "sha256": "e25d68d340bf6795457eb0796d07a2ad2159007b9aad3f03a30b2421a81c0f7c"
+      }
+    },
+    {
+      "path": "runtime/home-motor-motion.mjs",
+      "sha256": "05fdde0f51a0c4b761defc9034613c5b5a30b580d4e6f911fb500bec4e406630",
+      "source": {
+        "path": "dist/home-motor-motion.mjs",
+        "sha256": "05fdde0f51a0c4b761defc9034613c5b5a30b580d4e6f911fb500bec4e406630"
+      }
+    },
+    {
+      "path": "runtime/home-motor-architecture.mjs",
+      "sha256": "8829e570d6f8e4b3790f6cb586f97bb1344f71ec781995c70990a90a5e881c89",
+      "source": {
+        "path": "dist/home-motor-architecture.mjs",
+        "sha256": "8829e570d6f8e4b3790f6cb586f97bb1344f71ec781995c70990a90a5e881c89"
+      }
+    },
+    {
+      "path": "runtime/home-motor-palette.mjs",
+      "sha256": "f9a791eb5c06017937051fb5a1e61a0cee033c5a8a1a5c1e028453c015ead4b4",
+      "source": {
+        "path": "dist/home-motor-palette.mjs",
+        "sha256": "f9a791eb5c06017937051fb5a1e61a0cee033c5a8a1a5c1e028453c015ead4b4"
+      }
+    },
+    {
+      "path": "runtime/home-motor-speed.mjs",
+      "sha256": "74a6d4b22aed31eb9b98843c2bea16e22859515c81c5ed77f835954efe5a96ab",
+      "source": {
+        "path": "dist/home-motor-speed.mjs",
+        "sha256": "74a6d4b22aed31eb9b98843c2bea16e22859515c81c5ed77f835954efe5a96ab"
+      }
+    },
+    {
+      "path": "runtime/home-motor-line.mjs",
+      "sha256": "57cadd824e05e30fa99cf6c60dcbead216172acb4a89fd7318bba226a7e954bd",
+      "source": {
+        "path": "dist/home-motor-line.mjs",
+        "sha256": "57cadd824e05e30fa99cf6c60dcbead216172acb4a89fd7318bba226a7e954bd"
+      }
+    },
+    {
+      "path": "runtime/home-motor-burst.mjs",
+      "sha256": "09f06c3e23ccc34347a5e0b79897df93e81e401421b0182e755c61ef014aba67",
+      "source": {
+        "path": "dist/home-motor-burst.mjs",
+        "sha256": "09f06c3e23ccc34347a5e0b79897df93e81e401421b0182e755c61ef014aba67"
+      }
+    },
+    {
+      "path": "runtime/home-motor-guide.mjs",
+      "sha256": "ad1c9071396a9e37a2a88fd1f204bb19564bc01c881d60099e032779885c55f3",
+      "source": {
+        "path": "dist/home-motor-guide.mjs",
+        "sha256": "ad1c9071396a9e37a2a88fd1f204bb19564bc01c881d60099e032779885c55f3"
+      }
+    },
+    {
+      "path": "runtime/home-motor-path.mjs",
+      "sha256": "60c1341eadf4a14c5f3214ec01dbd349ff0e579c58efae1e6e46803e00a35470",
+      "source": {
+        "path": "dist/home-motor-path.mjs",
+        "sha256": "60c1341eadf4a14c5f3214ec01dbd349ff0e579c58efae1e6e46803e00a35470"
+      }
+    },
+    {
+      "path": "runtime/home-motor-opening.mjs",
+      "sha256": "30d54c3f80fcdf5524135e9ecc9218c798e17e90a7c654485216851b88833397",
+      "source": {
+        "path": "dist/home-motor-opening.mjs",
+        "sha256": "30d54c3f80fcdf5524135e9ecc9218c798e17e90a7c654485216851b88833397"
+      }
+    },
+    {
+      "path": "runtime/construction.mjs",
+      "sha256": "35e45534cbfa7833a1bab1dafff4acc46afa3f113382f45343ff3bb3b8cfe957",
+      "source": {
+        "path": "dist/construction.mjs",
+        "sha256": "58972615c564a0559d9d6c988467a6bbc98f68da51262f12a8cfe69623077df5"
+      }
+    },
+    {
+      "path": "runtime/vendor/three/RoomEnvironment.mjs",
+      "sha256": "3abf1ce79bb64c3ebd457be5e5f587ac5b29ef84436cba0d49c7720d020a5905",
+      "source": {
+        "path": "dist/vendor/three/RoomEnvironment.mjs",
+        "sha256": "3abf1ce79bb64c3ebd457be5e5f587ac5b29ef84436cba0d49c7720d020a5905"
+      }
+    },
+    {
+      "path": "runtime/construction-space.mjs",
+      "sha256": "d50e0d9026de2aac2df07a299293a01a8c6af44dc8256a02383ad51774475890",
+      "source": {
+        "path": "dist/construction-space.mjs",
+        "sha256": "d50e0d9026de2aac2df07a299293a01a8c6af44dc8256a02383ad51774475890"
+      }
+    },
+    {
+      "path": "runtime/assets/maintenance/ceramic-albedo.webp",
+      "sha256": "dca2f58417e8bf7127b1a500c26ae0789d0b1aa84ebe0461eb6297ccaf0ed02f",
+      "source": {
+        "path": "dist/assets/maintenance/ceramic-albedo.webp",
+        "sha256": "dca2f58417e8bf7127b1a500c26ae0789d0b1aa84ebe0461eb6297ccaf0ed02f"
+      }
+    },
+    {
+      "path": "runtime/assets/maintenance/yellow-plastic.webp",
+      "sha256": "7910cec15da0161c37b48092c7dee228b2938287b971a4eb9146d5bc9fc07cbe",
+      "source": {
+        "path": "dist/assets/maintenance/yellow-plastic.webp",
+        "sha256": "7910cec15da0161c37b48092c7dee228b2938287b971a4eb9146d5bc9fc07cbe"
+      }
+    },
+    {
+      "path": "runtime/construction.css",
+      "sha256": "bb9a38840f4b02ec61897597086b105e1ed5ebb079c66df0b3e89cb03834b421",
+      "source": {
+        "path": "dist/construction.css",
+        "sha256": "81c0504e6737945f872a3f031ed0f7cf370fcbe25c9d4474bb38215b3927735c"
+      }
+    },
+    {
+      "path": "runtime/assets/fonts/anton-regular.ttf",
+      "sha256": "a4ba3a92350ebb031da0cb47630ac49eb265082ca1bc0450442f4a83ab947cab",
+      "source": {
+        "path": "dist/assets/fonts/anton-regular.ttf",
+        "sha256": "a4ba3a92350ebb031da0cb47630ac49eb265082ca1bc0450442f4a83ab947cab"
+      }
+    },
+    {
+      "path": "runtime/assets/fonts/archivo-variable.ttf",
+      "sha256": "0e094a7d3c7c4c25cf1310c4b30014f1dae9332220b1c2c88f4fa996f0b05053",
+      "source": {
+        "path": "dist/assets/fonts/archivo-variable.ttf",
+        "sha256": "0e094a7d3c7c4c25cf1310c4b30014f1dae9332220b1c2c88f4fa996f0b05053"
+      }
+    },
+    {
+      "path": "runtime/assets/fonts/instrument-serif-regular.ttf",
+      "sha256": "a99e3db50076202713812ed541feeb23ffeebb61db1fa6b1cf48fe590d37ef18",
+      "source": {
+        "path": "dist/assets/fonts/instrument-serif-regular.ttf",
+        "sha256": "a99e3db50076202713812ed541feeb23ffeebb61db1fa6b1cf48fe590d37ef18"
+      }
+    },
+    {
+      "path": "runtime/assets/fonts/OFL.txt",
+      "sha256": "129ed7618959716959f2941fdd5b49e0ad6e6c1d78726761786a00253d865521",
+      "source": {
+        "path": "dist/assets/fonts/OFL.txt",
+        "sha256": "129ed7618959716959f2941fdd5b49e0ad6e6c1d78726761786a00253d865521"
+      }
+    },
+    {
+      "path": "runtime/assets/fonts/SourceHanSans-LICENSE.txt",
+      "sha256": "fcac737e761ec63dbfbdce11030a1780161920d80315edba9c8beff1c2bac5a2",
+      "source": {
+        "path": "dist/assets/fonts/SourceHanSans-LICENSE.txt",
+        "sha256": "fcac737e761ec63dbfbdce11030a1780161920d80315edba9c8beff1c2bac5a2"
+      }
+    },
+    {
+      "path": "runtime/assets/fonts/Anton-OFL.txt",
+      "sha256": "eee1d24ff8f553eb732237c7dd9b945a78313ed49ad6de02872a47277741b44a",
+      "source": {
+        "path": "dist/assets/fonts/Anton-OFL.txt",
+        "sha256": "eee1d24ff8f553eb732237c7dd9b945a78313ed49ad6de02872a47277741b44a"
+      }
+    },
+    {
+      "path": "runtime/assets/fonts/Archivo-OFL.txt",
+      "sha256": "108b4e57c9c796d3d38d0428ca7ee39de47ad93187302718d9b2d8864b9b716b",
+      "source": {
+        "path": "dist/assets/fonts/Archivo-OFL.txt",
+        "sha256": "108b4e57c9c796d3d38d0428ca7ee39de47ad93187302718d9b2d8864b9b716b"
+      }
+    },
+    {
+      "path": "runtime/assets/hongyi-chen-resume.pdf",
+      "sha256": "c46998db7f8c61c34bc075b97a9fc5ffada5e7c004c0199f0ce743d990a22360",
+      "source": {
+        "path": "dist/assets/hongyi-chen-resume.pdf",
+        "sha256": "c46998db7f8c61c34bc075b97a9fc5ffada5e7c004c0199f0ce743d990a22360"
+      }
+    },
+    {
+      "path": "runtime/gallery/assets/mobius-outline.svg",
+      "sha256": "e144a471c3b3d2af3d0b7912ff420e11d514c63d10271dd7f45b77c838a02b13",
+      "source": {
+        "path": "dist/gallery/assets/mobius-outline.svg",
+        "sha256": "e144a471c3b3d2af3d0b7912ff420e11d514c63d10271dd7f45b77c838a02b13"
+      }
+    },
+    {
+      "path": "runtime/vendor/three/LICENSE",
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601",
+      "source": {
+        "path": "dist/vendor/three/LICENSE",
+        "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
+      }
+    },
+    {
+      "path": "runtime/photography-preview/c6495aef5fe2fd2016e174644e7e9637.jpg",
+      "sha256": "bfcf469b40d73dde102740005607a1ac46edb857557669d99d0f92e23ae21b39",
+      "source": {
+        "path": "dist/photography-preview/c6495aef5fe2fd2016e174644e7e9637.jpg",
+        "sha256": "bfcf469b40d73dde102740005607a1ac46edb857557669d99d0f92e23ae21b39"
+      }
+    },
+    {
+      "path": "runtime/photography-preview/7791361ef9a438ead7e13223550a212b.jpg",
+      "sha256": "2ee5a770b84b51010ab77d51ecb184eee1c775d42778b2d5707aee14089c716a",
+      "source": {
+        "path": "dist/photography-preview/7791361ef9a438ead7e13223550a212b.jpg",
+        "sha256": "2ee5a770b84b51010ab77d51ecb184eee1c775d42778b2d5707aee14089c716a"
+      }
+    },
+    {
+      "path": "runtime/photography-preview/44e0cac7f390dc59a1bdfd25e5930a85.jpg",
+      "sha256": "413c213a292cf068a8683af04100953f0783a044db2f3f146270a1f74f2229a7",
+      "source": {
+        "path": "dist/photography-preview/44e0cac7f390dc59a1bdfd25e5930a85.jpg",
+        "sha256": "413c213a292cf068a8683af04100953f0783a044db2f3f146270a1f74f2229a7"
+      }
+    },
+    {
+      "path": "runtime/photography-preview/f85d2017537b65c254e52f035d2aa3ee.jpg",
+      "sha256": "37e446574866e9a455ec025201a8047e2e2c47dd67bfd214e357cd4ab5254543",
+      "source": {
+        "path": "dist/photography-preview/f85d2017537b65c254e52f035d2aa3ee.jpg",
+        "sha256": "37e446574866e9a455ec025201a8047e2e2c47dd67bfd214e357cd4ab5254543"
+      }
+    },
+    {
+      "path": "runtime/game-field.mjs",
+      "sha256": "188e1d30d582cf07c696b0a7fe1c350debb91c2fd36c825d1266da3584ae4a4d",
+      "source": {
+        "path": "dist/home-scenes.mjs",
+        "sha256": "5744b6aa2a3862ad0d84168d43b30192d5da807d0fff65fcef131f5238b67384",
+        "adaptation": "Extracted game field; unused motor and photography integrations removed."
+      }
+    },
+    {
+      "path": "runtime/photo-frame.mjs",
+      "sha256": "e61936f7adf988e9bad57222875822601716c67628cf8a01fd935ad7a2ab9d39",
+      "source": {
+        "path": "dist/home-photo-transition.mjs",
+        "sha256": "6e3c8da24679f88b2e5b0738c320099458127d576d22269355a74ecf15de9f14",
+        "adaptation": "Preserved frame calculations; live page navigation installer excluded."
+      }
+    },
+    {
+      "path": "lab.css",
+      "sha256": "5b90b3adf1b3913a5e9f4058f8bd48ba6fc0ddc5090b18260d7328166e1b92fc"
+    },
+    {
+      "path": "lab.mjs",
+      "sha256": "544ac4558e985f7cc33b371927f3901a4d1a0acc81665a9e21495a556a8cb8e4"
+    },
+    {
+      "path": "personal-card/index.html",
+      "sha256": "bcb3e1c1686ba8b0c49bdd429c629076ba18842c01fee4dfb40317c5a37eb353"
+    },
+    {
+      "path": "game-designer/index.html",
+      "sha256": "0ed6c6a26aac61d7742ce0b9246bde9f0a634b0ae10219aa53771323b92b3896"
+    },
+    {
+      "path": "filmmaker/index.html",
+      "sha256": "0276e88cbee6fdbf66a1df98927ff31708d13a6fdd8bcbb25125f82caf24b48d"
+    },
+    {
+      "path": "gallery-entrance/index.html",
+      "sha256": "f230891efc778a5407b2366efddb217581fb537b1951f168cae554d9b4f5caac"
+    },
+    {
+      "path": "car-enthusiast/index.html",
+      "sha256": "79d103db64339d3594c6395eb5cb16613537962f8e26d5f0d735fa73f8e68478"
+    },
+    {
+      "path": "under-construction/index.html",
+      "sha256": "ce3aae852951f54712e2f27457e5c81804754c3393a4587540c269e045b67d8e"
+    }
+  ]
+}
