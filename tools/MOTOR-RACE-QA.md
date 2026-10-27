@@ -1,4 +1,10 @@
-# Car Enthusiast — Ground-level second camera, 2026-10-27
+# Car Enthusiast — Restore the approved second camera, 2026-10-27
+
+Started from 0f1dfac on clean master. The user requested reversing the immediately preceding low-camera trial. Desktop height returns to 65cm and phone height to 70cm. `home-motor-race.mjs` and `tools/test-motor-race.mjs` match dc58115 exactly; cache revision refreshes the restored version. Motor/home regressions, site validation and strict dist audit passed. Prior approved browser framing evidence remains in the earlier records.
+
+---
+
+# Previous: Ground-level second camera, 2026-10-27
 
 Started from dc58115 on clean master. The solo MINI rear camera now sits 18cm above the road, down from 65cm desktop / 70cm phone. Following distances (5.5m / 7.5m), upward targets, FOV, timing, shared road width and other camera setups retain their approved values.
 

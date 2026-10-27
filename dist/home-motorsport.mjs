@@ -1,4 +1,4 @@
-import { createMotorWorld, raceShot } from './home-motor-race.mjs?rev=20261027-low';
+import { createMotorWorld, raceShot } from './home-motor-race.mjs?rev=20261027-restored';
 export const MOTOR_DURATION=19.85;
 export const MOTOR_CLICK_LEAD=1;
 export function openingFrame(time,idle=false){return {t:0,shot:'starlit-lead',phase:'preview',idle,openingTime:time};}

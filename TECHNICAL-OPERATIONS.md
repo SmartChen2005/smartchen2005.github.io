@@ -96,6 +96,10 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-27 — Restore the previous second-shot height
+
+- Reversed the 18cm camera trial at the user's request: second-shot height returns to 65cm desktop / 70cm phone. Camera source and its regression expectations match dc58115 exactly. Motor/home checks and site validation passed.
+
 ### 2026-10-27 — Lower the second-shot chase camera
 
 - Lowered the solo MINI rear camera from 65cm desktop / 70cm phone to 18cm above the road. Existing following distances and upward targets retain the complete vehicle while strengthening the ground-level perspective.

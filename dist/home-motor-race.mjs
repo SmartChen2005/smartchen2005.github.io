@@ -11,7 +11,7 @@ import {createOpeningStreet,openingCar,OPENING_SPEED} from './home-motor-opening
 export {motorPalette,MOTOR_PALETTES};
 export const MOTOR_SHOTS=[
  {start:0,end:1,id:'starlit-lead',mode:'lane',camera:[2.35,1.2,15.8],target:[-3.2,2.4,4],fov:62,palette:0},
- {start:1,end:2.4,id:'bumper-train',mode:'lane',camera:[.65,.18,-5.5],target:[0,1.35,5],fov:65,palette:0},
+ {start:1,end:2.4,id:'bumper-train',mode:'lane',camera:[.65,.65,-5.5],target:[0,1.35,5],fov:65,palette:0},
  {start:2.4,end:3.9,id:'city-circuit',mode:'circuit',camera:[1.9,13.5,-7.5],target:[0,.2,2.6],fov:54,palette:0},
  {start:3.9,end:8.5,travelStart:3.9,travelEnd:19.85,travelRamp:11,travelOffset:-36,id:'exhaust-exit',mode:'lane',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:0},
  {start:8.5,end:18.2,travelStart:3.9,travelEnd:19.85,travelRamp:11,travelOffset:-36,id:'grid-guide',mode:'tunnel',camera:[.8,.58,-5.1],target:[0,1.3,2],fov:61,palette:0},
@@ -32,7 +32,7 @@ export function raceView(t,width=1440,height=900,input=.5,sentenceBottom=0,openi
  const shot=raceShot(t),distance=cameraTravel(shot,t),d=openingTime!==null?0:['exhaust-exit','grid-guide'].includes(shot.id)?laneProgress(distance):distance,narrow=width<650,p=raceCamera(t,input),widen=narrow&&shot.mode==='circuit'?1.22:1;
  let position=new T.Vector3(p[0],p[1]*widen,d+p[2]*widen),target=new T.Vector3(shot.target[0],shot.target[1],d+shot.target[2]),fov=shot.fov+(narrow?16:0),up=new T.Vector3(0,1,0);
  if(narrow&&shot.id==='starlit-lead'){position.set(.35,2.1,d+18.5);target.set(-1.7,5.15+Math.max(0,sentenceBottom/height+.02-.64)*25,d+3.8);fov=78;}
- if(narrow&&shot.id==='bumper-train'){position.set(.15,.18,d-7.5);target.set(-.35,1,d+1);fov=78;}
+ if(narrow&&shot.id==='bumper-train'){position.set(.15,.7,d-7.5);target.set(-.35,1,d+1);fov=78;}
  if(['exhaust-exit','grid-guide'].includes(shot.id)){
   const r=cameraRise(t-shot.travelStart),pose=guideFrame(d+7*r),x=narrow?.15+.55*r:.8+8.2*r,y=narrow?.7+9.8*r:.58+7*r,rear=narrow?8.8+13*r:5.1+7*r;
   position=pose.position.clone().addScaledVector(pose.right,x+(input-.5)*.12).addScaledVector(pose.up,y).addScaledVector(pose.tangent,-rear);
