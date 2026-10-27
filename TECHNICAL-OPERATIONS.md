@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-27 — Refine catalogue plates and restore the native Gallery wordmark treatment
+
+- Re-rendered the preserved SX-70 model as a larger, clearer 960×840 plate. Re-captured Personal Card with its real hover reflection and updated the Gallery thumbnail to show the native white clearance. Prior thumbnails remain in the archive.
+- Corrected the Gallery isolation's missing white oval, traced mark/title reveal and oversized final logo. A new six-payload `2026-10-27-gallery` edition preserves this correction without rewriting either earlier edition or changing the live entrance. Its destination follows the actual Gallery masthead's type and spacing, centered without page context.
+- Regenerate the index with `node tools/render-figures-of-speech.mjs`; freeze/verify the new edition with `node tools/freeze-figures-edition.mjs --gallery`. Archive validation now checks 72 payload hashes in three editions. Verification evidence is in `tools/FIGURES-OF-SPEECH-QA.md`.
+
 ### 2026-10-27 — Archive the Polaroid document camera
 
 - Added FIG. 008, Polaroid Camera, to Figures of Speech with a white isolated-object thumbnail, the original 2026-09-22 development records and immediate interactive playback.

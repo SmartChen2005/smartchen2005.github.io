@@ -19,6 +19,7 @@ assert(html.includes('Open in New Page'),'The independent experiment must have a
 const manifests=[...new Set(studies.map(studyEdition))].map(name=>JSON.parse(fs.readFileSync(path.join(archive,'editions',name,'manifest.json'),'utf8')));
 assert.equal(manifests.find(item=>item.edition==='2026-10-27').sourceCommit,'e6bb1c9aa2798b7ddacddb74840fc948d857c61a');
 assert.equal(manifests.find(item=>item.edition==='2026-10-27-sx70').sourceCommit,'1de028bb51c96eebaf8e44bf7cb12f8f1e8d394e');
+assert.equal(manifests.find(item=>item.edition==='2026-10-27-gallery').sourceCommit,'2d4eba468c170080f4c85943b3e862853c95f9ff');
 function editionFiles(directory,prefix=''){
   return fs.readdirSync(directory,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?editionFiles(path.join(directory,entry.name),`${prefix}${entry.name}/`):[`${prefix}${entry.name}`]);
 }

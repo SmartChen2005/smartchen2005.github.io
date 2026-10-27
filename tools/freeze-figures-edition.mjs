@@ -5,8 +5,9 @@ import {execFileSync} from 'node:child_process';
 
 // An existing edition is verified, never regenerated from evolving site code.
 const cameraOnly=process.argv.includes('--camera');
-const edition=cameraOnly?'2026-10-27-sx70':'2026-10-27';
-const sourceCommit=cameraOnly?'1de028bb51c96eebaf8e44bf7cb12f8f1e8d394e':'e6bb1c9aa2798b7ddacddb74840fc948d857c61a';
+const galleryOnly=process.argv.includes('--gallery');
+const edition=galleryOnly?'2026-10-27-gallery':cameraOnly?'2026-10-27-sx70':'2026-10-27';
+const sourceCommit=galleryOnly?'2d4eba468c170080f4c85943b3e862853c95f9ff':cameraOnly?'1de028bb51c96eebaf8e44bf7cb12f8f1e8d394e':'e6bb1c9aa2798b7ddacddb74840fc948d857c61a';
 const output=`dist/projects/figures-of-speech/editions/${edition}`;
 const digest=buffer=>crypto.createHash('sha256').update(buffer).digest('hex');
 const refreshDraft=process.argv.includes('--refresh-draft');
@@ -38,6 +39,15 @@ function copy(name){
     for(const match of text.matchAll(/url\(['"]?([^)'"?]+\.(?:ttf|otf|woff2?|webp|jpg|png))/g))refs.add(new URL(match[1],`https://edition.local/${name}`).pathname.slice(1));
     content=text;write(`runtime/${name}`,content,{path:`dist/${name}`,sha256:digest(bytes)});for(const ref of refs)copy(ref);
   }else write(`runtime/${name}`,content,{path:`dist/${name}`,sha256:digest(bytes)});
+}
+if(galleryOnly){
+  copy('home-gallery-architecture.mjs');copy('gallery/assets/mobius-outline.svg');
+  const source=tracked('home-photo-transition.mjs');
+  write('runtime/photo-frame.mjs',source.toString('utf8').split('export function installPhotoTransition')[0].replace(/^import .*;\r?\n/gm,'').replace(/^const architecture = .*;\r?\n/gm,''),{path:'dist/home-photo-transition.mjs',sha256:digest(source),adaptation:'Preserved native frame calculations; live page navigation installer excluded.'});
+  for(const name of ['gallery-lab.css','gallery-lab.mjs'])write(name,fs.readFileSync(`tools/figures-lab/${name}`));
+  write('gallery-entrance/index.html',`<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="robots" content="noindex"><title>Into The Gallery — Preserved 2026-10-27</title><link rel="stylesheet" href="../gallery-lab.css"><script type="module" src="../gallery-lab.mjs"></script></head><body><main class="lab-stage" aria-label="Into The Gallery"><canvas id="gallery-lines" class="lab-canvas" role="img" aria-label="Animated museum entrance"></canvas><div class="gallery-brand"><img src="../runtime/gallery/assets/mobius-outline.svg" alt=""><span>The Gallery</span></div><div class="lab-controls"><button id="replay" type="button">Replay</button></div></main><noscript>This experiment needs JavaScript.</noscript></body></html>\n`);
+  fs.writeFileSync(`${output}/manifest.json`,JSON.stringify({edition,sourceCommit,preserved:'2026-10-27',description:'Corrected isolated Gallery entrance: native white wordmark clearance, traced mark, title reveal and masthead scale. Earlier editions remain intact.',studies:[{slug:'gallery-entrance',kind:'gallery',title:'Into The Gallery'}],files},null,2)+'\n');
+  console.log(`Preserved Gallery edition ${edition}; ${files.length} files.`);process.exit(0);
 }
 if(cameraOnly){
   const subject='projects/polaroid-of-yesterday/photography/assets/the-camera-remembers.webp';

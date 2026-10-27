@@ -3,7 +3,7 @@
 export const studies = [
   {
     id: '001', title: 'Personal Card', kind: 'Object / Material', location: 'Homepage / Smart Chen',
-    image: 'personal-card-isolated.jpg', alt: 'The silver Smart Chen contact card, isolated on white.', experiment: 'personal-card',
+    image: 'personal-card-lit.jpg', alt: 'The silver Smart Chen contact card with its real hover reflection, isolated on white.', experiment: 'personal-card',
     world: 'card', first: '2026-09-29', revised: '2026-10-14',
     description: 'A contact card treated as a physical object: circular-grained metal, engraved lettering, and one moving studio light.',
     perspective: 'Identity is carried by material as well as information. Cursor movement and device tilt reveal the finish without moving the grain itself.',
@@ -38,7 +38,7 @@ export const studies = [
   },
   {
     id: '005', title: 'Into The Gallery', kind: 'Motion / Transition', location: 'Homepage + Projects → The Gallery',
-    image: 'gallery-entrance-isolated.jpg', alt: 'The isolated museum entrance animation on white.', experiment: 'gallery-entrance',
+    image: 'gallery-entrance-refined.jpg', alt: 'The museum entrance with white clearance behind its smaller Gallery wordmark.', experiment: 'gallery-entrance', edition: '2026-10-27-gallery',
     world: 'photo', action: 'photo', first: '2026-10-14', revised: '2026-10-24',
     description: 'A viewfinder opens into an imagined museum, then resolves into the real Gallery masthead.',
     perspective: 'Entering a collection becomes a spatial journey. The opening frame, architecture, and destination belong to one continuous movement.',
@@ -78,7 +78,7 @@ export const studies = [
   },
   {
     id: '008', title: 'Polaroid Camera', kind: 'Object / Cursor', location: 'Polaroid of Yesterday / Game Design Document',
-    image: 'polaroid-camera-isolated.jpg', alt: 'The articulated SX-70 camera cursor, isolated on white.', experiment: 'polaroid-camera',
+    image: 'polaroid-camera-detail.jpg', alt: 'A larger, high-resolution rendering of the articulated SX-70 camera on white.', experiment: 'polaroid-camera',
     edition: '2026-10-27-sx70', world: 'camera', first: '2026-09-22', revised: '2026-09-22',
     description: 'A folding SX-70 replaces the document cursor. It opens, enters a viewfinder, photographs the page, and ejects a print.',
     perspective: 'The document’s photographic subject becomes a usable reading tool. Framing and making a physical-looking print turn browsing into an act of image making.',

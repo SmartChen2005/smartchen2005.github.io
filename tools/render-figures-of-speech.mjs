@@ -25,8 +25,8 @@ const html = `<!doctype html>
   <meta name="description" content="Figures of Speech — studies in motion and interface design by Smart Chen. An interactive index of VegShark.com, with dated development records.">
   <title>Figures of Speech — Smart Chen</title>
   ${projectHeaderAssets('../../')}
-  <link rel="stylesheet" href="figures.css?v=20261027-sx70">
-  <script type="module" src="figures.mjs?v=20261027-sx70"></script>
+  <link rel="stylesheet" href="figures.css?v=20261027-plates">
+  <script type="module" src="figures.mjs?v=20261027-plates"></script>
 </head>
 <body>
   <a class="skip-link" href="#index">Skip to the index</a>

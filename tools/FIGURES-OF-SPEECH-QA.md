@@ -1,5 +1,14 @@
 # Figures of Speech — 2026-10-27
 
+## Catalogue plate and Gallery presentation correction
+
+- The new camera plate is a 960×840 native-model rendering with a 1920×1680 canvas backing, rather than enlargement of the earlier 260×240 screenshot. Its model occupies about 59% of the plate width versus about 44% previously. The capture fixture is `tools/figures-lab/camera-plate.html`; it imports the preserved camera model. Live cursor dimensions and interaction are unchanged.
+- Personal Card was re-captured after a real pointer click/move over its upper-right surface. The existing material controller reported light X about 93.75% and spectral strength about 0.236. The 520×360 white crop retains the original card scale with visible metal reflection and stronger engraving. No painted-on effect or changed resting interaction was introduced.
+- The Gallery adapter had omitted the native canvas `destination-out` ellipse and used a final width of 62% of its frame. The correction restores the white clearance behind the wordmark, native SVG stroke tracing/title fade, and the actual masthead font/spacing/padding. At 1280px, the settled mark frame is about 233×64px with 28px lettering (previously about 794×265px with 87px lettering). Inside the desktop archive iframe, it settles to about 179×54px with 24px lettering.
+- The corrected runtime is a separate six-payload `2026-10-27-gallery` edition, pinned to source commit `2d4eba4`. The first 66 payloads remain intact. The Gallery plate is a real mid-animation capture at about 1.6s, with the white oval visibly separating the lettering from the museum lines.
+- Browser checks confirmed that the index loads all three new plates at their real dimensions and uses the new Gallery edition automatically. At 390×844, its settled frame is about 158×54px with 22px lettering. Escape from Replay removes the iframe, restores focus to its original study link and leaves no horizontal overflow. Desktop/narrow checks preserve the existing white independent presentation.
+- Passed the site validator, archive tests (72 hashes across three editions, all dependencies, 19 source dates), photo-transition and business-card regressions, all three freezer profiles, syntax and whitespace checks. The strict published-dist audit has zero findings. Saved native browser proof as `figures-plates-proof.jpg` in the conversation's visualization directory; no physical phone hardware test was performed.
+
 ## Polaroid Camera addition — FIG. 008
 
 - Added the Game Design Document's existing SX-70 cursor as the seventh independent study. The white thumbnail shows only the real model. Its two development milestones use the actual 2026-09-22 Git dates. The separate `2026-10-27-sx70` edition has 9 SHA-256 payloads pinned to source commit `1de028b`; the earlier 57 payloads remain unchanged. No live document or live root camera module is embedded.

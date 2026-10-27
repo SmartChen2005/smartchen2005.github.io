@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>SX-70 catalogue plate</title>
+<style>html,body{margin:0;background:#fff}canvas{display:block;width:960px;height:840px}</style>
+<canvas width="1920" height="1680" aria-label="Open SX-70 camera rendered from its preserved model"></canvas>
+<script type="module">
+import {drawSX70} from '../../dist/projects/figures-of-speech/editions/2026-10-27-sx70/runtime/camera-model.mjs';
+const ctx=document.querySelector('canvas').getContext('2d');ctx.scale(2,2);
+drawSX70(ctx,1,-.55,.43,170,497,510);
+document.body.dataset.ready='true';
+</script></html>
