@@ -27,6 +27,7 @@ const nodes = { '.identity-cars': cars, '.composition': composition, '.portrait-
 let cardOpen = false, keyboardEntries = 0, navigate, navigatePhoto, photoBlocksGame, playback,plays=0;
 const gameController = { active: false }, photoController = { active: false };
 const sandbox = {
+  URLSearchParams, location: { search: '' },
   document: { body: { dataset: {} }, documentElement: { style: style() }, fonts: { ready: { then() {} } },
     querySelector: selector => nodes[selector] || {}, querySelectorAll: () => identities,
     createComment: () => anchor, addEventListener: (key, fn) => events.set(key, fn) },
@@ -93,4 +94,10 @@ dispatch(name, 'click'); navigate(); assert(dock.hidden); assert.equal(world(), 
 dispatch(name, 'click'); navigatePhoto(); assert(dock.hidden); assert.equal(world(), '');
 dispatch(cars,'click',0);assert.equal(sandbox.document.body.dataset.motorPlaying,'true');events.get('keydown')({key:'Escape'});assert.equal(sandbox.document.body.dataset.motorPlaying,undefined);assert.equal(world(),'');
 dispatch(cars,'click',0);playback(false,'complete');assert.equal(world(),'cars','Keyboard completion restores the car preview and trigger');assert.equal(sandbox.document.body.dataset.motorPlaying,undefined);
-console.log('Passed: expanded arrival; first click closes; portrait-only hover; click pins portrait and card; all temporary previews restore both; click-only movie lock / complete / cancel / keyboard return; explicit selection/dismissal clears both; keyboard restoration preserves focus; Photographer transition integration, mutual exclusion and restoration.');
+for (const [search, expected] of [['?study=games','games'],['?study=photo','photo'],['?study=cars','cars'],['?study=card','name'],['?study=unknown','name']]) {
+  const archiveContext = vm.createContext({ ...sandbox, location: { search } });
+  vm.runInContext(fs.readFileSync(new URL('../dist/home.mjs', import.meta.url), 'utf8').replace(/^import .*;\r?\n/gm, ''), archiveContext);
+  assert.equal(world(), expected, `Archive entrance ${search} must select its real feature`);
+  assert.equal(dock.hidden, expected !== 'name', 'Only card/name arrivals may expose contact material');
+}
+console.log('Passed: expanded arrival; portrait/card restoration; movie and navigation lifecycle; keyboard restoration; native archive entrances on every identity; unknown archive parameters preserve the normal arrival.');

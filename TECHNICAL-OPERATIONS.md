@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-27 — Open the Figures of Speech design archive
+
+- Added a Projects entry and a print-catalogue-inspired square grid of seven existing motion/interface studies, with original site thumbnails, locations, recorded dates, design commentary and a chronological view.
+- Added opt-in current-version experiences using the existing homepage/404 implementations; closing or resetting retires the iframe. Homepage query links enter each real identity without changing normal arrivals.
+- Editorial source and renderer: `tools/figures-of-speech.mjs` and `tools/render-figures-of-speech.mjs`; regenerate with `node tools/render-figures-of-speech.mjs`. Source records link to dated Git commits, with no claim of archived interactive playback. Validate with `node tools/test-figures-of-speech.mjs` and the homepage/transition checks as well as `node tools/validate-site.mjs`. Browser verification is recorded in `tools/FIGURES-OF-SPEECH-QA.md`.
+
 ### 2026-10-27 — Restore the previous second-shot height
 
 - Reversed the 18cm camera trial at the user's request: second-shot height returns to 65cm desktop / 70cm phone. Camera source and its regression expectations match dc58115 exactly. Motor/home checks and site validation passed.

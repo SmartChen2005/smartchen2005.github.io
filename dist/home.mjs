@@ -153,3 +153,14 @@ document.fonts.ready.then(measure);
 measure();
 // The initial composition is also the remembered selection after a preview.
 render();
+
+// Explicit archive links enter the real feature in context, on touch and desktop.
+// Ordinary arrivals retain the established portrait/card default.
+const requestedStudy = new URLSearchParams(location.search).get('study');
+if (['games', 'photo', 'cars'].includes(requestedStudy)) {
+  nameCardOpen = false;
+  pinned = requestedStudy;
+  hovered = null;
+  focused = null;
+  render();
+}
