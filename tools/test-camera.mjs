@@ -17,7 +17,8 @@ assert(openHeight>foldedHeight*2);
 
 // Deterministic DOM/event harness exercises the actual production controller.
 const listeners=new Map(), nodes=new Map(), frames=[];
-let now=0, photoCount=0, failCapture=false, reduce=false, captureOptions;
+let now=0, photoCount=0, failCapture=false, reduce=false, finePointer=true, captureOptions;
+const archive=process.argv.includes('--archive');
 const context2d=new Proxy({drawImage(image){if(image.captured)photoCount++;},createLinearGradient(){return {addColorStop(){}};}},{get:(o,k)=>o[k]??(()=>{})});
 class Element {
   constructor(){this.dataset={};this.style={};this.children=[];this.classes=new Set();this.classList={add:c=>this.classes.add(c),remove:c=>this.classes.delete(c),toggle:(c,on)=>on?this.classes.add(c):this.classes.delete(c)};}
@@ -30,13 +31,14 @@ class Element {
 const body=new Element(),root=new Element();
 const on=(name,fn)=>{if(!listeners.has(name))listeners.set(name,[]);listeners.get(name).push(fn);};
 const sandbox={console,document:{body,images:[],documentElement:root,createElement:()=>new Element(),querySelector:()=>null,addEventListener:on},
-  matchMedia:q=>({get matches(){return q.includes('reduced')?reduce:q.includes('fine');},addEventListener(){}}),
+  matchMedia:q=>({get matches(){return q.includes('reduced')?reduce:q.includes('fine')&&finePointer;},addEventListener(){}}),
   innerWidth:1280,innerHeight:720,devicePixelRatio:1,scrollX:0,scrollY:0,
   requestAnimationFrame:fn=>{frames.push(fn);return frames.length;},addEventListener:on,
   performance:{now:()=>now},setTimeout:()=>0,MutationObserver:class{},drawSX70(){},projectPoint,filmCorners,EYEPIECE,
   window:{html2canvas:(body,options)=>{captureOptions=options;return failCapture?Promise.reject(new Error('Expected capture failure')):Promise.resolve({width:461,height:461,captured:true});}}};
 vm.createContext(sandbox);
-const code=fs.readFileSync(new URL('./camera.mjs',import.meta.url),'utf8').replace(/^import .*\n/,'').replace(/export /g,'');
+const controller=archive?'../dist/projects/figures-of-speech/editions/2026-10-27-sx70/runtime/camera.mjs':'./camera.mjs';
+const code=fs.readFileSync(new URL(controller,import.meta.url),'utf8').replace(/^import .*\n/,'').replace(/export /g,'');
 vm.runInContext(code,sandbox);
 const state=()=>body.children[0].dataset.state;
 function dispatch(type,details={}){
@@ -80,4 +82,16 @@ failCapture=true;dispatch('pointermove');dispatch('mousedown',{button:2,buttons:
 await new Promise(resolve=>setImmediate(resolve));advance();assert.equal(state(),'open');assert.equal(photoCount,2);
 reduce=true;failCapture=false;dispatch('mousedown',{button:2,buttons:2});advance();assert.equal(state(),'viewfinder');
 dispatch('mousedown',{button:0,buttons:3});dispatch('click');await new Promise(resolve=>setImmediate(resolve));assert.equal(state(),'open');
-console.log('PASS: 3D geometry, open/fold, native clicks, hold/release, F aiming with pointer movement, native Tab, text input and Ctrl+F, distinct crop coordinates, scrolled crop, multi-button shutter, click-through guard, ejection, blur recovery, capture failure, reduced motion.');
+if(archive){
+  finePointer=false;
+  assert(sandbox.labState().enabled,'Independent controls remain usable with a coarse pointer');
+  sandbox.labPosition(200,180);sandbox.labOpen();advance();assert.equal(state(),'open');
+  const toolbar={target:{closest:()=>true},clientX:900,clientY:20};
+  dispatch('pointermove',toolbar);dispatch('mousedown',toolbar);dispatch('click',toolbar);
+  assert.equal(state(),'open');assert.equal(parseFloat(nodes.get('.sx-window').style.left)+230.4,200);
+  sandbox.labToggle();advance();assert.equal(state(),'folded');
+  sandbox.labOpen();sandbox.enterAim('f');advance();assert.equal(state(),'viewfinder');
+  sandbox.labShutter();await new Promise(resolve=>setImmediate(resolve));assert.equal(state(),'open');
+  dispatch('click');assert.equal(state(),'folded','Toolbar shutter must not consume the next ordinary click');
+}
+console.log(`PASS (${archive?'preserved camera':'production camera'}): 3D geometry, open/fold, native clicks, hold/release, F aiming with pointer movement, native Tab, text input and Ctrl+F, distinct crop coordinates, scrolled crop, multi-button shutter, click-through guard, ejection, blur recovery, capture failure, reduced motion${archive?', toolbar isolation and coarse-pointer controls':''}.`);

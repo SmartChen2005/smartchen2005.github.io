@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-27 — Archive the Polaroid document camera
+
+- Added FIG. 008, Polaroid Camera, to Figures of Speech with a white isolated-object thumbnail, the original 2026-09-22 development records and immediate interactive playback.
+- Preserved the native SX-70 model, folding, viewfinder, page capture and physical print ejection in the separate `2026-10-27-sx70` edition pinned to `1de028b`. Its 9 hashed payloads include the local capture library/license and a small test-subject photo. The original 57-file edition and live GDD camera remain unchanged.
+- Regenerate the catalogue with `node tools/render-figures-of-speech.mjs`; verify both editions with the freezer's default mode and `--camera`. Archive checks now cover seven studies, 66 hashes and 19 Git dates. Camera regressions run on both the production controller and preserved controller (`node tools/test-camera.mjs --archive`), including toolbar input isolation and coarse-pointer controls. Browser evidence is recorded in `tools/FIGURES-OF-SPEECH-QA.md`.
+
 ### 2026-10-27 — Isolate and preserve the Figures of Speech experiments
 
 - Merged Game Designer and its entrance into one study, kept the two film/gallery studies separate, and moved Figures of Speech immediately below Polaroid of Yesterday.

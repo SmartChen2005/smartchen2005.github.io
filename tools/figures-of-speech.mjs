@@ -76,7 +76,20 @@ export const studies = [
       ['2026-10-09', '0dfe75d', 'Scroll rotation direction is refined.'],
     ],
   },
+  {
+    id: '008', title: 'Polaroid Camera', kind: 'Object / Cursor', location: 'Polaroid of Yesterday / Game Design Document',
+    image: 'polaroid-camera-isolated.jpg', alt: 'The articulated SX-70 camera cursor, isolated on white.', experiment: 'polaroid-camera',
+    edition: '2026-10-27-sx70', world: 'camera', first: '2026-09-22', revised: '2026-09-22',
+    description: 'A folding SX-70 replaces the document cursor. It opens, enters a viewfinder, photographs the page, and ejects a print.',
+    perspective: 'The document’s photographic subject becomes a usable reading tool. Framing and making a physical-looking print turn browsing into an act of image making.',
+    instruction: 'Move the camera with the pointer. Click to open or fold; hold RMB or F to aim, then click to shoot. The controls also provide Open/Fold, Aim and Shutter.',
+    history: [
+      ['2026-09-22', '8efb234', 'The Polaroid cursor is introduced.'],
+      ['2026-09-22', 'ac8453e', 'The camera model and interaction details are refined.'],
+    ],
+  },
 ];
 
 export const preservedEdition = '2026-10-27';
-export const experimentURL = study => `editions/${preservedEdition}/${study.experiment}/`;
+export const studyEdition = study => study.edition || preservedEdition;
+export const experimentURL = study => `editions/${studyEdition(study)}/${study.experiment}/`;

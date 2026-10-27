@@ -1,5 +1,15 @@
 # Figures of Speech — 2026-10-27
 
+## Polaroid Camera addition — FIG. 008
+
+- Added the Game Design Document's existing SX-70 cursor as the seventh independent study. The white thumbnail shows only the real model. Its two development milestones use the actual 2026-09-22 Git dates. The separate `2026-10-27-sx70` edition has 9 SHA-256 payloads pinned to source commit `1de028b`; the earlier 57 payloads remain unchanged. No live document or live root camera module is embedded.
+- Actual desktop browser checks covered native click fold, toolbar open, optical viewfinder and a real html2canvas capture (360px canvas) followed by paper ejection. The native Open in New Page link opened the exact independent camera route. A small local photograph provides a meaningful subject to capture on the white stage; toolbar and help are excluded from captures.
+- At 390×844, Aim and Shutter remain visible above the viewfinder, a real capture creates a print, the body is `rgb(255,255,255)` and the page has no horizontal overflow. This is viewport verification, not physical phone hardware verification. The coarse-pointer path is additionally covered by the controller regression harness.
+- The narrow archive dialog also captures and ejects a real print immediately inside its frame. Escape from a child control closes the dialog, removes its iframe and returns focus to Open Polaroid Camera study; no horizontal overflow remains.
+- The camera regression harness runs both production and preserved controllers. The preserved run additionally verifies coarse-pointer availability, toolbar events leaving the model position/open state intact, Open/Fold/Aim/Shutter accessors and the next ordinary click after toolbar capture. Existing capture failure, reduced motion, crop, native mouse/F input and ejection cases pass. Expected capture-failure logging belongs to the failure test.
+- Archive checks cover seven entries, both editions' 66 hashes and dependency closure, source/render parity, 19 real Git dates and unchanged Projects ordering. Vendor parser string literals are no longer mistaken for resource dependencies.
+- Site validation, production/preserved camera regressions, both edition verifiers, module syntax and whitespace checks pass. The strict published-dist UI audit reports zero findings. The existing six experiments and live GDD source files are unchanged.
+
 ## Latest revision — isolated, preserved components
 
 - Replaced the initial live-page embeds with six independent studies. Game Designer now includes both the physical field and the converging click animation; Filmmaker and Into The Gallery remain separate. Projects now lists Polaroid first and Figures of Speech second.

@@ -1,4 +1,4 @@
-import { studies, experimentURL, preservedEdition } from './catalogue.mjs';
+import { studies, experimentURL, studyEdition } from './catalogue.mjs?rev=20261027-sx70';
 
 const dialog = document.querySelector('.study-dialog');
 const close = document.querySelector('#close-study');
@@ -37,7 +37,7 @@ function startPreview() {
   status.textContent = 'Loading interaction…';
   const activeFrame = document.createElement('iframe');
   frame = activeFrame;
-  activeFrame.title = `${current.title} — preserved ${preservedEdition}`;
+  activeFrame.title = `${current.title} — preserved ${studyEdition(current).slice(0,10)}`;
   activeFrame.src = experimentURL(current);
   // The preserved card retains its own explicit sensor-permission flow.
   activeFrame.allow = 'fullscreen';

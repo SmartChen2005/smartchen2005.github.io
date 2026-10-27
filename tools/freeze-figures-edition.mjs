@@ -4,8 +4,9 @@ import crypto from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 
 // An existing edition is verified, never regenerated from evolving site code.
-const edition='2026-10-27';
-const sourceCommit='e6bb1c9aa2798b7ddacddb74840fc948d857c61a';
+const cameraOnly=process.argv.includes('--camera');
+const edition=cameraOnly?'2026-10-27-sx70':'2026-10-27';
+const sourceCommit=cameraOnly?'1de028bb51c96eebaf8e44bf7cb12f8f1e8d394e':'e6bb1c9aa2798b7ddacddb74840fc948d857c61a';
 const output=`dist/projects/figures-of-speech/editions/${edition}`;
 const digest=buffer=>crypto.createHash('sha256').update(buffer).digest('hex');
 const refreshDraft=process.argv.includes('--refresh-draft');
@@ -37,6 +38,19 @@ function copy(name){
     for(const match of text.matchAll(/url\(['"]?([^)'"?]+\.(?:ttf|otf|woff2?|webp|jpg|png))/g))refs.add(new URL(match[1],`https://edition.local/${name}`).pathname.slice(1));
     content=text;write(`runtime/${name}`,content,{path:`dist/${name}`,sha256:digest(bytes)});for(const ref of refs)copy(ref);
   }else write(`runtime/${name}`,content,{path:`dist/${name}`,sha256:digest(bytes)});
+}
+if(cameraOnly){
+  const subject='projects/polaroid-of-yesterday/photography/assets/the-camera-remembers.webp';
+  for(const name of ['camera-model.mjs','camera.css','vendor/html2canvas.min.js','vendor/html2canvas.LICENSE',subject])copy(name);
+  const original=tracked('camera.mjs');
+  let controller=original.toString('utf8').replace('fine.matches&&!contrast.matches&&!!ctx','!contrast.matches&&!!ctx');
+  for(const event of ['pointermove','mousedown','click'])controller=controller.replace(`addEventListener('${event}',event=>{`,`addEventListener('${event}',event=>{\n  if(event.target?.closest?.('[data-camera-control]'))return;`);
+  controller+=`\n// Standalone accessors preserve the native cursor, finder and capture pipeline.\nexport function labPosition(x,y){mouse={x,y};setVisible(true);positionFinder();schedule();}\nexport function labOpen(){if(busy)return;opened=true;setVisible(true);publish();schedule();}\nexport function labToggle(){if(busy)return;exitAim();opened=!opened;setVisible(true);publish();schedule();}\nexport function labShutter(){const result=takePhoto();consumeClick=false;return result;}\nexport function labState(){return {opened,busy,phase,enabled:enabled()};}\n`;
+  write('runtime/camera.mjs',controller,{path:'dist/camera.mjs',sha256:digest(original),adaptation:'Standalone controls and coarse-pointer access; toolbar input is excluded from native cursor clicks. Original model, viewfinder, DOM capture and film choreography retained.'});
+  for(const name of ['camera-lab.css','camera-lab.mjs'])write(name,fs.readFileSync(`tools/figures-lab/${name}`));
+  write('polaroid-camera/index.html',`<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="robots" content="noindex"><title>Polaroid Camera — Preserved 2026-10-27</title><link rel="stylesheet" href="../runtime/camera.css"><link rel="stylesheet" href="../camera-lab.css"><script src="../runtime/vendor/html2canvas.min.js" defer></script><script type="module" src="../camera-lab.mjs"></script></head><body data-lab="camera"><main class="camera-stage" aria-label="SX-70 camera cursor experiment"><figure class="camera-subject"><img src="../runtime/${subject}" width="1600" height="900" alt="A photograph of a camera framing a room, used as a subject for this experiment"><figcaption>Test subject</figcaption></figure><p class="camera-instruction" data-html2canvas-ignore>Click: open / fold / shoot · Hold RMB / F: aim</p></main><nav class="camera-controls" aria-label="Camera controls" data-camera-control data-html2canvas-ignore><button id="camera-fold" type="button">Fold</button><button id="camera-aim" type="button" aria-pressed="false">Aim</button><button id="camera-shutter" type="button" disabled>Shutter</button></nav></body></html>\n`);
+  fs.writeFileSync(`${output}/manifest.json`,JSON.stringify({edition,sourceCommit,preserved:'2026-10-27',description:'Independent SX-70 cursor edition with native folding, viewfinder, DOM capture and physical film ejection. The six earlier studies remain unchanged.',studies:[{slug:'polaroid-camera',kind:'camera',title:'Polaroid Camera'}],files},null,2)+'\n');
+  console.log(`Preserved camera edition ${edition}; ${files.length} files.`);process.exit(0);
 }
 for(const name of ['home-business-card.mjs','home-business-card.css','home-exhibition.mjs','home-game-transition.mjs','home-gallery-architecture.mjs','home-motorsport.mjs','construction.mjs','construction.css','assets/fonts/instrument-serif-regular.ttf','assets/fonts/OFL.txt','assets/fonts/SourceHanSans-LICENSE.txt','assets/fonts/Anton-OFL.txt','assets/fonts/Archivo-OFL.txt','assets/hongyi-chen-resume.pdf','gallery/assets/mobius-outline.svg','vendor/three/LICENSE'])copy(name);
 const homepage=tracked('index.html').toString('utf8');

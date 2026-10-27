@@ -28,6 +28,8 @@ jobs:
         run: |
           node tools/validate-site.mjs
           node tools/test-figures-of-speech.mjs
+          node tools/test-camera.mjs
+          node tools/test-camera.mjs --archive
           node tools/test-gallery-carousels.mjs
           node tools/test-gallery-layouts.mjs
           node tools/test-home.mjs

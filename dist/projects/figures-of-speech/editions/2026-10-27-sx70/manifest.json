@@ -1,0 +1,76 @@
+{
+  "edition": "2026-10-27-sx70",
+  "sourceCommit": "1de028bb51c96eebaf8e44bf7cb12f8f1e8d394e",
+  "preserved": "2026-10-27",
+  "description": "Independent SX-70 cursor edition with native folding, viewfinder, DOM capture and physical film ejection. The six earlier studies remain unchanged.",
+  "studies": [
+    {
+      "slug": "polaroid-camera",
+      "kind": "camera",
+      "title": "Polaroid Camera"
+    }
+  ],
+  "files": [
+    {
+      "path": "runtime/camera-model.mjs",
+      "sha256": "eb957c0fbe597afcbb9bd8f58eaa68d532d93c93589c84085f9cf97e6e6f5acb",
+      "source": {
+        "path": "dist/camera-model.mjs",
+        "sha256": "eb957c0fbe597afcbb9bd8f58eaa68d532d93c93589c84085f9cf97e6e6f5acb"
+      }
+    },
+    {
+      "path": "runtime/camera.css",
+      "sha256": "d829c54ee2120dd241df01a41a0d14926ca112c5d500031a76700c4de7878da5",
+      "source": {
+        "path": "dist/camera.css",
+        "sha256": "d829c54ee2120dd241df01a41a0d14926ca112c5d500031a76700c4de7878da5"
+      }
+    },
+    {
+      "path": "runtime/vendor/html2canvas.min.js",
+      "sha256": "e87e550794322e574a1fda0c1549a3c70dae5a93d9113417a429016838eab8cb",
+      "source": {
+        "path": "dist/vendor/html2canvas.min.js",
+        "sha256": "e87e550794322e574a1fda0c1549a3c70dae5a93d9113417a429016838eab8cb"
+      }
+    },
+    {
+      "path": "runtime/vendor/html2canvas.LICENSE",
+      "sha256": "86200ce4e92d9a22c41c8647a55f7a5fddff304ff89b4d36ecc699ed8c123d2c",
+      "source": {
+        "path": "dist/vendor/html2canvas.LICENSE",
+        "sha256": "86200ce4e92d9a22c41c8647a55f7a5fddff304ff89b4d36ecc699ed8c123d2c"
+      }
+    },
+    {
+      "path": "runtime/projects/polaroid-of-yesterday/photography/assets/the-camera-remembers.webp",
+      "sha256": "4cc73930d50b0fe1fbd12600febd9a2a3474b18f8fb97c93067a149031f0aaa5",
+      "source": {
+        "path": "dist/projects/polaroid-of-yesterday/photography/assets/the-camera-remembers.webp",
+        "sha256": "4cc73930d50b0fe1fbd12600febd9a2a3474b18f8fb97c93067a149031f0aaa5"
+      }
+    },
+    {
+      "path": "runtime/camera.mjs",
+      "sha256": "632a0dbd085de2aa9dd782e7a2293a17e08240f8a42f06e4b3e980271bac0640",
+      "source": {
+        "path": "dist/camera.mjs",
+        "sha256": "b283ea6fd05a6d2b0b98a6f016f28d5614aa25ba0b409bbbdb975b8786623162",
+        "adaptation": "Standalone controls and coarse-pointer access; toolbar input is excluded from native cursor clicks. Original model, viewfinder, DOM capture and film choreography retained."
+      }
+    },
+    {
+      "path": "camera-lab.css",
+      "sha256": "89c55a7fefda0910f95064ebcf64e8f2cc9d47450b1cde77288f0b642bb37e4a"
+    },
+    {
+      "path": "camera-lab.mjs",
+      "sha256": "a1f912997faa41eaef599af027192b31c88c5fb4a6156085324cdc651c7b156c"
+    },
+    {
+      "path": "polaroid-camera/index.html",
+      "sha256": "770352f75288f279d6a256cb0da0dfa1aabbc6e0b6ac376b8724541fb10f89d6"
+    }
+  ]
+}
