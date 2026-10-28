@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { siteFavicon } from './site-favicon.mjs';
 import { projectHeader, projectHeaderAssets } from './project-header.mjs';
 import { wheel, map, lugPoints, starOrder } from './vr-illustrations.mjs';
 import path from 'node:path';
@@ -38,6 +39,7 @@ const html = `<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f3f2ec">
   <meta name="description" content="${e(content.subtitle)}">
+  ${siteFavicon('../../')}
   <title>${e(content.title)} | Smart Chen</title>
   <link rel="canonical" href="https://smartchen2005.github.io/projects/vr-for-skill-learning/">
   <link rel="stylesheet" href="vr.css?v=interaction-3">

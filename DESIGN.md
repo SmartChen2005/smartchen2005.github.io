@@ -1,5 +1,9 @@
 # Polaroid of Yesterday — Design Context
 
+## Browser tab icon (2026-10-28)
+
+Every page uses one solid white square with no border, inset, lettering or transparent pixels. `dist/favicon.ico` supplies 16px and 32px versions, with shared includes from `tools/site-favicon.mjs`. Archived independent studies use the root favicon fallback.
+
 ## Figures of Speech archive (2026-10-27)
 
 Route: `/projects/figures-of-speech/`, immediately after Polaroid of Yesterday in Projects. The user chose **Figures of Speech**, with **Studies in Motion & Interface Design** as its subtitle, and explicitly requested inspiration from Virgil Abloh's book of the same name. This is a project-specific print-catalogue identity. Reference: the [MCA publication](https://mcachicago.org/stories/editorial/virgil-abloh-figures-of-speech/) and inspected [book plate spreads](https://weltkern.com/products/virgil-abloh-figures-of-speech). Book imagery is reference only and is not shipped as site content. The website uses available Helvetica/Arial-like grotesks with small Georgia/Times captions; no claim is made that these are the book's exact licensed fonts.

@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { siteFavicon } from './site-favicon.mjs';
 import { studies, experimentURL, preservedEdition, studyEdition } from './figures-of-speech.mjs';
 import { projectHeader, projectHeaderAssets } from './project-header.mjs';
 
@@ -23,6 +24,7 @@ const html = `<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="Figures of Speech — studies in motion and interface design by Smart Chen. An interactive index of VegShark.com, with dated development records.">
+  ${siteFavicon('../../')}
   <title>Figures of Speech — Smart Chen</title>
   ${projectHeaderAssets('../../')}
   <link rel="stylesheet" href="figures.css?v=20261028-cursor">

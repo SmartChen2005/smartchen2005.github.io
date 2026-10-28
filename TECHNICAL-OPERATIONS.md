@@ -52,6 +52,8 @@ node tools/render-notion.mjs
 node tools/validate-site.mjs
 ```
 
+The shared tab icon is an opaque white square. Run `node tools/render-site-favicon.mjs` to regenerate `dist/favicon.ico` (16px and 32px) and synchronize live page links. Page renderers use `tools/site-favicon.mjs`; preserved Figures of Speech editions use the browser's `/favicon.ico` fallback without rewriting archived payloads.
+
 Do not use `git add -A` blindly when unrelated files are present. Review `git status` and `git diff --stat` first, then stage the intended complete update.
 
 ## Commit summary standard

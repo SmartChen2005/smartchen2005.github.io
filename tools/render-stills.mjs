@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { siteFavicon } from './site-favicon.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { siteCursorAssets } from './site-cursor.mjs';
@@ -24,6 +25,7 @@ const html = `<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#ffffff">
   <meta name="description" content="An exhibition of ${description.toLowerCase()} from Polaroid of Yesterday. Explore a memory spiral or an editorial gallery.">
+  ${siteFavicon('../../../')}
   <title>Stills | Polaroid of Yesterday | The Gallery</title>
   <link rel="preload" as="image" href="assets/the-room.webp">
   <link rel="stylesheet" href="stills.css?gallery=20261013">
