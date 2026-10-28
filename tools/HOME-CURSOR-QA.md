@@ -4,6 +4,13 @@ Follow-up: the implementation now lives in `site-cursor.*`; the homepage files
 are compatibility entries. See `SITE-CURSOR-QA.md` for the shared rollout and its
 native-pointer exclusions. This original nine-group regression still runs.
 
+2026-10-28 refinement: the user selected borderless soft light. All four targets
+now have zero rectangular fill and outline, a local 4.5% ink glow and a feathered
+white hotspot. The same padded attraction/click region and stable typography
+remain. The browser regression explicitly checks this replacement, with current
+evidence in `refined-home-cursor/`. The original frame description below is the
+historical first iteration.
+
 The user selected a translucent frame around each complete identity, a light spot
 that follows the real pointer inside the frame, a roughly 10px capture region,
 and a small arrow capsule for contact-card links. Reference:

@@ -12,15 +12,15 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
   cursor.className = homepage ? 'site-cursor home-cursor' : 'site-cursor';
   cursor.setAttribute('aria-hidden', 'true');
   cursor.hidden = true;
-  cursor.innerHTML = '<span class="site-cursor-surface"></span><span class="site-cursor-light"></span><span class="site-cursor-edge"></span><svg class="site-cursor-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 12 4M4 4h8v8"/></svg>';
+  cursor.innerHTML = '<span class="site-cursor-surface"></span><span class="site-cursor-glow"></span><span class="site-cursor-light"></span><span class="site-cursor-edge"></span><svg class="site-cursor-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 12 4M4 4h8v8"/></svg><svg class="site-cursor-magnify" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><path d="m14.5 14.5 6 6"/></svg>';
   document.body.append(cursor);
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-  const pointShape = () => ({ x: pointer.x, y: pointer.y, w: 13, h: 13, r: 6.5, fill: .65, edge: 0, light: 0, arrow: 0 });
+  const pointShape = () => ({ x: pointer.x, y: pointer.y, w: 13, h: 13, r: 6.5, fill: .65, edge: 0, light: 0, arrow: 0, glow: 0, magnify: 0 });
   let pointer = { x: 0, y: 0 }, current, velocity = {};
   let frame = 0, previousTime = 0, pressed = false, active = false;
   const allowed = () => fine.matches && !reduced.matches && !forced.matches && !document.hidden;
-  const nativeRegions = 'input, textarea, select, [contenteditable]:not([contenteditable="false"]), iframe, video[controls], audio[controls], [data-cursor-native], #world-control, .process-track, .print-link, .index-print .story-image-open, #maintenance-scene[data-hover], #maintenance-scene[data-dragging]';
+  const nativeRegions = 'input, textarea, select, [contenteditable]:not([contenteditable="false"]), iframe, video[controls], audio[controls], [data-cursor-native], #world-control, .process-track, #maintenance-scene[data-hover], #maintenance-scene[data-dragging]';
   const nativeAt = hit => root.classList.contains('sx-cursor') || Boolean(hit?.closest(nativeRegions));
 
   function hide() {
@@ -43,14 +43,19 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     const hit = document.elementFromPoint(pointer.x, pointer.y);
     if (nativeAt(hit)) return null;
     const identity = homepage && !transitioning && !body.hasAttribute('data-motor-playing') && hit?.closest('.identity');
+    const photo = !transitioning && hit?.closest('.story-image-open, .print-link');
     const link = !transitioning && hit?.closest('a[href]');
     const button = !transitioning && hit?.closest('button:not(:disabled), summary, [role="button"]');
     if (identity && !identity.closest('[inert]')) {
       const rect = identity.getBoundingClientRect();
       Object.assign(next, { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2,
-        w: rect.width + padding * 2, h: rect.height + padding * 2, r: 12, fill: .085, edge: .16, light: 1 });
+        w: rect.width + padding * 2, h: rect.height + padding * 2, r: 12, fill: 0, edge: 0, glow: 1, light: .65 });
       cursor.dataset.mode = 'identity';
       cursor.dataset.identity = identity.dataset.identity;
+    } else if (photo && !photo.closest('[inert]') && photo.getAttribute('aria-disabled') !== 'true') {
+      Object.assign(next, { w: 28, h: 28, r: 14, fill: 0, magnify: 1 });
+      cursor.dataset.mode = 'magnify';
+      delete cursor.dataset.identity;
     } else if (link && !link.closest('[inert]') && link.getAttribute('aria-disabled') !== 'true') {
       Object.assign(next, { w: 34, h: 26, r: 13, fill: .88, arrow: 1 });
       cursor.dataset.mode = 'link';
@@ -78,7 +83,8 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     cursor.style.width = `${current.w}px`;
     cursor.style.height = `${current.h}px`;
     cursor.style.borderRadius = `${current.r}px`;
-    for (const key of ['fill', 'edge', 'light', 'arrow']) cursor.style.setProperty(`--cursor-${key}`, current[key]);
+    for (const key of ['fill', 'edge', 'light', 'arrow', 'glow', 'magnify']) cursor.style.setProperty(`--cursor-${key}`, current[key]);
+    cursor.style.setProperty('--magnify-scale', clamp(current.w / 28, .4, 1));
     cursor.style.setProperty('--light-x', `${clamp(pointer.x - left, 0, current.w)}px`);
     cursor.style.setProperty('--light-y', `${clamp(pointer.y - top, 0, current.h)}px`);
   }
@@ -102,12 +108,12 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
       const decay = Math.exp(-omega * dt);
       current[key] = target[key] + (offset + term * dt) * decay;
       velocity[key] = ((velocity[key] || 0) - omega * term * dt) * decay;
-      const precision = ['fill', 'edge', 'light', 'arrow'].includes(key) ? .001 : .05;
+      const precision = ['fill', 'edge', 'light', 'arrow', 'glow', 'magnify'].includes(key) ? .001 : .05;
       if (Math.abs(current[key] - target[key]) > precision || Math.abs(velocity[key]) > precision * 10) moving = true;
       else { current[key] = target[key]; velocity[key] = 0; }
     }
     // A free dot/pill tracks input directly once the magnetic frame has retracted.
-    if (cursor.dataset.mode !== 'identity' && current.w < 36 && current.h < 28) {
+    if (cursor.dataset.mode !== 'identity' && current.w < 36 && current.h < 30) {
       current.x = pointer.x;
       current.y = pointer.y;
       velocity.x = velocity.y = 0;

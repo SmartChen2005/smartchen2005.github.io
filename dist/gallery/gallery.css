@@ -91,7 +91,7 @@
 .story-heading:first-child { margin-top: 0; }
 .story-image { margin: 64px auto; max-width: 1080px; }
 .story-image.portrait { width: calc(100% * var(--print-scale)); max-width: calc(1080px * var(--print-scale)); }
-.story-image-open { display: block; }
+.story-image-open { display: block; cursor: zoom-in; }
 .story-image figcaption, .story-video figcaption { margin-top: 12px; font: 12px/1.5 var(--font); color: var(--photo-secondary); }
 .story-caption { max-width: 1080px; margin: -48px auto 64px; font: 12px/1.5 var(--font); color: var(--photo-secondary); }
 .story-columns { display: grid; grid-template-columns: var(--column-tracks); align-items: start; gap: 24px; max-width: 1080px; margin: 64px auto; }

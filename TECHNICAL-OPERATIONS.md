@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Distinguish photo viewing and soften identity attraction
+
+- Added a fine-line magnifier for Gallery editorial/index photo details and Stills image entries. Covers that navigate to a project keep the arrow capsule; native viewer behavior and fallback image links remain intact.
+- At the user's selected follow-up direction, replaced the homepage's gray rectangle/outline with borderless soft light: no rectangular fill or edge, a localized 4.5% ink glow and a pointer-following white hotspot. Identity text and the real 10px hit region retain their geometry.
+- Bumped shared asset revisions and synchronized all live templates/output; no camera or frozen-edition payload changed. Site/coverage/Gallery/Stills/source-parity checks, 22-route/seven-group browser QA, nine homepage groups and strict design audit passed. Current evidence and reproduction are recorded in `tools/SITE-CURSOR-QA.md`.
+
 ### 2026-10-27 — Extend the adaptive pointer across live pages
 
 - Promoted the homepage implementation to shared site assets and connected 22 live pages. The white difference-blended dot/capsule reads pale on dark backgrounds and dark on light backgrounds. Homepage identity frames retain their accepted treatment.

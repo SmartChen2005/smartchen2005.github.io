@@ -20,9 +20,20 @@
 .site-cursor[hidden] { display: none; }
 .site-cursor-surface,
 .site-cursor-edge,
+.site-cursor-glow,
 .site-cursor-light { position: absolute; inset: 0; border-radius: inherit; }
 .site-cursor-surface { background: currentColor; opacity: var(--cursor-fill, .65); }
 .site-cursor-edge { border: 1px solid currentColor; opacity: var(--cursor-edge, 0); }
+.site-cursor-glow {
+  opacity: calc(var(--cursor-glow, 0) * .045);
+  background: radial-gradient(ellipse 90px 34px at var(--light-x, 50%) var(--light-y, 50%), currentColor, transparent);
+}
+.site-cursor-glow, .site-cursor-light {
+  /* Feather the measured interaction region; it has no visible perimeter. */
+  mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 12px), transparent),
+    linear-gradient(transparent, #000 12px, #000 calc(100% - 12px), transparent);
+  mask-composite: intersect;
+}
 .site-cursor-light {
   opacity: var(--cursor-light, 0);
   background: radial-gradient(circle 34px at var(--light-x, 50%) var(--light-y, 50%), #ffffffd9, #ffffff40 45%, #ffffff00 100%);
@@ -35,6 +46,15 @@
   top: calc(50% - 7px);
   color: #000000;
   opacity: var(--cursor-arrow, 0);
+}
+.site-cursor-magnify {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: calc(50% - 12px);
+  top: calc(50% - 12px);
+  opacity: var(--cursor-magnify, 0);
+  transform: scale(var(--magnify-scale, 1));
 }
 .home-cursor { color: var(--ink); mix-blend-mode: normal; }
 .home-cursor .site-cursor-arrow { color: var(--paper); }

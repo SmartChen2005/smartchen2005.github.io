@@ -33,7 +33,7 @@ fs.mkdirSync(output, { recursive: true });
     }));
     const waitMode = mode => page.waitForFunction(mode => {
       const cursor = document.querySelector('.site-cursor');
-      const width = { dot: 13, link: 34, button: 22 }[mode];
+      const width = { dot: 13, link: 34, button: 22, magnify: 28 }[mode];
       return cursor && !cursor.hidden && cursor.dataset.mode === mode && Math.abs(parseFloat(cursor.style.width) - width) < .1;
     }, mode);
     const goto = async route => {
@@ -68,6 +68,29 @@ fs.mkdirSync(output, { recursive: true });
       await page.screenshot({ path: path.join(output, name + '.png') });
     }
     checks.push('Actual rendered pixels prove pale dots on dark Projects/room backgrounds and a dark dot on white Gallery.');
+
+    await goto('/gallery/');
+    await page.locator('.media-link').first().hover(); await waitMode('link');
+    for (const route of ['/gallery/analog-and-digital/', '/gallery/rhythms-of-chaos/']) {
+      await goto(route);
+      const photo = page.locator('.story-image-open').first();
+      await photo.hover(); await waitMode('magnify');
+      assert.equal(await page.locator('.site-cursor').evaluate(e => +e.style.getPropertyValue('--cursor-arrow')), 0, 'Photo detail is distinct from navigation');
+      await page.screenshot({ path: path.join(output, route.includes('analog') ? 'photo-magnifier.png' : 'index-magnifier.png') });
+      await photo.click();
+      await page.locator('.gallery-viewer:modal').waitFor();
+      await page.locator('.gallery-viewer [data-close]').hover(); await waitMode('button');
+      assert.equal((await state()).parent, 'DIALOG');
+      await page.keyboard.press('Escape');
+      await page.locator('.gallery-viewer:modal').waitFor({ state: 'hidden' });
+      await photo.hover(); await waitMode('magnify');
+    }
+    await goto('/projects/polaroid-of-yesterday/photography/?view=gallery');
+    await page.locator('.print-link').first().hover(); await waitMode('magnify');
+    await page.locator('.print-link').first().click();
+    await page.locator('dialog:modal').waitFor();
+    await page.keyboard.press('Escape');
+    checks.push('Gallery cover links retain arrows; editorial/index/Stills photo details show magnifiers and open/close real viewers.');
 
     await goto('/projects/');
     await page.locator('.project-header__nav a').first().hover(); await waitMode('link');

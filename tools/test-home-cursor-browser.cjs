@@ -38,6 +38,8 @@ fs.mkdirSync(output, { recursive: true });
       mode: el.dataset.mode, identity: el.dataset.identity, hidden: el.hidden,
       rect: el.getBoundingClientRect().toJSON(), light: el.style.getPropertyValue('--light-x'),
       color: getComputedStyle(el).color, arrow: +el.style.getPropertyValue('--cursor-arrow'),
+      fill: +el.style.getPropertyValue('--cursor-fill'), edge: +el.style.getPropertyValue('--cursor-edge'),
+      glow: +el.style.getPropertyValue('--cursor-glow'),
       active: document.documentElement.classList.contains('has-home-cursor'),
       frames: window.cursorFrames.size, maxFrames: window.cursorMaxFrames,
     }));
@@ -63,6 +65,9 @@ fs.mkdirSync(output, { recursive: true });
       await page.mouse.move(bounds.x + bounds.width * .25, bounds.y + bounds.height / 2); await settle();
       state = await read();
       assert.equal(state.identity, id); assert.equal(state.mode, 'identity');
+      assert.equal(state.fill, 0, 'The selected soft glow has no rectangular fill');
+      assert.equal(state.edge, 0, 'The selected soft glow has no outline');
+      assert.equal(state.glow, 1, 'The soft glow replaces the frame');
       assert(Math.abs(state.rect.width - bounds.width - 20) < .15);
       assert(Math.abs(state.rect.x - bounds.x + 10) < .15);
       const light = parseFloat(state.light);
