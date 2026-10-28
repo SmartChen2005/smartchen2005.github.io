@@ -1,5 +1,15 @@
 # Figures of Speech — 2026-10-27
 
+## 2026-10-28 — Adaptive Cursor object
+
+- Added FIG. 009 and its 960×560 white six-form plate, captured from the preserved controller's exact cursor markup/styles at four times their real dimensions. The preserved `2026-10-28-cursor` edition has eight payloads pinned to `bb2bac9`; every earlier payload remains intact. Five actual 2026-10-27/28 Git records extend the chronology to 24 milestones.
+- The dedicated controller retains the original pointer and intent code with two deliberate changes: opt into this study's own iframe and enable word attraction without importing the homepage. The live shared pointer files are unchanged. The shared-site validator still excludes all edition documents from live cursor injection.
+- Native 1280×720 browser interaction: action click turns On and reports button mode; a real anchor reaches its same-screen destination and reports link mode; pressing Design changes it to Imagine and reports identity mode with about 0.99 background glow; photo click zooms the image and reports magnify mode. Moving back onto the two-tone surface restores dot mode. The gray/dark pointer and pale symbols are actually rendered with the original difference blending.
+- Captured pointer drag moved the handle from 50% to 94%; a real range click changed it to 77%. Keyboard Home then ArrowRight moved the handle to 5%, and range End reached 100%. Typing stores text inside the demo and hides the decorative pointer over the native input. No synthetic input is used by the demo.
+- Inside the actual archive iframe there is one local pointer. At 390×844, all eight mechanisms fit together inside the 315px-wide 3:5 frame without horizontal overflow. The native action click toggles On and still reports button mode. The demo retains mouse, keyboard and touch-capable controls; no physical touchscreen or OS preference switch was tested.
+- Child Escape removes the iframe and returns focus to Open Adaptive Cursor study. The index thumbnail loads at its full 960×560 dimensions; the resting index has zero experiment contexts.
+- Passed site validation, shared cursor coverage/exclusion checks, archive source/render parity, all 86 payload hashes/dependency closure and 24 Git dates, the cursor edition verifier, module syntax and whitespace checks. Strict published-dist audit reports zero findings. Desktop and narrow proof is saved in the conversation's visualization directory.
+
 ## Much smaller Gallery logo
 
 - Applied a uniform 0.4 scale to the complete logo at every animation frame and the same factor to its white clearance. The earlier correction had retained the large native in-flight logo; this follow-up intentionally reduces it as well as the settled mark.

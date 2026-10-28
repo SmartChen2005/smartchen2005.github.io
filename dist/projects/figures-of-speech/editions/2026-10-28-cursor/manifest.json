@@ -1,0 +1,64 @@
+{
+  "edition": "2026-10-28-cursor",
+  "sourceCommit": "bb2bac9272ba2244a3e74a1edbd6c0907f2de184",
+  "preserved": "2026-10-28",
+  "description": "Independent adaptive cursor and eight working interaction mechanisms, with a six-form catalogue plate. All previous editions remain intact.",
+  "studies": [
+    {
+      "slug": "adaptive-cursor",
+      "kind": "cursor",
+      "title": "Adaptive Cursor"
+    }
+  ],
+  "files": [
+    {
+      "path": "runtime/site-cursor.css",
+      "sha256": "ea5f9319e85eb480104d9c1564154a6bef13946f01d9168ac066bc43080c0cbc",
+      "source": {
+        "path": "dist/site-cursor.css",
+        "sha256": "ea5f9319e85eb480104d9c1564154a6bef13946f01d9168ac066bc43080c0cbc"
+      }
+    },
+    {
+      "path": "runtime/site-cursor-intents.mjs",
+      "sha256": "5b090f85ad911b7e83fcacc3fa2417f97af967f61e18316bc73ffbc851fa462c",
+      "source": {
+        "path": "dist/site-cursor-intents.mjs",
+        "sha256": "5b090f85ad911b7e83fcacc3fa2417f97af967f61e18316bc73ffbc851fa462c"
+      }
+    },
+    {
+      "path": "runtime/projects/polaroid-of-yesterday/photography/assets/the-camera-remembers.webp",
+      "sha256": "4cc73930d50b0fe1fbd12600febd9a2a3474b18f8fb97c93067a149031f0aaa5",
+      "source": {
+        "path": "dist/projects/polaroid-of-yesterday/photography/assets/the-camera-remembers.webp",
+        "sha256": "4cc73930d50b0fe1fbd12600febd9a2a3474b18f8fb97c93067a149031f0aaa5"
+      }
+    },
+    {
+      "path": "runtime/site-cursor.mjs",
+      "sha256": "94858cb34b4616730ada2fd26f90ffbc1574e358d1fa50fe693df1adadcbdd5d",
+      "source": {
+        "path": "dist/site-cursor.mjs",
+        "sha256": "44099b84dfa98d2cddc9e9d829ad470911a0a5a21f8c77f834489c470e6e47ba",
+        "adaptation": "Opt in only inside this standalone cursor study, including its word-attraction specimen. Native geometry, intent resolution, springs, inversion, capture tracking and preference fallbacks retained."
+      }
+    },
+    {
+      "path": "cursor-lab.css",
+      "sha256": "9c421820c6006da89b991673a645d719368667a2f71fa23104ead224af2d5054"
+    },
+    {
+      "path": "cursor-lab.mjs",
+      "sha256": "a17b2218f62ae73bf8fcffeecacbf661f7b904c95a511d097078d67a45675253"
+    },
+    {
+      "path": "adaptive-cursor/index.html",
+      "sha256": "3538ab03099182ca58bdc6e31003b81bd99d573c32589aee51bd3e1cb8401910"
+    },
+    {
+      "path": "cursor-plate.html",
+      "sha256": "4a42543e17a4a7d18e59f334cf880c0157ea2561354cc5759eb15cdcc328a6bd"
+    }
+  ]
+}

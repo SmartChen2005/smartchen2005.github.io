@@ -11,7 +11,7 @@ const html = fs.readFileSync(path.join(archive,'index.html'),'utf8');
 const shallow = execFileSync('git',['rev-parse','--is-shallow-repository'],{cwd:root,encoding:'utf8'}).trim() === 'true';
 assert.equal(studies.length, new Set(studies.map(study=>study.id)).size, 'Archive IDs must remain unique');
 assert.equal(fs.readFileSync(path.join(root,'tools/figures-of-speech.mjs'),'utf8'),fs.readFileSync(path.join(archive,'catalogue.mjs'),'utf8'),'Browser data must match the editorial source');
-assert.equal(studies.length,7,'The six isolated studies and the Polaroid cursor must be present');
+assert.equal(studies.length,8,'The existing studies and the adaptive cursor must be present');
 assert(!studies.some(study=>study.id==='003'),'The merged entrance must not remain a separate card');
 assert(!/<iframe\b/.test(html),'The index must not boot hidden rendering contexts');
 assert(!/Try interaction|Open full page|id="start-preview"|id="reset-preview"/.test(html),'No extra interaction gate or live-page control may remain');
@@ -21,6 +21,7 @@ assert.equal(manifests.find(item=>item.edition==='2026-10-27').sourceCommit,'e6b
 assert.equal(manifests.find(item=>item.edition==='2026-10-27-sx70').sourceCommit,'1de028bb51c96eebaf8e44bf7cb12f8f1e8d394e');
 assert.equal(manifests.find(item=>item.edition==='2026-10-27-gallery').sourceCommit,'2d4eba468c170080f4c85943b3e862853c95f9ff');
 assert.equal(manifests.find(item=>item.edition==='2026-10-27-gallery-small').sourceCommit,'b63438bbc2230cf68135f58109e9a2ce840b1ace');
+assert.equal(manifests.find(item=>item.edition==='2026-10-28-cursor').sourceCommit,'bb2bac9272ba2244a3e74a1edbd6c0907f2de184');
 function editionFiles(directory,prefix=''){
   return fs.readdirSync(directory,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?editionFiles(path.join(directory,entry.name),`${prefix}${entry.name}/`):[`${prefix}${entry.name}`]);
 }

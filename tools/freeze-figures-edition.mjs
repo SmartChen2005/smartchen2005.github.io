@@ -5,10 +5,11 @@ import {execFileSync} from 'node:child_process';
 
 // An existing edition is verified, never regenerated from evolving site code.
 const cameraOnly=process.argv.includes('--camera');
+const cursorOnly=process.argv.includes('--cursor');
 const gallerySmall=process.argv.includes('--gallery-small');
 const galleryOnly=gallerySmall||process.argv.includes('--gallery');
-const edition=gallerySmall?'2026-10-27-gallery-small':galleryOnly?'2026-10-27-gallery':cameraOnly?'2026-10-27-sx70':'2026-10-27';
-const sourceCommit=gallerySmall?'b63438bbc2230cf68135f58109e9a2ce840b1ace':galleryOnly?'2d4eba468c170080f4c85943b3e862853c95f9ff':cameraOnly?'1de028bb51c96eebaf8e44bf7cb12f8f1e8d394e':'e6bb1c9aa2798b7ddacddb74840fc948d857c61a';
+const edition=cursorOnly?'2026-10-28-cursor':gallerySmall?'2026-10-27-gallery-small':galleryOnly?'2026-10-27-gallery':cameraOnly?'2026-10-27-sx70':'2026-10-27';
+const sourceCommit=cursorOnly?'bb2bac9272ba2244a3e74a1edbd6c0907f2de184':gallerySmall?'b63438bbc2230cf68135f58109e9a2ce840b1ace':galleryOnly?'2d4eba468c170080f4c85943b3e862853c95f9ff':cameraOnly?'1de028bb51c96eebaf8e44bf7cb12f8f1e8d394e':'e6bb1c9aa2798b7ddacddb74840fc948d857c61a';
 const output=`dist/projects/figures-of-speech/editions/${edition}`;
 const digest=buffer=>crypto.createHash('sha256').update(buffer).digest('hex');
 const refreshDraft=process.argv.includes('--refresh-draft');
@@ -40,6 +41,20 @@ function copy(name){
     for(const match of text.matchAll(/url\(['"]?([^)'"?]+\.(?:ttf|otf|woff2?|webp|jpg|png))/g))refs.add(new URL(match[1],`https://edition.local/${name}`).pathname.slice(1));
     content=text;write(`runtime/${name}`,content,{path:`dist/${name}`,sha256:digest(bytes)});for(const ref of refs)copy(ref);
   }else write(`runtime/${name}`,content,{path:`dist/${name}`,sha256:digest(bytes)});
+}
+if(cursorOnly){
+  for(const name of ['site-cursor.css','site-cursor-intents.mjs','projects/polaroid-of-yesterday/photography/assets/the-camera-remembers.webp'])copy(name);
+  const original=tracked('site-cursor.mjs');
+  const controller=original.toString('utf8').replace('window.top === window && !location.pathname.includes(\'/editions/\')','document.body.dataset.lab === \'cursor\'').replace("const homepage = Boolean(document.querySelector('.homepage'));","const homepage = true; // Standalone word-attraction specimen.");
+  if(controller===original.toString('utf8')||controller.includes("window.top === window && !location.pathname.includes('/editions/')"))throw new Error('The pinned cursor extraction guard did not match');
+  write('runtime/site-cursor.mjs',controller,{path:'dist/site-cursor.mjs',sha256:digest(original),adaptation:'Opt in only inside this standalone cursor study, including its word-attraction specimen. Native geometry, intent resolution, springs, inversion, capture tracking and preference fallbacks retained.'});
+  for(const name of ['cursor-lab.css','cursor-lab.mjs'])write(name,fs.readFileSync(`tools/figures-lab/${name}`));
+  write('adaptive-cursor/index.html',fs.readFileSync('tools/figures-lab/cursor-lab.html'));
+  const markup=original.toString('utf8').match(/cursor\.innerHTML = '([^']+)';/)[1];
+  const shapes=[['dot',13,13,6.5,.65,''],['button',26,26,13,.88,''],['link',34,26,13,.88,'--cursor-arrow:1'],['magnify',34,26,13,.88,'--cursor-magnify:1'],['drag',34,26,13,.88,'--cursor-move:1'],['dragging',30,24,12,.96,'--cursor-move:1;--move-scale:.75;--magnify-scale:.88235294']];
+  write('cursor-plate.html',`<!doctype html><html lang="en"><meta charset="utf-8"><title>Adaptive Cursor catalogue plate</title><link rel="stylesheet" href="cursor-lab.css"><style>html,body{margin:0;background:#fff}.cursor-plate{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);width:960px;height:560px;place-items:center}.cursor-specimen{width:260px;height:220px;display:grid;place-items:center}.cursor-specimen .site-cursor{position:relative;left:auto;top:auto;transform:scale(4)}</style><main class="cursor-plate" aria-label="Six preserved cursor forms">${shapes.map(([mode,w,h,r,fill,extra])=>`<div class="cursor-specimen"><div class="site-cursor" data-mode="${mode}" aria-hidden="true" style="width:${w}px;height:${h}px;border-radius:${r}px;--cursor-fill:${fill};${extra}">${markup}</div></div>`).join('')}</main></html>\n`);
+  fs.writeFileSync(`${output}/manifest.json`,JSON.stringify({edition,sourceCommit,preserved:'2026-10-28',description:'Independent adaptive cursor and eight working interaction mechanisms, with a six-form catalogue plate. All previous editions remain intact.',studies:[{slug:'adaptive-cursor',kind:'cursor',title:'Adaptive Cursor'}],files},null,2)+'\n');
+  console.log(`Preserved cursor edition ${edition}; ${files.length} files.`);process.exit(0);
 }
 if(galleryOnly){
   copy('home-gallery-architecture.mjs');copy('gallery/assets/mobius-outline.svg');

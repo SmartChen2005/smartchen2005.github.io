@@ -88,6 +88,21 @@ export const studies = [
       ['2026-09-22', 'ac8453e', 'The camera model and interaction details are refined.'],
     ],
   },
+  {
+    id: '009', title: 'Adaptive Cursor', kind: 'Object / Interaction', location: 'Homepage + Shared website pointer',
+    image: 'adaptive-cursor-forms.jpg', alt: 'Six forms of the preserved pointer: dot, action circle, link, magnifier, drag and held drag, together on white.', experiment: 'adaptive-cursor',
+    edition: '2026-10-28-cursor', world: 'cursor', first: '2026-10-27', revised: '2026-10-28',
+    description: 'One pointer changes shape to express what can happen next: press, follow, inspect or drag. A soft light is attracted to the homepage words.',
+    perspective: 'The cursor becomes a small object with its own material and motion. Its transformations make the available interaction visible before anything is activated.',
+    instruction: 'Move across the eight specimens. Press the button and word, follow the link, zoom the photo, drag the handle, adjust the range, or type. Touch and keyboard retain the native controls.',
+    history: [
+      ['2026-10-27', '7202a4f', 'The adaptive magnetic pointer is introduced on the homepage.'],
+      ['2026-10-27', '423886d', 'The pointer becomes shared across the live website.'],
+      ['2026-10-28', '328c30c', 'Link, zoom and drag capsules share one visual language.'],
+      ['2026-10-28', '3ce2a99', 'Actions use plain circles; native range inputs gain drag feedback.'],
+      ['2026-10-28', 'bb2bac9', 'The word-attraction shadow gains a softer, unclipped falloff.'],
+    ],
+  },
 ];
 
 export const preservedEdition = '2026-10-27';

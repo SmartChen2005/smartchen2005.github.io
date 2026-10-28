@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Add the adaptive cursor as an archived object
+
+- Added FIG. 009 with a white six-form thumbnail, five actual Git milestones and immediate access to eight working interaction mechanisms on one screen. The demo reuses the current cursor's real geometry, inversion, springs, shadow and semantic intent handling.
+- Preserved eight payloads in `2026-10-28-cursor`, pinned to `bb2bac9`. The copied controller explicitly opts into its dedicated archive frame; the live site's iframe exclusion is untouched. Every earlier edition remains intact. Generate/verify with `node tools/freeze-figures-edition.mjs --cursor`, then regenerate the catalogue normally.
+- Archive validation covers eight studies, 86 hashes across five editions, all local dependencies and 24 source dates. Site/shared-cursor checks and native desktop/narrow interaction verification are recorded in `tools/FIGURES-OF-SPEECH-QA.md`.
+
 ### 2026-10-28 — Smooth homepage shadow falloff beyond its measured bounds
 
 - Removed rectangular overflow/paint clipping from the decorative attraction layer. The gray shadow now fades through a multi-stop elliptical alpha mask on a child expanded 32px horizontally / 24px vertically, then receives a 10px blur on its parent so the feathered tail remains visible.
