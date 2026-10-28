@@ -1,5 +1,33 @@
 # Shared adaptive pointer — 2026-10-27
 
+## Unified capsules and minimal cues — 2026-10-28 correction
+
+The user rejected the detailed hand icons and the homepage's icon-only variant.
+The shared foreground cursor now uses the same 34×26px / 13px-radius / 88%
+inversion capsule for navigation, photo details, actions, drag hover and all four
+homepage identities. Navigation/magnifier glyphs are retained; actions use one
+4px center dot, and draggable surfaces use a thin bidirectional arrow. Actual
+dragging contracts the capsule to 30×24px with 96% inversion and tightens the
+arrow by 25%. Ordinary press contraction remains 12%.
+
+Homepage gray shadow/hotspot lives in `.site-cursor-attraction` below the word;
+the foreground capsule follows the real pointer above the word with difference
+blending. One RAF owns both layers. There is no separate homepage icon and no
+hand glyph. The global intent resolver, native camera/edition exclusions and
+component event/capture ownership remain unchanged.
+
+Verified: all 16 Pages Node checks, 22 live routes plus an unknown future route /
+ten browser groups, all nine homepage groups, all 78 immutable hashes, renderer
+idempotence and strict dist audit with zero findings. No unexpected page errors.
+Active-drag pixel comparison uses stable dark paper outside the animated room;
+the actual room screenshot separately records the moving device and arrow.
+
+Current evidence: `unified-site/`, `unified-home/`, `unified-audit.json`; shared
+revision `20261028-unified`. Browser assertions check actual visible inverted
+capsule pixels on a homepage identity, modal button, draggable hover and active
+drag, with geometry checks for all four homepage words. Earlier sections below
+document superseded iterations.
+
 ## Global semantic actions and two-state dragging — 2026-10-28
 
 The user clarified that the cursor is global, including Projects and future

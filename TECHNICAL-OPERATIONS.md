@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Unify foreground capsules and simplify action/drag cues
+
+- Replaced the rejected hand drawings with a small action dot and a thin bidirectional drag arrow. Actual dragging contracts the arrow and capsule while retaining the existing component's capture/lifecycle ownership.
+- Homepage identities now use the same 34×26px inverted foreground capsule as every other action. Moved the accepted gray word shadow/hotspot into a separate background attraction layer, sharing one RAF with the cursor; removed the standalone homepage hand icon.
+- Updated the integration/design contract and browser checks to verify rendered capsule surfaces on homepage, modal buttons and both Music drag states, in addition to existing global/future-route coverage. Shared revision: `20261028-unified`.
+- Verified all 16 Pages Node checks, 22 live routes plus the unknown future-route fixture / ten browser groups, all nine homepage groups, unchanged immutable hashes, renderer idempotence and a strict dist audit with zero findings. Pixel comparison samples active dragging over stable dark paper rather than the animated room.
+
 ### 2026-10-28 — Make cursor intents global and add action/drag gestures
 
 - Replaced Gallery-specific photo matching with one shared semantic/CSS intent resolver. Projects image previews, document sheets, future image links, native actions and dynamically inserted controls use the same capability rules. The contract is `tools/CURSOR-CONTRACT.md`.

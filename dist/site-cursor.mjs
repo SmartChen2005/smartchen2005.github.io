@@ -1,6 +1,6 @@
 // Shared decorative pointer; native controls and dedicated pointer experiences
 // retain ownership. Never initialize in a preview iframe or preserved edition.
-import { createCursorIntents } from './site-cursor-intents.mjs?rev=20261028-intents';
+import { createCursorIntents } from './site-cursor-intents.mjs?rev=20261028-unified';
 const dedicatedPointer = document.querySelector('script[src*="camera.mjs"], [data-page-cursor="native"]');
 if (!dedicatedPointer && window.top === window && !location.pathname.includes('/editions/') && !document.querySelector('.site-cursor')) {
   const homepage = Boolean(document.querySelector('.homepage'));
@@ -14,24 +14,20 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
   cursor.className = homepage ? 'site-cursor home-cursor' : 'site-cursor';
   cursor.setAttribute('aria-hidden', 'true');
   cursor.hidden = true;
-  cursor.innerHTML = '<span class="site-cursor-surface"></span><span class="site-cursor-glow"></span><span class="site-cursor-light"></span><span class="site-cursor-edge"></span><svg class="site-cursor-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 12 4M4 4h8v8"/></svg><svg class="site-cursor-magnify" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><path d="m14.5 14.5 6 6"/></svg>';
-  const handPaths = {
-    tap: 'M9 12V4.5a1.5 1.5 0 0 1 3 0V10M12 8.5a1.5 1.5 0 0 1 3 0V11M15 9.5a1.5 1.5 0 0 1 3 0V12M18 11a1.5 1.5 0 0 1 3 0v4.5c0 3.2-2 5.5-5 5.5h-3c-1.8 0-3-.6-4.2-2L5 14a1.5 1.5 0 0 1 2.2-2L9 14M5.5 6 3.8 5.2M6.5 2.8 5.5 1.3M15 3l1.3-1.5',
-    grab: 'M6.5 12V7a1.5 1.5 0 0 1 3 0v5M9.5 10V4.5a1.5 1.5 0 0 1 3 0V11M12.5 10V5.5a1.5 1.5 0 0 1 3 0V12M15.5 10V8a1.5 1.5 0 0 1 3 0v6M6.5 12l-1-1a1.6 1.6 0 0 0-2.3 2.2L7 19.2c1 1.2 2.5 1.8 4 1.8h2.8c3.6 0 5.2-2.7 5.2-6v-3',
-    grabbing: 'M6.5 12V9a1.5 1.5 0 0 1 3 0v2M9.5 10V8a1.5 1.5 0 0 1 3 0v3M12.5 10V8.5a1.5 1.5 0 0 1 3 0V12M15.5 11V10a1.5 1.5 0 0 1 3 0v5M6.5 12H6a2 2 0 0 0-1.5 3.3L8 19c1 1.3 2.5 2 4.2 2h2c3.4 0 5.3-2.5 5.3-5.5V13M9 13h4a1.5 1.5 0 0 1 0 3h-2',
-  };
-  const glyph = kind => `<svg class="site-cursor-${kind}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="${handPaths[kind]}"/></svg>`;
-  cursor.insertAdjacentHTML('beforeend', Object.keys(handPaths).map(glyph).join(''));
+  cursor.innerHTML = '<span class="site-cursor-surface"></span><span class="site-cursor-edge"></span><svg class="site-cursor-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 12 4M4 4h8v8"/></svg><svg class="site-cursor-magnify" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><path d="m14.5 14.5 6 6"/></svg><svg class="site-cursor-action" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="2"/></svg><svg class="site-cursor-move" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h12M5 5 2 8l3 3m6-6 3 3-3 3"/></svg>';
   document.body.append(cursor);
-  const identityHint = document.createElement('div');
-  identityHint.className = 'site-cursor-identity-hint';
-  identityHint.setAttribute('aria-hidden', 'true');
-  identityHint.hidden = true;
-  identityHint.innerHTML = glyph('tap');
-  if (homepage) document.body.append(identityHint);
+  // Word attraction is a background treatment. The pointer itself always uses
+  // the same foreground capsule, including over homepage identities.
+  const attraction = document.createElement('div');
+  attraction.className = 'site-cursor-attraction';
+  attraction.setAttribute('aria-hidden', 'true');
+  attraction.hidden = true;
+  attraction.innerHTML = '<span class="site-cursor-glow"></span><span class="site-cursor-light"></span>';
+  if (homepage) document.body.append(attraction);
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-  const pointShape = () => ({ x: pointer.x, y: pointer.y, w: 13, h: 13, r: 6.5, fill: .65, edge: 0, light: 0, arrow: 0, glow: 0, magnify: 0, tap: 0, grab: 0, grabbing: 0 });
+  const pointShape = () => ({ x: pointer.x, y: pointer.y, w: 13, h: 13, r: 6.5, fill: .65, edge: 0, light: 0, arrow: 0, glow: 0, magnify: 0, action: 0, move: 0, grip: 0,
+    magnetX: pointer.x, magnetY: pointer.y, magnetW: 13, magnetH: 13 });
   const capsule = { w: 34, h: 26, r: 13, fill: .88 };
   let pointer = { x: 0, y: 0 }, current, velocity = {};
   let frame = 0, previousTime = 0, pressed = false, active = false;
@@ -49,7 +45,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     current = undefined;
     velocity = {};
     cursor.hidden = true;
-    identityHint.hidden = true;
+    attraction.hidden = true;
     root.classList.remove('has-home-cursor');
     root.classList.remove('has-site-cursor');
   }
@@ -63,13 +59,14 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     const intent = intents.resolve(hit);
     const identity = homepage && !transitioning && !body.hasAttribute('data-motor-playing') && hit?.closest('.identity');
     if (dragSession?.owner.isConnected && pressed) {
-      Object.assign(next, capsule, { w: 30, h: 24, r: 12, fill: .96, grabbing: 1 });
+      Object.assign(next, capsule, { w: 30, h: 24, r: 12, fill: .96, move: 1, grip: 1 });
       cursor.dataset.mode = 'dragging';
       delete cursor.dataset.identity;
     } else if (identity && !identity.closest('[inert]')) {
       const rect = identity.getBoundingClientRect();
-      Object.assign(next, { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2,
-        w: rect.width + padding * 2, h: rect.height + padding * 2, r: 12, fill: 0, edge: 0, glow: 1, light: 1, tap: 1 });
+      Object.assign(next, capsule, { action: 1, glow: 1, light: 1,
+        magnetX: rect.left + rect.width / 2, magnetY: rect.top + rect.height / 2,
+        magnetW: rect.width + padding * 2, magnetH: rect.height + padding * 2 });
       cursor.dataset.mode = 'identity';
       cursor.dataset.identity = identity.dataset.identity;
     } else if (!transitioning && intent.kind === 'magnify') {
@@ -77,7 +74,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
       cursor.dataset.mode = 'magnify';
       delete cursor.dataset.identity;
     } else if (!transitioning && intent.kind === 'drag') {
-      Object.assign(next, capsule, { grab: 1 });
+      Object.assign(next, capsule, { move: 1 });
       cursor.dataset.mode = 'drag';
       delete cursor.dataset.identity;
     } else if (!transitioning && intent.kind === 'link') {
@@ -85,7 +82,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
       cursor.dataset.mode = 'link';
       delete cursor.dataset.identity;
     } else if (!transitioning && intent.kind === 'button') {
-      Object.assign(next, capsule, { tap: 1 });
+      Object.assign(next, capsule, { action: 1 });
       cursor.dataset.mode = 'button';
       delete cursor.dataset.identity;
     } else {
@@ -93,7 +90,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
       delete cursor.dataset.identity;
     }
     if (pressed && cursor.dataset.mode !== 'dragging') {
-      const scale = identity ? .985 : .88;
+      const scale = .88;
       next.w *= scale;
       next.h *= scale;
       next.r *= scale;
@@ -107,14 +104,20 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     cursor.style.width = `${current.w}px`;
     cursor.style.height = `${current.h}px`;
     cursor.style.borderRadius = `${current.r}px`;
-    for (const key of ['fill', 'edge', 'light', 'arrow', 'glow', 'magnify', 'tap', 'grab', 'grabbing']) cursor.style.setProperty(`--cursor-${key}`, current[key]);
+    for (const key of ['fill', 'edge', 'arrow', 'magnify', 'action', 'move']) cursor.style.setProperty(`--cursor-${key}`, current[key]);
     cursor.style.setProperty('--magnify-scale', clamp(current.w / capsule.w, .4, 1));
-    cursor.style.setProperty('--light-x', `${clamp(pointer.x - left, 0, current.w)}px`);
-    cursor.style.setProperty('--light-y', `${clamp(pointer.y - top, 0, current.h)}px`);
-    const hintHidden = !active || cursor.dataset.mode !== 'identity';
-    if (identityHint.hidden !== hintHidden) identityHint.hidden = hintHidden;
-    identityHint.style.transform = `translate3d(${pointer.x - 9}px, ${pointer.y - 9}px, 0) scale(${pressed ? .88 : 1})`;
-    identityHint.style.opacity = current.tap;
+    cursor.style.setProperty('--move-scale', 1 - current.grip * .25);
+    if (homepage) {
+      const magnetLeft = current.magnetX - current.magnetW / 2, magnetTop = current.magnetY - current.magnetH / 2;
+      attraction.style.transform = `translate3d(${magnetLeft}px, ${magnetTop}px, 0)`;
+      attraction.style.width = `${current.magnetW}px`;
+      attraction.style.height = `${current.magnetH}px`;
+      for (const key of ['glow', 'light']) attraction.style.setProperty(`--cursor-${key}`, current[key]);
+      attraction.style.setProperty('--light-x', `${clamp(pointer.x - magnetLeft, 0, current.magnetW)}px`);
+      attraction.style.setProperty('--light-y', `${clamp(pointer.y - magnetTop, 0, current.magnetH)}px`);
+      const hidden = !active || current.glow < .001;
+      if (attraction.hidden !== hidden) attraction.hidden = hidden;
+    }
   }
 
   function tick(time) {
@@ -130,22 +133,21 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     let moving = false;
     for (const key of Object.keys(target)) {
       // Exact critically damped spring: retarget from live position AND velocity.
-      const omega = key === 'x' || key === 'y' ? 42 : 32;
+      const omega = ['x', 'y', 'magnetX', 'magnetY'].includes(key) ? 42 : 32;
       const offset = current[key] - target[key];
       const term = (velocity[key] || 0) + omega * offset;
       const decay = Math.exp(-omega * dt);
       current[key] = target[key] + (offset + term * dt) * decay;
       velocity[key] = ((velocity[key] || 0) - omega * term * dt) * decay;
-      const precision = ['fill', 'edge', 'light', 'arrow', 'glow', 'magnify', 'tap', 'grab', 'grabbing'].includes(key) ? .001 : .05;
+      const precision = ['fill', 'edge', 'light', 'arrow', 'glow', 'magnify', 'action', 'move', 'grip'].includes(key) ? .001 : .05;
       if (Math.abs(current[key] - target[key]) > precision || Math.abs(velocity[key]) > precision * 10) moving = true;
       else { current[key] = target[key]; velocity[key] = 0; }
     }
-    // A free dot/pill tracks input directly once the magnetic frame has retracted.
-    if (cursor.dataset.mode !== 'identity' && current.w < 36 && current.h < 30) {
-      current.x = pointer.x;
-      current.y = pointer.y;
-      velocity.x = velocity.y = 0;
-    }
+    // Every foreground pointer follows input directly; only the background word
+    // attraction springs to its bounds. There is no special homepage icon layer.
+    current.x = pointer.x;
+    current.y = pointer.y;
+    velocity.x = velocity.y = 0;
     paint();
     if (moving) frame = requestAnimationFrame(tick);
     else previousTime = 0;

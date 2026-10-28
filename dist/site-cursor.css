@@ -17,7 +17,19 @@
   contain: layout style paint;
   will-change: transform;
 }
-.site-cursor[hidden] { display: none; }
+.site-cursor[hidden], .site-cursor-attraction[hidden] { display: none; }
+.site-cursor-attraction {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  border-radius: 12px;
+  color: var(--ink);
+  pointer-events: none;
+  overflow: hidden;
+  contain: layout style paint;
+  will-change: transform;
+}
 .site-cursor-surface,
 .site-cursor-edge,
 .site-cursor-glow,
@@ -59,36 +71,23 @@
   opacity: var(--cursor-magnify, 0);
   transform: scale(var(--magnify-scale, 1));
 }
-.site-cursor-tap, .site-cursor-grab, .site-cursor-grabbing {
+.site-cursor-action, .site-cursor-move {
   position: absolute;
-  width: 18px;
-  height: 18px;
-  left: calc(50% - 9px);
-  top: calc(50% - 9px);
+  width: 16px;
+  height: 16px;
+  left: calc(50% - 8px);
+  top: calc(50% - 8px);
   color: #000;
   transform: scale(var(--magnify-scale, 1));
 }
-.site-cursor-tap { opacity: var(--cursor-tap, 0); }
-.site-cursor-grab { opacity: var(--cursor-grab, 0); }
-.site-cursor-grabbing { opacity: var(--cursor-grabbing, 0); }
-.site-cursor-identity-hint {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 18px;
-  height: 18px;
-  z-index: 10000;
-  color: #fff;
-  mix-blend-mode: difference;
-  pointer-events: none;
+.site-cursor-action { opacity: var(--cursor-action, 0); }
+.site-cursor-move {
+  opacity: var(--cursor-move, 0);
+  transform: scale(calc(var(--magnify-scale, 1) * var(--move-scale, 1)));
 }
-.site-cursor-identity-hint[hidden] { display: none; }
-.site-cursor-identity-hint .site-cursor-tap { color: inherit; opacity: 1; transform: none; }
-.home-cursor[data-mode='identity'] .site-cursor-tap { opacity: 0; }
-/* Only identity light/shadow uses normal compositing, beneath the lettering.
-   Free dots and contact links share the same inversion as every other page. */
-.home-cursor[data-mode='identity'] { z-index: 2; color: var(--ink); mix-blend-mode: normal; }
-body[data-world='cars']:not([data-motor-fallback]) .home-cursor[data-mode='identity'] { color: var(--motor-paper); }
+/* Only the background attraction sits beneath lettering. Every foreground
+   capsule, including homepage identities, shares the site's inversion. */
+body[data-world='cars']:not([data-motor-fallback]) .site-cursor-attraction { color: var(--motor-paper); }
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) and (forced-colors: none) {
   html.has-site-cursor, html.has-site-cursor * { cursor: none !important; }
@@ -99,13 +98,13 @@ body[data-world='cars']:not([data-motor-fallback]) .home-cursor[data-mode='ident
     position: absolute;
     inset: calc(-1 * var(--home-cursor-padding));
   }
-  /* The new continuous frame replaces the small hover-only viewfinder corners. */
+  /* Word attraction replaces the small hover-only viewfinder corners. */
   html.has-home-cursor .identity-photo::after { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce), (forced-colors: active), (hover: none), (pointer: coarse) {
-  .site-cursor, .site-cursor-identity-hint { display: none; }
+  .site-cursor, .site-cursor-attraction { display: none; }
 }
 @media print {
-  .site-cursor, .site-cursor-identity-hint { display: none; }
+  .site-cursor, .site-cursor-attraction { display: none; }
   html.has-site-cursor, html.has-site-cursor * { cursor: auto !important; }
 }

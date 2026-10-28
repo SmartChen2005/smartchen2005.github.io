@@ -33,8 +33,8 @@ fs.mkdirSync(output, { recursive: true });
     }));
     const waitMode = mode => page.waitForFunction(mode => {
       const cursor = document.querySelector('.site-cursor');
-      const width = { dot: 13, link: 34, button: 34, magnify: 34, drag: 34, dragging: 30 }[mode];
-      const capsule = ['link', 'magnify', 'button', 'drag'].includes(mode);
+      const width = { dot: 13, link: 34, button: 34, identity: 34, magnify: 34, drag: 34, dragging: 30 }[mode];
+      const capsule = ['link', 'magnify', 'button', 'identity', 'drag'].includes(mode);
       return cursor && !cursor.hidden && cursor.dataset.mode === mode && Math.abs(parseFloat(cursor.style.width) - width) < .1
         && (!capsule || cursor.style.borderRadius === '13px' && cursor.style.height === '26px'
           && +cursor.style.getPropertyValue('--cursor-fill') === .88);
@@ -47,6 +47,18 @@ fs.mkdirSync(output, { recursive: true });
       const buffer = await page.screenshot({ clip: { x: x - 1, y: y - 1, width: 3, height: 3 } });
       const data = await sharp(buffer).ensureAlpha().raw().toBuffer();
       return .2126 * data[16] + .7152 * data[17] + .0722 * data[18];
+    };
+    const capsuleSurface = async label => {
+      const pill = page.locator('.site-cursor');
+      const rect = await pill.boundingBox();
+      const x = Math.round(rect.x + rect.width / 2 + 10), y = Math.round(rect.y + rect.height / 2);
+      await pill.evaluate(e => { e.style.visibility = 'hidden'; });
+      const under = await brightness(x, y);
+      await pill.evaluate(e => { e.style.visibility = ''; });
+      const over = await brightness(x, y);
+      const fill = await pill.evaluate(e => +e.style.getPropertyValue('--cursor-fill'));
+      assert(Math.abs(over - (255 * fill + (1 - 2 * fill) * under)) < 12, `${label}: actual rendered capsule surface is visible and inverted (${under} -> ${over})`);
+      assert(Math.abs(over - under) > 25, `${label}: capsule has visible contrast with its background`);
     };
     for (let i = 0; i < routes.length; i++) {
       await goto(routes[i]);
@@ -106,9 +118,12 @@ fs.mkdirSync(output, { recursive: true });
     const sampleX = Math.round(name.x + name.width / 2), sampleY = Math.round(name.y + name.height - 4);
     const paper = await brightness(sampleX, sampleY);
     await page.locator('.identity-name').hover();
-    await page.waitForFunction(() => document.querySelector('.site-cursor').style.getPropertyValue('--cursor-glow') === '1');
-    assert.equal(await page.locator('.site-cursor-identity-hint').isVisible(), true, 'Identity attraction includes the accepted click hint');
-    await page.locator('.site-cursor-identity-hint').evaluate(e => { e.style.visibility = 'hidden'; });
+    await waitMode('identity');
+    await page.waitForFunction(() => document.querySelector('.site-cursor-attraction').style.getPropertyValue('--cursor-glow') === '1');
+    assert.equal(await page.locator('.site-cursor').evaluate(e => getComputedStyle(e).mixBlendMode), 'difference');
+    assert.equal(await page.locator('.site-cursor-tap, .site-cursor-grab, .site-cursor-grabbing, .site-cursor-identity-hint').count(), 0, 'No hand icons or separate homepage pointer');
+    await capsuleSurface('Homepage identity');
+    await page.locator('.site-cursor').evaluate(e => { e.style.visibility = 'hidden'; });
     const shadow = await brightness(sampleX, sampleY);
     assert(shadow < paper - 10, `The gray shadow is actually visible (${paper} -> ${shadow})`);
     await page.mouse.move(sampleX, sampleY); await page.waitForTimeout(80);
@@ -117,7 +132,7 @@ fs.mkdirSync(output, { recursive: true });
     await page.locator('.site-cursor-light').evaluate(e => { e.style.visibility = ''; });
     const lit = await brightness(sampleX, sampleY);
     assert(lit > unlit + 15, `The pointer hotspot is visible above the gray shadow (${unlit} -> ${lit})`);
-    await page.locator('.site-cursor-identity-hint').evaluate(e => { e.style.visibility = ''; });
+    await page.locator('.site-cursor').evaluate(e => { e.style.visibility = ''; });
     assert.deepEqual(await page.locator('.sentence').boundingBox(), sentence);
     await page.screenshot({ path: path.join(output, 'home-shadow-hotspot.png') });
 
@@ -142,14 +157,16 @@ fs.mkdirSync(output, { recursive: true });
     }
     assert(invertedTextPixels >= 2, 'Actual Résumé lettering beneath the pill becomes light, rather than disappearing into its dark fill');
     await page.screenshot({ path: path.join(output, 'home-inverted-resume.png') });
-    checks.push('Rendered pixels prove visible gray identity shadow, a moving pale hotspot, stable text and inverted Résumé lettering.');
+    checks.push('Rendered pixels prove the shared homepage capsule, visible gray word shadow, moving pale hotspot, stable text and inverted Résumé lettering.');
 
     await goto('/projects/');
     await page.locator('.project-header__nav a').first().hover(); await waitMode('link');
     await page.screenshot({ path: path.join(output, 'dark-link.png') });
     await goto('/projects/figures-of-speech/');
+    await page.locator('.view-switch:not([hidden])').waitFor({ state: 'visible' });
     await page.locator('.specimen[data-study="001"]').click();
     await page.locator('.study-dialog:modal .dialog-header button').hover(); await waitMode('button');
+    await capsuleSurface('Modal action button');
     assert.equal((await state()).parent, 'DIALOG', 'The cursor joins a modal top layer');
     await page.screenshot({ path: path.join(output, 'modal-pointer.png') });
     await page.locator('.study-dialog iframe').hover();
@@ -164,15 +181,20 @@ fs.mkdirSync(output, { recursive: true });
     await page.locator('a[href="#playground"]').last().click();
     await page.waitForFunction(() => !document.querySelector('#world-control').disabled);
     await page.locator('#world-control').hover(); await waitMode('drag');
-    await page.screenshot({ path: path.join(output, 'drag-open-hand.png') });
+    await capsuleSurface('Draggable hover');
+    await page.screenshot({ path: path.join(output, 'drag-ready.png') });
     const world = await page.locator('#world-control').boundingBox();
     const distanceBefore = await page.locator('#distance-input').inputValue();
     await page.mouse.down();
     await page.mouse.move(world.x + world.width / 2 + 60, world.y + world.height / 2 + 55, { steps: 5 });
     await waitMode('dragging');
     assert.notEqual(await page.locator('#distance-input').inputValue(), distanceBefore, 'Actual device position changes during drag');
-    await page.screenshot({ path: path.join(output, 'drag-closed-hand.png') });
+    await page.waitForFunction(() => +document.querySelector('.site-cursor').style.getPropertyValue('--move-scale') === .75);
+    await page.screenshot({ path: path.join(output, 'drag-active.png') });
     await page.mouse.move(20, 130); await waitMode('dragging');
+    // The room is animated. Sample the captured pointer over stable dark paper
+    // so before/after pixels describe the capsule rather than device motion.
+    await capsuleSurface('Active drag');
     await page.mouse.up();
     await page.locator('#world-control').hover(); await waitMode('drag');
     await page.mouse.down(); await waitMode('dragging');
@@ -199,7 +221,7 @@ fs.mkdirSync(output, { recursive: true });
     await page.mouse.move(9, 700); assert.equal((await state()).active, false);
     await page.emulateMedia({ forcedColors: 'none' });
     await page.mouse.move(10, 700); await waitMode('dot');
-    checks.push('Music device drag has open/closed hand capsules, real movement, capture outside its bounds and cancellation recovery; editing/preferences remain native.');
+    checks.push('Music drag has a visible bidirectional-arrow capsule, tightened active state, real movement, capture outside its bounds and cancellation recovery; editing/preferences remain native.');
 
     await goto('/projects/multiverse-all-star-battlefront/');
     await page.locator('[data-preview]').first().hover(); await waitMode('magnify');
@@ -224,9 +246,9 @@ fs.mkdirSync(output, { recursive: true });
     // A route and class names unknown to the controller exercise future reuse.
     const futureURL = origin + '/__cursor-future-fixture/';
     await context.route(futureURL, route => route.fulfill({ contentType: 'text/html', body: `<!doctype html><html><head>
-      <link rel="stylesheet" href="/site-cursor.css?rev=20261028-intents">
+      <link rel="stylesheet" href="/site-cursor.css?rev=20261028-unified">
       <style>body{margin:40px;background:#fff}button,a,#future-drag{display:block;width:220px;height:60px;margin:12px;padding:10px;box-sizing:border-box}#future-drag{cursor:grab;background:#ddd}#future-drag.held{cursor:grabbing!important}</style>
-      <script type="module" src="/site-cursor.mjs?rev=20261028-intents"></script></head><body>
+      <script type="module" src="/site-cursor.mjs?rev=20261028-unified"></script></head><body>
       <button id="future-action">An ordinary future action</button><a id="future-link" href="/next/">A future destination</a>
       <a id="future-image" href="/new-image.webp">A future image, without a known class</a>
       <button id="future-css">A future CSS-defined preview</button><div id="future-drag" style="cursor:grab">A future custom draggable</div>
@@ -234,7 +256,7 @@ fs.mkdirSync(output, { recursive: true });
       </body></html>` }));
     await goto('/__cursor-future-fixture/');
     await page.locator('#future-action').hover(); await waitMode('button');
-    assert(await page.locator('.site-cursor').evaluate(e => +e.style.getPropertyValue('--cursor-tap') > .99));
+    assert(await page.locator('.site-cursor').evaluate(e => +e.style.getPropertyValue('--cursor-action') > .99));
     await page.locator('#future-action').evaluate(e => { e.disabled = true; }); await waitMode('dot');
     await page.locator('#future-action').evaluate(e => { e.disabled = false; }); await waitMode('button');
     await page.locator('#future-link').hover(); await waitMode('link');

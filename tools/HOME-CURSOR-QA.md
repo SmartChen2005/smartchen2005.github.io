@@ -1,6 +1,16 @@
 # Homepage adaptive pointer — 2026-10-27
 
-Latest 2026-10-28 correction: homepage free dots and contact capsules now use the
+Latest 2026-10-28 correction: all four identities use the same 34×26px inverted
+foreground capsule as ordinary action controls, with one 4px center dot. Gray
+attraction and the moving pale hotspot remain in a separate background layer
+beneath the word. Hand glyphs and the standalone homepage icon are removed.
+One RAF owns both layers. The nine-group regression checks capsule geometry,
+pointer tracking and unchanged attraction bounds, alongside existing native
+input, lifecycle and navigation checks. Full-site QA also checks actual capsule,
+shadow/hotspot and Résumé inversion pixels. Evidence: `unified-home/` and
+`unified-site/`; canonical current design is in `SITE-CURSOR-QA.md`.
+
+Earlier 2026-10-28 correction: homepage free dots and contact capsules use the
 same inversion as other pages. Only identity attraction uses normal blending,
 with a visible 15% word-anchored gray shadow and an 18px moving pale hotspot
 beneath the lettering. All nine original groups pass. Visible pixel assertions

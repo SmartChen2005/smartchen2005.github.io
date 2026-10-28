@@ -10,14 +10,16 @@ the same resolver without new route/class branches.
 | --- | --- | --- |
 | Navigation | Native links, image-map links, `role="link"` | Arrow capsule |
 | Photo/detail viewing | Image-file URLs, `data-preview`, `data-process-page`, `data-lightbox`, `data-zoom`, authored `cursor: zoom-in/zoom-out` | Magnifier capsule |
-| Action | Buttons, summary, `role="button"`, action inputs, click handlers/author-declared `cursor: pointer` | Pointing-finger/tap capsule |
-| Draggable | Authored `cursor: grab/grabbing/move`, `draggable="true"` | Open-hand capsule |
-| Actual dragging | The owning component's pointer capture/grabbing state or native drag lifecycle | Closed-hand capsule, slightly tighter |
+| Action | Buttons, summary, `role="button"`, action inputs, click handlers/author-declared `cursor: pointer` | Capsule with one small center dot |
+| Draggable | Authored `cursor: grab/grabbing/move`, `draggable="true"` | Capsule with a thin bidirectional arrow |
+| Actual dragging | The owning component's pointer capture/grabbing state or native drag lifecycle | Tighter capsule and contracted bidirectional arrow |
 
 Standard capsules share 34×26px geometry, a 13px radius and an 88% inversion
-surface. Dragging uses 30×24px and a stronger surface. Pointer-down gives press
-feedback. Homepage identities keep their accepted attraction shadow/hotspot and
-add a small tap icon above the hotspot, with the same contrast behavior.
+surface. Dragging uses 30×24px, a stronger surface and a 25% smaller arrow.
+Pointer-down contracts ordinary capsules by 12%. Homepage identities use the
+exact same foreground action capsule. Their accepted attraction shadow/hotspot
+is a separate background layer beneath the lettering. There are no hand icons
+or standalone homepage pointer variants; one RAF owns both decorative layers.
 
 For a custom component, declare an intent on its actual interaction owner:
 
@@ -33,7 +35,7 @@ actual action/keyboard/drag behavior in the component. A drag component retains
 ownership of `setPointerCapture`, movement and release. The cursor observes
 capture/loss/up/cancel/blur and does not synthesize clicks, take capture or block
 events. A threshold-based carousel can show magnifiers on child photos until a
-real drag starts, then hand off to the closed-hand state.
+real drag starts, then hand off to the tightened drag state.
 
 Authored CSS cursor declarations are mirrored into a private custom property,
 preserving selectors, media/support/container/layer conditions and importance.
