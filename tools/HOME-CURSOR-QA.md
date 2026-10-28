@@ -1,14 +1,14 @@
 # Homepage adaptive pointer — 2026-10-27
 
-Latest 2026-10-28 correction: all four identities use the same 34×26px inverted
-foreground capsule as ordinary action controls, with one 4px center dot. Gray
+Latest 2026-10-28 correction: all four identities use the same plain 26px inverted
+foreground circle as ordinary action controls, with no center icon. Gray
 attraction and the moving pale hotspot remain in a separate background layer
 beneath the word. Hand glyphs and the standalone homepage icon are removed.
-One RAF owns both layers. The nine-group regression checks capsule geometry,
+One RAF owns both layers. The nine-group regression checks circle geometry,
 pointer tracking and unchanged attraction bounds, alongside existing native
-input, lifecycle and navigation checks. Full-site QA also checks actual capsule,
-shadow/hotspot and Résumé inversion pixels. Evidence: `unified-home/` and
-`unified-site/`; canonical current design is in `SITE-CURSOR-QA.md`.
+input, lifecycle and navigation checks. Full-site QA also checks actual circle,
+shadow/hotspot and Résumé inversion pixels. Evidence: `circle-home/` and
+`circle-site/`; canonical current design is in `SITE-CURSOR-QA.md`.
 
 Earlier 2026-10-28 correction: homepage free dots and contact capsules use the
 same inversion as other pages. Only identity attraction uses normal blending,

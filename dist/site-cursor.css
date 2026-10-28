@@ -71,22 +71,18 @@
   opacity: var(--cursor-magnify, 0);
   transform: scale(var(--magnify-scale, 1));
 }
-.site-cursor-action, .site-cursor-move {
+.site-cursor-move {
   position: absolute;
   width: 16px;
   height: 16px;
   left: calc(50% - 8px);
   top: calc(50% - 8px);
   color: #000;
-  transform: scale(var(--magnify-scale, 1));
-}
-.site-cursor-action { opacity: var(--cursor-action, 0); }
-.site-cursor-move {
   opacity: var(--cursor-move, 0);
   transform: scale(calc(var(--magnify-scale, 1) * var(--move-scale, 1)));
 }
-/* Only the background attraction sits beneath lettering. Every foreground
-   capsule, including homepage identities, shares the site's inversion. */
+/* Only the background attraction sits beneath lettering. Foreground circles
+   and capsules, including homepage identities, share the site's inversion. */
 body[data-world='cars']:not([data-motor-fallback]) .site-cursor-attraction { color: var(--motor-paper); }
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) and (forced-colors: none) {

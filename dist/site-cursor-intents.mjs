@@ -6,7 +6,8 @@ export function createCursorIntents(doc = document) {
   const mirror = doc.createElement('style');
   mirror.dataset.cursorIntentRules = '';
   const actionableInputs = 'input:is([type="button"],[type="submit"],[type="reset"],[type="checkbox"],[type="radio"])';
-  const native = 'textarea, select, input:not(:is([type="button"],[type="submit"],[type="reset"],[type="checkbox"],[type="radio"])), [contenteditable]:not([contenteditable="false"]), iframe, video[controls], audio[controls], [data-cursor-native]';
+  const native = 'textarea, select, input:not(:is([type="button"],[type="submit"],[type="reset"],[type="checkbox"],[type="radio"],[type="range"])), [contenteditable]:not([contenteditable="false"]), iframe, video[controls], audio[controls], [data-cursor-native]';
+  const slider = 'input[type="range"], [role="slider"]';
   const photo = 'a[data-preview], a[data-process-page], [data-lightbox], [data-zoom]';
   const action = `button, summary, [role="button"], [onclick], ${actionableInputs}`;
   const blocked = element => Boolean(element?.closest(':disabled, [aria-disabled="true"], [inert]'));
@@ -68,6 +69,7 @@ export function createCursorIntents(doc = document) {
   function dragOwner(element) {
     for (let node = element; node instanceof win.Element; node = node.parentElement) {
       if (blocked(node) || node.matches('[data-cursor="native"], [data-cursor-native]')) return null;
+      if (node.matches(slider)) return node;
       if (node.matches('[data-cursor="drag"], [draggable="true"]') || /^(grab|grabbing|move)$/.test(source(node))) {
         // Prefer the actual authored scope over a child inheriting its cursor.
         let owner = node;
@@ -86,6 +88,9 @@ export function createCursorIntents(doc = document) {
       const kind = { zoom: 'magnify', action: 'button', link: 'link', drag: 'drag', native: 'native' }[explicit.dataset.cursor];
       if (kind) return { kind, owner: explicit };
     }
+    // Sliders express drag intent even when their native fallback is ew-resize.
+    const range = element.closest(slider);
+    if (range) return { kind: 'drag', owner: range };
     const authored = source(element);
     if (/^(?:native|none|text|vertical-text|crosshair|not-allowed|wait|progress|[a-z-]*resize)$/.test(authored)) return { kind: 'native', owner: element };
     const image = element.closest(photo);

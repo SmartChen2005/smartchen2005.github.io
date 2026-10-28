@@ -1,5 +1,31 @@
 # Shared adaptive pointer — 2026-10-27
 
+## Plain action circles and global range dragging — 2026-10-28
+
+The user replaced action capsules/center dots with a plain enlarged inverted
+circle. Buttons and all four homepage identities now use 26×26px, 13px radius,
+88% inversion and no center glyph. Navigation arrows, image magnifiers and drag
+arrows retain their existing shapes. Word attraction/shadow remains separate.
+
+Range inputs and `role="slider"` are global drag intents, overriding their
+resize fallback while custom cursors are active. A native range press starts
+the tightened drag pointer immediately; the browser still owns thumb capture,
+value/input events, constraints and keyboard adjustment. No slider-specific
+Music Station markup/controller changes or synthetic input events are needed.
+
+Browser regression covers actual Music slider hover, native value change while
+dragging, outside bounds/release, ArrowLeft adjustment and keyboard exit, plus
+a range input with `ew-resize` on the unknown future-page fixture. Actual circle
+pixels and all four homepage geometries are checked as before.
+
+Current evidence: `circle-site/`, `circle-home/`, `circle-audit.json`; shared
+revision `20261028-circles`. Earlier sections below describe past iterations.
+
+All 16 Pages Node checks, 22 live routes plus the unknown future route / ten
+browser groups, nine homepage groups and strict dist audit passed. No unexpected
+page errors; immutable camera/edition payloads remain intact. Chrome's native
+range thumb computes `cursor: none` while the shared drag pointer is active.
+
 ## Unified capsules and minimal cues — 2026-10-28 correction
 
 The user rejected the detailed hand icons and the homepage's icon-only variant.

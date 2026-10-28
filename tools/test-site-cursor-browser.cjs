@@ -33,7 +33,7 @@ fs.mkdirSync(output, { recursive: true });
     }));
     const waitMode = mode => page.waitForFunction(mode => {
       const cursor = document.querySelector('.site-cursor');
-      const width = { dot: 13, link: 34, button: 34, identity: 34, magnify: 34, drag: 34, dragging: 30 }[mode];
+      const width = { dot: 13, link: 34, button: 26, identity: 26, magnify: 34, drag: 34, dragging: 30 }[mode];
       const capsule = ['link', 'magnify', 'button', 'identity', 'drag'].includes(mode);
       return cursor && !cursor.hidden && cursor.dataset.mode === mode && Math.abs(parseFloat(cursor.style.width) - width) < .1
         && (!capsule || cursor.style.borderRadius === '13px' && cursor.style.height === '26px'
@@ -48,7 +48,7 @@ fs.mkdirSync(output, { recursive: true });
       const data = await sharp(buffer).ensureAlpha().raw().toBuffer();
       return .2126 * data[16] + .7152 * data[17] + .0722 * data[18];
     };
-    const capsuleSurface = async label => {
+    const pointerSurface = async label => {
       const pill = page.locator('.site-cursor');
       const rect = await pill.boundingBox();
       const x = Math.round(rect.x + rect.width / 2 + 10), y = Math.round(rect.y + rect.height / 2);
@@ -57,8 +57,8 @@ fs.mkdirSync(output, { recursive: true });
       await pill.evaluate(e => { e.style.visibility = ''; });
       const over = await brightness(x, y);
       const fill = await pill.evaluate(e => +e.style.getPropertyValue('--cursor-fill'));
-      assert(Math.abs(over - (255 * fill + (1 - 2 * fill) * under)) < 12, `${label}: actual rendered capsule surface is visible and inverted (${under} -> ${over})`);
-      assert(Math.abs(over - under) > 25, `${label}: capsule has visible contrast with its background`);
+      assert(Math.abs(over - (255 * fill + (1 - 2 * fill) * under)) < 12, `${label}: actual rendered pointer surface is visible and inverted (${under} -> ${over})`);
+      assert(Math.abs(over - under) > 25, `${label}: pointer has visible contrast with its background`);
     };
     for (let i = 0; i < routes.length; i++) {
       await goto(routes[i]);
@@ -121,8 +121,8 @@ fs.mkdirSync(output, { recursive: true });
     await waitMode('identity');
     await page.waitForFunction(() => document.querySelector('.site-cursor-attraction').style.getPropertyValue('--cursor-glow') === '1');
     assert.equal(await page.locator('.site-cursor').evaluate(e => getComputedStyle(e).mixBlendMode), 'difference');
-    assert.equal(await page.locator('.site-cursor-tap, .site-cursor-grab, .site-cursor-grabbing, .site-cursor-identity-hint').count(), 0, 'No hand icons or separate homepage pointer');
-    await capsuleSurface('Homepage identity');
+    assert.equal(await page.locator('.site-cursor-action, .site-cursor-tap, .site-cursor-grab, .site-cursor-grabbing, .site-cursor-identity-hint').count(), 0, 'No center-dot/hand icons or separate homepage pointer');
+    await pointerSurface('Homepage identity');
     await page.locator('.site-cursor').evaluate(e => { e.style.visibility = 'hidden'; });
     const shadow = await brightness(sampleX, sampleY);
     assert(shadow < paper - 10, `The gray shadow is actually visible (${paper} -> ${shadow})`);
@@ -157,7 +157,7 @@ fs.mkdirSync(output, { recursive: true });
     }
     assert(invertedTextPixels >= 2, 'Actual Résumé lettering beneath the pill becomes light, rather than disappearing into its dark fill');
     await page.screenshot({ path: path.join(output, 'home-inverted-resume.png') });
-    checks.push('Rendered pixels prove the shared homepage capsule, visible gray word shadow, moving pale hotspot, stable text and inverted Résumé lettering.');
+    checks.push('Rendered pixels prove the plain homepage circle, visible gray word shadow, moving pale hotspot, stable text and inverted Résumé lettering.');
 
     await goto('/projects/');
     await page.locator('.project-header__nav a').first().hover(); await waitMode('link');
@@ -166,7 +166,7 @@ fs.mkdirSync(output, { recursive: true });
     await page.locator('.view-switch:not([hidden])').waitFor({ state: 'visible' });
     await page.locator('.specimen[data-study="001"]').click();
     await page.locator('.study-dialog:modal .dialog-header button').hover(); await waitMode('button');
-    await capsuleSurface('Modal action button');
+    await pointerSurface('Modal action button');
     assert.equal((await state()).parent, 'DIALOG', 'The cursor joins a modal top layer');
     await page.screenshot({ path: path.join(output, 'modal-pointer.png') });
     await page.locator('.study-dialog iframe').hover();
@@ -181,7 +181,7 @@ fs.mkdirSync(output, { recursive: true });
     await page.locator('a[href="#playground"]').last().click();
     await page.waitForFunction(() => !document.querySelector('#world-control').disabled);
     await page.locator('#world-control').hover(); await waitMode('drag');
-    await capsuleSurface('Draggable hover');
+    await pointerSurface('Draggable hover');
     await page.screenshot({ path: path.join(output, 'drag-ready.png') });
     const world = await page.locator('#world-control').boundingBox();
     const distanceBefore = await page.locator('#distance-input').inputValue();
@@ -194,7 +194,7 @@ fs.mkdirSync(output, { recursive: true });
     await page.mouse.move(20, 130); await waitMode('dragging');
     // The room is animated. Sample the captured pointer over stable dark paper
     // so before/after pixels describe the capsule rather than device motion.
-    await capsuleSurface('Active drag');
+    await pointerSurface('Active drag');
     await page.mouse.up();
     await page.locator('#world-control').hover(); await waitMode('drag');
     await page.mouse.down(); await waitMode('dragging');
@@ -202,8 +202,27 @@ fs.mkdirSync(output, { recursive: true });
     assert.equal((await state()).active, false, 'Cancelled grabs release custom pointer state');
     await page.mouse.up();
     await page.locator('#world-control').hover(); await waitMode('drag');
-    await page.locator('input[type="range"]').first().hover();
-    assert.equal((await state()).active, false, 'Native range interaction is preserved');
+    const slider = page.locator('#distance-input');
+    await slider.hover(); await waitMode('drag');
+    assert.equal(await slider.evaluate(e => getComputedStyle(e, '::-webkit-slider-thumb').cursor), 'none', 'Native thumb does not introduce a second cursor');
+    await page.screenshot({ path: path.join(output, 'slider-ready.png') });
+    const sliderRect = await slider.boundingBox();
+    await page.mouse.move(sliderRect.x + sliderRect.width * .25, sliderRect.y + sliderRect.height / 2);
+    await page.mouse.down(); await waitMode('dragging');
+    const sliderBefore = await slider.inputValue();
+    await page.mouse.move(sliderRect.x + sliderRect.width * .75, sliderRect.y + sliderRect.height / 2, { steps: 6 });
+    await waitMode('dragging');
+    assert.notEqual(await slider.inputValue(), sliderBefore, 'Native slider value really changes during adjustment');
+    await page.screenshot({ path: path.join(output, 'slider-active.png') });
+    await page.mouse.move(sliderRect.x + sliderRect.width + 24, sliderRect.y + sliderRect.height / 2);
+    await waitMode('dragging');
+    await page.mouse.up();
+    await slider.hover(); await waitMode('drag');
+    await slider.focus();
+    const keyboardBefore = +await slider.inputValue();
+    await page.keyboard.press('ArrowLeft');
+    assert.equal(+await slider.inputValue(), keyboardBefore - 1, 'Native range keyboard adjustment is preserved');
+    await page.keyboard.press('Tab'); assert.equal((await state()).active, false);
     await page.mouse.move(8, 700); await waitMode('dot');
     // Representative editable/native regions and dynamic opt-out, without
     // requiring production forms to be added just for testing.
@@ -221,7 +240,7 @@ fs.mkdirSync(output, { recursive: true });
     await page.mouse.move(9, 700); assert.equal((await state()).active, false);
     await page.emulateMedia({ forcedColors: 'none' });
     await page.mouse.move(10, 700); await waitMode('dot');
-    checks.push('Music drag has a visible bidirectional-arrow capsule, tightened active state, real movement, capture outside its bounds and cancellation recovery; editing/preferences remain native.');
+    checks.push('Music objects and range slider share hover/active drag states; actual movement/value changes, outside release and slider keyboard adjustment work; editing/preferences remain native.');
 
     await goto('/projects/multiverse-all-star-battlefront/');
     await page.locator('[data-preview]').first().hover(); await waitMode('magnify');
@@ -246,17 +265,18 @@ fs.mkdirSync(output, { recursive: true });
     // A route and class names unknown to the controller exercise future reuse.
     const futureURL = origin + '/__cursor-future-fixture/';
     await context.route(futureURL, route => route.fulfill({ contentType: 'text/html', body: `<!doctype html><html><head>
-      <link rel="stylesheet" href="/site-cursor.css?rev=20261028-unified">
+      <link rel="stylesheet" href="/site-cursor.css?rev=20261028-circles">
       <style>body{margin:40px;background:#fff}button,a,#future-drag{display:block;width:220px;height:60px;margin:12px;padding:10px;box-sizing:border-box}#future-drag{cursor:grab;background:#ddd}#future-drag.held{cursor:grabbing!important}</style>
-      <script type="module" src="/site-cursor.mjs?rev=20261028-unified"></script></head><body>
+      <script type="module" src="/site-cursor.mjs?rev=20261028-circles"></script></head><body>
       <button id="future-action">An ordinary future action</button><a id="future-link" href="/next/">A future destination</a>
       <a id="future-image" href="/new-image.webp">A future image, without a known class</a>
       <button id="future-css">A future CSS-defined preview</button><div id="future-drag" style="cursor:grab">A future custom draggable</div>
+      <input id="future-range" type="range" min="0" max="100" value="40" style="cursor:ew-resize">
       <script>const d=document.querySelector('#future-drag');d.addEventListener('pointerdown',e=>{d.setPointerCapture(e.pointerId);d.classList.add('held')});d.addEventListener('pointermove',e=>{if(d.classList.contains('held'))d.dataset.x=e.clientX});for(const type of ['pointerup','pointercancel','lostpointercapture'])d.addEventListener(type,()=>d.classList.remove('held'));</script>
       </body></html>` }));
     await goto('/__cursor-future-fixture/');
     await page.locator('#future-action').hover(); await waitMode('button');
-    assert(await page.locator('.site-cursor').evaluate(e => +e.style.getPropertyValue('--cursor-action') > .99));
+    assert.equal(await page.locator('.site-cursor-action').count(), 0, 'Action circles have no center icon');
     await page.locator('#future-action').evaluate(e => { e.disabled = true; }); await waitMode('dot');
     await page.locator('#future-action').evaluate(e => { e.disabled = false; }); await waitMode('button');
     await page.locator('#future-link').hover(); await waitMode('link');
@@ -267,6 +287,9 @@ fs.mkdirSync(output, { recursive: true });
     await page.locator('#future-css').hover(); await waitMode('magnify');
     await page.evaluate(() => { const style=document.createElement('style');style.textContent='#future-css{cursor:col-resize!important}';document.head.append(style); });
     await page.waitForFunction(() => !document.documentElement.classList.contains('has-site-cursor'));
+    await page.locator('#future-range').hover(); await waitMode('drag');
+    await page.mouse.down(); await waitMode('dragging');
+    await page.mouse.up(); await waitMode('drag');
     await page.locator('#future-drag').hover(); await waitMode('drag');
     await page.mouse.down(); await waitMode('dragging');
     await page.mouse.move(500, 500); await waitMode('dragging');

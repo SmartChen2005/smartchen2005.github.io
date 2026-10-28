@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Simplify actions to circles and adapt range sliders
+
+- Replaced ordinary action/homepage identity capsules and their center dot with a plain 26px inverted circle. Kept existing arrow/magnifier/drag presentations and separate word attraction.
+- Recognize range inputs and semantic sliders as global drag intents, including Music Station's `ew-resize` fallback. Native range presses show the active drag state without taking capture or changing input events/value/keyboard handling.
+- Extended actual Music slider and unknown future-page browser checks; synchronized revision `20261028-circles` and current design/integration records.
+- Verified all 16 Pages Node checks, 22 live routes plus the unknown future route / ten browser groups, nine homepage groups, actual Music slider value changes/outside release/keyboard adjustment, all immutable hashes and strict dist audit with zero findings.
+
 ### 2026-10-28 — Unify foreground capsules and simplify action/drag cues
 
 - Replaced the rejected hand drawings with a small action dot and a thin bidirectional drag arrow. Actual dragging contracts the arrow and capsule while retaining the existing component's capture/lifecycle ownership.

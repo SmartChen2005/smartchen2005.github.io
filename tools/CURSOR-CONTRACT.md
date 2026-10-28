@@ -10,16 +10,21 @@ the same resolver without new route/class branches.
 | --- | --- | --- |
 | Navigation | Native links, image-map links, `role="link"` | Arrow capsule |
 | Photo/detail viewing | Image-file URLs, `data-preview`, `data-process-page`, `data-lightbox`, `data-zoom`, authored `cursor: zoom-in/zoom-out` | Magnifier capsule |
-| Action | Buttons, summary, `role="button"`, action inputs, click handlers/author-declared `cursor: pointer` | Capsule with one small center dot |
-| Draggable | Authored `cursor: grab/grabbing/move`, `draggable="true"` | Capsule with a thin bidirectional arrow |
-| Actual dragging | The owning component's pointer capture/grabbing state or native drag lifecycle | Tighter capsule and contracted bidirectional arrow |
+| Action | Buttons, summary, `role="button"`, action inputs, click handlers/author-declared `cursor: pointer` | Plain enlarged inverted circle, no center icon |
+| Draggable | Native range inputs, `role="slider"`, authored `cursor: grab/grabbing/move`, `draggable="true"` | Capsule with a thin bidirectional arrow |
+| Actual dragging | Native range pointer-down, owning component's pointer capture/grabbing state or native drag lifecycle | Tighter capsule and contracted bidirectional arrow |
 
-Standard capsules share 34×26px geometry, a 13px radius and an 88% inversion
-surface. Dragging uses 30×24px, a stronger surface and a 25% smaller arrow.
-Pointer-down contracts ordinary capsules by 12%. Homepage identities use the
-exact same foreground action capsule. Their accepted attraction shadow/hotspot
-is a separate background layer beneath the lettering. There are no hand icons
-or standalone homepage pointer variants; one RAF owns both decorative layers.
+Actions and homepage identities use a plain 26×26px circle, a 13px radius and
+an 88% inversion surface. There is no center icon. Navigation, photo previews
+and draggable hover retain 34×26px capsules. Dragging uses 30×24px, a stronger
+surface and a 25% smaller arrow. Pointer-down contracts ordinary pointers by
+12%. Homepage attraction shadow/hotspot remains a separate background layer
+beneath the lettering; one RAF owns both decorative layers.
+
+Range inputs are recognized globally, including when their native CSS fallback
+is `ew-resize`. Pointer-down enters the active drag presentation immediately;
+the browser retains native thumb capture, value/input events and keyboard
+behavior. The decorative cursor does not take capture or change slider values.
 
 For a custom component, declare an intent on its actual interaction owner:
 
@@ -46,7 +51,7 @@ observed. After direct CSSOM `insertRule` / adopted-sheet changes, dispatch
 Cross-origin stylesheet access failures
 retain native semantics and explicit data-attribute fallback.
 
-Editing, media/iframe surfaces, resize/crosshair/busy/custom-URL cursors and
+Editable inputs, media/iframe surfaces, non-slider resize/crosshair/busy/custom-URL cursors and
 `data-cursor="native"` / `data-cursor-native` retain native ownership. Whole
 specialized pages can opt out with `data-page-cursor="native"`. The SX-70 camera
 document and immutable editions are excluded, and inert preview frames do not
