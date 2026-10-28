@@ -1,5 +1,12 @@
 # Homepage adaptive pointer — 2026-10-27
 
+Latest 2026-10-28 correction: homepage free dots and contact capsules now use the
+same inversion as other pages. Only identity attraction uses normal blending,
+with a visible 15% word-anchored gray shadow and an 18px moving pale hotspot
+beneath the lettering. All nine original groups pass. Visible pixel assertions
+for the shadow/hotspot and inverted Résumé glyphs are in the full-site browser
+check; current evidence is `shadow-home-cursor/` and `shadow-site-cursor/`.
+
 Follow-up: the implementation now lives in `site-cursor.*`; the homepage files
 are compatibility entries. See `SITE-CURSOR-QA.md` for the shared rollout and its
 native-pointer exclusions. This original nine-group regression still runs.

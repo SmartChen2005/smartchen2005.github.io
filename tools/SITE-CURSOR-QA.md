@@ -1,5 +1,37 @@
 # Shared adaptive pointer — 2026-10-27
 
+## Shared capsules, homepage inversion and visible shadow — 2026-10-28
+
+The user clarified that photo details should use the **same filled capsule as
+navigation**, with only the icon changed. Photo and link states now share one
+34×26px / 13px-radius / 88%-fill definition. The magnifier is a 16px icon inside
+that capsule and shares its press feedback and difference blending.
+
+The homepage's blanket normal-blend override caused its contact capsules to
+obscure lettering. Free dots and contact links now use the shared white
+difference-blended surface and black icon cutout. Normal blending is scoped to
+identity attraction only, at z-index 2 beneath the sentence's z-index 3. It uses
+a word-anchored 15% gray elliptical shadow and a pointer-following 18px pale
+hotspot. Letter shapes stay untouched above both layers. The rectangular fill
+and edge remain zero. This supersedes the earlier almost-invisible 4.5% glow.
+
+Current checks pass: all 16 Node commands from the Pages workflow; additional
+Gallery/Stills checks; 78 immutable hashes; VR/MASB source parity; strict dist
+audit (zero findings); 22 live routes / **eight browser groups**; and the nine
+homepage browser groups. The browser checks now verify capsule dimensions,
+an actual gray backdrop at least 10 luminance units below paper, a pale hotspot
+at least 15 units above its gray backdrop, and actual Résumé glyph pixels
+brightening under the inverted capsule. These assertions check visible pixels,
+not only configured opacity or blend properties. Existing Chrome native
+transition cancellations remain recorded separately.
+
+Current task-local evidence: `shadow-site-cursor/`, `shadow-home-cursor/`,
+`shadow-cursor-audit.json` and inspected `shadow-name.png`, `shadow-resume.png`,
+`shadow-magnify.png`. Asset revision: `20261028-shadow`. Windows CRLF includes
+are recognized without rewriting an already-current page.
+
+The sections below record earlier iterations.
+
 ## Photo magnifier and borderless attraction — 2026-10-28
 
 The user selected a magnifying glass for photo details and **borderless soft

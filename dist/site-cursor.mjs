@@ -17,6 +17,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   const pointShape = () => ({ x: pointer.x, y: pointer.y, w: 13, h: 13, r: 6.5, fill: .65, edge: 0, light: 0, arrow: 0, glow: 0, magnify: 0 });
+  const capsule = { w: 34, h: 26, r: 13, fill: .88 };
   let pointer = { x: 0, y: 0 }, current, velocity = {};
   let frame = 0, previousTime = 0, pressed = false, active = false;
   const allowed = () => fine.matches && !reduced.matches && !forced.matches && !document.hidden;
@@ -49,15 +50,15 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     if (identity && !identity.closest('[inert]')) {
       const rect = identity.getBoundingClientRect();
       Object.assign(next, { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2,
-        w: rect.width + padding * 2, h: rect.height + padding * 2, r: 12, fill: 0, edge: 0, glow: 1, light: .65 });
+        w: rect.width + padding * 2, h: rect.height + padding * 2, r: 12, fill: 0, edge: 0, glow: 1, light: 1 });
       cursor.dataset.mode = 'identity';
       cursor.dataset.identity = identity.dataset.identity;
     } else if (photo && !photo.closest('[inert]') && photo.getAttribute('aria-disabled') !== 'true') {
-      Object.assign(next, { w: 28, h: 28, r: 14, fill: 0, magnify: 1 });
+      Object.assign(next, capsule, { magnify: 1 });
       cursor.dataset.mode = 'magnify';
       delete cursor.dataset.identity;
     } else if (link && !link.closest('[inert]') && link.getAttribute('aria-disabled') !== 'true') {
-      Object.assign(next, { w: 34, h: 26, r: 13, fill: .88, arrow: 1 });
+      Object.assign(next, capsule, { arrow: 1 });
       cursor.dataset.mode = 'link';
       delete cursor.dataset.identity;
     } else if (button && !button.closest('[inert]') && button.getAttribute('aria-disabled') !== 'true') {
@@ -84,7 +85,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     cursor.style.height = `${current.h}px`;
     cursor.style.borderRadius = `${current.r}px`;
     for (const key of ['fill', 'edge', 'light', 'arrow', 'glow', 'magnify']) cursor.style.setProperty(`--cursor-${key}`, current[key]);
-    cursor.style.setProperty('--magnify-scale', clamp(current.w / 28, .4, 1));
+    cursor.style.setProperty('--magnify-scale', clamp(current.w / capsule.w, .4, 1));
     cursor.style.setProperty('--light-x', `${clamp(pointer.x - left, 0, current.w)}px`);
     cursor.style.setProperty('--light-y', `${clamp(pointer.y - top, 0, current.h)}px`);
   }

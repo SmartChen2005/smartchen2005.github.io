@@ -14,7 +14,7 @@ for (const file of pages('dist')) {
   const original = fs.readFileSync(file, 'utf8');
   if (hasDedicatedPointer(file, original) || original.includes('src="home-cursor.mjs')) continue;
   const base = path.basename(file) === '404.html' ? '/' : '../'.repeat(path.relative('dist', path.dirname(file)).split(path.sep).filter(Boolean).length);
-  if (original.includes(siteCursorAssets(base))) continue;
+  if (original.replaceAll('\r\n', '\n').includes(siteCursorAssets(base))) continue;
   const html = original.replace(/\s*<link rel="stylesheet" href="[^"]*site-cursor\.css[^"]*">/g, '')
     .replace(/\s*<script type="module" src="[^"]*site-cursor\.mjs[^"]*"><\/script>/g, '')
     .replace('</head>', `${siteCursorAssets(base)}</head>`);

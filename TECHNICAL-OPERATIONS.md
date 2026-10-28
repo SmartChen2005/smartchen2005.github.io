@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Match photo capsules and restore homepage inversion
+
+- Corrected photo detail feedback to use the exact navigation capsule (34×26px, 13px radius, 88% fill), replacing only its arrow with a compact magnifier. Both states share one geometry definition and press feedback.
+- Restored difference blending to homepage free pointers and contact links. Only identity attraction uses normal compositing below the lettering. A visible 15% gray elliptical shadow stays anchored to the word while an 18px pale hotspot follows the pointer; the shape retains no rectangular fill or outline.
+- Synchronized asset revisions and made include detection tolerant of Windows line endings. The full Pages check sequence, eight browser groups across 22 live routes, nine homepage groups, source parity and strict audit passed. Pixel assertions verify actual shadow/hotspot visibility and brightened Résumé text beneath the capsule; evidence is in `tools/SITE-CURSOR-QA.md`.
+
 ### 2026-10-28 — Distinguish photo viewing and soften identity attraction
 
 - Added a fine-line magnifier for Gallery editorial/index photo details and Stills image entries. Covers that navigate to a project keep the arrow capsule; native viewer behavior and fallback image links remain intact.

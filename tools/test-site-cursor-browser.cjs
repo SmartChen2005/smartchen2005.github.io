@@ -33,8 +33,11 @@ fs.mkdirSync(output, { recursive: true });
     }));
     const waitMode = mode => page.waitForFunction(mode => {
       const cursor = document.querySelector('.site-cursor');
-      const width = { dot: 13, link: 34, button: 22, magnify: 28 }[mode];
-      return cursor && !cursor.hidden && cursor.dataset.mode === mode && Math.abs(parseFloat(cursor.style.width) - width) < .1;
+      const width = { dot: 13, link: 34, button: 22, magnify: 34 }[mode];
+      const capsule = mode === 'link' || mode === 'magnify';
+      return cursor && !cursor.hidden && cursor.dataset.mode === mode && Math.abs(parseFloat(cursor.style.width) - width) < .1
+        && (!capsule || cursor.style.borderRadius === '13px' && cursor.style.height === '26px'
+          && +cursor.style.getPropertyValue('--cursor-fill') === .88);
     }, mode);
     const goto = async route => {
       await page.goto(origin + route, { waitUntil: 'load' });
@@ -75,6 +78,9 @@ fs.mkdirSync(output, { recursive: true });
       await goto(route);
       const photo = page.locator('.story-image-open').first();
       await photo.hover(); await waitMode('magnify');
+      assert.equal((await state()).radius, 13, 'Photo details use the navigation capsule geometry');
+      assert.equal((await page.locator('.site-cursor').boundingBox()).height, 26);
+      assert.equal(await page.locator('.site-cursor').evaluate(e => +e.style.getPropertyValue('--cursor-fill')), .88);
       assert.equal(await page.locator('.site-cursor').evaluate(e => +e.style.getPropertyValue('--cursor-arrow')), 0, 'Photo detail is distinct from navigation');
       await page.screenshot({ path: path.join(output, route.includes('analog') ? 'photo-magnifier.png' : 'index-magnifier.png') });
       await photo.click();
@@ -91,6 +97,49 @@ fs.mkdirSync(output, { recursive: true });
     await page.locator('dialog:modal').waitFor();
     await page.keyboard.press('Escape');
     checks.push('Gallery cover links retain arrows; editorial/index/Stills photo details show magnifiers and open/close real viewers.');
+
+    await goto('/');
+    await page.locator('.business-card-dock[data-state="settled"]').waitFor();
+    await page.mouse.move(80, 740); await waitMode('dot');
+    const sentence = await page.locator('.sentence').boundingBox();
+    const name = await page.locator('.identity-name').boundingBox();
+    const sampleX = Math.round(name.x + name.width / 2), sampleY = Math.round(name.y + name.height - 4);
+    const paper = await brightness(sampleX, sampleY);
+    await page.locator('.identity-name').hover();
+    await page.waitForFunction(() => document.querySelector('.site-cursor').style.getPropertyValue('--cursor-glow') === '1');
+    const shadow = await brightness(sampleX, sampleY);
+    assert(shadow < paper - 10, `The gray shadow is actually visible (${paper} -> ${shadow})`);
+    await page.mouse.move(sampleX, sampleY); await page.waitForTimeout(80);
+    await page.locator('.site-cursor-light').evaluate(e => { e.style.visibility = 'hidden'; });
+    const unlit = await brightness(sampleX, sampleY);
+    await page.locator('.site-cursor-light').evaluate(e => { e.style.visibility = ''; });
+    const lit = await brightness(sampleX, sampleY);
+    assert(lit > unlit + 15, `The pointer hotspot is visible above the gray shadow (${unlit} -> ${lit})`);
+    assert.deepEqual(await page.locator('.sentence').boundingBox(), sentence);
+    await page.screenshot({ path: path.join(output, 'home-shadow-hotspot.png') });
+
+    await page.locator('.card-links a').first().hover(); await waitMode('link');
+    assert.equal(await page.locator('.site-cursor').evaluate(e => getComputedStyle(e).mixBlendMode), 'difference');
+    await page.waitForTimeout(160);
+    const pill = await page.locator('.site-cursor').boundingBox();
+    const clip = { x: Math.floor(pill.x), y: Math.floor(pill.y), width: Math.ceil(pill.width) + 2, height: Math.ceil(pill.height) + 2 };
+    await page.locator('.site-cursor').evaluate(e => { e.style.visibility = 'hidden'; });
+    const under = await sharp(await page.screenshot({ clip })).ensureAlpha().raw().toBuffer();
+    await page.locator('.site-cursor').evaluate(e => { e.style.visibility = ''; });
+    const over = await sharp(await page.screenshot({ clip })).ensureAlpha().raw().toBuffer();
+    let invertedTextPixels = 0;
+    for (let y = 0; y < clip.height; y++) for (let x = 0; x < clip.width; x++) {
+      const dx = x + clip.x - pill.x - pill.width / 2, dy = y + clip.y - pill.y - pill.height / 2;
+      if (Math.abs(dx) < 9 && Math.abs(dy) < 9) continue; // Exclude the cursor's own icon.
+      if (Math.max(Math.abs(dx) - 4, 0) ** 2 + dy ** 2 > 100) continue; // Stay inside the solid capsule.
+      const at = (y * clip.width + x) * 4;
+      const base = .2126 * under[at] + .7152 * under[at + 1] + .0722 * under[at + 2];
+      const result = .2126 * over[at] + .7152 * over[at + 1] + .0722 * over[at + 2];
+      if (base < 140 && result > base + 35 && Math.abs(result - (224.4 - .76 * base)) < 18) invertedTextPixels++;
+    }
+    assert(invertedTextPixels >= 2, 'Actual Résumé lettering beneath the pill becomes light, rather than disappearing into its dark fill');
+    await page.screenshot({ path: path.join(output, 'home-inverted-resume.png') });
+    checks.push('Rendered pixels prove visible gray identity shadow, a moving pale hotspot, stable text and inverted Résumé lettering.');
 
     await goto('/projects/');
     await page.locator('.project-header__nav a').first().hover(); await waitMode('link');
