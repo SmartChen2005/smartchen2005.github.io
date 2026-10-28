@@ -25,7 +25,7 @@ fs.mkdirSync(output, { recursive: true });
       const raf = window.requestAnimationFrame.bind(window), cancel = window.cancelAnimationFrame.bind(window);
       window.cursorFrames = new Set(); window.cursorMaxFrames = 0;
       window.requestAnimationFrame = callback => {
-        const own = new Error().stack.includes('home-cursor.mjs');
+        const own = new Error().stack.includes('site-cursor.mjs');
         const id = raf(time => { window.cursorFrames.delete(id); callback(time); });
         if (own) { window.cursorFrames.add(id); window.cursorMaxFrames = Math.max(window.cursorMaxFrames, window.cursorFrames.size); }
         return id;

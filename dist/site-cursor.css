@@ -1,0 +1,62 @@
+/* Shared pointer. Difference blending keeps it legible on dark/light surfaces
+   and photographs without sampling, repainting or altering the artwork. */
+:root { --home-cursor-padding: 10px; }
+.site-cursor {
+  --cursor-size: 13px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10000;
+  width: var(--cursor-size);
+  height: var(--cursor-size);
+  border-radius: 50%;
+  color: #ffffff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  overflow: hidden;
+  contain: layout style paint;
+  will-change: transform;
+}
+.site-cursor[hidden] { display: none; }
+.site-cursor-surface,
+.site-cursor-edge,
+.site-cursor-light { position: absolute; inset: 0; border-radius: inherit; }
+.site-cursor-surface { background: currentColor; opacity: var(--cursor-fill, .65); }
+.site-cursor-edge { border: 1px solid currentColor; opacity: var(--cursor-edge, 0); }
+.site-cursor-light {
+  opacity: var(--cursor-light, 0);
+  background: radial-gradient(circle 34px at var(--light-x, 50%) var(--light-y, 50%), #ffffffd9, #ffffff40 45%, #ffffff00 100%);
+}
+.site-cursor-arrow {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: calc(50% - 7px);
+  top: calc(50% - 7px);
+  color: #000000;
+  opacity: var(--cursor-arrow, 0);
+}
+.home-cursor { color: var(--ink); mix-blend-mode: normal; }
+.home-cursor .site-cursor-arrow { color: var(--paper); }
+body[data-world='cars']:not([data-motor-fallback]) .home-cursor { color: var(--motor-paper); }
+body[data-world='cars']:not([data-motor-fallback]) .site-cursor-arrow { color: var(--motor-ink); }
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  html.has-site-cursor, html.has-site-cursor * { cursor: none !important; }
+  /* Real hit regions match the visible magnet; native clicks need no forwarding. */
+  html.has-home-cursor .identity > span { position: relative; }
+  html.has-home-cursor .identity > span::before {
+    content: '';
+    position: absolute;
+    inset: calc(-1 * var(--home-cursor-padding));
+  }
+  /* The new continuous frame replaces the small hover-only viewfinder corners. */
+  html.has-home-cursor .identity-photo::after { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce), (forced-colors: active), (hover: none), (pointer: coarse) {
+  .site-cursor { display: none; }
+}
+@media print {
+  .site-cursor { display: none; }
+  html.has-site-cursor, html.has-site-cursor * { cursor: auto !important; }
+}

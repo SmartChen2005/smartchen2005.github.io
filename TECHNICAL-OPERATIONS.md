@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-27 — Extend the adaptive pointer across live pages
+
+- Promoted the homepage implementation to shared site assets and connected 22 live pages. The white difference-blended dot/capsule reads pale on dark backgrounds and dark on light backgrounds. Homepage identity frames retain their accepted treatment.
+- Preserved the live SX-70 camera document, all immutable editions, embedded experiments and native drag/zoom/editing/media controls. The shared pointer follows native modal top-layer ownership and releases to iframes without overriding keyboard or touch.
+- `tools/site-cursor.mjs` supplies canonical includes to Gallery, Stills and shared project-header generation. Run `node tools/render-site-cursor.mjs` for direct pages; `node tools/test-site-cursor.mjs` enforces coverage/exclusions in Pages validation. Existing generators remain idempotent and preserve source/render parity.
+- Passed the full Pages validation sequence, Gallery/Stills/entrance checks, strict dist audit, real Chrome coverage of all 22 routes and the original nine homepage browser groups. Actual pixel contrast, modal/native controls and camera exclusion evidence are recorded in `tools/SITE-CURSOR-QA.md`.
+
 ### 2026-10-27 — Add the adaptive homepage pointer
 
 - Added a fine-pointer dot that morphs into complete identity frames, using real 10px native hit regions and a moving interior light. Contact-card links use an arrow capsule with press feedback. Existing scene inks adapt the pointer to the dark car preview.

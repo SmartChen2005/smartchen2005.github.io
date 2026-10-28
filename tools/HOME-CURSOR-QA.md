@@ -1,5 +1,9 @@
 # Homepage adaptive pointer — 2026-10-27
 
+Follow-up: the implementation now lives in `site-cursor.*`; the homepage files
+are compatibility entries. See `SITE-CURSOR-QA.md` for the shared rollout and its
+native-pointer exclusions. This original nine-group regression still runs.
+
 The user selected a translucent frame around each complete identity, a light spot
 that follows the real pointer inside the frame, a roughly 10px capture region,
 and a small arrow capsule for contact-card links. Reference:

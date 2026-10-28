@@ -1,4 +1,5 @@
 // Shared navigation and Gallery entrance for the Projects directory and landing pages.
+import { siteCursorAssets } from './site-cursor.mjs';
 export function projectHeader({ base = '../../', current = false, theme = 'dark', placement = '' } = {}) {
   return `<header class="project-header project-header--${theme}${placement ? ` project-header--${placement}` : ''}" data-project-header>
     <nav class="project-header__nav" aria-label="Primary navigation">
@@ -11,4 +12,5 @@ export function projectHeader({ base = '../../', current = false, theme = 'dark'
 
 export const projectHeaderAssets = base => `<link rel="stylesheet" href="${base}project-header.css?v=20261027-aligned">
   <link rel="stylesheet" href="${base}gallery-entry.css?rev=20261024-shared-entry">
-  <script type="module" src="${base}gallery-entry.mjs?rev=20261024-shared-entry"></script>`;
+  <script type="module" src="${base}gallery-entry.mjs?rev=20261024-shared-entry"></script>
+  ${siteCursorAssets(base)}`;

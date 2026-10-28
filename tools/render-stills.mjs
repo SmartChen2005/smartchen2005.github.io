@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { siteCursorAssets } from './site-cursor.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const route = path.join(root, 'dist/projects/polaroid-of-yesterday/photography');
@@ -27,6 +28,7 @@ const html = `<!doctype html>
   <link rel="preload" as="image" href="assets/the-room.webp">
   <link rel="stylesheet" href="stills.css?gallery=20261013">
   <script type="module" src="stills.mjs?gallery=20261013"></script>
+  ${siteCursorAssets('../../../')}
 </head>
 <body>
   <a class="skip-link" href="#installation">Skip to images</a>

@@ -20,7 +20,9 @@ for (const page of pages) {
   } else html = html.replace(page.legacy, header);
   // Remove prior shared entrance assets so repeated rendering is idempotent.
   html = html.replace(/\s*<link rel="stylesheet" href="[^"]*gallery-entry\.css[^"]*">/g, '')
-    .replace(/\s*<script type="module" src="[^"]*gallery-entry\.mjs[^"]*"><\/script>/g, '');
+    .replace(/\s*<script type="module" src="[^"]*gallery-entry\.mjs[^"]*"><\/script>/g, '')
+    .replace(/\s*<link rel="stylesheet" href="[^"]*site-cursor\.css[^"]*">/g, '')
+    .replace(/\s*<script type="module" src="[^"]*site-cursor\.mjs[^"]*"><\/script>/g, '');
   if (html.includes('project-header.css')) html = html.replace(/<link rel="stylesheet" href="[^"]*project-header\.css[^"]*">/, projectHeaderAssets(page.base));
   else html = html.replace('</head>', `  ${projectHeaderAssets(page.base)}\n</head>`);
   fs.writeFileSync(page.file, html);
