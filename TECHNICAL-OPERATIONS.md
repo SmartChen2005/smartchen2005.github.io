@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-27 — Add the adaptive homepage pointer
+
+- Added a fine-pointer dot that morphs into complete identity frames, using real 10px native hit regions and a moving interior light. Contact-card links use an arrow capsule with press feedback. Existing scene inks adapt the pointer to the dark car preview.
+- Kept the enhancement homepage-only and isolated from existing controllers and immutable archive editions. Keyboard, touch, reduced motion, forced colors and failed module loads retain native operation; idle and page lifecycle cleanup stop the cursor loop.
+- Site/home/card/entrance/motor/archive checks and strict dist audit passed. Actual Chrome interaction and screenshot coverage, including 390px mouse/touch and navigation/Back, are recorded in `tools/HOME-CURSOR-QA.md` and reproducible with `tools/test-home-cursor-browser.cjs`.
+
 ### 2026-10-27 — Make the complete Gallery logo much smaller
 
 - At the user's follow-up request, scaled the entire archived Gallery logo to 40% of its previous size throughout the animation, including its mark, lettering and white clearance. Updated the thumbnail to match.
