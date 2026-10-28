@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Smooth homepage shadow falloff beyond its measured bounds
+
+- Removed rectangular overflow/paint clipping from the decorative attraction layer. The gray shadow now fades through a multi-stop elliptical alpha mask on a child expanded 32px horizontally / 24px vertically, then receives a 10px blur on its parent so the feathered tail remains visible.
+- Retained 15% peak ink, native 10px hit padding, word geometry, local hotspot, action circle and all pointer behavior. Only stylesheet revisions changed to `20261028-feather`; script revisions remain `20261028-circles`.
+- Passed all 16 Pages Node checks, 22 live routes plus future fixture / ten browser groups, nine homepage groups, immutable hashes and strict dist audit with zero findings. Controlled before/after screenshots and pixel profiles confirm a faint tail outside the previously clipped boundary; see `tools/SITE-CURSOR-QA.md`.
+
 ### 2026-10-28 — Simplify actions to circles and adapt range sliders
 
 - Replaced ordinary action/homepage identity capsules and their center dot with a plain 26px inverted circle. Kept existing arrow/magnifier/drag presentations and separate word attraction.

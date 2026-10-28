@@ -265,7 +265,7 @@ fs.mkdirSync(output, { recursive: true });
     // A route and class names unknown to the controller exercise future reuse.
     const futureURL = origin + '/__cursor-future-fixture/';
     await context.route(futureURL, route => route.fulfill({ contentType: 'text/html', body: `<!doctype html><html><head>
-      <link rel="stylesheet" href="/site-cursor.css?rev=20261028-circles">
+      <link rel="stylesheet" href="/site-cursor.css?rev=20261028-feather">
       <style>body{margin:40px;background:#fff}button,a,#future-drag{display:block;width:220px;height:60px;margin:12px;padding:10px;box-sizing:border-box}#future-drag{cursor:grab;background:#ddd}#future-drag.held{cursor:grabbing!important}</style>
       <script type="module" src="/site-cursor.mjs?rev=20261028-circles"></script></head><body>
       <button id="future-action">An ordinary future action</button><a id="future-link" href="/next/">A future destination</a>

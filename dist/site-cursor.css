@@ -26,8 +26,8 @@
   border-radius: 12px;
   color: var(--ink);
   pointer-events: none;
-  overflow: hidden;
-  contain: layout style paint;
+  overflow: visible;
+  contain: layout style;
   will-change: transform;
 }
 .site-cursor-surface,
@@ -37,13 +37,20 @@
 .site-cursor-surface { background: currentColor; opacity: var(--cursor-fill, .65); }
 .site-cursor-edge { border: 1px solid currentColor; opacity: var(--cursor-edge, 0); }
 .site-cursor-glow {
-  --cursor-feather-y: 20px;
   opacity: calc(var(--cursor-glow, 0) * .15);
-  background: radial-gradient(ellipse 70% 65% at 50% 58%, currentColor 8%, transparent 90%);
-  filter: blur(6px);
+  /* Blur the already-feathered child, allowing its faint tail past the bounds. */
+  filter: blur(10px);
 }
-.site-cursor-glow, .site-cursor-light {
-  /* Feather the measured interaction region; it has no visible perimeter. */
+.site-cursor-glow::before {
+  content: '';
+  position: absolute;
+  inset: -24px -32px;
+  background: currentColor;
+  mask-image: radial-gradient(ellipse closest-side at 50% 58%,
+    #000 0%, #000f 18%, #000c 38%, #0006 60%, #0002 80%, #00000005 92%, transparent 100%);
+}
+.site-cursor-light {
+  /* The moving hotspot keeps its local feather; the word shadow fades radially. */
   mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 12px), transparent),
     linear-gradient(transparent, #000 var(--cursor-feather-y, 12px), #000 calc(100% - var(--cursor-feather-y, 12px)), transparent);
   mask-composite: intersect;

@@ -1,5 +1,26 @@
 # Shared adaptive pointer — 2026-10-27
 
+## Smooth radial shadow tail — 2026-10-28
+
+The homepage gray shadow no longer clips at the measured interaction rectangle.
+Its attraction layer permits visible overflow and omits paint containment. A
+child alpha mask expands 32px horizontally / 24px vertically and fades through
+18/38/60/80/92/100% stops; its parent applies a 10px blur after that feathering.
+Peak opacity remains 15%. Hit bounds, text metrics, local hotspot, action-circle
+geometry and all interaction code are unchanged.
+
+Controlled before/after screenshots isolate the word shadow. Original outer
+samples were zero; the new left tail is about three luminance steps at 12px
+outside the old bounds, one at 20px, and zero at 32px. The tail reaches the paper
+gradually rather than stopping at the measured rectangle. Existing pixel checks
+still prove visible gray ink, a moving pale hotspot and inverted contact text.
+
+Passed all 16 Pages Node checks, 22 routes plus the unknown future fixture / ten
+browser groups, nine homepage groups and strict dist audit with zero findings.
+Current evidence: `feather-qa/` (controlled images/profiles), `feather-site/`,
+`feather-home/`, `feather-audit.json`. Styles use `20261028-feather`; scripts retain
+`20261028-circles`. Earlier sections below describe past iterations.
+
 ## Plain action circles and global range dragging — 2026-10-28
 
 The user replaced action capsules/center dots with a plain enlarged inverted
