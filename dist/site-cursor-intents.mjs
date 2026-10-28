@@ -74,15 +74,15 @@ export function createCursorIntents(doc = document) {
     return editable?.isContentEditable ? editable : null;
   }
   function textAt(element, point) {
-    if (!point) return false;
+    if (!point) return null;
     const caret = doc.caretPositionFromPoint?.(point.x, point.y);
     const node = caret?.offsetNode || doc.caretRangeFromPoint?.(point.x, point.y)?.startContainer;
-    if (node?.nodeType !== win.Node.TEXT_NODE || !node.textContent.trim() || !element.contains(node)) return false;
+    if (node?.nodeType !== win.Node.TEXT_NODE || !node.textContent.trim() || !element.contains(node)) return null;
     // Caret APIs can return the nearest line even over empty padding. Require
     // the pointer to actually occupy a rendered text fragment, including wraps.
     const range = doc.createRange();
     range.selectNodeContents(node);
-    return [...range.getClientRects()].some(rect => point.x >= rect.left && point.x <= rect.right && point.y >= rect.top && point.y <= rect.bottom);
+    return [...range.getClientRects()].some(rect => point.x >= rect.left && point.x <= rect.right && point.y >= rect.top && point.y <= rect.bottom) ? node.parentElement : null;
   }
   function dragOwner(element) {
     if (editorOwner(element) && !element.closest('[data-cursor="drag"]')) return null;
@@ -127,7 +127,8 @@ export function createCursorIntents(doc = document) {
     const editor = editorOwner(element);
     if (editor) return { kind: 'text', owner: editor };
     if (authored === 'pointer' || typeof element.onclick === 'function') return { kind: 'button', owner: element };
-    if (explicit?.dataset.cursor === 'text' || authored === 'text' || textAt(element, point)) return { kind: 'text', owner: element };
+    const text = textAt(element, point);
+    if (explicit?.dataset.cursor === 'text' || authored === 'text' || text) return { kind: 'text', owner: text || element };
     return { kind: 'dot', owner: null };
   }
   return { resolve, dragOwner, source, refresh };

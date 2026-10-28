@@ -22,7 +22,11 @@ surface and a 25% smaller arrow. Pointer-down contracts ordinary pointers by
 12%. Homepage attraction shadow/hotspot remains a separate background layer
 beneath the lettering; one RAF owns both decorative layers.
 
-The text bar is 2×24px, radius 1px and 90% inversion. It has lower hover
+The text bar is 2px wide, radius 1px and 90% inversion. Its height is
+`max(24px, 1.1 × rendered font size)`, with no upper cap. The actual text node's
+parent supplies the font metrics, including mixed-size nested spans; editor
+fields use their own computed font. A selection press retains its starting bar
+height until release. It has lower hover
 priority than navigation, photo previews, actions and dragging, even when a
 link's nested text declares `cursor: text` or `data-cursor="text"`. Native caret
 hit testing plus text-fragment bounds distinguishes visible text from empty

@@ -1,5 +1,20 @@
 # Shared adaptive pointer — 2026-10-27
 
+## Type-aware bar height — 2026-10-28
+
+Text bars now use max(24px, 1.1 × rendered font size), without an upper cap.
+Width/radius/inversion remain 2px/1px/90%. Ordinary text takes its font from the
+actual text-node parent rather than a larger surrounding element; editor fields
+use their own font. Active text selection preserves its starting height.
+
+Passed 16 Pages Node checks, 22 live routes plus future fixture / eleven browser
+groups and nine homepage groups. Browser coverage verifies 10px text at 24px,
+72px text at 79.2px, a live class change to 112px text at 123.2px, a 12px span
+inside an 80px parent at 24px, and actual Gallery title metrics. Link priority,
+native editing/selection and existing interactions continue to pass.
+Evidence: `type-scale-site/`, `type-scale-home/`. Script revision:
+`20261028-type-scale`; styles retain `20261028-feather`.
+
 ## Low-priority text and editor bar — 2026-10-28
 
 Visible ordinary text and editable text fields use a thin inverted 2×24px bar

@@ -36,13 +36,15 @@ fs.mkdirSync(output, { recursive: true });
       const width = { dot: 13, text: 2, link: 34, button: 26, identity: 26, magnify: 34, drag: 34, dragging: 30 }[mode];
       const capsule = ['link', 'magnify', 'button', 'identity', 'drag'].includes(mode);
       return cursor && !cursor.hidden && cursor.dataset.mode === mode && Math.abs(parseFloat(cursor.style.width) - width) < .1
-        && (mode !== 'text' || cursor.style.height === '24px' && cursor.style.borderRadius === '1px' && +cursor.style.getPropertyValue('--cursor-fill') === .9)
+        && (mode !== 'text' || parseFloat(cursor.style.height) >= 23.9 && cursor.style.borderRadius === '1px' && +cursor.style.getPropertyValue('--cursor-fill') === .9)
         && (!capsule || cursor.style.borderRadius === '13px' && cursor.style.height === '26px'
           && +cursor.style.getPropertyValue('--cursor-fill') === .88);
     }, mode);
+    const waitTextHeight = height => page.waitForFunction(height => Math.abs(parseFloat(document.querySelector('.site-cursor').style.height) - height) < .1, height);
     const goto = async route => {
       await page.goto(origin + route, { waitUntil: 'load' });
-      await page.locator('.site-cursor').waitFor({ state: 'attached' });
+      try { await page.locator('.site-cursor').waitFor({ state: 'attached' }); }
+      catch (error) { console.error(JSON.stringify({ route, url: page.url(), errors })); throw error; }
     };
     const hoverText = async target => {
       await target.scrollIntoViewIfNeeded();
@@ -99,6 +101,7 @@ fs.mkdirSync(output, { recursive: true });
     for (const route of ['/gallery/analog-and-digital/', '/gallery/rhythms-of-chaos/']) {
       await goto(route);
       await hoverText(page.locator('h1')); await waitMode('text');
+      await waitTextHeight(await page.locator('h1').evaluate(e => Math.max(24, parseFloat(getComputedStyle(e).fontSize) * 1.1)));
       if (route.includes('analog')) await page.screenshot({ path: path.join(output, 'gallery-text-bar.png') });
       const photo = page.locator('.story-image-open').first();
       await photo.hover(); await waitMode('magnify');
@@ -281,7 +284,7 @@ fs.mkdirSync(output, { recursive: true });
     await context.route(futureURL, route => route.fulfill({ contentType: 'text/html', body: `<!doctype html><html><head>
       <link rel="stylesheet" href="/site-cursor.css?rev=20261028-feather">
       <style>body{margin:40px;background:#fff}button,a,#future-drag{display:block;width:220px;height:60px;margin:12px;padding:10px;box-sizing:border-box}#future-drag{cursor:grab;background:#ddd}#future-drag.held{cursor:grabbing!important}</style>
-      <script type="module" src="/site-cursor.mjs?rev=20261028-text"></script></head><body>
+      <script type="module" src="/site-cursor.mjs?rev=20261028-type-scale"></script></head><body>
       <button id="future-action"><span style="cursor:text">An ordinary future action</span></button><a id="future-link" href="/next/">A future destination</a>
       <a id="future-image" href="/new-image.webp">A future image, without a known class</a>
       <button id="future-css">A future CSS-defined preview</button><div id="future-drag" style="cursor:grab">A future custom draggable</div>
@@ -289,6 +292,9 @@ fs.mkdirSync(output, { recursive: true });
       <section style="padding:24px;width:380px;font:20px/1.6 sans-serif">
         <p><span id="future-words">Select these words.</span></p>
         <p style="width:150px"><span id="future-wrap">Wrapped ordinary text continues onto several lines.</span></p>
+        <p><span id="future-small" style="font-size:10px">Small type</span></p>
+        <p><span id="future-large" style="display:inline-block;font-size:72px;line-height:1">Large</span></p>
+        <p style="font-size:80px"><span id="future-nested-small" style="font-size:12px;pointer-events:none">Small inside large</span></p>
         <a href="/text-link/" style="cursor:text"><span id="future-link-label" data-cursor="text" style="cursor:text">Text-styled link</span></a>
         <input id="future-input" aria-label="Text entry" placeholder="An empty text field" style="display:block;width:260px;height:40px">
         <textarea id="future-textarea" aria-label="Multiline entry" style="width:260px;height:90px"></textarea>
@@ -325,9 +331,14 @@ fs.mkdirSync(output, { recursive: true });
     await page.mouse.up(); await waitMode('dot');
     await page.evaluate(() => getSelection().removeAllRanges());
     await hoverText(page.locator('#future-wrap')); await waitMode('text');
+    await page.locator('#future-small').hover(); await waitMode('text'); await waitTextHeight(24);
+    await page.locator('#future-large').hover(); await waitMode('text'); await waitTextHeight(79.2);
+    await page.evaluate(() => { const style=document.createElement('style');style.textContent='#future-large.enlarged{font-size:112px!important}';document.head.append(style);document.querySelector('#future-large').classList.add('enlarged'); });
+    await waitTextHeight(123.2);
+    await hoverText(page.locator('#future-nested-small')); await waitMode('text'); await waitTextHeight(24);
     await page.locator('#future-link-label').hover(); await waitMode('link');
     const entry = page.locator('#future-input');
-    await entry.hover(); await waitMode('text');
+    await entry.hover(); await waitMode('text'); await waitTextHeight(24);
     await entry.click(); await entry.fill('Native typing');
     await entry.press('Home'); await entry.press('Shift+End');
     await page.keyboard.type('Replaced natively');

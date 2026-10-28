@@ -1,6 +1,6 @@
 // Shared decorative pointer; native controls and dedicated pointer experiences
 // retain ownership. Never initialize in a preview iframe or preserved edition.
-import { createCursorIntents } from './site-cursor-intents.mjs?rev=20261028-text';
+import { createCursorIntents } from './site-cursor-intents.mjs?rev=20261028-type-scale';
 const dedicatedPointer = document.querySelector('script[src*="camera.mjs"], [data-page-cursor="native"]');
 if (!dedicatedPointer && window.top === window && !location.pathname.includes('/editions/') && !document.querySelector('.site-cursor')) {
   const homepage = Boolean(document.querySelector('.homepage'));
@@ -31,10 +31,12 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
   const capsule = { w: 34, h: 26, r: 13, fill: .88 };
   const actionCircle = { w: 26, h: 26, r: 13, fill: .88 };
   const textBar = { w: 2, h: 24, r: 1, fill: .9 };
+  const textShape = owner => ({ ...textBar, h: Math.max(textBar.h, (parseFloat(getComputedStyle(owner).fontSize) || 0) * 1.1) });
   let pointer = { x: 0, y: 0 }, current, velocity = {};
   let frame = 0, previousTime = 0, pressed = false, active = false;
   let dragCandidate = null, dragSession = null;
   let selectingText = false;
+  let selectionTextHeight = textBar.h;
   const allowed = () => fine.matches && !reduced.matches && !forced.matches && !document.hidden;
   const nativeAt = hit => root.classList.contains('sx-cursor') || intents.resolve(hit).kind === 'native';
 
@@ -43,6 +45,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     pressed = false;
     dragCandidate = dragSession = null;
     selectingText = false;
+    selectionTextHeight = textBar.h;
     cancelAnimationFrame(frame);
     frame = 0;
     previousTime = 0;
@@ -67,7 +70,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
       cursor.dataset.mode = 'dragging';
       delete cursor.dataset.identity;
     } else if (selectingText && pressed) {
-      Object.assign(next, textBar);
+      Object.assign(next, textBar, { h: selectionTextHeight });
       cursor.dataset.mode = 'text';
       delete cursor.dataset.identity;
     } else if (identity && !identity.closest('[inert]')) {
@@ -94,7 +97,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
       cursor.dataset.mode = 'button';
       delete cursor.dataset.identity;
     } else if (!transitioning && intent.kind === 'text') {
-      Object.assign(next, textBar);
+      Object.assign(next, textShape(intent.owner));
       cursor.dataset.mode = 'text';
       delete cursor.dataset.identity;
     } else {
@@ -199,7 +202,9 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     move(event);
     if (event.button === 0 && active) {
       pressed = true;
-      selectingText = intents.resolve(event.target, pointer).kind === 'text';
+      const intent = intents.resolve(event.target, pointer);
+      selectingText = intent.kind === 'text';
+      selectionTextHeight = selectingText ? textShape(intent.owner).h : textBar.h;
       dragCandidate = intents.dragOwner(event.target);
       // The browser owns range-thumb capture and value changes; observe the
       // press immediately without taking capture or synthesizing input events.

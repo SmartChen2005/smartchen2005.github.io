@@ -96,6 +96,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Scale text bars with rendered type
+
+- Text bars now use max(24px, 1.1 × actual rendered font size), with no maximum. Mixed-size text nodes and editor fields supply their own metrics; active selection keeps its starting height.
+- Verified all 16 Pages Node checks, 22 live routes plus future fixture / eleven browser groups, nine homepage groups, 10/72/112px type, nested mixed-size text and live size changes. Script revision: `20261028-type-scale`.
+
 ### 2026-10-28 — Add a low-priority text/editor cursor bar
 
 - Added a thin inverted 2×24px bar over rendered text, text-like inputs, textarea and contenteditable. Links, previews, buttons and drag intents retain their existing higher hover priority, including nested text-styled links.
