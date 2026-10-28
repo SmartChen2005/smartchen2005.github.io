@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Add a low-priority text/editor cursor bar
+
+- Added a thin inverted 2×24px bar over rendered text, text-like inputs, textarea and contenteditable. Links, previews, buttons and drag intents retain their existing higher hover priority, including nested text-styled links.
+- Use native caret hit testing plus text-fragment rectangles to exclude empty padding and support wrapped text. Keep a stable bar during native selection; preserve browser focus, caret, typing, input replacement and multiline editing. Native pickers, YouTube and immutable editions retain ownership.
+- Passed all 16 Pages Node checks, 22 live routes plus future fixture / eleven browser groups, nine homepage groups, frozen payload hashes and strict dist audit with zero findings. Scripts use `20261028-text`; styles remain `20261028-feather`.
+
 ### 2026-10-28 — Add the adaptive cursor as an archived object
 
 - Added FIG. 009 with a white six-form thumbnail, five actual Git milestones and immediate access to eight working interaction mechanisms on one screen. The demo reuses the current cursor's real geometry, inversion, springs, shadow and semantic intent handling.

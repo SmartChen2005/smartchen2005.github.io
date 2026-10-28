@@ -6,7 +6,8 @@ export function createCursorIntents(doc = document) {
   const mirror = doc.createElement('style');
   mirror.dataset.cursorIntentRules = '';
   const actionableInputs = 'input:is([type="button"],[type="submit"],[type="reset"],[type="checkbox"],[type="radio"])';
-  const native = 'textarea, select, input:not(:is([type="button"],[type="submit"],[type="reset"],[type="checkbox"],[type="radio"],[type="range"])), [contenteditable]:not([contenteditable="false"]), iframe, video[controls], audio[controls], [data-cursor-native]';
+  const native = 'select, iframe, video[controls], audio[controls], [data-cursor-native]';
+  const textInputTypes = new Set(['text', 'search', 'email', 'url', 'tel', 'password', 'number']);
   const slider = 'input[type="range"], [role="slider"]';
   const photo = 'a[data-preview], a[data-process-page], [data-lightbox], [data-zoom]';
   const action = `button, summary, [role="button"], [onclick], ${actionableInputs}`;
@@ -66,7 +67,25 @@ export function createCursorIntents(doc = document) {
     const value = element ? win.getComputedStyle(element).getPropertyValue(property).trim() : '';
     return value.includes('url(') ? 'native' : value.split(',').at(-1).trim();
   }
+  function editorOwner(element) {
+    const field = element?.closest?.('input, textarea');
+    if (field && (field.tagName === 'TEXTAREA' || textInputTypes.has(field.type))) return field;
+    const editable = element?.closest?.('[contenteditable]');
+    return editable?.isContentEditable ? editable : null;
+  }
+  function textAt(element, point) {
+    if (!point) return false;
+    const caret = doc.caretPositionFromPoint?.(point.x, point.y);
+    const node = caret?.offsetNode || doc.caretRangeFromPoint?.(point.x, point.y)?.startContainer;
+    if (node?.nodeType !== win.Node.TEXT_NODE || !node.textContent.trim() || !element.contains(node)) return false;
+    // Caret APIs can return the nearest line even over empty padding. Require
+    // the pointer to actually occupy a rendered text fragment, including wraps.
+    const range = doc.createRange();
+    range.selectNodeContents(node);
+    return [...range.getClientRects()].some(rect => point.x >= rect.left && point.x <= rect.right && point.y >= rect.top && point.y <= rect.bottom);
+  }
   function dragOwner(element) {
+    if (editorOwner(element) && !element.closest('[data-cursor="drag"]')) return null;
     for (let node = element; node instanceof win.Element; node = node.parentElement) {
       if (blocked(node) || node.matches('[data-cursor="native"], [data-cursor-native]')) return null;
       if (node.matches(slider)) return node;
@@ -79,10 +98,12 @@ export function createCursorIntents(doc = document) {
     }
     return null;
   }
-  function resolve(element) {
+  function resolve(element, point) {
     if (!(element instanceof win.Element)) return { kind: 'dot', owner: null };
     if (blocked(element)) return { kind: 'dot', owner: null };
     if (element.closest(native)) return { kind: 'native', owner: null };
+    const input = element.closest('input');
+    if (input && !textInputTypes.has(input.type) && input.type !== 'range' && !input.matches(actionableInputs)) return { kind: 'native', owner: input };
     const explicit = element.closest('[data-cursor]');
     if (explicit) {
       const kind = { zoom: 'magnify', action: 'button', link: 'link', drag: 'drag', native: 'native' }[explicit.dataset.cursor];
@@ -92,7 +113,7 @@ export function createCursorIntents(doc = document) {
     const range = element.closest(slider);
     if (range) return { kind: 'drag', owner: range };
     const authored = source(element);
-    if (/^(?:native|none|text|vertical-text|crosshair|not-allowed|wait|progress|[a-z-]*resize)$/.test(authored)) return { kind: 'native', owner: element };
+    if (/^(?:native|none|vertical-text|crosshair|not-allowed|wait|progress|[a-z-]*resize)$/.test(authored)) return { kind: 'native', owner: element };
     const image = element.closest(photo);
     const link = element.closest('a[href], area[href], [role="link"]');
     let imageURL = false;
@@ -102,7 +123,11 @@ export function createCursorIntents(doc = document) {
     if (drag) return { kind: 'drag', owner: drag };
     if (link) return { kind: 'link', owner: link };
     const control = element.closest(action);
-    if (control || authored === 'pointer' || typeof element.onclick === 'function') return { kind: 'button', owner: control || element };
+    if (control) return { kind: 'button', owner: control };
+    const editor = editorOwner(element);
+    if (editor) return { kind: 'text', owner: editor };
+    if (authored === 'pointer' || typeof element.onclick === 'function') return { kind: 'button', owner: element };
+    if (explicit?.dataset.cursor === 'text' || authored === 'text' || textAt(element, point)) return { kind: 'text', owner: element };
     return { kind: 'dot', owner: null };
   }
   return { resolve, dragOwner, source, refresh };

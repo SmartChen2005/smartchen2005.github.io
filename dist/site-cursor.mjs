@@ -1,6 +1,6 @@
 // Shared decorative pointer; native controls and dedicated pointer experiences
 // retain ownership. Never initialize in a preview iframe or preserved edition.
-import { createCursorIntents } from './site-cursor-intents.mjs?rev=20261028-circles';
+import { createCursorIntents } from './site-cursor-intents.mjs?rev=20261028-text';
 const dedicatedPointer = document.querySelector('script[src*="camera.mjs"], [data-page-cursor="native"]');
 if (!dedicatedPointer && window.top === window && !location.pathname.includes('/editions/') && !document.querySelector('.site-cursor')) {
   const homepage = Boolean(document.querySelector('.homepage'));
@@ -30,9 +30,11 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     magnetX: pointer.x, magnetY: pointer.y, magnetW: 13, magnetH: 13 });
   const capsule = { w: 34, h: 26, r: 13, fill: .88 };
   const actionCircle = { w: 26, h: 26, r: 13, fill: .88 };
+  const textBar = { w: 2, h: 24, r: 1, fill: .9 };
   let pointer = { x: 0, y: 0 }, current, velocity = {};
   let frame = 0, previousTime = 0, pressed = false, active = false;
   let dragCandidate = null, dragSession = null;
+  let selectingText = false;
   const allowed = () => fine.matches && !reduced.matches && !forced.matches && !document.hidden;
   const nativeAt = hit => root.classList.contains('sx-cursor') || intents.resolve(hit).kind === 'native';
 
@@ -40,6 +42,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     active = false;
     pressed = false;
     dragCandidate = dragSession = null;
+    selectingText = false;
     cancelAnimationFrame(frame);
     frame = 0;
     previousTime = 0;
@@ -57,11 +60,15 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     const transitioning = body.hasAttribute('data-game-transition') || body.hasAttribute('data-photo-transition');
     const hit = document.elementFromPoint(pointer.x, pointer.y);
     if (!dragSession && nativeAt(hit)) return null;
-    const intent = intents.resolve(hit);
+    const intent = intents.resolve(hit, pointer);
     const identity = homepage && !transitioning && !body.hasAttribute('data-motor-playing') && hit?.closest('.identity');
     if (dragSession?.owner.isConnected && pressed) {
       Object.assign(next, capsule, { w: 30, h: 24, r: 12, fill: .96, move: 1, grip: 1 });
       cursor.dataset.mode = 'dragging';
+      delete cursor.dataset.identity;
+    } else if (selectingText && pressed) {
+      Object.assign(next, textBar);
+      cursor.dataset.mode = 'text';
       delete cursor.dataset.identity;
     } else if (identity && !identity.closest('[inert]')) {
       const rect = identity.getBoundingClientRect();
@@ -86,11 +93,15 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
       Object.assign(next, actionCircle);
       cursor.dataset.mode = 'button';
       delete cursor.dataset.identity;
+    } else if (!transitioning && intent.kind === 'text') {
+      Object.assign(next, textBar);
+      cursor.dataset.mode = 'text';
+      delete cursor.dataset.identity;
     } else {
       cursor.dataset.mode = 'dot';
       delete cursor.dataset.identity;
     }
-    if (pressed && cursor.dataset.mode !== 'dragging') {
+    if (pressed && !['dragging', 'text'].includes(cursor.dataset.mode)) {
       const scale = .88;
       next.w *= scale;
       next.h *= scale;
@@ -188,6 +199,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     move(event);
     if (event.button === 0 && active) {
       pressed = true;
+      selectingText = intents.resolve(event.target, pointer).kind === 'text';
       dragCandidate = intents.dragOwner(event.target);
       // The browser owns range-thumb capture and value changes; observe the
       // press immediately without taking capture or synthesizing input events.
@@ -197,23 +209,23 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
       wake();
     }
   }, { passive: true });
-  document.addEventListener('pointerup', () => { pressed = false; dragCandidate = dragSession = null; wake(); }, { passive: true });
+  document.addEventListener('pointerup', () => { pressed = selectingText = false; dragCandidate = dragSession = null; wake(); }, { passive: true });
   document.addEventListener('gotpointercapture', event => {
     const owner = intents.dragOwner(event.target);
-    if (pressed && owner) { dragCandidate = owner; dragSession = { owner, pointerId: event.pointerId }; wake(); }
+    if (pressed && !selectingText && owner) { dragCandidate = owner; dragSession = { owner, pointerId: event.pointerId }; wake(); }
   });
   document.addEventListener('lostpointercapture', () => {
     if (dragSession?.nativeDrag) return;
-    pressed = false; dragCandidate = dragSession = null; wake();
+    pressed = selectingText = false; dragCandidate = dragSession = null; wake();
   });
   document.addEventListener('dragstart', event => {
     const owner = intents.dragOwner(event.target);
-    if (active && owner) { pressed = true; dragCandidate = owner; dragSession = { owner, pointerId: null, nativeDrag: true }; wake(); }
+    if (active && owner) { pressed = true; selectingText = false; dragCandidate = owner; dragSession = { owner, pointerId: null, nativeDrag: true }; wake(); }
   });
   document.addEventListener('dragover', event => {
     if (dragSession?.nativeDrag) { pointer = { x: event.clientX, y: event.clientY }; wake(); }
   });
-  document.addEventListener('dragend', () => { pressed = false; dragCandidate = dragSession = null; wake(); });
+  document.addEventListener('dragend', () => { pressed = selectingText = false; dragCandidate = dragSession = null; wake(); });
   document.addEventListener('pointercancel', () => { if (!dragSession?.nativeDrag) hide(); });
   root.addEventListener('pointerleave', () => { if (!dragSession) hide(); });
   document.addEventListener('keydown', event => { if (event.key === 'Tab' || event.key === 'Escape') hide(); });
@@ -234,7 +246,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
   new MutationObserver(wake).observe(document.body, { attributes: true, subtree: true, attributeFilter: [
     'data-world', 'data-motor-playing', 'data-game-transition', 'data-photo-transition', 'data-motor-fallback',
     'open', 'hidden', 'inert', 'data-hover', 'data-dragging', 'class',
-    'disabled', 'aria-disabled', 'data-cursor', 'draggable', 'type',
+    'disabled', 'aria-disabled', 'data-cursor', 'draggable', 'type', 'contenteditable', 'role',
   ] });
   new MutationObserver(() => { if (root.classList.contains('sx-cursor')) hide(); }).observe(root, { attributes: true, attributeFilter: ['class'] });
 }

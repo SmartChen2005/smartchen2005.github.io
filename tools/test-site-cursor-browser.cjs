@@ -33,15 +33,25 @@ fs.mkdirSync(output, { recursive: true });
     }));
     const waitMode = mode => page.waitForFunction(mode => {
       const cursor = document.querySelector('.site-cursor');
-      const width = { dot: 13, link: 34, button: 26, identity: 26, magnify: 34, drag: 34, dragging: 30 }[mode];
+      const width = { dot: 13, text: 2, link: 34, button: 26, identity: 26, magnify: 34, drag: 34, dragging: 30 }[mode];
       const capsule = ['link', 'magnify', 'button', 'identity', 'drag'].includes(mode);
       return cursor && !cursor.hidden && cursor.dataset.mode === mode && Math.abs(parseFloat(cursor.style.width) - width) < .1
+        && (mode !== 'text' || cursor.style.height === '24px' && cursor.style.borderRadius === '1px' && +cursor.style.getPropertyValue('--cursor-fill') === .9)
         && (!capsule || cursor.style.borderRadius === '13px' && cursor.style.height === '26px'
           && +cursor.style.getPropertyValue('--cursor-fill') === .88);
     }, mode);
     const goto = async route => {
       await page.goto(origin + route, { waitUntil: 'load' });
       await page.locator('.site-cursor').waitFor({ state: 'attached' });
+    };
+    const hoverText = async target => {
+      await target.scrollIntoViewIfNeeded();
+      const point = await target.evaluate(element => {
+        const range = document.createRange(); range.selectNodeContents(element);
+        const rect = [...range.getClientRects()].find(r => r.width > 0 && r.height > 0);
+        return { x: rect.left + Math.min(10, rect.width / 2), y: rect.top + rect.height / 2 };
+      });
+      await page.mouse.move(point.x, point.y);
     };
     const brightness = async (x, y) => {
       const buffer = await page.screenshot({ clip: { x: x - 1, y: y - 1, width: 3, height: 3 } });
@@ -88,6 +98,8 @@ fs.mkdirSync(output, { recursive: true });
     await page.locator('.media-link').first().hover(); await waitMode('link');
     for (const route of ['/gallery/analog-and-digital/', '/gallery/rhythms-of-chaos/']) {
       await goto(route);
+      await hoverText(page.locator('h1')); await waitMode('text');
+      if (route.includes('analog')) await page.screenshot({ path: path.join(output, 'gallery-text-bar.png') });
       const photo = page.locator('.story-image-open').first();
       await photo.hover(); await waitMode('magnify');
       assert.equal((await state()).radius, 13, 'Photo details use the navigation capsule geometry');
@@ -231,8 +243,10 @@ fs.mkdirSync(output, { recursive: true });
       input.id = 'qa-native-input'; input.style.cssText = 'position:fixed;left:10px;top:200px;width:150px;height:40px;z-index:20000';
       document.body.append(input);
     });
-    await page.locator('#qa-native-input').hover(); assert.equal((await state()).active, false);
+    await page.locator('#qa-native-input').hover(); await waitMode('text');
+    await page.locator('#qa-native-input').click();
     await page.locator('#qa-native-input').fill('Native editing still works');
+    assert.equal(await page.locator('#qa-native-input').inputValue(), 'Native editing still works');
     await page.mouse.move(8, 700); await waitMode('dot');
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.waitForFunction(() => !document.documentElement.classList.contains('has-site-cursor'));
@@ -267,11 +281,20 @@ fs.mkdirSync(output, { recursive: true });
     await context.route(futureURL, route => route.fulfill({ contentType: 'text/html', body: `<!doctype html><html><head>
       <link rel="stylesheet" href="/site-cursor.css?rev=20261028-feather">
       <style>body{margin:40px;background:#fff}button,a,#future-drag{display:block;width:220px;height:60px;margin:12px;padding:10px;box-sizing:border-box}#future-drag{cursor:grab;background:#ddd}#future-drag.held{cursor:grabbing!important}</style>
-      <script type="module" src="/site-cursor.mjs?rev=20261028-circles"></script></head><body>
-      <button id="future-action">An ordinary future action</button><a id="future-link" href="/next/">A future destination</a>
+      <script type="module" src="/site-cursor.mjs?rev=20261028-text"></script></head><body>
+      <button id="future-action"><span style="cursor:text">An ordinary future action</span></button><a id="future-link" href="/next/">A future destination</a>
       <a id="future-image" href="/new-image.webp">A future image, without a known class</a>
       <button id="future-css">A future CSS-defined preview</button><div id="future-drag" style="cursor:grab">A future custom draggable</div>
       <input id="future-range" type="range" min="0" max="100" value="40" style="cursor:ew-resize">
+      <section style="padding:24px;width:380px;font:20px/1.6 sans-serif">
+        <p><span id="future-words">Select these words.</span></p>
+        <p style="width:150px"><span id="future-wrap">Wrapped ordinary text continues onto several lines.</span></p>
+        <a href="/text-link/" style="cursor:text"><span id="future-link-label" data-cursor="text" style="cursor:text">Text-styled link</span></a>
+        <input id="future-input" aria-label="Text entry" placeholder="An empty text field" style="display:block;width:260px;height:40px">
+        <textarea id="future-textarea" aria-label="Multiline entry" style="width:260px;height:90px"></textarea>
+        <div id="future-editor" contenteditable="true" role="textbox" aria-label="Editable text">Edit this text.</div>
+        <select id="future-select" aria-label="Native choice"><option>A native choice</option></select>
+      </section>
       <script>const d=document.querySelector('#future-drag');d.addEventListener('pointerdown',e=>{d.setPointerCapture(e.pointerId);d.classList.add('held')});d.addEventListener('pointermove',e=>{if(d.classList.contains('held'))d.dataset.x=e.clientX});for(const type of ['pointerup','pointercancel','lostpointercapture'])d.addEventListener(type,()=>d.classList.remove('held'));</script>
       </body></html>` }));
     await goto('/__cursor-future-fixture/');
@@ -290,6 +313,39 @@ fs.mkdirSync(output, { recursive: true });
     await page.locator('#future-range').hover(); await waitMode('drag');
     await page.mouse.down(); await waitMode('dragging');
     await page.mouse.up(); await waitMode('drag');
+    await page.locator('#future-words').hover(); await waitMode('text');
+    const words = await page.locator('#future-words').boundingBox();
+    await page.mouse.move(words.x + 2, words.y + words.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(words.x + words.width - 2, words.y + words.height / 2, { steps: 6 });
+    await waitMode('text');
+    assert(await page.evaluate(() => getSelection().toString().length > 5), 'Native text selection still works');
+    await page.mouse.move(words.x + words.width + 20, words.y + words.height / 2);
+    await waitMode('text');
+    await page.mouse.up(); await waitMode('dot');
+    await page.evaluate(() => getSelection().removeAllRanges());
+    await hoverText(page.locator('#future-wrap')); await waitMode('text');
+    await page.locator('#future-link-label').hover(); await waitMode('link');
+    const entry = page.locator('#future-input');
+    await entry.hover(); await waitMode('text');
+    await entry.click(); await entry.fill('Native typing');
+    await entry.press('Home'); await entry.press('Shift+End');
+    await page.keyboard.type('Replaced natively');
+    assert.equal(await entry.inputValue(), 'Replaced natively', 'Input focus, selection and replacement stay native');
+    await page.screenshot({ path: path.join(output, 'input-text-bar.png') });
+    await entry.evaluate(e => { e.type = 'date'; });
+    await page.waitForFunction(() => !document.documentElement.classList.contains('has-site-cursor'));
+    await entry.evaluate(e => { e.type = 'text'; });
+    await entry.hover(); await waitMode('text');
+    await page.locator('#future-textarea').hover(); await waitMode('text');
+    await page.locator('#future-textarea').fill('Line one\nLine two');
+    assert.equal(await page.locator('#future-textarea').inputValue(), 'Line one\nLine two');
+    await page.locator('#future-editor').hover(); await waitMode('text');
+    await page.locator('#future-editor').fill('Edited content');
+    assert.equal(await page.locator('#future-editor').textContent(), 'Edited content');
+    await page.locator('#future-select').hover();
+    assert.equal((await state()).active, false, 'Native select retains ownership');
+    checks.push('Visible/wrapped text and editors use a text bar; links/buttons outrank text; real selection, input replacement, multiline/contenteditable editing and native pickers work.');
     await page.locator('#future-drag').hover(); await waitMode('drag');
     await page.mouse.down(); await waitMode('dragging');
     await page.mouse.move(500, 500); await waitMode('dragging');

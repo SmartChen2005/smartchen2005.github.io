@@ -1,5 +1,28 @@
 # Shared adaptive pointer — 2026-10-27
 
+## Low-priority text and editor bar — 2026-10-28
+
+Visible ordinary text and editable text fields use a thin inverted 2×24px bar
+with 1px radius / 90% fill. Navigation, previews, action circles and draggable
+states retain their higher hover priority. A link with nested `cursor: text`
+and `data-cursor="text"` still receives its arrow. Plain-text hit testing checks
+actual rendered fragments after native caret hit testing, so wrapped lines work
+without turning nearby empty layout space into text targets.
+
+The decorative bar preserves native input focus/caret, keyboard selection and
+replacement, multiline/contenteditable editing and actual document selection.
+It stays stable during a selection press into empty space; release restores
+hover intent. Select/date and other browser-owned pickers remain native, as do
+the accepted YouTube/iframe exception and dedicated/frozen experiences.
+
+Passed all 16 Pages Node checks, 22 live routes plus an unknown future fixture /
+eleven browser groups, nine homepage groups and strict dist audit with zero
+findings. Browser cases include actual Gallery titles, wrapped text, native
+drag-selection, input replacement, textarea/contenteditable edits, text-to-date
+type changes and link/button-over-text priority. Frozen payloads are intact.
+Evidence: `text-site/`, `text-home/`, `text-audit.json`. Script revision is
+`20261028-text`; stylesheet revision remains `20261028-feather`.
+
 ## Smooth radial shadow tail — 2026-10-28
 
 The homepage gray shadow no longer clips at the measured interaction rectangle.
