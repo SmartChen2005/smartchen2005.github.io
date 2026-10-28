@@ -96,6 +96,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Widen and feather the homepage shadow
+
+- Widened the identity shadow's elliptical footprint and softened its perimeter with 6px blur and 20px vertical feathering. Kept the 15% gray weight, moving hotspot and native interaction region.
+- Updated shared asset revisions and design context. Site validation, all Pages checks, existing shadow/hotspot pixel assertions, 22-route/eight-group browser coverage and nine homepage groups passed; visual evidence is in `wide-shadow-site/` and `wide-shadow-home/` in the task visualization directory.
+
 ### 2026-10-28 — Match photo capsules and restore homepage inversion
 
 - Corrected photo detail feedback to use the exact navigation capsule (34×26px, 13px radius, 88% fill), replacing only its arrow with a compact magnifier. Both states share one geometry definition and press feedback.

@@ -23,6 +23,6 @@ for (const relative of files) {
 }
 assert(hasDedicatedPointer('dist/future/index.html', '<html data-page-cursor="native">'));
 assert.equal((siteCursorAssets('../').match(/site-cursor\./g) || []).length, 2);
-assert(fs.readFileSync('dist/home-cursor.mjs', 'utf8').includes("import './site-cursor.mjs?rev=20261028-shadow'"), 'Homepage must share the canonical controller');
-assert(fs.readFileSync('dist/home-cursor.css', 'utf8').includes("@import url('site-cursor.css?rev=20261028-shadow')"), 'Homepage must share canonical styles');
+assert(fs.readFileSync('dist/home-cursor.mjs', 'utf8').includes("import './site-cursor.mjs?rev=20261028-wide-shadow'"), 'Homepage must share the canonical controller');
+assert(fs.readFileSync('dist/home-cursor.css', 'utf8').includes("@import url('site-cursor.css?rev=20261028-wide-shadow')"), 'Homepage must share canonical styles');
 console.log(`Passed: shared pointer on ${shared} live pages; ${excluded} dedicated/frozen pages excluded; native opt-out and all dependencies resolve.`);

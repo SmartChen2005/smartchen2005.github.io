@@ -1,5 +1,19 @@
 # Shared adaptive pointer — 2026-10-27
 
+## Wider, softer identity shadow — 2026-10-28
+
+At the user's request, widened the shadow with an explicit 70%/65% ellipse and
+an 8%-to-90% fade. Added 6px blur and 20px vertical feathering to the shadow
+layer only. Gray weight remains 15%; the moving hotspot, lettering, hit regions
+and inverted/photo capsules retain their existing behavior.
+
+Passed site validation and all 16 Pages Node checks, the existing eight browser
+groups across 22 routes (including visible shadow/hotspot and inverted-text
+pixel assertions), nine homepage groups and strict dist audit (zero findings).
+Desktop/narrow screenshots were inspected. Evidence: `wide-shadow-site/`,
+`wide-shadow-home/` and `wide-shadow-audit.json` in the task visualization
+directory. Shared asset revision: `20261028-wide-shadow`.
+
 ## Shared capsules, homepage inversion and visible shadow — 2026-10-28
 
 The user clarified that photo details should use the **same filled capsule as
