@@ -59,6 +59,32 @@
   opacity: var(--cursor-magnify, 0);
   transform: scale(var(--magnify-scale, 1));
 }
+.site-cursor-tap, .site-cursor-grab, .site-cursor-grabbing {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: calc(50% - 9px);
+  top: calc(50% - 9px);
+  color: #000;
+  transform: scale(var(--magnify-scale, 1));
+}
+.site-cursor-tap { opacity: var(--cursor-tap, 0); }
+.site-cursor-grab { opacity: var(--cursor-grab, 0); }
+.site-cursor-grabbing { opacity: var(--cursor-grabbing, 0); }
+.site-cursor-identity-hint {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  z-index: 10000;
+  color: #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+}
+.site-cursor-identity-hint[hidden] { display: none; }
+.site-cursor-identity-hint .site-cursor-tap { color: inherit; opacity: 1; transform: none; }
+.home-cursor[data-mode='identity'] .site-cursor-tap { opacity: 0; }
 /* Only identity light/shadow uses normal compositing, beneath the lettering.
    Free dots and contact links share the same inversion as every other page. */
 .home-cursor[data-mode='identity'] { z-index: 2; color: var(--ink); mix-blend-mode: normal; }
@@ -77,9 +103,9 @@ body[data-world='cars']:not([data-motor-fallback]) .home-cursor[data-mode='ident
   html.has-home-cursor .identity-photo::after { opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce), (forced-colors: active), (hover: none), (pointer: coarse) {
-  .site-cursor { display: none; }
+  .site-cursor, .site-cursor-identity-hint { display: none; }
 }
 @media print {
-  .site-cursor { display: none; }
+  .site-cursor, .site-cursor-identity-hint { display: none; }
   html.has-site-cursor, html.has-site-cursor * { cursor: auto !important; }
 }

@@ -96,6 +96,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Make cursor intents global and add action/drag gestures
+
+- Replaced Gallery-specific photo matching with one shared semantic/CSS intent resolver. Projects image previews, document sheets, future image links, native actions and dynamically inserted controls use the same capability rules. The contract is `tools/CURSOR-CONTRACT.md`.
+- Added pointing-finger action capsules and homepage tap hints. Existing grab/grabbing styles now produce open/closed-hand capsules, observing actual capture and native drag lifecycle without changing component behavior. Device movement, out-of-bounds dragging, release/cancel recovery and 404 grabs are exercised.
+- Passed all 16 Pages Node checks, 22 live routes plus an unknown future-route fixture / ten browser groups, nine homepage groups, pixel contrast checks, immutable hashes and strict dist audit. Evidence and reproduction are in `tools/SITE-CURSOR-QA.md`; shared revision is `20261028-intents`.
+
 ### 2026-10-28 — Widen and feather the homepage shadow
 
 - Widened the identity shadow's elliptical footprint and softened its perimeter with 6px blur and 20px vertical feathering. Kept the 15% gray weight, moving hotspot and native interaction region.

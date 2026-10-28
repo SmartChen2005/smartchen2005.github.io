@@ -1,5 +1,40 @@
 # Shared adaptive pointer — 2026-10-27
 
+## Global semantic actions and two-state dragging — 2026-10-28
+
+The user clarified that the cursor is global, including Projects and future
+pages. The shared resolver now uses native control semantics, image URLs,
+preview attributes and authored CSS cursor declarations, with no Gallery/route
+branches. CSS declarations are mirrored into a private property to preserve
+their cascade while the OS cursor is suppressed. `tools/CURSOR-CONTRACT.md`
+documents the automatic signals, explicit API and native ownership rules.
+
+Action controls now use a pointing-finger capsule. Homepage identities add the
+accepted small tap hint above their existing hotspot. Draggable surfaces use
+an open-hand capsule; actual capture/grabbing changes it to a closed-hand,
+slightly tighter capsule. The component retains all movement/capture/event
+ownership. The cursor releases on up, cancellation, capture loss, blur and page
+lifecycle. Hover/disabled/CSS changes update without a page-specific reinstall.
+
+Verification: all 16 Pages Node checks passed; full-site Chrome QA passes
+**22 live routes plus an unknown future route / ten browser groups**; homepage
+QA passes all nine groups, including single/idle RAF checks. Existing actual
+pixel checks still prove gray-shadow/hotspot visibility and inverted Résumé
+glyphs. Added actual Battlefront and Music Station preview openings, live
+Music device displacement, open/closed hand state, continued capture outside
+the device region, cancellation recovery and native 404 object grabs.
+
+The future fixture has no known page/class selectors and tests semantic links,
+image URLs, actions, late-created controls, live/important CSS cursor changes,
+inline grab styles, disabled states, actual capture-based dragging and explicit
+native opt-out. No unexpected errors; existing Chrome transition cancellations
+remain separately recorded. Strict dist audit has zero findings. Camera and
+all 78 immutable hashes remain preserved.
+
+Current task-local evidence: `intent-site/`, `intent-home/`, `intent-audit.json`,
+including open/closed-hand, modal, narrow and homepage screenshots. Shared asset
+revision: `20261028-intents`. Earlier sections record superseded iterations.
+
 ## Wider, softer identity shadow — 2026-10-28
 
 At the user's request, widened the shadow with an explicit 70%/65% ellipse and

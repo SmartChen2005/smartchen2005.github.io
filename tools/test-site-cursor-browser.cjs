@@ -33,8 +33,8 @@ fs.mkdirSync(output, { recursive: true });
     }));
     const waitMode = mode => page.waitForFunction(mode => {
       const cursor = document.querySelector('.site-cursor');
-      const width = { dot: 13, link: 34, button: 22, magnify: 34 }[mode];
-      const capsule = mode === 'link' || mode === 'magnify';
+      const width = { dot: 13, link: 34, button: 34, magnify: 34, drag: 34, dragging: 30 }[mode];
+      const capsule = ['link', 'magnify', 'button', 'drag'].includes(mode);
       return cursor && !cursor.hidden && cursor.dataset.mode === mode && Math.abs(parseFloat(cursor.style.width) - width) < .1
         && (!capsule || cursor.style.borderRadius === '13px' && cursor.style.height === '26px'
           && +cursor.style.getPropertyValue('--cursor-fill') === .88);
@@ -107,6 +107,8 @@ fs.mkdirSync(output, { recursive: true });
     const paper = await brightness(sampleX, sampleY);
     await page.locator('.identity-name').hover();
     await page.waitForFunction(() => document.querySelector('.site-cursor').style.getPropertyValue('--cursor-glow') === '1');
+    assert.equal(await page.locator('.site-cursor-identity-hint').isVisible(), true, 'Identity attraction includes the accepted click hint');
+    await page.locator('.site-cursor-identity-hint').evaluate(e => { e.style.visibility = 'hidden'; });
     const shadow = await brightness(sampleX, sampleY);
     assert(shadow < paper - 10, `The gray shadow is actually visible (${paper} -> ${shadow})`);
     await page.mouse.move(sampleX, sampleY); await page.waitForTimeout(80);
@@ -115,6 +117,7 @@ fs.mkdirSync(output, { recursive: true });
     await page.locator('.site-cursor-light').evaluate(e => { e.style.visibility = ''; });
     const lit = await brightness(sampleX, sampleY);
     assert(lit > unlit + 15, `The pointer hotspot is visible above the gray shadow (${unlit} -> ${lit})`);
+    await page.locator('.site-cursor-identity-hint').evaluate(e => { e.style.visibility = ''; });
     assert.deepEqual(await page.locator('.sentence').boundingBox(), sentence);
     await page.screenshot({ path: path.join(output, 'home-shadow-hotspot.png') });
 
@@ -160,8 +163,23 @@ fs.mkdirSync(output, { recursive: true });
     await goto('/projects/world-sensing-music-station/');
     await page.locator('a[href="#playground"]').last().click();
     await page.waitForFunction(() => !document.querySelector('#world-control').disabled);
-    await page.locator('#world-control').hover();
-    assert.equal((await state()).active, false, 'Music dragging retains grab/grabbing');
+    await page.locator('#world-control').hover(); await waitMode('drag');
+    await page.screenshot({ path: path.join(output, 'drag-open-hand.png') });
+    const world = await page.locator('#world-control').boundingBox();
+    const distanceBefore = await page.locator('#distance-input').inputValue();
+    await page.mouse.down();
+    await page.mouse.move(world.x + world.width / 2 + 60, world.y + world.height / 2 + 55, { steps: 5 });
+    await waitMode('dragging');
+    assert.notEqual(await page.locator('#distance-input').inputValue(), distanceBefore, 'Actual device position changes during drag');
+    await page.screenshot({ path: path.join(output, 'drag-closed-hand.png') });
+    await page.mouse.move(20, 130); await waitMode('dragging');
+    await page.mouse.up();
+    await page.locator('#world-control').hover(); await waitMode('drag');
+    await page.mouse.down(); await waitMode('dragging');
+    await page.locator('#world-control').dispatchEvent('pointercancel', { pointerId: 1, pointerType: 'mouse', bubbles: true });
+    assert.equal((await state()).active, false, 'Cancelled grabs release custom pointer state');
+    await page.mouse.up();
+    await page.locator('#world-control').hover(); await waitMode('drag');
     await page.locator('input[type="range"]').first().hover();
     assert.equal((await state()).active, false, 'Native range interaction is preserved');
     await page.mouse.move(8, 700); await waitMode('dot');
@@ -181,7 +199,62 @@ fs.mkdirSync(output, { recursive: true });
     await page.mouse.move(9, 700); assert.equal((await state()).active, false);
     await page.emulateMedia({ forcedColors: 'none' });
     await page.mouse.move(10, 700); await waitMode('dot');
-    checks.push('Drag surfaces, range and text inputs remain native; dynamic reduced-motion/forced-colors preferences work.');
+    checks.push('Music device drag has open/closed hand capsules, real movement, capture outside its bounds and cancellation recovery; editing/preferences remain native.');
+
+    await goto('/projects/multiverse-all-star-battlefront/');
+    await page.locator('[data-preview]').first().hover(); await waitMode('magnify');
+    await page.locator('[data-preview]').first().click();
+    await page.locator('.image-viewer:modal .viewer-close').hover(); await waitMode('button');
+    await page.keyboard.press('Escape');
+    await goto('/projects/world-sensing-music-station/');
+    await page.locator('[data-process-page]').first().hover(); await waitMode('magnify');
+    await page.locator('[data-process-page]').first().click();
+    await page.locator('.process-viewer:modal #viewer-close').hover(); await waitMode('button');
+    await page.keyboard.press('Escape');
+    await goto('/404.html');
+    await page.waitForFunction(() => window.maintenanceScene);
+    const object = await page.evaluate(() => maintenanceScene.project(maintenanceScene.snapshot()[0].id));
+    await page.mouse.move(object.x, object.y); await waitMode('drag');
+    await page.mouse.down(); await waitMode('dragging');
+    await page.mouse.move(object.x + 24, object.y + 12, { steps: 5 });
+    await page.mouse.up();
+    assert.notEqual((await state()).mode, 'native');
+    checks.push('Project image previews, document-sheet previews and existing 404 object grabs share global intents.');
+
+    // A route and class names unknown to the controller exercise future reuse.
+    const futureURL = origin + '/__cursor-future-fixture/';
+    await context.route(futureURL, route => route.fulfill({ contentType: 'text/html', body: `<!doctype html><html><head>
+      <link rel="stylesheet" href="/site-cursor.css?rev=20261028-intents">
+      <style>body{margin:40px;background:#fff}button,a,#future-drag{display:block;width:220px;height:60px;margin:12px;padding:10px;box-sizing:border-box}#future-drag{cursor:grab;background:#ddd}#future-drag.held{cursor:grabbing!important}</style>
+      <script type="module" src="/site-cursor.mjs?rev=20261028-intents"></script></head><body>
+      <button id="future-action">An ordinary future action</button><a id="future-link" href="/next/">A future destination</a>
+      <a id="future-image" href="/new-image.webp">A future image, without a known class</a>
+      <button id="future-css">A future CSS-defined preview</button><div id="future-drag" style="cursor:grab">A future custom draggable</div>
+      <script>const d=document.querySelector('#future-drag');d.addEventListener('pointerdown',e=>{d.setPointerCapture(e.pointerId);d.classList.add('held')});d.addEventListener('pointermove',e=>{if(d.classList.contains('held'))d.dataset.x=e.clientX});for(const type of ['pointerup','pointercancel','lostpointercapture'])d.addEventListener(type,()=>d.classList.remove('held'));</script>
+      </body></html>` }));
+    await goto('/__cursor-future-fixture/');
+    await page.locator('#future-action').hover(); await waitMode('button');
+    assert(await page.locator('.site-cursor').evaluate(e => +e.style.getPropertyValue('--cursor-tap') > .99));
+    await page.locator('#future-action').evaluate(e => { e.disabled = true; }); await waitMode('dot');
+    await page.locator('#future-action').evaluate(e => { e.disabled = false; }); await waitMode('button');
+    await page.locator('#future-link').hover(); await waitMode('link');
+    await page.locator('#future-image').hover(); await waitMode('magnify');
+    await page.evaluate(() => { const button=document.createElement('button');button.id='future-late';button.textContent='Created after initialization';document.body.append(button); });
+    await page.locator('#future-late').hover(); await waitMode('button');
+    await page.evaluate(() => { const style=document.createElement('style');style.textContent='#future-css{cursor:zoom-in!important}';document.head.append(style); });
+    await page.locator('#future-css').hover(); await waitMode('magnify');
+    await page.evaluate(() => { const style=document.createElement('style');style.textContent='#future-css{cursor:col-resize!important}';document.head.append(style); });
+    await page.waitForFunction(() => !document.documentElement.classList.contains('has-site-cursor'));
+    await page.locator('#future-drag').hover(); await waitMode('drag');
+    await page.mouse.down(); await waitMode('dragging');
+    await page.mouse.move(500, 500); await waitMode('dragging');
+    assert.equal(await page.locator('#future-drag').getAttribute('data-x'), '500');
+    await page.mouse.up();
+    await page.locator('#future-drag').hover(); await waitMode('drag');
+    await page.locator('#future-drag').evaluate(e => { e.dataset.cursor = 'native'; });
+    await page.locator('#future-drag').hover();
+    assert.equal((await state()).active, false, 'Future controls can explicitly keep native ownership');
+    checks.push('An unknown future route supports semantic actions/navigation/images, live CSS intents, disabled controls and capture-based dragging without controller edits.');
 
     const cameraRoute = '/projects/polaroid-of-yesterday/game-design-document/';
     await page.goto(origin + cameraRoute);
