@@ -1,0 +1,64 @@
+{
+  "edition": "2026-10-28-cursor-text",
+  "sourceCommit": "24b4a5846e7016fbe8cc6ff4320b615612498a4b",
+  "preserved": "2026-10-28",
+  "description": "Type-aware cursor edition: scalable text bars, two-dimensional object dragging and a one-axis range sharing the same pointer; revised six-form plate. All previous editions remain intact.",
+  "studies": [
+    {
+      "slug": "adaptive-cursor",
+      "kind": "cursor",
+      "title": "Adaptive Cursor"
+    }
+  ],
+  "files": [
+    {
+      "path": "runtime/site-cursor.css",
+      "sha256": "ea5f9319e85eb480104d9c1564154a6bef13946f01d9168ac066bc43080c0cbc",
+      "source": {
+        "path": "dist/site-cursor.css",
+        "sha256": "ea5f9319e85eb480104d9c1564154a6bef13946f01d9168ac066bc43080c0cbc"
+      }
+    },
+    {
+      "path": "runtime/site-cursor-intents.mjs",
+      "sha256": "b4e857bb7200d420a70810d5277e27c85554ad730787e38fbf0376fd78e9a661",
+      "source": {
+        "path": "dist/site-cursor-intents.mjs",
+        "sha256": "b4e857bb7200d420a70810d5277e27c85554ad730787e38fbf0376fd78e9a661"
+      }
+    },
+    {
+      "path": "runtime/projects/polaroid-of-yesterday/photography/assets/the-camera-remembers.webp",
+      "sha256": "4cc73930d50b0fe1fbd12600febd9a2a3474b18f8fb97c93067a149031f0aaa5",
+      "source": {
+        "path": "dist/projects/polaroid-of-yesterday/photography/assets/the-camera-remembers.webp",
+        "sha256": "4cc73930d50b0fe1fbd12600febd9a2a3474b18f8fb97c93067a149031f0aaa5"
+      }
+    },
+    {
+      "path": "runtime/site-cursor.mjs",
+      "sha256": "3fe6146d3c86d302b9e19e66da30b739f7fd972345fc5922844e501fed1407bd",
+      "source": {
+        "path": "dist/site-cursor.mjs",
+        "sha256": "a12fbb3511b896a43f38f218023e0317c0b7230c72a597dcbf950c9b1a3fb8e6",
+        "adaptation": "Opt in only inside this standalone cursor study, including its word-attraction specimen. Native geometry, intent resolution, springs, inversion, capture tracking and preference fallbacks retained."
+      }
+    },
+    {
+      "path": "cursor-lab.css",
+      "sha256": "d34e7642ef381093556e8e109398581a01454c57b7f773137667170a35228a75"
+    },
+    {
+      "path": "cursor-lab.mjs",
+      "sha256": "21d9dae3619daf6e52c4914bb22bc9950143022f04494d50682cfb861e4091c1"
+    },
+    {
+      "path": "adaptive-cursor/index.html",
+      "sha256": "fd5a285f0e0a563c302bf8134d4527a56a6de98132e3520b3e69bd9fb2b51f7c"
+    },
+    {
+      "path": "cursor-plate.html",
+      "sha256": "0f2f216470ad7a30c5c7a5e9e0c36d1e5589f38289260052474d0f32df731bfc"
+    }
+  ]
+}

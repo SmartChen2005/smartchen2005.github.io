@@ -96,6 +96,13 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Refresh the Adaptive Cursor exhibit
+
+- FIG. 009 now uses `2026-10-28-cursor-text`, pinned to verified type-scaling source `24b4a58`, while every earlier edition remains immutable. The new thumbnail puts dot/action circle/text on top and the three link/zoom/drag capsules below.
+- Drag now moves freely on X/Y with four-direction keys and Home-to-center. Range retains one-axis native adjustment; both share identical hover/held cursor forms. The Text field uses the actual font-aware bar with native editing.
+- Regenerate or verify with `node tools/freeze-figures-edition.mjs --cursor-text`; `node tools/test-cursor-lab-browser.cjs --write-thumbnail` captures the actual plate. Updated catalogue revisions, source records and generated metadata.
+- Passed all 16 Pages Node checks, 94 hashes across six editions / 26 source dates, six exhibit browser groups (actual iframe, desktop, narrow, reduced motion and focus teardown), global pointer/home regressions and strict dist audit with zero findings.
+
 ### 2026-10-28 — Scale text bars with rendered type
 
 - Text bars now use max(24px, 1.1 × actual rendered font size), with no maximum. Mixed-size text nodes and editor fields supply their own metrics; active selection keeps its starting height.

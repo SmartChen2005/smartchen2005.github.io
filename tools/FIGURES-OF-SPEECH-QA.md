@@ -1,5 +1,36 @@
 # Figures of Speech — 2026-10-27
 
+## 2026-10-28 — Type-aware cursor and two-dimensional drag
+
+- FIG. 009 now opens `2026-10-28-cursor-text`, eight payloads pinned to the
+  verified live font-scaling source `24b4a58`. The first cursor edition and all
+  other payloads remain unchanged. The chronology has 26 verified Git records.
+- The new 960×560 plate has dot / action circle / text bar on the upper row and
+  link / magnifier / shared drag capsules below. The separate held-drag sample
+  is removed from the plate. `adaptive-cursor-type-forms.jpg` is a real JPEG
+  capture of that exact preserved markup; the old thumbnail is retained.
+- Drag is a bounded two-dimensional surface with X/Y output, pointer capture,
+  arrow-key movement in four directions and Home-to-center. Range remains a
+  native one-dimensional slider. Their settled hover and held cursor geometry,
+  inversion, glyph opacity and glyph scale are identical in browser assertions.
+- Text uses the same type-aware bar as the live site. The standalone 28px field
+  gives a 30.8px bar and retains it during a press; narrow fields preserve the
+  24px minimum. Native typing, selection/replacement and range keyboard behavior
+  remain functional in the actual archive iframe.
+- Passed all 16 Pages Node checks, all 94 immutable hashes across six editions,
+  both cursor edition verifiers and strict dist audit with zero findings. The
+  six-group browser regression opens the real catalogue modal, exercises all
+  eight mechanisms, verifies X/Y movement and shared Drag/Range shapes, tests
+  child Escape teardown/focus restoration, narrow 3:5 layout and reduced motion,
+  and checks the independent desktop page. The live pointer also passed 22 routes
+  plus future fixture / eleven groups and all nine homepage groups.
+- Reproduce with a local `dist/` server and
+  `node tools/test-cursor-lab-browser.cjs`; add `--write-thumbnail` only when
+  regenerating the current catalogue asset. Verify the frozen copy with
+  `node tools/freeze-figures-edition.mjs --cursor-text`. Task-local evidence:
+  `cursor-type-exhibit/`, `type-scale-site/`, `type-scale-home/`,
+  `cursor-type-audit.json` in the conversation visualization directory.
+
 ## 2026-10-28 — Adaptive Cursor object
 
 - Added FIG. 009 and its 960×560 white six-form plate, captured from the preserved controller's exact cursor markup/styles at four times their real dimensions. The preserved `2026-10-28-cursor` edition has eight payloads pinned to `bb2bac9`; every earlier payload remains intact. Five actual 2026-10-27/28 Git records extend the chronology to 24 milestones.

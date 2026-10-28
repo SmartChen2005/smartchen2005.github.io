@@ -22,6 +22,7 @@ assert.equal(manifests.find(item=>item.edition==='2026-10-27-sx70').sourceCommit
 assert.equal(manifests.find(item=>item.edition==='2026-10-27-gallery').sourceCommit,'2d4eba468c170080f4c85943b3e862853c95f9ff');
 assert.equal(manifests.find(item=>item.edition==='2026-10-27-gallery-small').sourceCommit,'b63438bbc2230cf68135f58109e9a2ce840b1ace');
 assert.equal(manifests.find(item=>item.edition==='2026-10-28-cursor').sourceCommit,'bb2bac9272ba2244a3e74a1edbd6c0907f2de184');
+assert.equal(manifests.find(item=>item.edition==='2026-10-28-cursor-text').sourceCommit,'24b4a5846e7016fbe8cc6ff4320b615612498a4b');
 function editionFiles(directory,prefix=''){
   return fs.readdirSync(directory,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?editionFiles(path.join(directory,entry.name),`${prefix}${entry.name}/`):[`${prefix}${entry.name}`]);
 }
