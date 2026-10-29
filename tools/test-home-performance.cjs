@@ -52,15 +52,15 @@ const server = http.createServer((req, res) => {
       }));
       assert(initial.images.every(i => i.loaded));
       assert(initial.images.slice(0, 4).every(i => i.src.endsWith('.webp')));
-      assert(initial.images.at(-1).src.endsWith('/assets/selfportrait-light.webp'), 'Portrait must load its lightly compressed full-resolution version');
-      assert.equal(await page.locator('.portrait-full img').evaluate(i => i.naturalWidth), 6000);
+      assert(new URL(initial.images.at(-1).src).pathname.endsWith('/assets/selfportrait-light.webp'), 'Portrait must load its lightly compressed version');
+      assert.deepEqual(await page.locator('.portrait-full img').evaluate(i => [i.naturalWidth, i.naturalHeight]), [3000, 2000]);
       assert(initial.resources.some(r => /three\.module/.test(r.url)), 'Three.js must load on arrival');
       assert(initial.resources.some(r => /home-motorsport/.test(r.url)), 'Car scene must load on arrival');
       assert(!initial.resources.some(r => /photography-preview\/.*\.jpg$/.test(r.url)), 'Film originals must not be downloaded');
       assert(!initial.overflow);
       const imageBytes = initial.resources.filter(r => /photography-preview\/.*\.webp$/.test(r.url)).reduce((n,r) => n+r.bytes,0);
       assert(imageBytes < 1_100_000);
-      results.push({ viewport: name, filmImageBytes: imageBytes, totalImageBytes: imageBytes + initial.resources.filter(r => /\/assets\/selfportrait-light\.webp$/.test(r.url)).reduce((n,r) => n+r.bytes,0), totalBytes: initial.resources.reduce((n,r) => n+r.bytes,0), images: initial.images });
+      results.push({ viewport: name, filmImageBytes: imageBytes, totalImageBytes: imageBytes + initial.resources.filter(r => /\/assets\/selfportrait-light\.webp(?:\?|$)/.test(r.url)).reduce((n,r) => n+r.bytes,0), totalBytes: initial.resources.reduce((n,r) => n+r.bytes,0), images: initial.images });
       await page.screenshot({ path: path.join(output, `home-${name}.png`) });
       if (touch) await page.goto(origin + '/?study=photo');
       else await page.hover('.identity-photo');
@@ -77,9 +77,37 @@ const server = http.createServer((req, res) => {
       }
       await context.close();
     }
+    const phone = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+    await phone.route('**/*', route => route.request().url().startsWith(origin) ? route.continue() : route.abort());
+    for (const slug of ['', 'polaroid-of-yesterday/', 'world-sensing-music-station/', 'multiverse-all-star-battlefront/', 'vr-for-skill-learning/']) {
+      const page = await phone.newPage();
+      await page.goto(origin + '/projects/' + slug, { waitUntil: 'domcontentloaded' });
+      await page.evaluate(() => document.fonts.ready);
+      if (slug === 'world-sensing-music-station/') {
+        // Inspect arrows in both native containers in their open state.
+        await page.locator('.technical-details').evaluate(details => { details.open = true; });
+        await page.locator('.process-viewer').evaluate(dialog => dialog.showModal());
+      }
+      const arrows = await page.locator('svg[data-site-arrow="north-east"]').evaluateAll(icons => icons.map(icon => {
+        const style = getComputedStyle(icon), box = icon.getBoundingClientRect();
+        return { width: box.width, height: box.height, rendered: icon.checkVisibility(), display: style.display, fill: style.fill, stroke: style.stroke, hidden: icon.getAttribute('aria-hidden'), focusable: icon.getAttribute('focusable'), length: icon.querySelector('path').getTotalLength() };
+      }));
+      assert(arrows.length > 0);
+      assert(arrows.every(icon => icon.fill === 'none' && icon.stroke !== 'none' && icon.hidden === 'true' && icon.focusable === 'false' && icon.length > 0), `${slug || 'Projects'}: invalid SVG arrow`);
+      assert(arrows.filter(icon => icon.rendered).every(icon => icon.width > 0 && icon.height > 0 && icon.display !== 'none'), `${slug || 'Projects'}: ${JSON.stringify(arrows)}`);
+      if (!slug) {
+        assert.equal(arrows.length, 6);
+        assert(arrows.every(icon => icon.rendered), 'All Projects row arrows must render on mobile');
+        assert(!await page.locator('body').evaluate(body => body.textContent.includes('\u2197')));
+        await page.screenshot({ path: path.join(output, 'projects-phone-svg-arrows.png'), fullPage: true });
+        assert.equal(await page.locator('.directory-link').first().getAttribute('href'), 'polaroid-of-yesterday/');
+      }
+      await page.close();
+    }
+    await phone.close();
     assert.deepEqual(errors, []);
     fs.writeFileSync(path.join(output, 'results.json'), JSON.stringify(results, null, 2) + '\n');
     console.log(JSON.stringify(results, null, 2));
-    console.log('Passed: desktop/phone/4K responsive film photos; full 6000px lightly compressed portrait; arrival-time 3D loading; complete uncropped film previews; car hover/click/Escape; no page errors or overflow.');
+    console.log('Passed: desktop/phone/4K responsive film photos; requested 3000x2000 portrait; arrival-time 3D loading; photo/car interactions; SVG arrow geometry on all five affected mobile routes; no home page errors or overflow.');
   } finally { await browser.close(); await new Promise(done => server.close(done)); }
 })().catch(error => { console.error(error); server.close(); process.exitCode = 1; });

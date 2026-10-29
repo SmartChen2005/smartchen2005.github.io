@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { normalizeSiteArrows } from './site-icons.mjs';
 import { siteFavicon } from './site-favicon.mjs';
 import { studies, experimentURL, preservedEdition, studyEdition } from './figures-of-speech.mjs';
 import { projectHeader, projectHeaderAssets } from './project-header.mjs';
@@ -52,7 +53,7 @@ const html = `<!doctype html>
 </html>
 `;
 fs.mkdirSync('dist/projects/figures-of-speech', {recursive:true});
-fs.writeFileSync('dist/projects/figures-of-speech/index.html', html);
+fs.writeFileSync('dist/projects/figures-of-speech/index.html', normalizeSiteArrows(html));
 // Ship the same curated data to the browser, without duplicating editorial content.
 fs.copyFileSync('tools/figures-of-speech.mjs', 'dist/projects/figures-of-speech/catalogue.mjs');
 console.log(`Rendered Figures of Speech: ${studies.length} studies, ${records.length} dated records.`);

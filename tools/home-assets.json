@@ -128,10 +128,10 @@
     "sourceSha256": "3c3001fe61cd6e80efea026ba8dda412ad3b9ca8368dee34b2af1cd71b500632",
     "originalBytes": 2551590,
     "path": "assets/selfportrait-light.webp",
-    "width": 6000,
-    "height": 4000,
+    "width": 3000,
+    "height": 2000,
     "quality": 95,
-    "bytes": 1908962,
-    "sha256": "006ef7e6c7056e724fd306d461400239ac48c4bf8bf03734b6e6122dd8d78d0d"
+    "bytes": 318602,
+    "sha256": "d99c0b6c3dd600e9127549295749b381708e8c67fdca8475e13e0fbcd5aef22f"
   }
 }

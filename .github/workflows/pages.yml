@@ -28,6 +28,7 @@ jobs:
         run: |
           node tools/validate-site.mjs
           node tools/test-site-cursor.mjs
+          node tools/test-site-icons.mjs
           node tools/test-figures-of-speech.mjs
           node tools/test-camera.mjs
           node tools/test-camera.mjs --archive

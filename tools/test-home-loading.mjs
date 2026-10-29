@@ -13,9 +13,9 @@ assert(assets.images.reduce((n, image) => n + image.variants.find(v => v.width =
 assert(assets.images.reduce((n, image) => n + image.variants.at(-1).bytes, 0) < 1_100_000);
 const home = fs.readFileSync(new URL('../dist/index.html', import.meta.url), 'utf8');
 const portrait = home.match(/<figure class="portrait portrait-full"[^>]*>([\s\S]*?)<\/figure>/)?.[1];
-assert(portrait?.includes('src="assets/selfportrait-light.webp"'));
-assert(!portrait.includes('srcset='), 'The important portrait must retain its full resolution');
-assert.deepEqual([assets.portrait.width, assets.portrait.height], [6000, 4000]);
+assert(portrait?.includes('src="assets/selfportrait-light.webp?rev=20261029-3000"'));
+assert(!portrait.includes('srcset='), 'The portrait must retain its requested resolution');
+assert.deepEqual([assets.portrait.width, assets.portrait.height], [3000, 2000]);
 assert.equal(assets.portrait.quality, 95);
 assert(assets.portrait.bytes < assets.portrait.originalBytes);
-console.log('Passed: four responsive film photos and media budgets; full 6000x4000 lightly compressed quality-95 portrait.');
+console.log('Passed: four responsive film photos and media budgets; requested 3000x2000 quality-95 portrait.');

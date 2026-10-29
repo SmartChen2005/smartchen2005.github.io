@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { normalizeSiteArrows } from './site-icons.mjs';
 const root=new URL('../dist/projects/world-sensing-music-station/',import.meta.url);
 const manifest=JSON.parse(fs.readFileSync(new URL('assets/sources.json',root),'utf8'));
 const labels=['Project overview','Scribble sketches I','Scribble sketches II','Fluid experiments','Early concepts','Elevator pitch & research','Research gap','Sensing research','Storyboard','Prototype drawing','Instrument development','Device in use','Prototype & demonstration'];
@@ -13,5 +14,5 @@ ${sheets}
     </section>`;
 const path=new URL('index.html',root);
 const html=fs.readFileSync(path,'utf8').replace(/    <section class="document-section process-section"[\s\S]*?<\/section>/,section);
-fs.writeFileSync(path,html);
+fs.writeFileSync(path,normalizeSiteArrows(html));
 console.log(`Rendered ${manifest.processPages.length} complete process pages.`);

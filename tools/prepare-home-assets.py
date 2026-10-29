@@ -45,11 +45,12 @@ for source, widths in SOURCES:
             })
         manifest['images'].append(record)
 
-# The important portrait retains the full source dimensions; do not resize or crop.
+# Keep the full composition at the user's requested 3000x2000 display resolution.
 portrait_source = DIST / 'assets/selfportrait.jpg'
 portrait_target = DIST / 'assets/selfportrait-light.webp'
 with Image.open(portrait_source) as original:
     portrait = ImageOps.exif_transpose(original).convert('RGB')
+    portrait = portrait.resize((3000, 2000), Image.Resampling.LANCZOS)
     profile = original.info.get('icc_profile')
     options = {'icc_profile': profile} if profile else {}
     portrait.save(portrait_target, 'WEBP', quality=95, method=6, **options)
@@ -68,5 +69,5 @@ with Image.open(portrait_source) as original:
 for image in manifest['images']:
     print(f"{image['source']}: {image['originalBytes']:,} bytes -> " +
           ', '.join(f"{v['width']}w: {v['bytes']:,}" for v in image['variants']))
-print(f"Full-resolution portrait: {manifest['portrait']['originalBytes']:,} -> "
-      f"{manifest['portrait']['bytes']:,} bytes, quality 95, no resizing")
+print(f"3000x2000 portrait: {manifest['portrait']['originalBytes']:,} -> "
+      f"{manifest['portrait']['bytes']:,} bytes, quality 95, no cropping")

@@ -52,8 +52,8 @@ for (const image of homeAssets.images) {
   }
 }
 const lightPortrait = homeAssets.portrait;
-if (!lightPortrait || !home.includes(`src="${lightPortrait.path}"`)) {
-  failures.push('The homepage must use its full-resolution lightly compressed portrait');
+if (!lightPortrait || !home.includes(`src="${lightPortrait.path}?rev=20261029-3000"`)) {
+  failures.push('The homepage must use its requested 3000x2000 lightly compressed portrait');
 } else {
   const file = path.join(root, 'dist', lightPortrait.path);
   const source = path.join(root, 'dist', lightPortrait.source);

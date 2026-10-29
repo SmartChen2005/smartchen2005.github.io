@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { normalizeSiteArrows } from './site-icons.mjs';
 import { siteFavicon } from './site-favicon.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -105,7 +106,7 @@ for(const p of projects){
 }
 const managedPath=path.join(route,'generated-pages.json');
 const previous=fs.existsSync(managedPath)?JSON.parse(fs.readFileSync(managedPath,'utf8')):[];
-for(const [relative,html] of rendered){const file=path.resolve(route,relative);if(!file.startsWith(route+path.sep))throw new Error('Output path escapes Gallery');fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file+'.tmp',html);fs.renameSync(file+'.tmp',file);}
+for(const [relative,html] of rendered){const file=path.resolve(route,relative);if(!file.startsWith(route+path.sep))throw new Error('Output path escapes Gallery');fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file+'.tmp',normalizeSiteArrows(html));fs.renameSync(file+'.tmp',file);}
 for(const relative of previous){if(rendered.has(relative)||!/^[-a-z0-9]+\/index\.html$/.test(relative))continue;const file=path.resolve(route,relative);if(file.startsWith(route+path.sep)&&fs.existsSync(file))fs.unlinkSync(file);}
 fs.writeFileSync(managedPath,JSON.stringify([...rendered.keys()],null,2)+'\n');
 fs.mkdirSync(path.join(route,'assets'),{recursive:true});

@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { normalizeSiteArrows } from './site-icons.mjs';
 import { siteFavicon } from './site-favicon.mjs';
 import path from "node:path";
 
@@ -214,5 +215,5 @@ for (const file of ['camera.mjs', 'camera-model.mjs', 'camera.css']) {
   fs.copyFileSync(path.join(root, 'tools', file), path.join(root, 'dist', file));
 }
 fs.mkdirSync(documentOutputDir, { recursive: true });
-fs.writeFileSync(outputPath, enhancedHtml);
+fs.writeFileSync(outputPath, normalizeSiteArrows(enhancedHtml));
 console.log(JSON.stringify({headings:headings.length,images:imageIndex,characters:html.length},null,2));

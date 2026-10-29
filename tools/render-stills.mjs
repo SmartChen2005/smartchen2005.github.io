@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { normalizeSiteArrows } from './site-icons.mjs';
 import { siteFavicon } from './site-favicon.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -61,6 +62,6 @@ ${figures}
 </body>
 </html>
 `;
-fs.writeFileSync(path.join(route, 'index.html'), html);
+fs.writeFileSync(path.join(route, 'index.html'), normalizeSiteArrows(html));
 fs.writeFileSync(path.join(route, 'collection.json'), JSON.stringify(collection, null, 2) + '\n');
 console.log(`Rendered Stills with ${collection.length} project photographs.`);

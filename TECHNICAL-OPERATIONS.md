@@ -54,6 +54,8 @@ node tools/validate-site.mjs
 
 The shared tab icon is an opaque white square. Run `node tools/render-site-favicon.mjs` to regenerate `dist/favicon.ico` (16px and 32px) and synchronize live page links. Page renderers use `tools/site-favicon.mjs`; preserved Figures of Speech editions use the browser's `/favicon.ico` fallback without rewriting archived payloads.
 
+North-east UI arrows use the font-independent inline SVG from `tools/site-icons.mjs`. All maintained page renderers normalize visible arrow characters at output; run `node tools/render-site-icons.mjs` for directly maintained pages and `node tools/test-site-icons.mjs` to verify every current live page. No extra client script, image request or font is required.
+
 Do not use `git add -A` blindly when unrelated files are present. Review `git status` and `git diff --stat` first, then stage the intended complete update.
 
 ## Commit summary standard
@@ -97,6 +99,12 @@ The workflow intentionally deploys the existing `dist/` directory as-is. This ke
 At the time this standard was added, the repository contains the complete current static archive, its local image assets, the Notion source, the renderer, the validator, and the design context. The baseline is published by the commit that adds this document and the Pages workflow.
 
 ## Change log
+
+### 2026-10-29 — Resize the portrait and prevent emoji link arrows
+
+- Resize only the homepage display portrait to the user-requested 3000×2000 using Lanczos and quality-95 WebP (318,602 bytes); retain the full original. Synchronize intrinsic dimensions, cache revision, manifest and checks. Cars still load on arrival and the four film previews retain their existing optimization.
+- Replace all 27 emoji-capable north-east arrows across five maintained live pages with one color-inheriting inline SVG, including all six Projects rows. Extend every maintained page renderer and the future Cursor lab template; preserve historical frozen payloads and native link behavior.
+- Mobile browser geometry/screenshot checks cover Projects, Polaroid, Music Station (including open native details/viewer), Battlefront and VR. Static checks cover all 23 maintained pages and renderer idempotence; the new icon regression is included in Pages validation.
 
 ### 2026-10-29 — Lightly compress the full-resolution portrait
 
