@@ -1,6 +1,6 @@
 // Shared decorative pointer; native controls and dedicated pointer experiences
 // retain ownership. Never initialize in a preview iframe or preserved edition.
-import { createCursorIntents } from './site-cursor-intents.mjs?rev=20261028-type-scale';
+import { createCursorIntents } from './site-cursor-intents.mjs?rev=20261028-drag-axis';
 const dedicatedPointer = document.querySelector('script[src*="camera.mjs"], [data-page-cursor="native"]');
 if (!dedicatedPointer && window.top === window && !location.pathname.includes('/editions/') && !document.querySelector('.site-cursor')) {
   const homepage = Boolean(document.querySelector('.homepage'));
@@ -14,7 +14,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
   cursor.className = homepage ? 'site-cursor home-cursor' : 'site-cursor';
   cursor.setAttribute('aria-hidden', 'true');
   cursor.hidden = true;
-  cursor.innerHTML = '<span class="site-cursor-surface"></span><span class="site-cursor-edge"></span><svg class="site-cursor-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 12 4M4 4h8v8"/></svg><svg class="site-cursor-magnify" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><path d="m14.5 14.5 6 6"/></svg><svg class="site-cursor-move" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h12M5 5 2 8l3 3m6-6 3 3-3 3"/></svg>';
+  cursor.innerHTML = '<span class="site-cursor-surface"></span><span class="site-cursor-edge"></span><svg class="site-cursor-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 12 4M4 4h8v8"/></svg><svg class="site-cursor-magnify" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round"><circle cx="10" cy="10" r="6"/><path d="m14.5 14.5 6 6"/></svg><svg class="site-cursor-move" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1.5v13M1.5 8h13M5.5 4 8 1.5 10.5 4M5.5 12 8 14.5 10.5 12M4 5.5 1.5 8 4 10.5M12 5.5 14.5 8 12 10.5"/></svg><svg class="site-cursor-range" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h12M5 5 2 8l3 3m6-6 3 3-3 3"/></svg>';
   document.body.append(cursor);
   // Word attraction is a background treatment. The pointer itself always uses
   // the same action circle, including over homepage identities.
@@ -26,12 +26,18 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
   if (homepage) document.body.append(attraction);
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-  const pointShape = () => ({ x: pointer.x, y: pointer.y, w: 13, h: 13, r: 6.5, fill: .65, edge: 0, light: 0, arrow: 0, glow: 0, magnify: 0, move: 0, grip: 0,
+  const pointShape = () => ({ x: pointer.x, y: pointer.y, w: 13, h: 13, r: 6.5, fill: .65, edge: 0, light: 0, arrow: 0, glow: 0, magnify: 0, move: 0, range: 0, grip: 0,
     magnetX: pointer.x, magnetY: pointer.y, magnetW: 13, magnetH: 13 });
   const capsule = { w: 34, h: 26, r: 13, fill: .88 };
   const actionCircle = { w: 26, h: 26, r: 13, fill: .88 };
   const textBar = { w: 2, h: 24, r: 1, fill: .9 };
   const textShape = owner => ({ ...textBar, h: Math.max(textBar.h, (parseFloat(getComputedStyle(owner).fontSize) || 0) * 1.1) });
+  const dragShape = (owner, held = false) => {
+    const axis = intents.dragAxis(owner);
+    cursor.dataset.dragAxis = axis;
+    return { ...capsule, ...(held ? { w: 30, h: 24, r: 12, fill: .96 } : {}),
+      move: axis === 'both' ? 1 : 0, range: axis === 'both' ? 0 : 1, grip: held ? 1 : 0 };
+  };
   let pointer = { x: 0, y: 0 }, current, velocity = {};
   let frame = 0, previousTime = 0, pressed = false, active = false;
   let dragCandidate = null, dragSession = null;
@@ -66,7 +72,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     const intent = intents.resolve(hit, pointer);
     const identity = homepage && !transitioning && !body.hasAttribute('data-motor-playing') && hit?.closest('.identity');
     if (dragSession?.owner.isConnected && pressed) {
-      Object.assign(next, capsule, { w: 30, h: 24, r: 12, fill: .96, move: 1, grip: 1 });
+      Object.assign(next, dragShape(dragSession.owner, true));
       cursor.dataset.mode = 'dragging';
       delete cursor.dataset.identity;
     } else if (selectingText && pressed) {
@@ -85,7 +91,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
       cursor.dataset.mode = 'magnify';
       delete cursor.dataset.identity;
     } else if (!transitioning && intent.kind === 'drag') {
-      Object.assign(next, capsule, { move: 1 });
+      Object.assign(next, dragShape(intent.owner));
       cursor.dataset.mode = 'drag';
       delete cursor.dataset.identity;
     } else if (!transitioning && intent.kind === 'link') {
@@ -119,7 +125,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
     cursor.style.width = `${current.w}px`;
     cursor.style.height = `${current.h}px`;
     cursor.style.borderRadius = `${current.r}px`;
-    for (const key of ['fill', 'edge', 'arrow', 'magnify', 'move']) cursor.style.setProperty(`--cursor-${key}`, current[key]);
+    for (const key of ['fill', 'edge', 'arrow', 'magnify', 'move', 'range']) cursor.style.setProperty(`--cursor-${key}`, current[key]);
     cursor.style.setProperty('--magnify-scale', clamp(current.w / capsule.w, .4, 1));
     cursor.style.setProperty('--move-scale', 1 - current.grip * .25);
     if (homepage) {
@@ -154,7 +160,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
       const decay = Math.exp(-omega * dt);
       current[key] = target[key] + (offset + term * dt) * decay;
       velocity[key] = ((velocity[key] || 0) - omega * term * dt) * decay;
-      const precision = ['fill', 'edge', 'light', 'arrow', 'glow', 'magnify', 'move', 'grip'].includes(key) ? .001 : .05;
+      const precision = ['fill', 'edge', 'light', 'arrow', 'glow', 'magnify', 'move', 'range', 'grip'].includes(key) ? .001 : .05;
       if (Math.abs(current[key] - target[key]) > precision || Math.abs(velocity[key]) > precision * 10) moving = true;
       else { current[key] = target[key]; velocity[key] = 0; }
     }
@@ -251,7 +257,7 @@ if (!dedicatedPointer && window.top === window && !location.pathname.includes('/
   new MutationObserver(wake).observe(document.body, { attributes: true, subtree: true, attributeFilter: [
     'data-world', 'data-motor-playing', 'data-game-transition', 'data-photo-transition', 'data-motor-fallback',
     'open', 'hidden', 'inert', 'data-hover', 'data-dragging', 'class',
-    'disabled', 'aria-disabled', 'data-cursor', 'draggable', 'type', 'contenteditable', 'role',
+    'disabled', 'aria-disabled', 'data-cursor', 'draggable', 'type', 'contenteditable', 'role', 'aria-orientation', 'orient',
   ] });
   new MutationObserver(() => { if (root.classList.contains('sx-cursor')) hide(); }).observe(root, { attributes: true, attributeFilter: ['class'] });
 }

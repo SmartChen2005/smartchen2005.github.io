@@ -11,8 +11,9 @@ the same resolver without new route/class branches.
 | Navigation | Native links, image-map links, `role="link"` | Arrow capsule |
 | Photo/detail viewing | Image-file URLs, `data-preview`, `data-process-page`, `data-lightbox`, `data-zoom`, authored `cursor: zoom-in/zoom-out` | Magnifier capsule |
 | Action | Buttons, summary, `role="button"`, action inputs, click handlers/author-declared `cursor: pointer` | Plain enlarged inverted circle, no center icon |
-| Draggable | Native range inputs, `role="slider"`, authored `cursor: grab/grabbing/move`, `draggable="true"` | Capsule with a thin bidirectional arrow |
-| Actual dragging | Native range pointer-down, owning component's pointer capture/grabbing state or native drag lifecycle | Tighter capsule and contracted bidirectional arrow |
+| Free draggable | Authored `cursor: grab/grabbing/move`, `draggable="true"`, `data-cursor="drag"` | Capsule with four-way arrows |
+| Range / slider | Native range inputs, `role="slider"` | Capsule with two-way arrows along the slider axis |
+| Actual dragging | Native range pointer-down, owning component's pointer capture/grabbing state or native drag lifecycle | Same glyph, tighter capsule and contracted arrows |
 | Text / editing | Actual rendered text fragments, text-like inputs, textarea, contenteditable, authored `cursor: text`, `data-cursor="text"` | Thin inverted vertical bar |
 
 Actions and homepage identities use a plain 26×26px circle, a 13px radius and
@@ -39,6 +40,11 @@ Range inputs are recognized globally, including when their native CSS fallback
 is `ew-resize`. Pointer-down enters the active drag presentation immediately;
 the browser retains native thumb capture, value/input events and keyboard
 behavior. The decorative cursor does not take capture or change slider values.
+Free objects use four directions; sliders use horizontal arrows by default and
+vertical arrows for `aria-orientation="vertical"`, legacy `orient="vertical"`
+or a vertical/sideways writing mode. Explicit ARIA orientation takes precedence.
+Both retain identical capsule dimensions, inversion and press contraction. The
+captured owner retains its glyph/axis when the pointer leaves its bounds.
 
 For a custom component, declare an intent on its actual interaction owner:
 

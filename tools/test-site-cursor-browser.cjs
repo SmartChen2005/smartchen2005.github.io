@@ -27,6 +27,10 @@ fs.mkdirSync(output, { recursive: true });
     await context.route('**/*', route => route.request().url().startsWith(origin) ? route.continue() : route.abort());
     const page = await context.newPage();
     page.on('pageerror', recordError);
+    const loadErrors = [];
+    page.on('requestfailed', request => {
+      if (request.url().startsWith(origin) && ['script', 'stylesheet'].includes(request.resourceType())) loadErrors.push({ url: request.url(), failure: request.failure()?.errorText });
+    });
     const state = () => page.locator('.site-cursor').evaluate(e => ({
       hidden: e.hidden, mode: e.dataset.mode, active: document.documentElement.classList.contains('has-site-cursor'),
       parent: e.parentElement.tagName, radius: parseFloat(e.style.borderRadius),
@@ -41,10 +45,15 @@ fs.mkdirSync(output, { recursive: true });
           && +cursor.style.getPropertyValue('--cursor-fill') === .88);
     }, mode);
     const waitTextHeight = height => page.waitForFunction(height => Math.abs(parseFloat(document.querySelector('.site-cursor').style.height) - height) < .1, height);
+    const waitAxis = axis => page.waitForFunction(axis => {
+      const e = document.querySelector('.site-cursor');
+      return e.dataset.dragAxis === axis && +e.style.getPropertyValue('--cursor-move') === (axis === 'both' ? 1 : 0)
+        && +e.style.getPropertyValue('--cursor-range') === (axis === 'both' ? 0 : 1);
+    }, axis);
     const goto = async route => {
       await page.goto(origin + route, { waitUntil: 'load' });
       try { await page.locator('.site-cursor').waitFor({ state: 'attached' }); }
-      catch (error) { console.error(JSON.stringify({ route, url: page.url(), errors })); throw error; }
+      catch (error) { console.error(JSON.stringify({ route, url: page.url(), errors, loadErrors: loadErrors.slice(-10) })); throw error; }
     };
     const hoverText = async target => {
       await target.scrollIntoViewIfNeeded();
@@ -196,6 +205,7 @@ fs.mkdirSync(output, { recursive: true });
     await page.locator('a[href="#playground"]').last().click();
     await page.waitForFunction(() => !document.querySelector('#world-control').disabled);
     await page.locator('#world-control').hover(); await waitMode('drag');
+    await waitAxis('both');
     await pointerSurface('Draggable hover');
     await page.screenshot({ path: path.join(output, 'drag-ready.png') });
     const world = await page.locator('#world-control').boundingBox();
@@ -203,6 +213,7 @@ fs.mkdirSync(output, { recursive: true });
     await page.mouse.down();
     await page.mouse.move(world.x + world.width / 2 + 60, world.y + world.height / 2 + 55, { steps: 5 });
     await waitMode('dragging');
+    await waitAxis('both');
     assert.notEqual(await page.locator('#distance-input').inputValue(), distanceBefore, 'Actual device position changes during drag');
     await page.waitForFunction(() => +document.querySelector('.site-cursor').style.getPropertyValue('--move-scale') === .75);
     await page.screenshot({ path: path.join(output, 'drag-active.png') });
@@ -219,11 +230,13 @@ fs.mkdirSync(output, { recursive: true });
     await page.locator('#world-control').hover(); await waitMode('drag');
     const slider = page.locator('#distance-input');
     await slider.hover(); await waitMode('drag');
+    await waitAxis('x');
     assert.equal(await slider.evaluate(e => getComputedStyle(e, '::-webkit-slider-thumb').cursor), 'none', 'Native thumb does not introduce a second cursor');
     await page.screenshot({ path: path.join(output, 'slider-ready.png') });
     const sliderRect = await slider.boundingBox();
     await page.mouse.move(sliderRect.x + sliderRect.width * .25, sliderRect.y + sliderRect.height / 2);
     await page.mouse.down(); await waitMode('dragging');
+    await waitAxis('x');
     const sliderBefore = await slider.inputValue();
     await page.mouse.move(sliderRect.x + sliderRect.width * .75, sliderRect.y + sliderRect.height / 2, { steps: 6 });
     await waitMode('dragging');
@@ -231,6 +244,7 @@ fs.mkdirSync(output, { recursive: true });
     await page.screenshot({ path: path.join(output, 'slider-active.png') });
     await page.mouse.move(sliderRect.x + sliderRect.width + 24, sliderRect.y + sliderRect.height / 2);
     await waitMode('dragging');
+    await waitAxis('x');
     await page.mouse.up();
     await slider.hover(); await waitMode('drag');
     await slider.focus();
@@ -282,13 +296,14 @@ fs.mkdirSync(output, { recursive: true });
     // A route and class names unknown to the controller exercise future reuse.
     const futureURL = origin + '/__cursor-future-fixture/';
     await context.route(futureURL, route => route.fulfill({ contentType: 'text/html', body: `<!doctype html><html><head>
-      <link rel="stylesheet" href="/site-cursor.css?rev=20261028-feather">
+      <link rel="stylesheet" href="/site-cursor.css?rev=20261028-drag-axis">
       <style>body{margin:40px;background:#fff}button,a,#future-drag{display:block;width:220px;height:60px;margin:12px;padding:10px;box-sizing:border-box}#future-drag{cursor:grab;background:#ddd}#future-drag.held{cursor:grabbing!important}</style>
-      <script type="module" src="/site-cursor.mjs?rev=20261028-type-scale"></script></head><body>
+      <script type="module" src="/site-cursor.mjs?rev=20261028-drag-axis"></script></head><body>
       <button id="future-action"><span style="cursor:text">An ordinary future action</span></button><a id="future-link" href="/next/">A future destination</a>
       <a id="future-image" href="/new-image.webp">A future image, without a known class</a>
       <button id="future-css">A future CSS-defined preview</button><div id="future-drag" style="cursor:grab">A future custom draggable</div>
       <input id="future-range" type="range" min="0" max="100" value="40" style="cursor:ew-resize">
+      <input id="future-vertical" type="range" min="0" max="100" value="40" aria-label="Vertical level" style="writing-mode:vertical-lr;width:32px;height:140px">
       <section style="padding:24px;width:380px;font:20px/1.6 sans-serif">
         <p><span id="future-words">Select these words.</span></p>
         <p style="width:150px"><span id="future-wrap">Wrapped ordinary text continues onto several lines.</span></p>
@@ -317,8 +332,19 @@ fs.mkdirSync(output, { recursive: true });
     await page.evaluate(() => { const style=document.createElement('style');style.textContent='#future-css{cursor:col-resize!important}';document.head.append(style); });
     await page.waitForFunction(() => !document.documentElement.classList.contains('has-site-cursor'));
     await page.locator('#future-range').hover(); await waitMode('drag');
+    await waitAxis('x');
     await page.mouse.down(); await waitMode('dragging');
     await page.mouse.up(); await waitMode('drag');
+    const vertical = page.locator('#future-vertical');
+    await vertical.hover(); await waitMode('drag'); await waitAxis('y');
+    assert(await page.locator('.site-cursor-range').evaluate(e => { const matrix = new DOMMatrixReadOnly(getComputedStyle(e).transform); return Math.abs(matrix.a) < .01 && matrix.b > .9; }), 'Vertical range glyph really rotates into the slider direction');
+    const verticalBox = await vertical.boundingBox();
+    await page.mouse.down(); await waitMode('dragging'); await waitAxis('y');
+    const verticalBefore = await vertical.inputValue();
+    await page.mouse.move(verticalBox.x + verticalBox.width / 2, verticalBox.y + verticalBox.height * .8, { steps: 5 });
+    assert.notEqual(await vertical.inputValue(), verticalBefore, 'Native vertical range really changes value');
+    await page.screenshot({ path: path.join(output, 'vertical-range.png') });
+    await page.mouse.up();
     await page.locator('#future-words').hover(); await waitMode('text');
     const words = await page.locator('#future-words').boundingBox();
     await page.mouse.move(words.x + 2, words.y + words.height / 2);
@@ -358,6 +384,7 @@ fs.mkdirSync(output, { recursive: true });
     assert.equal((await state()).active, false, 'Native select retains ownership');
     checks.push('Visible/wrapped text and editors use a text bar; links/buttons outrank text; real selection, input replacement, multiline/contenteditable editing and native pickers work.');
     await page.locator('#future-drag').hover(); await waitMode('drag');
+    await waitAxis('both');
     await page.mouse.down(); await waitMode('dragging');
     await page.mouse.move(500, 500); await waitMode('dragging');
     assert.equal(await page.locator('#future-drag').getAttribute('data-x'), '500');

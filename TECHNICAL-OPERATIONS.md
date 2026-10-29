@@ -98,6 +98,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Distinguish free-drag and slider directions
+
+- Free draggable objects use four-way arrows; range/semantic sliders use two-way arrows along their declared or rendered axis, including vertical writing modes. Both retain the existing capsule geometry, inversion and held contraction.
+- Verified all 16 Pages Node checks, 22 live routes plus future fixture / eleven final browser groups and nine homepage groups. Actual Music device/ranges and a real vertical range verify glyph priority, direction, movement/value changes and capture. Revision: `20261028-drag-axis`.
+
 ### 2026-10-28 — Refresh the Adaptive Cursor exhibit
 
 - FIG. 009 now uses `2026-10-28-cursor-text`, pinned to verified type-scaling source `24b4a58`, while every earlier edition remains immutable. The new thumbnail puts dot/action circle/text on top and the three link/zoom/drag capsules below.

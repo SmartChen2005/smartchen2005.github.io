@@ -78,16 +78,21 @@
   opacity: var(--cursor-magnify, 0);
   transform: scale(var(--magnify-scale, 1));
 }
-.site-cursor-move {
+.site-cursor-move, .site-cursor-range {
   position: absolute;
   width: 16px;
   height: 16px;
   left: calc(50% - 8px);
   top: calc(50% - 8px);
   color: #000;
-  opacity: var(--cursor-move, 0);
   transform: scale(calc(var(--magnify-scale, 1) * var(--move-scale, 1)));
 }
+.site-cursor-move { opacity: var(--cursor-move, 0); }
+.site-cursor-range {
+  opacity: var(--cursor-range, 0);
+  transform: rotate(var(--range-angle, 0deg)) scale(calc(var(--magnify-scale, 1) * var(--move-scale, 1)));
+}
+.site-cursor[data-drag-axis='y'] { --range-angle: 90deg; }
 /* Only the background attraction sits beneath lettering. Foreground circles
    and capsules, including homepage identities, share the site's inversion. */
 body[data-world='cars']:not([data-motor-fallback]) .site-cursor-attraction { color: var(--motor-paper); }

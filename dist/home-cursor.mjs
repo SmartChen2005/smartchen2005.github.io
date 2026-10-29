@@ -1,2 +1,2 @@
 // Compatibility entry for the homepage's shared pointer.
-import './site-cursor.mjs?rev=20261028-type-scale';
+import './site-cursor.mjs?rev=20261028-drag-axis';

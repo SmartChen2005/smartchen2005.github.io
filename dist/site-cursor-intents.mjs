@@ -98,6 +98,14 @@ export function createCursorIntents(doc = document) {
     }
     return null;
   }
+  function dragAxis(element) {
+    const range = element?.closest?.(slider);
+    if (!range) return 'both';
+    const orientation = range.getAttribute('aria-orientation');
+    if (orientation === 'vertical') return 'y';
+    if (orientation === 'horizontal') return 'x';
+    return range.getAttribute('orient') === 'vertical' || /^(vertical|sideways)-/.test(win.getComputedStyle(range).writingMode) ? 'y' : 'x';
+  }
   function resolve(element, point) {
     if (!(element instanceof win.Element)) return { kind: 'dot', owner: null };
     if (blocked(element)) return { kind: 'dot', owner: null };
@@ -107,7 +115,7 @@ export function createCursorIntents(doc = document) {
     const explicit = element.closest('[data-cursor]');
     if (explicit) {
       const kind = { zoom: 'magnify', action: 'button', link: 'link', drag: 'drag', native: 'native' }[explicit.dataset.cursor];
-      if (kind) return { kind, owner: explicit };
+      if (kind) return { kind, owner: kind === 'drag' ? element.closest(slider) || explicit : explicit };
     }
     // Sliders express drag intent even when their native fallback is ew-resize.
     const range = element.closest(slider);
@@ -131,5 +139,5 @@ export function createCursorIntents(doc = document) {
     if (explicit?.dataset.cursor === 'text' || authored === 'text' || text) return { kind: 'text', owner: text || element };
     return { kind: 'dot', owner: null };
   }
-  return { resolve, dragOwner, source, refresh };
+  return { resolve, dragOwner, dragAxis, source, refresh };
 }

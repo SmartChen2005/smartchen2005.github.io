@@ -1,5 +1,23 @@
 # Shared adaptive pointer — 2026-10-27
 
+## Four-way objects and axis-aware range arrows — 2026-10-28
+
+Free draggable objects now use four-way arrows. Native/semantic sliders retain
+two-way arrows, horizontal by default and vertical for declared vertical ARIA /
+orient or vertical/sideways writing mode. Capsule dimensions, inversion and held
+contraction remain shared; active capture keeps the original owner's direction
+outside its bounds. Nested native ranges still resolve to their own slider
+owner inside an explicitly draggable region.
+
+Passed all 16 Pages Node checks, 22 live routes plus future fixture / eleven
+browser groups and nine homepage groups. Music device and 404/future objects
+use four directions; Music/future horizontal ranges use left/right arrows. A
+real vertical range both changes value and renders a 90-degree rotated glyph.
+An initial parallel run timed out waiting for a module attachment on Battlefront
+without page errors; the isolated final run passed. Resource-failure diagnostics
+are now included if that wait fails again.
+Evidence: `axis-site/`, `axis-home/`. Shared revision: `20261028-drag-axis`.
+
 ## Type-aware bar height — 2026-10-28
 
 Text bars now use max(24px, 1.1 × rendered font size), without an upper cap.
