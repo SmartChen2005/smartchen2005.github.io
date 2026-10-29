@@ -37,7 +37,6 @@ const html = `<!doctype html>
   ${projectHeader({theme:'light'})}
   <main class="archive">
     <header class="archive-cover">
-      <div class="cover-meta"><span>Smart Chen / VegShark.com</span><span>2026 — Ongoing</span></div>
       <h1>Figures of Speech</h1>
       <div class="cover-definition">
         <p class="cover-pronunciation">/ˌfiɡyər əv ˈspēCH/</p>
