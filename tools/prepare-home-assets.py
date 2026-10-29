@@ -1,4 +1,4 @@
-"""Build high-quality, uncropped homepage previews without changing the originals.
+"""Build uncropped Filmmaker previews; preserve all originals and the portrait.
 
 Requires Pillow with WebP support. Run from any directory with Python 3.
 """
@@ -17,7 +17,6 @@ PHOTOS = [
     'f85d2017537b65c254e52f035d2aa3ee',
 ]
 SOURCES = [(f'photography-preview/{name}.jpg', (480, 960, 1920)) for name in PHOTOS]
-SOURCES.append(('assets/selfportrait.jpg', (480, 960)))
 manifest = {'quality': 90, 'resampling': 'Lanczos', 'images': []}
 
 for source, widths in SOURCES:

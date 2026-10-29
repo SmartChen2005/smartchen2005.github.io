@@ -121,29 +121,6 @@
           "sha256": "4f30b75898d9d5831058b9d2fb10f2cc4bd101d43fe5b6efd35cc6062f431799"
         }
       ]
-    },
-    {
-      "source": "assets/selfportrait.jpg",
-      "sha256": "3c3001fe61cd6e80efea026ba8dda412ad3b9ca8368dee34b2af1cd71b500632",
-      "width": 6000,
-      "height": 4000,
-      "originalBytes": 2551590,
-      "variants": [
-        {
-          "path": "assets/selfportrait-480.webp",
-          "width": 480,
-          "height": 320,
-          "bytes": 12124,
-          "sha256": "7fdf12084d4c6564ef78dfb4c7e68f47ff9cc58e635f128f58c75997897f9aeb"
-        },
-        {
-          "path": "assets/selfportrait-960.webp",
-          "width": 960,
-          "height": 640,
-          "bytes": 29988,
-          "sha256": "64736f3cea897ee1db30e246dba07da13399820c3d3db3d447a61cbfb1952af2"
-        }
-      ]
     }
   ]
 }

@@ -52,7 +52,7 @@ for (const file of ['home-motorsport.mjs','home-exhibition.mjs','home-scenes.mjs
   const source=fs.readFileSync(new URL(`../dist/${file}`,import.meta.url),'utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,'');
   vm.runInContext(source,sandbox);
 }
-const scene = sandbox.createScenes({getContext:()=>context},{motor:motorCanvas,exhibition:gallery,motorFactory:sandbox.createMotorsport});
+const scene = sandbox.createScenes({getContext:()=>context},{motor:motorCanvas,exhibition:gallery});
 scene.resize({top:390,bottom:510});
 assert.equal(callbacks.size,0);
 function step(count=1) {

@@ -50,13 +50,17 @@ const server = http.createServer((req, res) => {
         images: [...document.images].map(i => ({ src: i.currentSrc, loaded: i.complete && i.naturalWidth > 0, width: i.clientWidth })),
         overflow: document.documentElement.scrollWidth > innerWidth,
       }));
-      assert(initial.images.every(i => i.loaded && i.src.endsWith('.webp')));
-      assert(!initial.resources.some(r => /three\.|home-motor-race|home-motorsport/.test(r.url)), '3D must remain unloaded on arrival');
-      assert(!initial.resources.some(r => /\.jpg$/.test(r.url)), 'Original photographs must not be downloaded');
+      assert(initial.images.every(i => i.loaded));
+      assert(initial.images.slice(0, 4).every(i => i.src.endsWith('.webp')));
+      assert(initial.images.at(-1).src.endsWith('/assets/selfportrait.jpg'), 'Portrait must load its original');
+      assert.equal(await page.locator('.portrait-full img').evaluate(i => i.naturalWidth), 6000);
+      assert(initial.resources.some(r => /three\.module/.test(r.url)), 'Three.js must load on arrival');
+      assert(initial.resources.some(r => /home-motorsport/.test(r.url)), 'Car scene must load on arrival');
+      assert(!initial.resources.some(r => /photography-preview\/.*\.jpg$/.test(r.url)), 'Film originals must not be downloaded');
       assert(!initial.overflow);
       const imageBytes = initial.resources.filter(r => /\.webp$/.test(r.url)).reduce((n,r) => n+r.bytes,0);
       assert(imageBytes < 1_100_000);
-      results.push({ viewport: name, imageBytes, totalBytes: initial.resources.reduce((n,r) => n+r.bytes,0), images: initial.images });
+      results.push({ viewport: name, filmImageBytes: imageBytes, totalImageBytes: imageBytes + initial.resources.filter(r => /\/assets\/selfportrait\.jpg$/.test(r.url)).reduce((n,r) => n+r.bytes,0), totalBytes: initial.resources.reduce((n,r) => n+r.bytes,0), images: initial.images });
       await page.screenshot({ path: path.join(output, `home-${name}.png`) });
       if (touch) await page.goto(origin + '/?study=photo');
       else await page.hover('.identity-photo');
@@ -70,21 +74,12 @@ const server = http.createServer((req, res) => {
         await page.click('.identity-cars'); await page.waitForFunction(() => document.body.dataset.motorPlaying === 'true');
         await page.keyboard.press('Escape');
         assert.equal(await page.locator('body').getAttribute('data-motor-playing'), null);
-        // A failed cold import leaves the native sentence and links usable.
-        const offline = await context.newPage();
-        await offline.route('**/home-motorsport.mjs*', route => route.abort());
-        await offline.goto(origin); await offline.hover('.identity-cars');
-        await offline.waitForFunction(() => document.body.dataset.motorFallback === 'true');
-        assert(await offline.locator('.sentence').isVisible());
-        await offline.hover('.identity-photo');
-        assert.equal(await offline.locator('body').getAttribute('data-motor-fallback'), null);
-        await offline.close();
       }
       await context.close();
     }
     assert.deepEqual(errors, []);
     fs.writeFileSync(path.join(output, 'results.json'), JSON.stringify(results, null, 2) + '\n');
     console.log(JSON.stringify(results, null, 2));
-    console.log('Passed: cold desktop/phone/4K responsive images; original-image and initial-3D request exclusion; complete uncropped film previews; cold car hover/click/Escape; network-failure fallback; no page errors or overflow.');
+    console.log('Passed: desktop/phone/4K responsive film photos; original 6000px portrait; arrival-time 3D loading; complete uncropped film previews; car hover/click/Escape; no page errors or overflow.');
   } finally { await browser.close(); await new Promise(done => server.close(done)); }
 })().catch(error => { console.error(error); server.close(); process.exitCode = 1; });

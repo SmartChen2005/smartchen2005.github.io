@@ -98,6 +98,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Keep full portrait quality and load cars on arrival
+
+- Following the user's clarification, restore the full original 6000×4000 portrait and the original arrival-time motorsport/Three.js import and scene initialization. Keep responsive quality-90 compression only for the four Filmmaker photographs.
+- Remove the now-unused portrait WebP derivatives and lazy car loader; Git retains the prior experiment. Asset generation and media budgets now apply exclusively to the film photos, and browser checks verify the original portrait plus initial 3D requests.
+- Supersedes the portrait and car-loading changes below. Current request measurements and applicable validation are documented in `tools/HOME-PERFORMANCE-QA.md`.
+
 ### 2026-10-28 — Reduce homepage media and defer the car scene
 
 - Preserve all original photographs; generate color-profile-preserving quality-90 WebP previews with `tools/prepare-home-assets.py`. Responsive Filmmaker images use 480/960/1920px alternatives and the portrait uses 480/960px, with explicit image priorities and SHA-256 provenance in `tools/home-assets.json`.
