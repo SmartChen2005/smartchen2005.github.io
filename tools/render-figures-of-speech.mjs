@@ -28,7 +28,7 @@ const html = `<!doctype html>
   <title>Figures of Speech — Smart Chen</title>
   ${projectHeaderAssets('../../')}
   <link rel="stylesheet" href="figures.css?v=20261028-cursor">
-  <script type="module" src="figures.mjs?v=20261028-cursor-text"></script>
+  <script type="module" src="figures.mjs?v=20261028-cursor-axis"></script>
 </head>
 <body>
   <a class="skip-link" href="#index">Skip to the index</a>

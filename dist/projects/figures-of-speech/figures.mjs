@@ -1,4 +1,4 @@
-import { studies, experimentURL, studyEdition } from './catalogue.mjs?rev=20261028-cursor-text';
+import { studies, experimentURL, studyEdition } from './catalogue.mjs?rev=20261028-cursor-axis';
 
 const dialog = document.querySelector('.study-dialog');
 const close = document.querySelector('#close-study');

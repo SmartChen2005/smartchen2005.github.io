@@ -23,7 +23,7 @@ fs.mkdirSync(output, { recursive: true });
     const state = frame => frame.locator('.site-cursor').evaluate(e => ({
       mode: e.dataset.mode, hidden: e.hidden, width: parseFloat(e.style.width),
       height: parseFloat(e.style.height), radius: parseFloat(e.style.borderRadius),
-      fill: +e.style.getPropertyValue('--cursor-fill'), move: +e.style.getPropertyValue('--cursor-move'),
+      fill: +e.style.getPropertyValue('--cursor-fill'), move: +e.style.getPropertyValue('--cursor-move'), range: +e.style.getPropertyValue('--cursor-range'), axis: e.dataset.dragAxis,
       scale: +e.style.getPropertyValue('--move-scale'),
     }));
     const waitMode = (frame, mode) => frame.waitForFunction(mode => {
@@ -31,7 +31,7 @@ fs.mkdirSync(output, { recursive: true });
       const dimensions = { dot: [13, 13], button: [26, 26], identity: [26, 26], link: [34, 26], magnify: [34, 26], drag: [34, 26], dragging: [30, 24], text: [2, null] }[mode];
       return e && !e.hidden && e.dataset.mode === mode && Math.abs(parseFloat(e.style.width) - dimensions[0]) < .1
         && (dimensions[1] === null || Math.abs(parseFloat(e.style.height) - dimensions[1]) < .1)
-        && (!['drag', 'dragging'].includes(mode) || +e.style.getPropertyValue('--cursor-move') === 1 && +e.style.getPropertyValue('--move-scale') === (mode === 'dragging' ? .75 : 1));
+        && (!['drag', 'dragging'].includes(mode) || +e.style.getPropertyValue(e.dataset.dragAxis === 'both' ? '--cursor-move' : '--cursor-range') === 1 && +e.style.getPropertyValue('--move-scale') === (mode === 'dragging' ? .75 : 1));
     }, mode);
     const openStudy = async () => {
       await page.locator('.view-switch:not([hidden])').waitFor({ state: 'visible' });
@@ -99,11 +99,15 @@ fs.mkdirSync(output, { recursive: true });
     await page.mouse.move(rangeBox.x + rangeBox.width * .8, rangeBox.y + rangeBox.height / 2, { steps: 5 });
     assert.notEqual(await range.inputValue(), rangeBefore, 'Native range changes its scalar value');
     await page.mouse.up();
-    const shape = value => [value.width, value.height, value.radius, value.fill, value.move, value.scale];
-    assert.deepEqual(shape(rangeHover), shape(dragHover), 'Drag and Range share the hover form');
-    assert.deepEqual(shape(rangeActive), shape(dragActive), 'Drag and Range share the active form');
+    const shape = value => [value.width, value.height, value.radius, value.fill, value.scale];
+    assert.deepEqual(shape(rangeHover), shape(dragHover), 'Drag and Range share capsule geometry and material');
+    assert.deepEqual(shape(rangeActive), shape(dragActive), 'Drag and Range share press contraction');
+    assert.deepEqual([dragHover.move, dragHover.range, dragHover.axis], [1, 0, 'both'], 'Free Drag uses the four-way glyph');
+    assert.deepEqual([rangeHover.move, rangeHover.range, rangeHover.axis], [0, 1, 'x'], 'Range uses its horizontal two-way glyph');
+    assert.deepEqual([dragActive.move, dragActive.range], [1, 0]);
+    assert.deepEqual([rangeActive.move, rangeActive.range], [0, 1]);
     await range.press('End'); assert.equal(await range.inputValue(), '100');
-    checks.push('Drag moves freely in X/Y with four-direction keys; Range changes one value; both have identical hover/held pointer forms.');
+    checks.push('Drag moves freely in X/Y and shows four-way arrows; Range changes one value with two-way arrows; capsule geometry/material and press contraction remain identical.');
 
     const entry = frame.locator('.text-study');
     await entry.hover(); await waitMode(frame, 'text');

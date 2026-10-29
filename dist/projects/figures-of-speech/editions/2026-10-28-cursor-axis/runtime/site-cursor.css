@@ -1,0 +1,118 @@
+/* Shared pointer. Difference blending keeps it legible on dark/light surfaces
+   and photographs without sampling, repainting or altering the artwork. */
+:root { --home-cursor-padding: 10px; }
+.site-cursor {
+  --cursor-size: 13px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10000;
+  width: var(--cursor-size);
+  height: var(--cursor-size);
+  border-radius: 50%;
+  color: #ffffff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  overflow: hidden;
+  contain: layout style paint;
+  will-change: transform;
+}
+.site-cursor[hidden], .site-cursor-attraction[hidden] { display: none; }
+.site-cursor-attraction {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  border-radius: 12px;
+  color: var(--ink);
+  pointer-events: none;
+  overflow: visible;
+  contain: layout style;
+  will-change: transform;
+}
+.site-cursor-surface,
+.site-cursor-edge,
+.site-cursor-glow,
+.site-cursor-light { position: absolute; inset: 0; border-radius: inherit; }
+.site-cursor-surface { background: currentColor; opacity: var(--cursor-fill, .65); }
+.site-cursor-edge { border: 1px solid currentColor; opacity: var(--cursor-edge, 0); }
+.site-cursor-glow {
+  opacity: calc(var(--cursor-glow, 0) * .15);
+  /* Blur the already-feathered child, allowing its faint tail past the bounds. */
+  filter: blur(10px);
+}
+.site-cursor-glow::before {
+  content: '';
+  position: absolute;
+  inset: -24px -32px;
+  background: currentColor;
+  mask-image: radial-gradient(ellipse closest-side at 50% 58%,
+    #000 0%, #000f 18%, #000c 38%, #0006 60%, #0002 80%, #00000005 92%, transparent 100%);
+}
+.site-cursor-light {
+  /* The moving hotspot keeps its local feather; the word shadow fades radially. */
+  mask-image: linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 12px), transparent),
+    linear-gradient(transparent, #000 var(--cursor-feather-y, 12px), #000 calc(100% - var(--cursor-feather-y, 12px)), transparent);
+  mask-composite: intersect;
+}
+.site-cursor-light {
+  opacity: var(--cursor-light, 0);
+  background: radial-gradient(circle 18px at var(--light-x, 50%) var(--light-y, 50%), #fffffff2, #ffffffa6 25%, #ffffff1f 65%, transparent);
+}
+.site-cursor-arrow {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: calc(50% - 7px);
+  top: calc(50% - 7px);
+  color: #000000;
+  opacity: var(--cursor-arrow, 0);
+}
+.site-cursor-magnify {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: calc(50% - 8px);
+  top: calc(50% - 8px);
+  color: #000000;
+  opacity: var(--cursor-magnify, 0);
+  transform: scale(var(--magnify-scale, 1));
+}
+.site-cursor-move, .site-cursor-range {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: calc(50% - 8px);
+  top: calc(50% - 8px);
+  color: #000;
+  transform: scale(calc(var(--magnify-scale, 1) * var(--move-scale, 1)));
+}
+.site-cursor-move { opacity: var(--cursor-move, 0); }
+.site-cursor-range {
+  opacity: var(--cursor-range, 0);
+  transform: rotate(var(--range-angle, 0deg)) scale(calc(var(--magnify-scale, 1) * var(--move-scale, 1)));
+}
+.site-cursor[data-drag-axis='y'] { --range-angle: 90deg; }
+/* Only the background attraction sits beneath lettering. Foreground circles
+   and capsules, including homepage identities, share the site's inversion. */
+body[data-world='cars']:not([data-motor-fallback]) .site-cursor-attraction { color: var(--motor-paper); }
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  html.has-site-cursor, html.has-site-cursor * { cursor: none !important; }
+  /* Real hit regions match the visible magnet; native clicks need no forwarding. */
+  html.has-home-cursor .identity > span { position: relative; }
+  html.has-home-cursor .identity > span::before {
+    content: '';
+    position: absolute;
+    inset: calc(-1 * var(--home-cursor-padding));
+  }
+  /* Word attraction replaces the small hover-only viewfinder corners. */
+  html.has-home-cursor .identity-photo::after { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce), (forced-colors: active), (hover: none), (pointer: coarse) {
+  .site-cursor, .site-cursor-attraction { display: none; }
+}
+@media print {
+  .site-cursor, .site-cursor-attraction { display: none; }
+  html.has-site-cursor, html.has-site-cursor * { cursor: auto !important; }
+}

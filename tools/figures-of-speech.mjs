@@ -90,9 +90,9 @@ export const studies = [
   },
   {
     id: '009', title: 'Adaptive Cursor', kind: 'Object / Interaction', location: 'Homepage + Shared website pointer',
-    image: 'adaptive-cursor-type-forms.jpg', alt: 'Dot, action circle and text bar on the upper row; link, magnifier and shared drag capsules on the lower row, together on white.', experiment: 'adaptive-cursor',
-    edition: '2026-10-28-cursor-text', world: 'cursor', first: '2026-10-27', revised: '2026-10-28',
-    description: 'One pointer changes shape to express what can happen next: press, follow, inspect, move or type. Text bars follow the type size; objects and sliders share one drag shape.',
+    image: 'adaptive-cursor-axis-forms.jpg', alt: 'Dot, action circle and text bar on the upper row; link, magnifier and four-way drag capsules on the lower row, together on white.', experiment: 'adaptive-cursor',
+    edition: '2026-10-28-cursor-axis', world: 'cursor', first: '2026-10-27', revised: '2026-10-28',
+    description: 'One pointer changes shape to express what can happen next: press, follow, inspect, move or type. Free objects use four-way arrows; sliders use arrows along their axis. Text bars follow the type size.',
     perspective: 'The cursor becomes a small object with its own material and motion. Its transformations make the available interaction visible before anything is activated.',
     instruction: 'Move across the eight specimens. Drag the object in two dimensions, adjust the horizontal range, or type with the text bar. Press the button and word, follow the link, or zoom the photo. Touch and keyboard retain access.',
     history: [
@@ -103,6 +103,7 @@ export const studies = [
       ['2026-10-28', 'bb2bac9', 'The word-attraction shadow gains a softer, unclipped falloff.'],
       ['2026-10-28', '73cc7cf', 'Text and editable fields gain a lower-priority vertical bar.'],
       ['2026-10-28', '24b4a58', 'The text bar follows type size, with a 24px minimum and no upper cap.'],
+      ['2026-10-28', '8c39410', 'Free objects gain four-way arrows; sliders retain directional two-way arrows.'],
     ],
   },
 ];

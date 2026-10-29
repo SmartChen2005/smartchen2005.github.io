@@ -1,0 +1,64 @@
+{
+  "edition": "2026-10-28-cursor-axis",
+  "sourceCommit": "8c39410682ef59d598b8081f96efac20af10cc5d",
+  "preserved": "2026-10-28",
+  "description": "Directional cursor edition: free dragging uses four-way arrows; sliders use two-way arrows along their axis, sharing capsule geometry and press feedback. All previous editions remain intact.",
+  "studies": [
+    {
+      "slug": "adaptive-cursor",
+      "kind": "cursor",
+      "title": "Adaptive Cursor"
+    }
+  ],
+  "files": [
+    {
+      "path": "runtime/site-cursor.css",
+      "sha256": "29a9e1631281a8f40aad1d38143333e3715dc14e18b94c54ac3c41195333fd71",
+      "source": {
+        "path": "dist/site-cursor.css",
+        "sha256": "29a9e1631281a8f40aad1d38143333e3715dc14e18b94c54ac3c41195333fd71"
+      }
+    },
+    {
+      "path": "runtime/site-cursor-intents.mjs",
+      "sha256": "360e9579dd54500b9fd77a401ffdf390c7216adae41fa3798fad4ba17be5b405",
+      "source": {
+        "path": "dist/site-cursor-intents.mjs",
+        "sha256": "360e9579dd54500b9fd77a401ffdf390c7216adae41fa3798fad4ba17be5b405"
+      }
+    },
+    {
+      "path": "runtime/projects/polaroid-of-yesterday/photography/assets/the-camera-remembers.webp",
+      "sha256": "4cc73930d50b0fe1fbd12600febd9a2a3474b18f8fb97c93067a149031f0aaa5",
+      "source": {
+        "path": "dist/projects/polaroid-of-yesterday/photography/assets/the-camera-remembers.webp",
+        "sha256": "4cc73930d50b0fe1fbd12600febd9a2a3474b18f8fb97c93067a149031f0aaa5"
+      }
+    },
+    {
+      "path": "runtime/site-cursor.mjs",
+      "sha256": "ae3fd89c7825ae794be04089cdae48b3b918095328e787b3b37be4a43a887252",
+      "source": {
+        "path": "dist/site-cursor.mjs",
+        "sha256": "8aa01281ed2e49ba578ad4181958d8384fc5d5e0ae35f521cbf778393f0f76a3",
+        "adaptation": "Opt in only inside this standalone cursor study, including its word-attraction specimen. Native geometry, intent resolution, springs, inversion, capture tracking and preference fallbacks retained."
+      }
+    },
+    {
+      "path": "cursor-lab.css",
+      "sha256": "d34e7642ef381093556e8e109398581a01454c57b7f773137667170a35228a75"
+    },
+    {
+      "path": "cursor-lab.mjs",
+      "sha256": "21d9dae3619daf6e52c4914bb22bc9950143022f04494d50682cfb861e4091c1"
+    },
+    {
+      "path": "adaptive-cursor/index.html",
+      "sha256": "fd5a285f0e0a563c302bf8134d4527a56a6de98132e3520b3e69bd9fb2b51f7c"
+    },
+    {
+      "path": "cursor-plate.html",
+      "sha256": "cb285f2aef055f2647161b511c4960eaec330e6f3f2930d181b96b756bc9342e"
+    }
+  ]
+}

@@ -5,12 +5,13 @@ import {execFileSync} from 'node:child_process';
 
 // An existing edition is verified, never regenerated from evolving site code.
 const cameraOnly=process.argv.includes('--camera');
-const cursorText=process.argv.includes('--cursor-text');
+const cursorAxis=process.argv.includes('--cursor-axis');
+const cursorText=cursorAxis||process.argv.includes('--cursor-text');
 const cursorOnly=cursorText||process.argv.includes('--cursor');
 const gallerySmall=process.argv.includes('--gallery-small');
 const galleryOnly=gallerySmall||process.argv.includes('--gallery');
-const edition=cursorText?'2026-10-28-cursor-text':cursorOnly?'2026-10-28-cursor':gallerySmall?'2026-10-27-gallery-small':galleryOnly?'2026-10-27-gallery':cameraOnly?'2026-10-27-sx70':'2026-10-27';
-const sourceCommit=cursorText?'24b4a5846e7016fbe8cc6ff4320b615612498a4b':cursorOnly?'bb2bac9272ba2244a3e74a1edbd6c0907f2de184':gallerySmall?'b63438bbc2230cf68135f58109e9a2ce840b1ace':galleryOnly?'2d4eba468c170080f4c85943b3e862853c95f9ff':cameraOnly?'1de028bb51c96eebaf8e44bf7cb12f8f1e8d394e':'e6bb1c9aa2798b7ddacddb74840fc948d857c61a';
+const edition=cursorAxis?'2026-10-28-cursor-axis':cursorText?'2026-10-28-cursor-text':cursorOnly?'2026-10-28-cursor':gallerySmall?'2026-10-27-gallery-small':galleryOnly?'2026-10-27-gallery':cameraOnly?'2026-10-27-sx70':'2026-10-27';
+const sourceCommit=cursorAxis?'8c39410682ef59d598b8081f96efac20af10cc5d':cursorText?'24b4a5846e7016fbe8cc6ff4320b615612498a4b':cursorOnly?'bb2bac9272ba2244a3e74a1edbd6c0907f2de184':gallerySmall?'b63438bbc2230cf68135f58109e9a2ce840b1ace':galleryOnly?'2d4eba468c170080f4c85943b3e862853c95f9ff':cameraOnly?'1de028bb51c96eebaf8e44bf7cb12f8f1e8d394e':'e6bb1c9aa2798b7ddacddb74840fc948d857c61a';
 const output=`dist/projects/figures-of-speech/editions/${edition}`;
 const digest=buffer=>crypto.createHash('sha256').update(buffer).digest('hex');
 const refreshDraft=process.argv.includes('--refresh-draft');
@@ -54,7 +55,7 @@ if(cursorOnly){
   const markup=original.toString('utf8').match(/cursor\.innerHTML = '([^']+)';/)[1];
   const shapes=cursorText?[['dot',13,13,6.5,.65,''],['button',26,26,13,.88,''],['text',2,24,1,.9,''],['link',34,26,13,.88,'--cursor-arrow:1'],['magnify',34,26,13,.88,'--cursor-magnify:1'],['drag',34,26,13,.88,'--cursor-move:1']]:[['dot',13,13,6.5,.65,''],['button',26,26,13,.88,''],['link',34,26,13,.88,'--cursor-arrow:1'],['magnify',34,26,13,.88,'--cursor-magnify:1'],['drag',34,26,13,.88,'--cursor-move:1'],['dragging',30,24,12,.96,'--cursor-move:1;--move-scale:.75;--magnify-scale:.88235294']];
   write('cursor-plate.html',`<!doctype html><html lang="en"><meta charset="utf-8"><title>Adaptive Cursor catalogue plate</title><link rel="stylesheet" href="cursor-lab.css"><style>html,body{margin:0;background:#fff}.cursor-plate{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);width:960px;height:560px;place-items:center}.cursor-specimen{width:260px;height:220px;display:grid;place-items:center}.cursor-specimen .site-cursor{position:relative;left:auto;top:auto;transform:scale(4)}</style><main class="cursor-plate" aria-label="Six preserved cursor forms">${shapes.map(([mode,w,h,r,fill,extra])=>`<div class="cursor-specimen"><div class="site-cursor" data-mode="${mode}" aria-hidden="true" style="width:${w}px;height:${h}px;border-radius:${r}px;--cursor-fill:${fill};${extra}">${markup}</div></div>`).join('')}</main></html>\n`);
-  fs.writeFileSync(`${output}/manifest.json`,JSON.stringify({edition,sourceCommit,preserved:'2026-10-28',description:cursorText?'Type-aware cursor edition: scalable text bars, two-dimensional object dragging and a one-axis range sharing the same pointer; revised six-form plate. All previous editions remain intact.':'Independent adaptive cursor and eight working interaction mechanisms, with a six-form catalogue plate. All previous editions remain intact.',studies:[{slug:'adaptive-cursor',kind:'cursor',title:'Adaptive Cursor'}],files},null,2)+'\n');
+  fs.writeFileSync(`${output}/manifest.json`,JSON.stringify({edition,sourceCommit,preserved:'2026-10-28',description:cursorAxis?'Directional cursor edition: free dragging uses four-way arrows; sliders use two-way arrows along their axis, sharing capsule geometry and press feedback. All previous editions remain intact.':cursorText?'Type-aware cursor edition: scalable text bars, two-dimensional object dragging and a one-axis range sharing the same pointer; revised six-form plate. All previous editions remain intact.':'Independent adaptive cursor and eight working interaction mechanisms, with a six-form catalogue plate. All previous editions remain intact.',studies:[{slug:'adaptive-cursor',kind:'cursor',title:'Adaptive Cursor'}],files},null,2)+'\n');
   console.log(`Preserved cursor edition ${edition}; ${files.length} files.`);process.exit(0);
 }
 if(galleryOnly){

@@ -98,6 +98,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Publish the directional Adaptive Cursor edition
+
+- FIG. 009 now opens `2026-10-28-cursor-axis`, pinned to verified source `8c39410`. The new thumbnail shows the four-way Drag glyph while retaining the six-form layout; Range uses its separate directional glyph in the demo. Older editions remain immutable.
+- Updated catalogue revisions, 27 actual source records and browser assertions: glyphs differ while capsule geometry, inversion and contraction remain equal. The X/Y Drag mechanism and native Range/Text behavior are retained.
+- Passed all 16 Pages Node checks, 102 hashes across seven editions, cursor profile verifiers, six exhibit browser groups, global/home regressions and strict dist audit with zero findings. Latest verification profile: `--cursor-axis`.
+
 ### 2026-10-28 — Distinguish free-drag and slider directions
 
 - Free draggable objects use four-way arrows; range/semantic sliders use two-way arrows along their declared or rendered axis, including vertical writing modes. Both retain the existing capsule geometry, inversion and held contraction.

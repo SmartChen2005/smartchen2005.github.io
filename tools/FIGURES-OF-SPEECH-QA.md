@@ -1,5 +1,26 @@
 # Figures of Speech — 2026-10-27
 
+## 2026-10-28 — Directional drag and slider glyphs
+
+- FIG. 009 now uses `2026-10-28-cursor-axis`, eight payloads pinned to `8c39410`.
+  Previous cursor editions remain unchanged. The new catalogue plate retains
+  dot/circle/text above the three capsules; its Drag capsule now has four-way
+  arrows. `adaptive-cursor-axis-forms.jpg` is captured from the actual plate.
+- Free Drag keeps its X/Y mechanism and four-direction keys, with a four-way
+  pointer. Range keeps native one-axis adjustment and two-way arrows. Browser
+  assertions compare equal capsule dimensions/material/press contraction while
+  confirming the distinct glyphs in both hover and held states.
+- Passed all 16 Pages Node checks, 102 hashes across seven editions / 27 verified
+  source dates, all three cursor edition verifiers and strict dist audit with
+  zero findings. Six exhibit browser groups exercise the real iframe, standalone
+  desktop, narrow view, native editing/range controls and reduced-motion/focus
+  lifecycle. Global pointer/home checks also pass, including a real vertical
+  range rendering up/down arrows and changing value.
+- Current evidence: `cursor-axis-exhibit/`, `axis-site/`, `axis-home/`,
+  `cursor-axis-audit.json`. Reproduce with
+  `node tools/test-cursor-lab-browser.cjs --write-thumbnail` for capture and
+  `node tools/freeze-figures-edition.mjs --cursor-axis` for immutable verification.
+
 ## 2026-10-28 — Type-aware cursor and two-dimensional drag
 
 - FIG. 009 now opens `2026-10-28-cursor-text`, eight payloads pinned to the
