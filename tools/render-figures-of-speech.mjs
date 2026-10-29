@@ -5,6 +5,7 @@ import { studies, experimentURL, preservedEdition, studyEdition } from './figure
 import { projectHeader, projectHeaderAssets } from './project-header.mjs';
 
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));
+const emphasis = value => escape(value).replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
 const date = value => value.replaceAll('-', '.');
 const revision = (item, study) => `<li><time datetime="${item[0]}">${date(item[0])}</time><span>${escape(item[2])}</span><a href="https://github.com/SmartChen2005/smartchen2005.github.io/commit/${item[1]}" target="_blank" rel="noopener noreferrer" aria-label="Source record for ${escape(study.title)} on ${item[0]} (opens in a new tab)">Record</a></li>`;
 
@@ -16,7 +17,7 @@ const grid = studies.map(study => `<a class="specimen" href="${experimentURL(stu
 
 const records = studies.flatMap(study => study.history.map(item => ({item, study}))).sort((a,b) => a.item[0].localeCompare(b.item[0]) || a.study.id.localeCompare(b.study.id));
 const chronology = records.map(({item,study}) => `<li><time datetime="${item[0]}">${date(item[0])}</time><a href="${experimentURL(study)}" data-study="${study.id}"><span class="record-number">FIG. ${study.number}</span><strong>${escape(study.title)}</strong><span>${escape(item[2])}</span></a></li>`).join('\n');
-const panels = studies.map(study => `<article data-panel="${study.id}" hidden><p class="study-type">${escape(study.kind)} / ${escape(study.location)}</p><p class="study-description">${escape(study.description)}</p><h3>Design perspective</h3><p>${escape(study.perspective)}</p><h3>Recorded development</h3><ol class="revision-list">${study.history.map(item => revision(item,study)).join('')}</ol><p class="record-note">Interactive edition preserved ${date(studyEdition(study).slice(0,10))}. Earlier development records are linked above.</p></article>`).join('\n');
+const panels = studies.map(study => `<article data-panel="${study.id}" hidden><p class="study-type">${escape(study.kind)} / ${escape(study.location)}</p><p class="study-description">${escape(study.description)}</p><h3>Design perspective</h3><p>${emphasis(study.perspective)}</p><h3>Recorded development</h3><ol class="revision-list">${study.history.map(item => revision(item,study)).join('')}</ol><p class="record-note">Interactive edition preserved ${date(studyEdition(study).slice(0,10))}. Earlier development records are linked above.</p></article>`).join('\n');
 
 const html = `<!doctype html>
 <html lang="en">
@@ -29,7 +30,7 @@ const html = `<!doctype html>
   <title>Figures of Speech — Smart Chen</title>
   ${projectHeaderAssets('../../')}
   <link rel="stylesheet" href="figures.css?v=20261029-definition">
-  <script type="module" src="figures.mjs?v=20261029-catalogue"></script>
+  <script type="module" src="figures.mjs?v=20261029-camera-copy"></script>
 </head>
 <body>
   <a class="skip-link" href="#index">Skip to the index</a>
