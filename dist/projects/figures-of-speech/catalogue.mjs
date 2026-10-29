@@ -5,8 +5,8 @@ export const studies = [
     id: '001', title: 'Personal Card', kind: 'Object / Material', location: 'Homepage / Smart Chen',
     image: 'personal-card-lit.jpg', alt: 'The silver Smart Chen contact card with its real hover reflection, isolated on white.', experiment: 'personal-card',
     world: 'card', first: '2026-09-29', revised: '2026-10-14',
-    description: 'A contact card treated as a physical object: circular-grained metal, engraved lettering, and one moving studio light.',
-    perspective: 'Identity is carried by material as well as information. Cursor movement and device tilt reveal the finish without moving the grain itself.',
+    description: 'A contact card designed as a physical object: aluminum, perlage finishing, engraved lettering, and a single moving studio light to reveal its surface.',
+    perspective: "Identity is carried by material as well as information. The CMF choices draw inspiration from the titanium Apple Card and traditional watchmaking techniques. Cursor movement and device tilt change the card's orientation relative to a simulated light source, revealing the perlage finish through shifting reflections.",
     instruction: 'Move over the card to inspect its surface. On supported phones, touch the card to enable device tilt.',
     history: [
       ['2026-09-29', '7377c93', 'The contact card becomes part of the homepage.'],
@@ -20,12 +20,12 @@ export const studies = [
     image: 'game-designer-isolated.jpg', alt: 'The standalone game design physics field and its trigger on white.', experiment: 'game-designer',
     world: 'games', first: '2026-09-28', revised: '2026-09-28',
     description: 'A field of balls and platforms responds to movement, then contracts toward a point when the word is activated.',
-    perspective: 'Gravity, collision, and response introduce game design through behavior. The click animation inherits the field already in motion.',
+    perspective: 'Inspired by the classic arcade game Pong.',
     instruction: 'Move to influence the field. Click “(game) designer” to play the contraction; the experiment then resets.',
     history: [['2026-09-28', '4c3f1a3', 'The interactive field and its converging entrance are recorded together.']],
   },
   {
-    id: '004', title: 'Filmmaker', kind: 'Interaction / Hover', location: 'Homepage / filmmaker',
+    id: '004', hidden: true, title: 'Filmmaker', kind: 'Interaction / Hover', location: 'Homepage / filmmaker',
     image: 'filmmaker-isolated.jpg', alt: 'Four developing photographs and viewfinder corners on white.', experiment: 'filmmaker',
     world: 'photo', first: '2026-09-28', revised: '2026-10-23',
     description: 'Photographs and viewfinder corners form a temporary exhibition around the homepage introduction.',
@@ -106,7 +106,8 @@ export const studies = [
       ['2026-10-28', '8c39410', 'Free objects gain four-way arrows; sliders retain directional two-way arrows.'],
     ],
   },
-];
+// Keep source IDs stable while numbering only the visible catalogue entries.
+].filter(study => !study.hidden).map((study, index) => ({ ...study, number: String(index + 1).padStart(3, '0') }));
 
 export const preservedEdition = '2026-10-27';
 export const studyEdition = study => study.edition || preservedEdition;

@@ -11,8 +11,10 @@ const html = fs.readFileSync(path.join(archive,'index.html'),'utf8');
 const shallow = execFileSync('git',['rev-parse','--is-shallow-repository'],{cwd:root,encoding:'utf8'}).trim() === 'true';
 assert.equal(studies.length, new Set(studies.map(study=>study.id)).size, 'Archive IDs must remain unique');
 assert.equal(fs.readFileSync(path.join(root,'tools/figures-of-speech.mjs'),'utf8'),fs.readFileSync(path.join(archive,'catalogue.mjs'),'utf8'),'Browser data must match the editorial source');
-assert.equal(studies.length,8,'The existing studies and the adaptive cursor must be present');
-assert(!studies.some(study=>study.id==='003'),'The merged entrance must not remain a separate card');
+assert.equal(studies.length,7,'The catalogue must show seven studies');
+assert.deepEqual(studies.map(study=>study.number),['001','002','003','004','005','006','007'],'Visible figures must be numbered consecutively');
+assert(!studies.some(study=>study.experiment==='filmmaker'),'Filmmaker must be hidden from the active catalogue');
+assert(!/data-(?:study|panel)="004"|filmmaker-isolated\.jpg|>Filmmaker</.test(html),'Hidden Filmmaker must not appear in the index, notes or chronology');
 assert(!/<iframe\b/.test(html),'The index must not boot hidden rendering contexts');
 assert(!/Try interaction|Open full page|id="start-preview"|id="reset-preview"/.test(html),'No extra interaction gate or live-page control may remain');
 assert(html.includes('Open in New Page'),'The independent experiment must have a new-page link');
@@ -54,6 +56,7 @@ for(const file of manifest.files){
 }
 for(const study of studies){
   assert(html.includes(`data-study="${study.id}"`),`Missing index entry ${study.id}`);
+  assert(html.includes(`<span>FIG. ${study.number}</span>`),`Missing displayed figure number for ${study.title}`);
   assert(html.includes(`data-panel="${study.id}"`),`Missing study notes ${study.id}`);
   const asset = fs.readFileSync(path.join(archive,'assets',study.image));
   assert(asset.length>2000,`Missing or empty real thumbnail ${study.image}`);

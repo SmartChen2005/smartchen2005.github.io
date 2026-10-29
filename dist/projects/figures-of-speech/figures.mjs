@@ -1,4 +1,4 @@
-import { studies, experimentURL, studyEdition } from './catalogue.mjs?rev=20261028-cursor-axis';
+import { studies, experimentURL, studyEdition } from './catalogue.mjs?rev=20261029-catalogue';
 
 const dialog = document.querySelector('.study-dialog');
 const close = document.querySelector('#close-study');
@@ -20,7 +20,7 @@ function stopPreview() {
 function openStudy(study, source) {
   stopPreview(); current = study; opener = source;
   stage.dataset.world = study.world;
-  document.querySelector('#study-number').textContent = `FIG. ${study.id}`;
+  document.querySelector('#study-number').textContent = `FIG. ${study.number}`;
   document.querySelector('#study-title').textContent = study.title;
   const poster = document.querySelector('#study-poster');
   poster.src = `assets/${study.image}`; poster.alt = study.alt;
