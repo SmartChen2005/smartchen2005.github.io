@@ -98,6 +98,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-29 — Lightly compress the full-resolution portrait
+
+- Following the user's latest request, serve a quality-95 WebP portrait at the complete 6000×4000 resolution, without cropping or resizing. Its size falls from 2,551,590 to 1,908,962 bytes (25.2%); the original JPEG remains unchanged and hash-verified.
+- Extend the existing home asset generator and manifest with separate portrait provenance. Enlarged face-detail comparison found no obvious detail/color change. The four Filmmaker previews and eager car initialization remain intact.
+- Update current design guidance, media validation and desktop/phone/4K browser checks to protect full portrait resolution and the existing interactions.
+
 ### 2026-10-28 — Keep full portrait quality and load cars on arrival
 
 - Following the user's clarification, restore the full original 6000×4000 portrait and the original arrival-time motorsport/Three.js import and scene initialization. Keep responsive quality-90 compression only for the four Filmmaker photographs.

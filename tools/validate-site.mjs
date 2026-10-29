@@ -51,6 +51,18 @@ for (const image of homeAssets.images) {
     if (!home.includes(`${variant.path} ${variant.width}w`)) failures.push(`Missing responsive homepage preview: ${variant.path}`);
   }
 }
+const lightPortrait = homeAssets.portrait;
+if (!lightPortrait || !home.includes(`src="${lightPortrait.path}"`)) {
+  failures.push('The homepage must use its full-resolution lightly compressed portrait');
+} else {
+  const file = path.join(root, 'dist', lightPortrait.path);
+  const source = path.join(root, 'dist', lightPortrait.source);
+  if (!fs.existsSync(file) || fs.statSync(file).size !== lightPortrait.bytes ||
+      createHash('sha256').update(fs.readFileSync(file)).digest('hex') !== lightPortrait.sha256 ||
+      createHash('sha256').update(fs.readFileSync(source)).digest('hex') !== lightPortrait.sourceSha256) {
+    failures.push('The lightly compressed portrait or its unchanged source does not match the recorded hash');
+  }
+}
 if (/\.identity::(?:after|before)/.test(homeCss)) failures.push('Persistent identity underline decorations must not return');
 if (!fs.existsSync(path.join(root, 'dist/home-scenes.mjs'))) failures.push('Homepage scenery module is missing');
 if (!fs.existsSync(path.join(root, 'dist/home-game-transition.mjs'))) failures.push('Game click transition module is missing');

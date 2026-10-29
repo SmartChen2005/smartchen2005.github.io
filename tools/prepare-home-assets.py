@@ -1,4 +1,4 @@
-"""Build uncropped Filmmaker previews; preserve all originals and the portrait.
+"""Build uncropped film previews and a lightly encoded full-resolution portrait.
 
 Requires Pillow with WebP support. Run from any directory with Python 3.
 """
@@ -45,8 +45,28 @@ for source, widths in SOURCES:
             })
         manifest['images'].append(record)
 
+# The important portrait retains the full source dimensions; do not resize or crop.
+portrait_source = DIST / 'assets/selfportrait.jpg'
+portrait_target = DIST / 'assets/selfportrait-light.webp'
+with Image.open(portrait_source) as original:
+    portrait = ImageOps.exif_transpose(original).convert('RGB')
+    profile = original.info.get('icc_profile')
+    options = {'icc_profile': profile} if profile else {}
+    portrait.save(portrait_target, 'WEBP', quality=95, method=6, **options)
+    manifest['portrait'] = {
+        'source': 'assets/selfportrait.jpg',
+        'sourceSha256': hashlib.sha256(portrait_source.read_bytes()).hexdigest(),
+        'originalBytes': portrait_source.stat().st_size,
+        'path': 'assets/selfportrait-light.webp',
+        'width': portrait.width, 'height': portrait.height, 'quality': 95,
+        'bytes': portrait_target.stat().st_size,
+        'sha256': hashlib.sha256(portrait_target.read_bytes()).hexdigest(),
+    }
+
 (ROOT / 'tools/home-assets.json').write_text(
     json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
 for image in manifest['images']:
     print(f"{image['source']}: {image['originalBytes']:,} bytes -> " +
           ', '.join(f"{v['width']}w: {v['bytes']:,}" for v in image['variants']))
+print(f"Full-resolution portrait: {manifest['portrait']['originalBytes']:,} -> "
+      f"{manifest['portrait']['bytes']:,} bytes, quality 95, no resizing")

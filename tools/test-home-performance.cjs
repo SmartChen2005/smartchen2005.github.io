@@ -52,15 +52,15 @@ const server = http.createServer((req, res) => {
       }));
       assert(initial.images.every(i => i.loaded));
       assert(initial.images.slice(0, 4).every(i => i.src.endsWith('.webp')));
-      assert(initial.images.at(-1).src.endsWith('/assets/selfportrait.jpg'), 'Portrait must load its original');
+      assert(initial.images.at(-1).src.endsWith('/assets/selfportrait-light.webp'), 'Portrait must load its lightly compressed full-resolution version');
       assert.equal(await page.locator('.portrait-full img').evaluate(i => i.naturalWidth), 6000);
       assert(initial.resources.some(r => /three\.module/.test(r.url)), 'Three.js must load on arrival');
       assert(initial.resources.some(r => /home-motorsport/.test(r.url)), 'Car scene must load on arrival');
       assert(!initial.resources.some(r => /photography-preview\/.*\.jpg$/.test(r.url)), 'Film originals must not be downloaded');
       assert(!initial.overflow);
-      const imageBytes = initial.resources.filter(r => /\.webp$/.test(r.url)).reduce((n,r) => n+r.bytes,0);
+      const imageBytes = initial.resources.filter(r => /photography-preview\/.*\.webp$/.test(r.url)).reduce((n,r) => n+r.bytes,0);
       assert(imageBytes < 1_100_000);
-      results.push({ viewport: name, filmImageBytes: imageBytes, totalImageBytes: imageBytes + initial.resources.filter(r => /\/assets\/selfportrait\.jpg$/.test(r.url)).reduce((n,r) => n+r.bytes,0), totalBytes: initial.resources.reduce((n,r) => n+r.bytes,0), images: initial.images });
+      results.push({ viewport: name, filmImageBytes: imageBytes, totalImageBytes: imageBytes + initial.resources.filter(r => /\/assets\/selfportrait-light\.webp$/.test(r.url)).reduce((n,r) => n+r.bytes,0), totalBytes: initial.resources.reduce((n,r) => n+r.bytes,0), images: initial.images });
       await page.screenshot({ path: path.join(output, `home-${name}.png`) });
       if (touch) await page.goto(origin + '/?study=photo');
       else await page.hover('.identity-photo');
@@ -80,6 +80,6 @@ const server = http.createServer((req, res) => {
     assert.deepEqual(errors, []);
     fs.writeFileSync(path.join(output, 'results.json'), JSON.stringify(results, null, 2) + '\n');
     console.log(JSON.stringify(results, null, 2));
-    console.log('Passed: desktop/phone/4K responsive film photos; original 6000px portrait; arrival-time 3D loading; complete uncropped film previews; car hover/click/Escape; no page errors or overflow.');
+    console.log('Passed: desktop/phone/4K responsive film photos; full 6000px lightly compressed portrait; arrival-time 3D loading; complete uncropped film previews; car hover/click/Escape; no page errors or overflow.');
   } finally { await browser.close(); await new Promise(done => server.close(done)); }
 })().catch(error => { console.error(error); server.close(); process.exitCode = 1; });
