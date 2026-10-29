@@ -32,8 +32,24 @@ if (/mix-blend-mode\s*:/.test(homeCss) || [...settledCss.matchAll(/\bfilter\s*:\
 }
 const exhibitionImages = [...home.matchAll(/src="photography-preview\/([^"]+)"/g)].map(match => match[1]);
 const suppliedImages = fs.readdirSync(path.join(root, 'dist/photography-preview')).filter(name => /\.jpe?g$/i.test(name));
-if (exhibitionImages.length !== 4 || JSON.stringify([...exhibitionImages].sort()) !== JSON.stringify(suppliedImages.sort())) {
+const homeAssets = JSON.parse(fs.readFileSync(path.join(root, 'tools/home-assets.json'), 'utf8'));
+const previewOriginals = exhibitionImages.map(name => name.replace(/-960\.webp$/, '.jpg'));
+if (exhibitionImages.length !== 4 || JSON.stringify(previewOriginals.sort()) !== JSON.stringify(suppliedImages.sort())) {
   failures.push('The exhibition must use each of the four supplied photographs exactly once');
+}
+for (const image of homeAssets.images) {
+  const source = path.join(root, 'dist', image.source);
+  if (createHash('sha256').update(fs.readFileSync(source)).digest('hex') !== image.sha256) {
+    failures.push(`Homepage original changed: ${image.source}`);
+  }
+  for (const variant of image.variants) {
+    const file = path.join(root, 'dist', variant.path);
+    if (!fs.existsSync(file) || fs.statSync(file).size !== variant.bytes ||
+        createHash('sha256').update(fs.readFileSync(file)).digest('hex') !== variant.sha256) {
+      failures.push(`Homepage preview missing or changed: ${variant.path}`);
+    }
+    if (!home.includes(`${variant.path} ${variant.width}w`)) failures.push(`Missing responsive homepage preview: ${variant.path}`);
+  }
 }
 if (/\.identity::(?:after|before)/.test(homeCss)) failures.push('Persistent identity underline decorations must not return');
 if (!fs.existsSync(path.join(root, 'dist/home-scenes.mjs'))) failures.push('Homepage scenery module is missing');

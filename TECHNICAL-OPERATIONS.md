@@ -98,6 +98,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-28 — Reduce homepage media and defer the car scene
+
+- Preserve all original photographs; generate color-profile-preserving quality-90 WebP previews with `tools/prepare-home-assets.py`. Responsive Filmmaker images use 480/960/1920px alternatives and the portrait uses 480/960px, with explicit image priorities and SHA-256 provenance in `tools/home-assets.json`.
+- Defer the existing motorsport/Three.js graph and scene construction until the first car interaction. Preserve queued cold clicks, cancellation, resize/input state and native fallback on request failure; leave immutable archived editions untouched.
+- Real Chrome cold-load checks measured homepage image payloads of 369,228 bytes on desktop 2×, 135,916 bytes on phone 3× and 1,082,872 bytes on 4K 2×, versus 26,090,075 original image bytes. These measure transfer size, not a promised wall-clock speedup. Reproduction and verification are in `tools/HOME-PERFORMANCE-QA.md`.
+
 ### 2026-10-28 — Publish the directional Adaptive Cursor edition
 
 - FIG. 009 now opens `2026-10-28-cursor-axis`, pinned to verified source `8c39410`. The new thumbnail shows the four-way Drag glyph while retaining the six-form layout; Range uses its separate directional glyph in the demo. Older editions remain immutable.
