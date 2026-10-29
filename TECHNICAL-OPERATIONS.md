@@ -18,6 +18,7 @@ This repository is the source of truth for the **Polaroid of Yesterday** web arc
 - `tools/gallery-notion/`, `tools/gallery-document.mjs`, `tools/render-gallery.mjs` — Notion content snapshots, native media mappings and the shared editorial article renderer.
 - `tools/sync-gallery-notion.mjs`, `tools/GALLERY-NOTION-SYNC.md` — Read-only Notion export, local watcher and setup instructions.
 - `dist/gallery/` — Gallery homepage, photography/film articles, shared exhibition styles and local media.
+- `tools/gallery-image-policy.json`, `tools/prepare-gallery-images.py`, `tools/gallery-image-renditions.json` — selected 3000px limit, reproducible responsive images and original/variant hashes.
 - `.github/workflows/pages.yml` — GitHub Pages deployment workflow.
 
 ## Standard update cycle
@@ -100,6 +101,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-10-29 — Optimize all Gallery photographs with a 3000px viewer limit
+
+- Preserve all 163 source files and generate 547 responsive size variants (539 distinct WebP files), covering Gallery covers/articles and the linked twenty-photo Stills collection. Use quality 92, natural proportions, embedded color profiles, no enlargement and a user-selected 3000px maximum long edge.
+- Reuse shared responsive attributes throughout all 14 Gallery/Stills pages. Load capped high-resolution copies on opening the viewer; retain native Original links and remove Stills' automatic uncapped-original fetch. Source CMS text, photo order, captions, original bytes and frozen editions are unchanged.
+- Notion sync prepares new image copies before rendering; its workflow installs pinned Pillow. New static checks verify every source hash, encoded dimensions, coverage and cap. Browser comparisons show phone Gallery-home images decreasing from 3,130,804 to 1,616,760 bytes after browsing all thirteen images (48.4%); sampled article/Stills reductions range from 21.6% to 54.5%. These are transfer-size results, not promised loading-time speedups.
+- Verification/reproduction and detailed request measurements: `tools/GALLERY-IMAGES-QA.md`.
 ### 2026-10-29 — Resize the portrait and prevent emoji link arrows
 
 - Resize only the homepage display portrait to the user-requested 3000×2000 using Lanczos and quality-95 WebP (318,602 bytes); retain the full original. Synchronize intrinsic dimensions, cache revision, manifest and checks. Cars still load on arrival and the four film previews retain their existing optimization.

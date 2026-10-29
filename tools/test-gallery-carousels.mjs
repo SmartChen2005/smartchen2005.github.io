@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { allImages, parseNotionMarkdown, adaptNotionBlocks, publicationNodes, mediaIdentity } from './gallery-document.mjs';
+import { imageRendition } from './gallery-media.mjs';
 
 const read=name=>JSON.parse(fs.readFileSync(new URL(name,import.meta.url),'utf8'));
 const recovery=read('gallery-carousel-recovery.json');
@@ -22,7 +23,7 @@ for(const record of recovery.photographs){
  assert(images.some(i=>mediaIdentity(i.src)===record.notionAssetId),'Recovered carousel is a native image in the CMS readback');
  assert.equal(media['notion-asset:'+record.notionAssetId]?.original,record.original,'Native identity resolves to the archived original');
  const html=fs.readFileSync(new URL('../dist/gallery/'+record.project+'/index.html',import.meta.url),'utf8');
- assert(html.includes(record.display)&&html.includes(record.original),'Published article includes display image and original viewer link');
+ assert(html.includes(imageRendition('gallery/'+record.original).variants.at(-1).path)&&html.includes(record.original),'Published article includes responsive viewer image and original link');
  assert(!html.includes('image-unavailable'),'Recovered article has no missing-image placeholder');
 }
 console.log(`Passed: ${recovery.photographs.length} recovered carousel originals, hashes, source order, native Notion identities, and generated article/viewer assets; no active missing references.`);

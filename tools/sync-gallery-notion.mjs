@@ -63,6 +63,8 @@ async function synchronize(){
  fs.writeFileSync(mediaPath+'.tmp',JSON.stringify(local,null,2)+'\n');
  const oldSnapshot=fs.readFileSync(snapshotPath),oldMedia=fs.readFileSync(mediaPath);
  fs.renameSync(snapshotPath+'.tmp',snapshotPath);fs.renameSync(mediaPath+'.tmp',mediaPath);
+ const prepared=spawnSync(process.env.GALLERY_PYTHON||(process.platform==='win32'?'python':'python3'),['tools/prepare-gallery-images.py'],{cwd:root,stdio:'inherit'});
+ if(prepared.status!==0){fs.writeFileSync(snapshotPath,oldSnapshot);fs.writeFileSync(mediaPath,oldMedia);throw new Error('Gallery image preparation failed; its previous content snapshot is preserved. Install the documented Pillow dependency.');}
  const rendered=spawnSync(process.execPath,['tools/render-gallery.mjs'],{cwd:root,stdio:'inherit'});
  if(rendered.status!==0){fs.writeFileSync(snapshotPath,oldSnapshot);fs.writeFileSync(mediaPath,oldMedia);throw new Error('Gallery export was rejected; its previous content snapshot is preserved.');}
  console.log(`Synced ${pages.length} published Gallery projects from Notion.`);

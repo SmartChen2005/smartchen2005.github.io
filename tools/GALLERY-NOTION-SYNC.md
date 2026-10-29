@@ -63,6 +63,29 @@ For GitHub Pages, set the repository Actions secret **NOTION_TOKEN**. After the 
 
 ## Offline rendering and safeguards
 
+### Responsive image delivery
+
+The user selected a maximum **3000px long edge** for display/viewer copies.
+Original files and Original links remain unchanged. Images below this size are
+not enlarged. `gallery-image-policy.json` controls quality 92 and responsive
+long-edge steps; `prepare-gallery-images.py` generates uncropped, color-profile-
+preserving WebP copies and `gallery-image-renditions.json` records provenance.
+Filenames are based on encoded content, so browsers receive updated pixels
+without overwriting an original or relying on a stale image URL.
+
+Use Python 3.12 with Pillow (`python -m pip install Pillow==13.0.0`) and run
+`python tools/prepare-gallery-images.py` after manually adding local images.
+`GALLERY_PYTHON` may select an installed interpreter. Regular Notion export now
+prepares new responsive files before rendering and rolls back its content
+snapshot on failure. The scheduled workflow supplies Python/Pillow. Offline
+rendering reuses the committed copies and manifest.
+
+Gallery and the linked Stills exhibition load smaller copies according to the
+actual image slot and screen density, then request a capped high-resolution
+copy only when the viewer opens. The Original link still opens the preserved
+source. Run `node tools/test-gallery-image-optimization.mjs` to verify all
+source hashes, output dimensions, the 3000px limit and published coverage.
+
 ```powershell
 node tools/sync-gallery-notion.mjs --offline
 node tools/test-gallery-document.mjs

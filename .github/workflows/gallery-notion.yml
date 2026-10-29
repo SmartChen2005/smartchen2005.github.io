@@ -27,6 +27,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Check Notion connection configuration
         id: configured
         run: |
@@ -38,12 +41,15 @@ jobs:
           fi
       - name: Export published Notion projects
         if: steps.configured.outputs.ready == 'true'
-        run: node tools/sync-gallery-notion.mjs
+        run: |
+          python -m pip install --disable-pip-version-check Pillow==13.0.0
+          node tools/sync-gallery-notion.mjs
       - name: Verify generated website
         if: steps.configured.outputs.ready == 'true'
         run: |
           node tools/test-gallery-document.mjs
           node tools/test-gallery.mjs
+          node tools/test-gallery-image-optimization.mjs
           node tools/validate-site.mjs
       - uses: actions/configure-pages@v5
         if: steps.configured.outputs.ready == 'true'

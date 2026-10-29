@@ -7,7 +7,7 @@ const photos = figures.map(figure => {
   const image = figure.querySelector('img');
   return { id: figure.id, title: figure.querySelector('.print-caption span').textContent,
     kind: figure.querySelector('.print-caption span:last-child').textContent,
-    source: figure.querySelector('a').href, preview: image.src, alt: image.alt,
+    source: figure.querySelector('a').href, preview: image.currentSrc||image.src, view: figure.querySelector('a').dataset.viewSrc||image.src, alt: image.alt,
     width: Number(image.getAttribute('width')), height: Number(image.getAttribute('height')) };
 });
 const viewer = document.querySelector('.photo-viewer');
@@ -138,9 +138,9 @@ function setViewerPhoto(index) {
   document.querySelector('#previous-photo').disabled = selected === 0;
   document.querySelector('#next-photo').disabled = selected === photos.length - 1;
   // Upgrade after entry; only the current load may change the displayed image.
-  const original = new Image();
-  original.onload = () => { if (viewer.open && generation === imageGeneration) viewerImage.src = photo.source; };
-  original.src = photo.source;
+  const highResolution = new Image();
+  highResolution.onload = () => { if (viewer.open && generation === imageGeneration) viewerImage.src = photo.view; };
+  highResolution.src = photo.view;
 }
 function openViewer(index, trigger) {
   if (typeof viewer.showModal !== 'function') return false;

@@ -34,6 +34,7 @@ jobs:
           node tools/test-camera.mjs --archive
           node tools/test-gallery-carousels.mjs
           node tools/test-gallery-layouts.mjs
+          node tools/test-gallery-image-optimization.mjs
           node tools/test-home.mjs
           node tools/test-home-loading.mjs
           node tools/test-motor-race.mjs

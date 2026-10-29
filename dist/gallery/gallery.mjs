@@ -20,7 +20,7 @@ if(works.length&&typeof HTMLDialogElement!=='undefined'){
   const present=index=>{
     selected=(index+works.length)%works.length;const work=works[selected];
     const title=work.dataset.imageTitle||work.querySelector('img')?.alt||'';
-    image.alt=title;image.src=work.querySelector('img').src;
+    image.alt=title;image.src=work.dataset.viewSrc||work.querySelector('img').currentSrc||work.querySelector('img').src;
     caption.textContent=title;viewer.querySelector('[data-original]').href=work.href;
     viewer.querySelector('[data-previous]').disabled=works.length<2;viewer.querySelector('[data-next]').disabled=works.length<2;
   };

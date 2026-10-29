@@ -1,0 +1,7 @@
+{
+  "longEdge": 3000,
+  "previewLongEdges": [480, 960, 1600, 2400, 3000],
+  "quality": 92,
+  "method": 6,
+  "upscale": false
+}

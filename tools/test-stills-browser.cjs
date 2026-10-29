@@ -5,6 +5,8 @@ const output = path.join(__dirname,'stills-qa');
 fs.mkdirSync(output,{recursive:true});
 const origin = process.env.STILLS_PREVIEW_URL || 'http://127.0.0.1:4173';
 const url = origin+'/projects/polaroid-of-yesterday/photography/';
+const imageManifest = JSON.parse(fs.readFileSync(path.join(__dirname,'gallery-image-renditions.json'),'utf8'));
+const roomImages = new Set(imageManifest.images[imageManifest.aliases['projects/polaroid-of-yesterday/photography/assets/the-room.webp']].variants.map(v=>'/'+v.path));
 const pause = p => p.waitForTimeout(1250);
 const ready = p => p.waitForFunction(() => document.body.classList.contains('is-ready') && document.querySelector('.print').style.transform);
 const settle = async p => {await pause(p); await p.evaluate(()=>document.fonts.ready);};
@@ -143,7 +145,7 @@ const galleryClear = async p => {
     assert(await longPage.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth),'Long captions do not overflow on phones');
     await longPage.screenshot({path:path.join(output,'ssense-long-title.png')});
     const slow=await touchContext.newPage();
-    await slow.route('**/assets/the-room.webp',async route=>{await new Promise(resolve=>setTimeout(resolve,1500));await route.continue();});
+    await slow.route('**/gallery/assets/optimized/**',async route=>{if(roomImages.has(new URL(route.request().url()).pathname))await new Promise(resolve=>setTimeout(resolve,1500));await route.continue();});
     await slow.goto(url+'?view=gallery',{waitUntil:'domcontentloaded'});await ready(slow);
     const reserved=await slow.locator('#the-room .print-paper').boundingBox();
     await slow.waitForFunction(()=>document.querySelector('#the-room img').naturalWidth>0);
@@ -155,7 +157,7 @@ const galleryClear = async p => {
     assert(!(await fallback.locator('.view-switch').isVisible()));
     assert((await fallback.locator('#the-room .print-link').getAttribute('href')).endsWith('room.jpg'));
     // Failed media keeps an understandable, actionable original link.
-    const broken=await context.newPage();await broken.route('**/assets/the-room.webp',r=>r.abort());await broken.goto(url);await ready(broken);
+    const broken=await context.newPage();await broken.route('**/gallery/assets/optimized/**',r=>roomImages.has(new URL(r.request().url()).pathname)?r.abort():r.continue());await broken.goto(url);await ready(broken);
     assert(await broken.locator('#the-room .print-error').isVisible());
     assert.equal(errors.length,0,errors.join('\n'));
     console.log('Passed: native scroll and 3D depth; responsive catalog columns; original tones and stationary hover; readable captions and 44px controls; shared viewer/focus/arrows; phone/tablet/laptop/landscape; reduced motion; forced colors; simulated 200% zoom; touch scrolling and tapping; long titles; delayed image geometry; offline/no-JS/error fallback.');

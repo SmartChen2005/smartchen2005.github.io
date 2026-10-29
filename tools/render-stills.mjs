@@ -4,6 +4,7 @@ import { siteFavicon } from './site-favicon.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { siteCursorAssets } from './site-cursor.mjs';
+import { imageRendition, renditionAttributes, viewerAttributes } from './gallery-media.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const route = path.join(root, 'dist/projects/polaroid-of-yesterday/photography');
@@ -13,12 +14,15 @@ const hasPhotography = collection.some(photo => photo.kind === 'Concept photogra
 const description = hasScreenshots && hasPhotography ? 'In-game screenshots and concept photography'
   : hasPhotography ? 'Concept photography' : hasScreenshots ? 'In-game screenshots' : 'Project images';
 const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
-const figures = collection.map((photo, index) => `      <figure class="print" data-index="${index}" id="${photo.id}">
-        <a class="print-link" href="${escape(photo.source)}" aria-label="View ${escape(photo.title)}; ${escape(photo.kind)}">
-          <span class="print-paper"><img src="assets/${photo.id}.webp" width="${photo.width}" height="${photo.height}" alt="${escape(photo.alt)}" ${index < 3 ? 'fetchpriority="high"' : index < 9 ? '' : 'loading="lazy"'} decoding="async"><span class="print-error" hidden>Image unavailable<span>Open original image</span></span></span>
+const figures = collection.map((photo, index) => {
+  const image = imageRendition(`projects/polaroid-of-yesterday/photography/assets/${photo.id}.webp`);
+  return `      <figure class="print" data-index="${index}" id="${photo.id}">
+        <a class="print-link" href="${escape(photo.source)}" aria-label="View ${escape(photo.title)}; ${escape(photo.kind)}" ${viewerAttributes(image,'../../../')}>
+          <span class="print-paper"><img ${renditionAttributes(image,'../../../',{sizes:'auto, (max-width: 700px) 50vw, (max-width: 1024px) 30vw, 24vw',priority:index<9})} alt="${escape(photo.alt)}" ${index < 3 ? 'fetchpriority="high"' : index < 9 ? '' : 'loading="lazy"'} decoding="async"><span class="print-error" hidden>Image unavailable<span>Open original image</span></span></span>
           <span class="print-caption"><span>${escape(photo.title)}</span><span>${escape(photo.kind)}</span></span>
         </a>
-      </figure>`).join('\n');
+      </figure>`;
+}).join('\n');
 const html = `<!doctype html>
 <html lang="en">
 <head>
@@ -28,9 +32,8 @@ const html = `<!doctype html>
   <meta name="description" content="An exhibition of ${description.toLowerCase()} from Polaroid of Yesterday. Explore a memory spiral or an editorial gallery.">
   ${siteFavicon('../../../')}
   <title>Stills | Polaroid of Yesterday | The Gallery</title>
-  <link rel="preload" as="image" href="assets/the-room.webp">
   <link rel="stylesheet" href="stills.css?gallery=20261013">
-  <script type="module" src="stills.mjs?gallery=20261013"></script>
+  <script type="module" src="stills.mjs?gallery=20261029-responsive"></script>
   ${siteCursorAssets('../../../')}
 </head>
 <body>

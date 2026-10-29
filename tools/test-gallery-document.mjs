@@ -5,6 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { parseNotionMarkdown, adaptNotionBlocks, renderDocument, allImages, canonicalMediaUrl, mediaIdentity, publicationNodes, withImageCaptions } from './gallery-document.mjs';
 import { NotionGalleryClient, galleryPageSnapshot } from './gallery-notion-client.mjs';
 import { imageDimensions } from './gallery-image.mjs';
+import { imageRendition } from './gallery-media.mjs';
 import { practiceSections, renderPractice } from './gallery-practice.mjs';
 import { withReadingLanguages } from './gallery-languages.mjs';
 
@@ -153,7 +154,7 @@ assert.equal((practiceHtml.match(/href="#practice-contents"/g)||[]).length,5,'Ev
 assert(!practiceHtml.match(/(?:<h2[^>]*><a[^>]*>|href="#practice-section-\d+">)\(/),'Chapter labels have no enclosing parentheses');
 const morning=snapshot.pages.find(p=>p.properties.Slug==='morning-unwoken');
 assert.equal(local(morning.properties['Cover image'][0]).original,local(allImages(parseNotionMarkdown(morning.markdown))[2].src).original,'Morning Unwoken uses its third photograph as the Notion cover');
-assert.match(galleryHome,/morning-unwoken[^>]*[\s\S]*?assets\/works\/58f7925f68ce9c2ac46c\.webp/);
+assert(galleryHome.includes(imageRendition('gallery/assets/works/58f7925f68ce9c2ac46c.webp').variants.at(-1).path),'Morning Unwoken uses responsive copies of the same selected photograph');
 const notesOnly=adaptNotionBlocks([{type:'toggle',toggle:{rich_text:[{plain_text:'Website layout notes (not published)'}],children:[{type:'paragraph',paragraph:{rich_text:[{plain_text:'Internal layout guidance'}]}}]}}]);
 assert.equal(renderDocument(notesOnly,{title:'Test'}),'','REST exports also omit the internal note');
 assert.equal(renderPractice(notesOnly,{title:'Test'}).document,'');

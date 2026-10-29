@@ -160,7 +160,7 @@ export function withImageCaptions(nodes) {
     return result;
   },[]);
 }
-export function renderDocument(nodes, {title, resolveMedia=url=>({display:url,original:url}), prefix='../', omitIntro='', omitFirstImage='', paragraphCaptions=true, imageOffset=0, referenceRatio:articleRatio}={}) {
+export function renderDocument(nodes, {title, resolveMedia=url=>({display:url,original:url}), prefix='../', omitIntro='', omitFirstImage='', paragraphCaptions=true, imageOffset=0, referenceRatio:articleRatio, imageAttributes, viewerAttributes}={}) {
   nodes=publicationNodes(nodes);
   const referenceRatio=articleRatio??landscapeRatio(nodes,resolveMedia);
   let number=imageOffset;const unavailableSeries=new Set();
@@ -174,7 +174,7 @@ export function renderDocument(nodes, {title, resolveMedia=url=>({display:url,or
     const src=media.display.startsWith('assets/')?prefix+media.display:media.display;
     const original=media.original.startsWith('assets/')?prefix+media.original:media.original;
     const portrait=media.displayHeight>media.displayWidth;
-    return `<figure class="story-image${portrait?' portrait':''}"${portrait?` style="--print-scale:${portraitScale(media.displayWidth,media.displayHeight,referenceRatio)}"`:''}><a class="story-image-open" href="${escapeHtml(original)}" data-image-title="${escapeHtml(label)}"><span class="media"><img src="${escapeHtml(src)}"${media.displayWidth?` width="${media.displayWidth}" height="${media.displayHeight}"`:''} alt="${escapeHtml(label)}" loading="lazy" decoding="async"><span class="media-error" hidden>Image unavailable. Open the original photograph.</span></span></a>${caption?`<figcaption>${inline(node.caption)}</figcaption>`:''}</figure>`;
+    return `<figure class="story-image${portrait?' portrait':''}"${portrait?` style="--print-scale:${portraitScale(media.displayWidth,media.displayHeight,referenceRatio)}"`:''}><a class="story-image-open" href="${escapeHtml(original)}" data-image-title="${escapeHtml(label)}"${viewerAttributes?` ${viewerAttributes(media,prefix)}`:''}><span class="media"><img ${imageAttributes?imageAttributes(media,prefix):`src="${escapeHtml(src)}"${media.displayWidth?` width="${media.displayWidth}" height="${media.displayHeight}"`:''}`} alt="${escapeHtml(label)}" loading="lazy" decoding="async"><span class="media-error" hidden>Image unavailable. Open the original photograph.</span></span></a>${caption?`<figcaption>${inline(node.caption)}</figcaption>`:''}</figure>`;
   };
   function render(list){
     let html='';
