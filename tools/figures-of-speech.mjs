@@ -92,8 +92,8 @@ export const studies = [
     id: '009', title: 'Adaptive Cursor', kind: 'Object / Interaction', location: 'Homepage + Shared website pointer',
     image: 'adaptive-cursor-axis-forms.jpg', alt: 'Dot, action circle and text bar on the upper row; link, magnifier and four-way drag capsules on the lower row, together on white.', experiment: 'adaptive-cursor',
     edition: '2026-10-28-cursor-axis', world: 'cursor', first: '2026-10-27', revised: '2026-10-28',
-    description: 'One pointer changes shape to express what can happen next: press, follow, inspect, move or type. Free objects use four-way arrows; sliders use arrows along their axis. Text bars follow the type size.',
-    perspective: 'The cursor becomes a small object with its own material and motion. Its transformations make the available interaction visible before anything is activated.',
+    description: 'One pointer changes shape to express what can happen next.',
+    perspective: 'Inspired by the iPadOS cursor, the design uses shape and motion to communicate how users can interact with different elements before clicking.',
     instruction: 'Move across the eight specimens. Drag the object in two dimensions, adjust the horizontal range, or type with the text bar. Press the button and word, follow the link, or zoom the photo. Touch and keyboard retain access.',
     history: [
       ['2026-10-27', '7202a4f', 'The adaptive magnetic pointer is introduced on the homepage.'],
