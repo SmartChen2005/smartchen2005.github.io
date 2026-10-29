@@ -37,11 +37,11 @@ export const studies = [
     ],
   },
   {
-    id: '005', title: 'Into The Gallery', kind: 'Motion / Transition', location: 'Homepage + Projects → The Gallery',
+    id: '005', title: 'Into the Gallery', kind: 'Motion / Transition', location: 'Homepage + Projects → The Gallery',
     image: 'gallery-entrance-small.jpg', alt: 'The museum entrance with a small Gallery wordmark and white clearance.', experiment: 'gallery-entrance', edition: '2026-10-27-gallery-small',
     world: 'photo', action: 'photo', first: '2026-10-14', revised: '2026-10-24',
-    description: 'A viewfinder opens into an imagined museum, then resolves into the real Gallery masthead.',
-    perspective: 'Entering a collection becomes a spatial journey. The opening frame, architecture, and destination belong to one continuous movement.',
+    description: 'A wireframe animation takes viewers through a viewfinder into an imagined museum, revealing the gallery.',
+    perspective: 'Entering a collection becomes a spatial journey. The viewfinder, architecture, and destination are connected through one continuous movement.',
     instruction: 'The preserved entrance plays on opening. Click the drawing or Replay to see it again.',
     history: [
       ['2026-10-14', '0f00edf', 'The architectural museum entrance is introduced.'],
@@ -53,8 +53,8 @@ export const studies = [
     id: '006', title: 'Car Enthusiast', kind: 'Motion / Film', location: 'Homepage / car enthusiast',
     image: 'car-enthusiast-isolated.jpg', alt: 'The preserved MINI and BMW Z4 film presented on its own.', experiment: 'car-enthusiast',
     world: 'cars', action: 'cars', first: '2026-10-24', revised: '2026-10-27',
-    description: 'A MINI Cooper S and BMW Z4 move from a narrow city street into an abstract star-grid chase.',
-    perspective: 'The identity unfolds through vehicle character, camera placement, and editing. A continuous street preview becomes a complete short film.',
+    description: 'A wireframe animation of a MINI Cooper and a BMW Z4 chasing each other through a narrow street in Paris.',
+    perspective: 'I bought the MINI Cooper S F55 after my BMW Z4 E85 was totaled in an accident. The two cars had never shared the same frame until this animation.',
     instruction: 'The street preview is already moving. Click the scene or Play film for the full sequence.',
     history: [
       ['2026-10-24', '0305c56', 'The MINI and Z4 line-art race is introduced.'],
@@ -69,7 +69,7 @@ export const studies = [
     image: 'under-construction-isolated.jpg', alt: 'The standalone 404 construction experiment with its own controls.', experiment: 'under-construction',
     world: '404', first: '2026-10-09', revised: '2026-10-09',
     description: 'The 404 page becomes a construction site where objects can be added, moved, and rotated.',
-    perspective: 'An unavailable destination still offers something to explore. Construction is both the message and the interaction.',
+    perspective: "Inspired by a photo I took in a bathroom at Emory University's Cox Hall. The bathroom looked almost exactly like this, so I recreated it as an interactive construction site.",
     instruction: 'Drag objects to move them. Add and clear with the page controls; the canvas also supports keyboard movement and rotation.',
     history: [
       ['2026-10-09', 'cd7e993', 'The construction-site 404 page is introduced.'],

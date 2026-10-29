@@ -30,7 +30,7 @@ const html = `<!doctype html>
   <title>Figures of Speech — Smart Chen</title>
   ${projectHeaderAssets('../../')}
   <link rel="stylesheet" href="figures.css?v=20261029-definition">
-  <script type="module" src="figures.mjs?v=20261029-cursor-copy"></script>
+  <script type="module" src="figures.mjs?v=20261029-stories"></script>
 </head>
 <body>
   <a class="skip-link" href="#index">Skip to the index</a>

@@ -1,4 +1,4 @@
-import { studies, experimentURL, studyEdition } from './catalogue.mjs?rev=20261029-cursor-copy';
+import { studies, experimentURL, studyEdition } from './catalogue.mjs?rev=20261029-stories';
 
 const dialog = document.querySelector('.study-dialog');
 const close = document.querySelector('#close-study');
