@@ -28,7 +28,7 @@ const html = `<!doctype html>
   ${siteFavicon('../../')}
   <title>Figures of Speech — Smart Chen</title>
   ${projectHeaderAssets('../../')}
-  <link rel="stylesheet" href="figures.css?v=20261028-cursor">
+  <link rel="stylesheet" href="figures.css?v=20261029-definition">
   <script type="module" src="figures.mjs?v=20261028-cursor-axis"></script>
 </head>
 <body>
@@ -38,6 +38,10 @@ const html = `<!doctype html>
     <header class="archive-cover">
       <div class="cover-meta"><span>Smart Chen / VegShark.com</span><span>2026 — Ongoing</span></div>
       <h1>Figures of Speech</h1>
+      <div class="cover-definition">
+        <p class="cover-pronunciation">/ˌfiɡyər əv ˈspēCH/</p>
+        <p>A <dfn>figure of speech</dfn> is a word or phrase that departs from literal meaning to express ideas in a more vivid, creative, or impactful way</p>
+      </div>
       <div class="cover-bottom"><p>Studies in Motion &amp; Interface Design</p><p>An evolving index of objects, interactions,<br>and the ideas behind this website.</p></div>
     </header>
     <div class="index-bar" id="index"><p><span id="view-label">Index</span> <span class="entry-count">/ ${studies.length} studies</span></p><div class="view-switch" aria-label="Archive view" hidden><button type="button" data-view="index" aria-pressed="true">Index</button><button type="button" data-view="chronology" aria-pressed="false">Chronology</button></div></div>
