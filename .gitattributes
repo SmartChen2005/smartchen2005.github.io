@@ -2,3 +2,6 @@
 # Editable extraction templates outside this directory retain normal checks.
 dist/projects/figures-of-speech/editions/** -text -whitespace
 dist/projects/figures-of-speech/editions/**/*.pdf -diff
+
+# Keep the live Figma resume export byte-for-byte identical to its source.
+dist/assets/hongyi-chen-resume.pdf -text -diff
