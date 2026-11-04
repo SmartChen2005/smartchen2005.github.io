@@ -95,11 +95,18 @@ If an asset is replaced, keep it beside the document or page that owns it, updat
 
 The workflow intentionally deploys the existing `dist/` directory as-is. This keeps the repository's source and generated output layout stable while making the GitHub Pages publication explicit and repeatable.
 
+Pages push publication and Gallery Notion synchronization use workflow-specific concurrency groups (`github.workflow` + `github.ref`), so a scheduled synchronization cannot cancel a normal website update. Their publishing jobs share `pages-deploy` with `cancel-in-progress: false` and `queue: max`: publication stays serial and waiting jobs are retained. The Gallery job still skips export and deployment when its Notion connection is not configured.
+
 ## Current baseline
 
 At the time this standard was added, the repository contains the complete current static archive, its local image assets, the Notion source, the renderer, the validator, and the design context. The baseline is published by the commit that adds this document and the Pages workflow.
 
 ## Change log
+
+### 2026-11-04 — Prevent scheduled Gallery sync from cancelling Pages publication
+
+- Separate the two workflows' cancellation groups and serialize their publishing jobs with a non-cancelling queue. A Gallery run that skips deployment must not cancel a validated website update.
+- The Projects card commit `53cd033` passed its CI validation, but its deploy job was cancelled when the old shared `pages` group was taken by Gallery synchronization. That Gallery run had no configured Notion connection and skipped deployment. This fix republishes the existing, verified `dist/` without changing page content.
 
 ### 2026-11-04 — Redesign only the Projects homepage with Apple Design
 
