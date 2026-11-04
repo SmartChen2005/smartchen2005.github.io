@@ -7,39 +7,15 @@ const spring = value => ({value, target:value, velocity:0});
 const presses = links.map(element => ({element, ...spring(1)}));
 let frame = 0, previous = 0;
 
-// Shared boundaries tessellate the actual image, without inventing scenery.
-const mesh = [
-  [[0,0],[25,0],[51,0],[76,0],[100,0]],
-  [[0,34],[22,28],[55,37],[73,30],[100,35]],
-  [[0,68],[28,72],[47,63],[79,70],[100,66]],
-  [[0,100],[25,100],[51,100],[76,100],[100,100]]
-];
 const effects = [...document.querySelectorAll('[data-project-effect]')].map(element => {
   const kind = element.dataset.projectEffect;
-  const effect = {element, kind, link:element.closest('a'), x:spring(0), y:spring(0), active:spring(0), develop:spring(0), visible:true, ready:false, pieces:[]};
-  effect.surface = element.querySelector(kind === 'polaroid' ? '.photo-print' : '.ruins-window');
+  const effect = {element, kind, link:element.closest('a'), x:spring(0), y:spring(0), active:spring(0), develop:spring(0), visible:true, ready:false, layers:[]};
   if (kind === 'polaroid') {
+    effect.surface = element.querySelector('.photo-print');
     effect.emulsion = element.querySelector('.photo-emulsion');
     effect.sheen = element.querySelector('.photo-sheen');
   } else {
-    effect.source = element.querySelector('.ruins-source');
-    effect.glass = element.querySelector('.ruins-glass');
-    const image = effect.source.querySelector('img');
-    const fragment = document.createDocumentFragment();
-    for (let row=0; row<3; row++) for (let col=0; col<4; col++) {
-      const points = [mesh[row][col], mesh[row][col+1], mesh[row+1][col+1], mesh[row+1][col]];
-      const cx = points.reduce((sum,p)=>sum+p[0],0)/4;
-      const cy = points.reduce((sum,p)=>sum+p[1],0)/4;
-      const i = row*4+col;
-      const piece = document.createElement('span');
-      piece.className = 'ruins-fragment';
-      piece.style.clipPath = `polygon(${points.map(p=>`${p[0]}% ${p[1]}%`).join(',')})`;
-      piece.style.transformOrigin = `${cx}% ${cy}%`;
-      piece.append(image.cloneNode(true));
-      fragment.append(piece);
-      effect.pieces.push({element:piece, dx:(cx-50)*.3, dy:(cy-50)*.24, z:8+(i*11)%30, angle:((i*7)%9-4)*.7});
-    }
-    element.querySelector('.ruins-fragments').append(fragment);
+    effect.layers = [...element.querySelectorAll('[data-star-depth]')].map(layer=>({element:layer,depth:Number(layer.dataset.starDepth)}));
   }
   return effect;
 });
@@ -64,12 +40,9 @@ function render(effect) {
     effect.sheen.style.opacity = (.06+active.value*.2).toFixed(4);
     effect.sheen.style.transform = `translate(${x.value*18}%,${y.value*6}%)`;
   } else {
-    effect.surface.style.transform = `translate(-50%, -50%) rotateX(${-y.value*7}deg) rotateY(${x.value*9}deg)`;
-    const spread = 1-develop.value;
-    effect.source.style.opacity = (.18+.82*develop.value).toFixed(4);
-    effect.glass.style.opacity = (.15+active.value*.2).toFixed(4);
-    for (const piece of effect.pieces) {
-      piece.element.style.transform = `translate3d(${piece.dx*spread}px,${piece.dy*spread}px,${piece.z*spread}px) rotateZ(${piece.angle*spread}deg)`;
+    for (const layer of effect.layers) {
+      layer.element.style.transform = `translate3d(${-x.value*layer.depth*22}px,${-y.value*layer.depth*14}px,0)`;
+      layer.element.style.opacity = (.78+active.value*.22).toFixed(4);
     }
   }
 }
@@ -87,7 +60,7 @@ function tick(time) {
     moving=advance(effect.x,dt,19)||moving;
     moving=advance(effect.y,dt,19)||moving;
     moving=advance(effect.active,dt,15)||moving;
-    moving=advance(effect.develop,dt,effect.kind==='polaroid'?6:8)||moving;
+    if (effect.kind==='polaroid') moving=advance(effect.develop,dt,6)||moving;
     render(effect);
   }
   if (moving) frame=requestAnimationFrame(tick);
@@ -110,14 +83,15 @@ function point(effect,event) {
   const rect=effect.element.getBoundingClientRect();
   effect.x.target=Math.max(-1,Math.min(1,(event.clientX-rect.left)/rect.width*2-1));
   effect.y.target=Math.max(-1,Math.min(1,(event.clientY-rect.top)/rect.height*2-1));
-  effect.active.target=effect.develop.target=1;
+  effect.active.target=1;
+  if (effect.kind==='polaroid') effect.develop.target=1;
   wake();
 }
 function clearEffect(effect) {
   for (const axis of [effect.x,effect.y,effect.active,effect.develop]) {
     axis.value=axis.target=axis.velocity=0;
   }
-  for (const element of [effect.surface,effect.emulsion,effect.sheen,effect.source,effect.glass,...effect.pieces.map(piece=>piece.element)]) {
+  for (const element of [effect.surface,effect.emulsion,effect.sheen,...effect.layers.map(layer=>layer.element)]) {
     element?.style.removeProperty('transform'); element?.style.removeProperty('opacity');
   }
 }

@@ -103,6 +103,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-04 — Widen the landscape print rim and simplify Gran Turismo to stars
+
+- Slightly increase Polaroid's top/side white rim to 9–14px and its bottom margin to 24–42px. Preserve its original photograph, development and reflection.
+- Replace Gran Turismo's thumbnail window and fragment assembly with a full-card black starfield. Three deterministic, server-rendered layers respond to pointer position with different shallow shifts and a gentle brightness change. Static stars remain without JavaScript or motion; phones show fewer points. Remove the obsolete fragment runtime/styles and retain the thumbnail archive unchanged.
+- Regenerate Projects, run site/icon/pointer/runtime checks, and inspect desktop, narrow, keyboard, pointer and navigation behavior. The latest evidence is recorded in `design-qa.md`.
+
 ### 2026-11-04 — Give the first two Projects cards their own interactions
 
 - Present Polaroid's existing photograph as a paper print with reversible development and pointer-driven reflection/tilt. Tessellate the existing Gran Turismo thumbnail into twelve shallow image fragments that reassemble on hover, with a pointer-driven window perspective. Keep the same image bytes, copy, project destinations, Header, title-only intro and five smaller cards.

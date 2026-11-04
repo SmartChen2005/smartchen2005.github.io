@@ -12,27 +12,39 @@ const room = imageRendition('projects/polaroid-of-yesterday/assets/room.jpg');
 assert(room, 'Reuse the existing optimized Polaroid screenshot.');
 const projects = [
   {href:'polaroid-of-yesterday/',title:'Polaroid of Yesterday',kind:'Narrative puzzle game',description:'A first-person game about photography, memory, and the stories we construct.',effect:'polaroid',image:`<img ${renditionAttributes(room,'../',{sizes:'(max-width: 700px) calc(100vw - 80px), 520px',priority:true})} alt="" decoding="async" fetchpriority="high" draggable="false">`},
-  {href:'gran-turismo/',title:'Gran Turismo',kind:'VR exploration',description:'A journey through the ruins of a lost civilization.',effect:'ruins',image:'<img src="assets/gran-turismo-demo.jpg" width="480" height="360" alt="" loading="lazy" decoding="async" draggable="false">'},
+  {href:'gran-turismo/',title:'Gran Turismo',kind:'VR exploration',description:'A journey through the ruins of a lost civilization.',effect:'stars'},
   {href:'figures-of-speech/',title:'Figures of Speech',kind:'Motion & interface design',description:'An evolving collection of interactive studies from VegShark.com.'},
   {href:'https://handbook.vegshark.com/',title:'The Vibe Coding Game Design Handbook',kind:'Game design resource',description:'handbook.vegshark.com',external:true},
   {href:'vr-for-skill-learning/',title:'VR for Skill Learning',kind:'VR interaction',description:'Practical skills, procedural guidance, and spatial learning.'},
   {href:'world-sensing-music-station/',title:'World Sensing Music Station',kind:'Physical computing',description:'A handheld instrument that turns movement and space into sound.'},
   {href:'multiverse-all-star-battlefront/',title:'Multiverse All-Star Battlefront',kind:'AI game experiment',description:'Imagined characters become pixel-art fighters and generated comics.'}
 ];
+function starfield() {
+  let seed = 4127;
+  const random = () => ((seed = (Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
+  return [{depth:.25,count:22},{depth:.55,count:20},{depth:1,count:14}].map(({depth,count})=>{
+    const stars = Array.from({length:count},()=>{
+      const x=random()*100, y=random()*100;
+      const size=.7+depth*.65+random()*.65;
+      const alpha=(.35+depth*.25+random()*.35)*(x<49 && y>22 && y<78 ? .28 : 1);
+      return `<span class="starfield-star" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;width:${size.toFixed(2)}px;height:${size.toFixed(2)}px;opacity:${alpha.toFixed(3)}"></span>`;
+    }).join('');
+    return `<span class="starfield-layer" data-star-depth="${depth}">${stars}</span>`;
+  }).join('');
+}
 function preview(project) {
-  if (!project.image) return '';
-  const content = project.effect === 'polaroid'
-    ? `<div class="photo-print"><div class="photo-image">${project.image}<span class="photo-emulsion"></span></div><span class="photo-sheen"></span></div>`
-    : `<div class="ruins-window"><div class="ruins-source">${project.image}</div><div class="ruins-fragments"></div><span class="ruins-glass"></span></div>`;
+  if (!project.effect) return '';
+  const content = project.effect === 'stars' ? starfield()
+    : `<div class="photo-print"><div class="photo-image">${project.image}<span class="photo-emulsion"></span></div><span class="photo-sheen"></span></div>`;
   return `<div class="project-preview project-preview--${project.effect}" data-project-effect="${project.effect}" aria-hidden="true">${content}</div>`;
 }
-const entries = projects.map((p,i)=>`<li class="${p.image?'project-feature':'project-card'}"><a class="directory-link" href="${p.href}"${p.external?' target="_blank" rel="noopener noreferrer"':''} draggable="false"><div class="project-copy"><p class="project-kind">${p.kind}${p.external?' <span class="project-external">· Opens in a new tab</span>':''}</p><div class="project-heading"><h2 class="directory-title"${i===0?' id="polaroid-link-title"':''}>${p.title}</h2><span class="directory-arrow" aria-hidden="true">${northEastArrow}</span></div><p class="directory-description">${p.description}</p></div>${preview(p)}</a></li>`).join('\n');
+const entries = projects.map((p,i)=>`<li class="${p.effect?'project-feature':'project-card'}"><a class="directory-link" href="${p.href}"${p.external?' target="_blank" rel="noopener noreferrer"':''} draggable="false"><div class="project-copy"><p class="project-kind">${p.kind}${p.external?' <span class="project-external">· Opens in a new tab</span>':''}</p><div class="project-heading"><h2 class="directory-title"${i===0?' id="polaroid-link-title"':''}>${p.title}</h2><span class="directory-arrow" aria-hidden="true">${northEastArrow}</span></div><p class="directory-description">${p.description}</p></div>${preview(p)}</a></li>`).join('\n');
 fs.writeFileSync(output, `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#070707"><meta name="description" content="Games, tools, and experiments in interaction by Smart Chen.">
 <title>Projects — Smart Chen</title>${siteFavicon('../')}
-<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="projects.css?rev=20261104-project-effects">
-${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261104-project-effects"></script></head>
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="projects.css?rev=20261104-stars">
+${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261104-stars"></script></head>
 <body class="projects-directory" id="top"><a class="projects-skip" href="#main">Skip to projects</a>
 ${header}
 <main class="projects-main" id="main"><div class="projects-intro"><h1 id="page-title">Projects</h1></div>

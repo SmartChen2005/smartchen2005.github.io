@@ -1,3 +1,36 @@
+# Projects: wider print rim and Gran Turismo starfield
+
+Date: 2026-11-04. Scope: the user's requested slight increase in the landscape print's white border and replacement of Gran Turismo's image window with a black, interactive star background.
+
+## Current evidence and review
+
+Artifacts: `C:/Users/15811/.codex/visualizations/2026/11/04/01a1a74e-c80a-7101-82ef-3b23eb02d719/projects-stars/`.
+
+- Reference: source commit `6037803` and the fresh `before-desktop.png` capture (1424×1750). Implementation: `after-desktop.png` (1424×1752), both from the same 1440×1000 CSS viewport/resting state. The extra page height follows the explicit 360px star-card minimum. Both captures omit the same scrollbar strip; no density mismatch.
+- Same-input comparison: `comparison.png`, baseline left and implementation right, both scaled to 720px wide. Focused full-size inspection: `preview.png` (the two featured cards) and `stars-active.png` (real pointer interaction).
+- Phone implementation: `after-390.png` (374×2186), `after-320.png`; geometry and visibility measurements at CSS widths 1440, 768, 390 and 320 are in `browser-results.json`.
+
+| Before | After | Why |
+| --- | --- | --- |
+| 6–10px top/side rim, 18–34px lower rim | 9–14px top/side rim, 24–42px lower rim | Slightly more white paper around the landscape photograph, as requested. |
+| Thumbnail fragments and a framed image window | Full-card black field, 56 sparse star points in three layers | Match the simpler star-background direction. The archived thumbnail remains unchanged. |
+| Fragment assembly on hover | Small depth-dependent star movement and gentle brightness change | Give the starfield a quiet pointer response while preserving normal navigation. |
+
+The source/implementation comparison found no actionable P0/P1/P2 issue. Typography, copy, shared Header, seven destinations, small-card styling and focus affordances remain intact. The wider physical print and full-card black background are intentional differences. Colors are owned by route CSS: black `#000`, stars `#f0f3fa`, existing off-white print. Polaroid image bytes remain unchanged. The starfield uses native generated points, with no replacement image or additional asset request. On phones the star card uses a 280px minimum and 33 visible stars; text and card heights can still grow naturally. All four inspected widths have no horizontal overflow or clipped titles.
+
+## Current verification and limits
+
+- Passed site validation, site icons/all-seven-links/renderer-idempotence checks, shared pointer checks, controller syntax, `git diff --check` and strict `dist/` design audit (zero findings).
+- The current artifact `runtime-check.cjs` passed depth response ratios, pointer brightness, rest/RAF sleep, photo development, press cancellation, keyboard/hidden/offscreen/resize cleanup, preference/coarse-pointer fallbacks, static HTML stars and native navigation ownership.
+- Real in-app browser checks observed three distinct star-layer transforms, black hover background, wider paper padding, four viewport widths, all seven Tab links with visible focus, static focused stars, Gran Turismo navigation and browser Back restoration. Results are in `keyboard-results.json` and `browser-results.json`.
+- Motion/contrast/coarse-pointer preferences were verified in the controlled runtime and CSS; no OS preference switch or physical-phone touch test is claimed. The earlier baseline MutationObserver observation remains historical; no shared script changes are part of this iteration.
+
+final result: passed
+
+---
+
+The preceding preview iteration and earlier 404 QA are retained below as historical evidence.
+
 # Projects: Polaroid and Gran Turismo preview effects
 
 Date: 2026-11-04. Scope: only the first two Projects preview regions, following the user's selection of the proposed photo-development and ruin-reassembly effects. The existing screenshot is the visual reference for retained page structure; the requested effects intentionally change those two previews.
