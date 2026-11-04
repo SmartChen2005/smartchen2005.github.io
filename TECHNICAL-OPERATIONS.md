@@ -103,6 +103,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-04 — Reserve an image for every Projects card
+
+- Keep Gran Turismo's starfield as its background and restore a separate 16:9 foreground image slot. Add image-above-copy slots to the five smaller cards, using an explicitly labelled neutral local SVG until real images are supplied.
+- Each catalog record owns its `previewImage` path, so all six placeholders can be replaced independently. Preserve the Polaroid print, starfield runtime, copy, seven links and responsive column counts. Regenerate Projects and verify loaded images, reserved ratios, narrow layouts, keyboard/native navigation and star interaction over the foreground image.
+
 ### 2026-11-04 — Widen the landscape print rim and simplify Gran Turismo to stars
 
 - Slightly increase Polaroid's top/side white rim to 9–14px and its bottom margin to 24–42px. Preserve its original photograph, development and reflection.

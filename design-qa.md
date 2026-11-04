@@ -1,3 +1,27 @@
+# Projects: image placeholders for Gran Turismo and all five smaller projects
+
+Date: 2026-11-04. Scope: the user's clarification that every card retains an image; Gran Turismo's stars are its background. Six explicit neutral placeholders reserve future project images. Earlier QA is retained below.
+
+## Current evidence
+
+Artifacts: `C:/Users/15811/.codex/visualizations/2026/11/04/01a1a74e-c80a-7101-82ef-3b23eb02d719/projects-placeholders/`.
+
+- Reference: fresh `before-desktop.png` from source `e56ffb4` (1424×1752); implementation `after-desktop.png` (1424×2026), both at CSS viewport 1440×1000/resting state. Page height grows intentionally to accommodate the five new cover images. The same scrollbar strip is omitted and both images are scaled equally in `comparison.png`, baseline left, implementation right.
+- Focused inspection: `preview.png` shows Gran Turismo and all five smaller covers. Phone implementation: `after-phone.png`; checks at CSS widths 768, 390 and 320 are in `browser-results.json`.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Gran Turismo has only a star background | Star background plus a separate 16:9 foreground image | Restore the image requested by the user. |
+| Five smaller text cards | Five image-above-copy cards, retaining the 3/2/1-column grid | Reserve an individual image for each project. |
+
+The comparison has no actionable P0/P1/P2 finding. Existing typography, colors, labels, Header, Polaroid print and seven native destinations remain. All seven images load; the six new images use the explicitly labelled local `project-placeholder.svg`. All six reserved slots measure 16:9 and no inspected width has horizontal overflow or clipped titles. Native SVG text and neutral paper are intentional placeholder UI, not invented project artwork. Placeholder paths are independently owned by their catalog entries. On phones both featured cards stack their copy and images; smaller cards remain a single image-above-copy column.
+
+Real in-app browser input confirms that the foreground image does not block star parallax, Gran Turismo navigation, browser Back or any of the seven Tab links/focus outlines. `keyboard-results.json` records focus checks. Controller behavior is unchanged. Site validation, icon/all-seven-links/renderer-idempotence checks, shared pointer checks, the existing controlled starfield runtime checks, `git diff --check` and strict `dist/` design audit pass. No physical-device or OS preference-switch coverage is claimed.
+
+final result: passed
+
+---
+
 # Projects: wider print rim and Gran Turismo starfield
 
 Date: 2026-11-04. Scope: the user's requested slight increase in the landscape print's white border and replacement of Gran Turismo's image window with a black, interactive star background.

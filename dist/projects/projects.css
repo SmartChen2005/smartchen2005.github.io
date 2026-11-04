@@ -60,6 +60,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
 .projects-main .project-feature .directory-link:has([data-project-effect="stars"]) { position: relative; isolation: isolate; min-height: 360px; background: #000; }
 .projects-main .project-preview[data-project-effect="stars"] { position: absolute; inset: 0; width: auto; height: auto; aspect-ratio: auto; border-radius: inherit; perspective: none; background: #000; z-index: 0; }
 .projects-main .directory-link:has([data-project-effect="stars"]) > .project-copy { position: relative; z-index: 1; text-shadow: 0 1px 8px #000; }
+.projects-main .project-preview--cover { position: relative; z-index: 1; border: 1px solid #343438; background: #1b1b1e; pointer-events: none; }
 .projects-main .starfield-layer { position: absolute; inset: -24px; opacity: .78; }
 .projects-main .starfield-star { position: absolute; display: block; border-radius: 50%; background: #f0f3fa; }
 .projects-main .starfield-star:nth-child(7n) { box-shadow: 0 0 4px #dce9ff55; }
@@ -68,8 +69,10 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
 .projects-main .directory-link:focus-visible .photo-sheen { opacity: 0 !important; }
 .projects-main .directory-link:focus-visible .starfield-layer { transform: none !important; opacity: .85 !important; }
 .projects-main .project-feature:has(+ .project-card) { margin-bottom: 8px; }
-.projects-main .project-card .directory-link { display: flex; align-items: stretch; height: 100%; min-height: 248px; padding: 28px; border-radius: 24px; }
-.projects-main .project-card .project-copy { display: flex; flex-direction: column; width: 100%; }
+.projects-main .project-card .directory-link { display: flex; flex-direction: column; align-items: stretch; gap: 20px; height: 100%; min-height: 248px; padding: 28px; border-radius: 24px; }
+.projects-main .project-card-preview { position: relative; flex: none; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid #343438; border-radius: 12px; background: #1b1b1e; }
+.projects-main .project-card-preview img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+.projects-main .project-card .project-copy { display: flex; flex: 1; flex-direction: column; width: 100%; }
 .projects-main .project-card .project-heading { align-items: flex-start; gap: 16px; }
 .projects-main .project-card .directory-title { font-size: 1.5rem; line-height: 1.15; letter-spacing: -.032em; text-wrap: pretty; }
 .projects-main .project-card .directory-description { max-width: 32ch; margin-top: auto; padding-top: 20px; font-size: .9375rem; overflow-wrap: anywhere; }
