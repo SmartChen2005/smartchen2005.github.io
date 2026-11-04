@@ -34,19 +34,23 @@ for(const file of pages){
 const homepage=fs.readFileSync(new URL('dist/index.html',root),'utf8');
 assert.match(homepage,/<a class="identity identity-photo" href="gallery\/" data-identity="photo">/);
 const stills=fs.readFileSync(new URL('dist/projects/polaroid-of-yesterday/photography/index.html',root),'utf8');
-assert.match(stills,/class="gallery-return" href="\.\.\/\.\.\/\.\.\/gallery\/">The Gallery/);
-assert.match(stills,/data-view="gallery"[^>]*>Index<\/button>/);
+assert.match(stills,/location.replace\("\.\.\/\.\.\/\.\.\/gallery\/trauma-induced-dissociative-amnesia\/" \+ location.search \+ location.hash\)/);
+const exhibition=fs.readFileSync(new URL('trauma-induced-dissociative-amnesia/index.html',gallery),'utf8');
+assert.match(exhibition,/data-view="gallery"[^>]*>Index<\/button>/);
 const room=fs.readFileSync(new URL('dist/projects/polaroid-of-yesterday/index.html',root),'utf8');
 assert.match(room,/camera-tag-title">Gallery /);
 const stillCss=fs.readFileSync(new URL('dist/projects/polaroid-of-yesterday/photography/stills.css',root),'utf8');
 assert.match(stillCss,/@import url\('\.\.\/\.\.\/\.\.\/gallery\/gallery-base.css'\)/);
 for(const file of ['gallery.css','gallery-base.css'])assert(!/object-fit:\s*cover|filter:|box-shadow:/.test(fs.readFileSync(new URL(file,gallery),'utf8')),'Neutral, uncropped photographs');
 const galleryHome=fs.readFileSync(new URL('index.html',gallery),'utf8');
-assert(galleryHome.includes(`${published.length+1} projects`),'Gallery count follows published projects plus the Stills exhibition');
+assert(galleryHome.includes(`${published.length} projects`),'The combined exhibition is counted once');
 const publishedSlugs=new Set(published.map(p=>p.properties.Slug));
 for(const p of projects.filter(p=>!publishedSlugs.has(p.id))){
  assert(!fs.existsSync(new URL(`${p.id}/index.html`,gallery)),`Removed CMS project has no public article: ${p.id}`);
  assert(!galleryHome.includes(`href="${p.id}/"`),`Removed CMS project has no homepage entry: ${p.id}`);
 }
-assert(galleryHome.includes('../projects/polaroid-of-yesterday/photography/'));
+assert(galleryHome.includes('trauma-induced-dissociative-amnesia/'));
+assert(!galleryHome.includes('class="stills-feature"'),'No duplicate standalone Stills entry');
+assert.match(room,/href="\.\.\/\.\.\/gallery\/trauma-induced-dissociative-amnesia\/"/);
+assert.match(room,/>Concept Photography and Game Screenshots<\/span>/);
 console.log(`Passed: ${published.length} published CMS projects; archived cover provenance; removed routes; local pages/assets; Gallery hierarchy; Photographer entry; Spiral/Index labels; room Gallery entry; shared styles; neutral, uncropped images.`);

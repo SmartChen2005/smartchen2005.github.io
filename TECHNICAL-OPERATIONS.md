@@ -101,6 +101,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-03 — Combine TIDA concept art and Polaroid screenshots
+
+- Make `/gallery/trauma-induced-dissociative-amnesia/` the single Gallery exhibition, retaining its title and the shared article shell. Combine eleven current TIDA photographs, explicitly labeled Concept art, with all twenty in-game screenshots in a reproducible shuffled order shared by Spiral, Index and the original Stills viewer.
+- Update Gallery navigation/counts and the Polaroid room's Gallery caption/destination; preserve old Stills query/hash bookmarks with a redirect. Keep source snapshots, original image bytes, native Original links and all responsive renditions unchanged. The shared generator includes future Notion changes without reinstating the prior split layout.
+- Validate with the static Gallery/document/layout/media checks, project-room checks and `node tools/test-stills.mjs` (also added to Pages CI). Real Chrome checks cover seven viewport shapes, mixed image completeness, shell/footer, both modes, category-only viewer, keyboard/focus, reduced motion, offline/no-JS/error recovery and old-address redirects. Reproduction: `tools/STILLS-QA.md`.
+
 ### 2026-10-29 — Optimize all Gallery photographs with a 3000px viewer limit
 
 - Preserve all 163 source files and generate 547 responsive size variants (539 distinct WebP files), covering Gallery covers/articles and the linked twenty-photo Stills collection. Use quality 92, natural proportions, embedded color profiles, no enlargement and a user-selected 3000px maximum long edge.

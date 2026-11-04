@@ -1,3 +1,23 @@
+# Combined Gallery exhibition — 2026-11-03
+
+Current route: `/gallery/trauma-induced-dissociative-amnesia/`. This revision supersedes the original standalone-page instructions below.
+
+- Title: Trauma Induced Dissociative Amnesia. Subtitle: Concept Photography and In-Game Screenshots for Polaroid of Yesterday.
+- Source: current TIDA Notion page plus all twenty existing screenshot records. Eleven concepts use the requested Concept art category; twenty screenshots use In-game screenshot. `tools/polaroid-exhibition.mjs` verifies cached originals and responsive renditions, mixes the whole collection reproducibly and renders one shared semantic sequence.
+- The shared Gallery shell remains in `tools/render-gallery.mjs`; the image body reuses the existing Stills runtime/geometry/viewer with `dist/gallery/polaroid-exhibition.css`. No new dependencies or image copies. Only category descriptions are visible in Index and viewer. Original source snapshots and original bytes remain archived.
+- Gallery's Stills nav and the Polaroid room camera now open this one page. The Gallery project count excludes the former duplicate standalone exhibition. The old Stills URL redirects while preserving query and fragment; without JavaScript it supplies a native link and meta redirect.
+
+Regenerate: `node tools/render-gallery.mjs`, then `node tools/render-stills.mjs`. Existing Notion sync runs the shared Gallery renderer, so future TIDA body image changes also enter this composition. Original-image preparation is unnecessary when reusing existing assets.
+
+Static checks: `node tools/validate-site.mjs`, `node tools/test-stills.mjs`, `node tools/test-project-room.mjs`, `node tools/test-gallery.mjs`, `node tools/test-gallery-document.mjs`, `node tools/test-gallery-layouts.mjs`, `node tools/test-gallery-carousels.mjs`, `node tools/test-gallery-image-optimization.mjs`, `node tools/test-site-cursor.mjs`, `node tools/test-site-icons.mjs`. Pages CI also runs the combined-collection/geometry check.
+
+Browser reproduction: serve `dist/` locally, set `STILLS_PREVIEW_URL` to that origin and `PLAYWRIGHT_MODULE` to the available installed package, then run `node tools/test-stills-browser.cjs`. It uses installed Chrome. Successful checks cover 1440/1920px desktop, 1024px laptop, 768px tablet, 390/320px phone and 844px landscape; all 31 images/categories; shell/title/footer; native scroll; stable mixed order; uncropped/non-overlapping Index; 44px controls; full-ratio viewer; arrows/Escape/focus/scroll lock; far-image keyboard focus; reduced motion/forced colors/offline; old query/hash redirects; no-JS originals; failed image/retry; and Projects → Polaroid → Gallery navigation. Screenshots are in ignored `tools/stills-qa/combined-*.png`.
+
+
+Premium audit evidence: `tools/stills-qa/combined-premium-audit.json`. The repository-wide parser reports 26 `affordance.actionless-button` matches in preserved lab/import HTML and generated test fixtures. It checks only inline `onclick` and cannot resolve this site's external `addEventListener` bindings; the six combined-exhibition matches are bound in the reused Stills module and exercised by the real Chrome suite. These are reviewed parser limitations, not a passing zero-finding audit. No unrelated lab/import files were changed. No `designmd` linter is installed; the additive design note was reviewed against the existing Gallery tokens and article CSS.
+
+---
+
 # Stills exhibition
 
 2026-10-12. Route: `/projects/polaroid-of-yesterday/photography/`.

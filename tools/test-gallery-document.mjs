@@ -135,9 +135,11 @@ for(const slug of ['trauma-induced-dissociative-amnesia','rhythms-of-chaos','ana
  const article=fs.readFileSync(new URL(`../dist/gallery/${slug}/index.html`,import.meta.url),'utf8');
  for(const image of allImages(page.blocks?adaptNotionBlocks(page.blocks):parseNotionMarkdown(page.markdown))){
   const asset=media[image.src]||media[canonicalMediaUrl(image.src)]||media['notion-asset:'+mediaIdentity(image.src)];
-  assert(asset?.original&&article.includes(`href="../${asset.original}"`),`Editorial layout must retain original photograph: ${slug}`);
+  const original=slug==='trauma-induced-dissociative-amnesia'?`../../gallery/${asset?.original}`:`../${asset?.original}`;
+  assert(asset?.original&&article.includes(`href="${original}"`),`Editorial layout must retain original photograph: ${slug}`);
  }
- if(['trauma-induced-dissociative-amnesia','rhythms-of-chaos'].includes(slug))assert.equal((article.match(/class="(?:story-cover )?story-image-open"/g)||[]).length,allImages(parseNotionMarkdown(page.markdown)).length,'The opening image remains selectable once, in the hero');
+ if(slug==='trauma-induced-dissociative-amnesia')assert.equal((article.match(/class="print-link"/g)||[]).length,allImages(parseNotionMarkdown(page.markdown)).length+20,'Every concept and screenshot appears once in the shared exhibition');
+ if(slug==='rhythms-of-chaos')assert.equal((article.match(/class="(?:story-cover )?story-image-open"/g)||[]).length,allImages(parseNotionMarkdown(page.markdown)).length,'The opening image remains selectable once');
 }
 const practicePage=snapshot.pages.find(p=>p.properties.Slug==='deliberate-practice');
 const practiceNodes=parseNotionMarkdown(practicePage.markdown);
@@ -171,7 +173,7 @@ fs.writeFileSync(curatedPath,JSON.stringify(curatedSnapshot));
 const curatedOutput=path.join(qa,'curated-site');
 const curated=spawnSync(process.execPath,['tools/render-gallery.mjs','--snapshot',curatedPath,'--out',curatedOutput],{encoding:'utf8'});
 assert.equal(curated.status,0,curated.stderr);
-const photoSection=fs.readFileSync(path.join(curatedOutput,'index.html'),'utf8').split('id="photography"')[1].split('<section class="stills-feature"')[0];
+const photoSection=fs.readFileSync(path.join(curatedOutput,'index.html'),'utf8').split('id="photography"')[1].split('id="films"')[0];
 const destinations=[...photoSection.matchAll(/<article class="project-card[^\"]*"><a href="([^\"]+)"/g)].map(m=>m[1]);
 const expected=snapshot.pages.filter(p=>p.properties.Type==='Photography'&&p.properties.Featured!=='__YES__'&&!unpublished.has(p.properties.Slug)).map(p=>p.properties.Slug+'/');
 assert.deepEqual(destinations.sort(),expected.sort(),'Unpublishing curated projects must retain each remaining project once');

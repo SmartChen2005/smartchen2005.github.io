@@ -14,11 +14,18 @@ const viewer = document.querySelector('.photo-viewer');
 const viewerImage = viewer.querySelector('.viewer-image');
 const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
 const stage = document.querySelector('.installation');
+const exhibition = document.querySelector('.exhibition');
+const embedded = Boolean(exhibition);
+const header = document.querySelector('.exhibition-header');
+const intro = document.querySelector(embedded ? '.story-hero' : '.exhibition-intro');
+const scrollOrigin = () => embedded ? exhibition.getBoundingClientRect().top + window.scrollY - document.querySelector('.gallery-header').offsetHeight : 0;
+const currentScroll = () => Math.max(0, window.scrollY - scrollOrigin());
+const scrollToPhoto = position => window.scrollTo({ top: scrollOrigin() + position, behavior: 'instant' });
 const spacer = document.querySelector('.exhibition-space');
 const switches = [...document.querySelectorAll('button[data-view]')];
 const footer = document.querySelector('.exhibition-footer');
 const count = document.querySelector('#current-photo');
-let mode = new URL(location.href).searchParams.get('view') === 'gallery' ? 'gallery' : 'spiral';
+let mode = ['gallery', 'index'].includes(new URL(location.href).searchParams.get('view')) ? 'gallery' : 'spiral';
 let width = 0, height = 0, gallery, metrics, scroll = window.scrollY;
 let poses = [], transition = null, frame = 0;
 let selected = 0, returnFocus = null, scrollBeforeViewer = 0, imageGeneration = 0;
@@ -27,12 +34,23 @@ const pad = value => String(value).padStart(2, '0');
 
 function updateViewport() {
   width = document.documentElement.clientWidth;
-  height = window.innerHeight;
+  const top = embedded ? document.querySelector('.gallery-header').offsetHeight + header.offsetHeight : 0;
+  height = Math.max(120, window.innerHeight - top);
+  if (embedded) {
+    exhibition.style.setProperty('--exhibition-top', `${top}px`);
+    exhibition.style.setProperty('--exhibition-height', `${height}px`);
+  }
   metrics = spiralMetrics(width, height, photos.length);
   gallery = galleryLayout(width, height, photos, window.innerWidth);
+  if (embedded) {
+    const offset = gallery.items[0].y - gallery.slotHeight / 2 - 24;
+    gallery.items.forEach(item => { item.y -= offset; });
+    gallery.height -= offset;
+  }
   stage.style.perspective = `${metrics.perspective}px`;
-  const introHeight = document.querySelector('.exhibition-intro').offsetHeight;
-  spacer.style.height = `${Math.max(height, (mode === 'spiral' ? metrics.distance + height : gallery.height) - introHeight)}px`;
+  spacer.style.height = embedded
+    ? `${mode === 'spiral' ? metrics.distance : Math.max(0, gallery.height - height)}px`
+    : `${Math.max(height, (mode === 'spiral' ? metrics.distance + height : gallery.height) - intro.offsetHeight)}px`;
 }
 
 function poseAt(index, scrollPosition) {
@@ -48,7 +66,7 @@ function paint(pose, index) {
   const projection = metrics.perspective / (metrics.perspective - pose.z);
   const screenY = height / 2 + pose.y * projection;
   // Keep photographs at their original tone; depth comes from perspective.
-  const visible = screenY > 40 && screenY < height + 100;
+  const visible = screenY > (embedded ? -100 : 40) && screenY < height + 100;
   figure.style.opacity = '1';
   figure.style.pointerEvents = visible ? 'auto' : 'none';
   figure.dataset.visible = String(visible);
@@ -58,11 +76,11 @@ function paint(pose, index) {
 function render(time) {
   frame = 0;
   if (document.hidden || viewer.open) return;
-  const rawScroll = window.scrollY;
+  const rawScroll = currentScroll();
   scroll = rawScroll;
-  const introBottom = document.querySelector('.exhibition-intro').getBoundingClientRect().bottom;
-  const headerBottom = document.querySelector('.exhibition-header').getBoundingClientRect().bottom;
-  stage.style.setProperty('--stage-top', `${Math.max(headerBottom + 8, introBottom + 24)}px`);
+  if (!embedded) {
+    stage.style.setProperty('--stage-top', `${Math.max(header.getBoundingClientRect().bottom + 8, intro.getBoundingClientRect().bottom + 24)}px`);
+  }
   let amount = 1;
   if (transition) {
     amount = clamp((time - transition.start) / 240);
@@ -104,14 +122,16 @@ function reflectMode() {
 }
 function switchMode(next) {
   if (mode === next) return;
-  const anchor = window.scrollY < 10 ? 0 : nearestPhoto();
+  const anchor = currentScroll() < 10 ? 0 : nearestPhoto();
   const from = poses.map(pose => ({ ...pose }));
-  const atStart = window.scrollY < 10;
+  const atStart = currentScroll() < 10;
+  const previousScroll = window.scrollY;
   mode = next;
   reflectMode();
   updateViewport();
   scroll = atStart ? 0 : positionForPhoto(anchor);
-  window.scrollTo({ top: scroll, behavior: 'instant' });
+  if (atStart) window.scrollTo({ top: previousScroll, behavior: 'instant' });
+  else scrollToPhoto(scroll);
   const url = new URL(location.href);
   if (mode === 'gallery') url.searchParams.set('view', 'gallery'); else url.searchParams.delete('view');
   history.replaceState(null, '', url);
@@ -130,7 +150,7 @@ function setViewerPhoto(index) {
   viewerImage.height = photo.height;
   viewerImage.src = photo.preview;
   viewer.querySelector('.viewer-error').hidden = true;
-  document.querySelector('#viewer-title').textContent = photo.title;
+  document.querySelector('#viewer-title').textContent = embedded ? photo.kind : photo.title;
   document.querySelector('#viewer-kind').textContent = photo.kind;
   document.querySelector('#viewer-counter').textContent = `${pad(selected + 1)} / ${pad(photos.length)}`;
   document.querySelector('#viewer-original').href = photo.source;
@@ -168,10 +188,12 @@ figures.forEach((figure, index) => {
   });
   link.addEventListener('focus', () => {
     if (viewer.open || transition || dismissedFromPointer || pointerDown) return;
-    const rect = image.getBoundingClientRect();
-    if (rect.top < 115 || rect.bottom > height - 85 || rect.left < 10 || rect.right > width - 10) {
+    const rect = image.getBoundingClientRect(), bounds = stage.getBoundingClientRect();
+    const top = embedded ? Math.max(bounds.top, parseFloat(exhibition.style.getPropertyValue('--exhibition-top'))) : 115;
+    const bottom = embedded ? bounds.bottom - 60 : height - 85;
+    if (rect.top < top || rect.bottom > bottom || rect.left < 10 || rect.right > width - 10) {
       scroll = positionForPhoto(index);
-      window.scrollTo({ top: scroll, behavior: 'instant' });
+      scrollToPhoto(scroll);
       schedule();
     }
   });
@@ -225,4 +247,8 @@ if (figures.length && CSS.supports('transform-style', 'preserve-3d')) {
   document.querySelector('.view-switch').hidden = false;
   footer.hidden = false;
   updateViewport(); reflectMode(); schedule();
+  if (embedded && location.hash) {
+    const index = figures.findIndex(figure => '#' + figure.id === location.hash);
+    if (index >= 0) scrollToPhoto(positionForPhoto(index));
+  }
 }
