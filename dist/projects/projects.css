@@ -1,4 +1,11 @@
 /* Projects homepage only. The shared Header keeps its existing styles and tokens. */
+@font-face {
+  font-family: "Great Vibes";
+  src: url("../assets/fonts/great-vibes-regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 .projects-main, .projects-footer {
   --projects-ink: #f5f5f7;
   --projects-secondary: #a1a1a6;
@@ -35,8 +42,19 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
 .projects-main .project-copy { min-width: 0; max-width: none; margin: 0; font: inherit; }
 .projects-main .project-kind { margin: 0 0 14px; color: var(--projects-secondary); font-size: 0.75rem; font-weight: 550; line-height: 1.4; letter-spacing: .035em; }
 .projects-main .project-heading { display: flex; align-items: center; gap: 24px; justify-content: space-between; }
-.projects-main .directory-title { display: block; color: var(--projects-ink); margin: 0; font-weight: 600; font-size: clamp(1.875rem, 3.1vw, 2.75rem); letter-spacing: -.04em; line-height: 1.1; overflow-wrap: anywhere; text-wrap: balance; transition: none; }
-.projects-main .directory-link:hover .directory-title { color: var(--projects-ink); }
+.projects-main .directory-title { display: block; color: var(--project-title-ink, var(--projects-ink)); margin: 0; font-weight: 600; font-size: clamp(1.875rem, 3.1vw, 2.75rem); letter-spacing: -.04em; line-height: 1.1; overflow-wrap: anywhere; text-wrap: balance; transition: none; }
+.projects-main .directory-link:hover .directory-title { color: var(--project-title-ink, var(--projects-ink)); }
+/* Reuse the game's own yellow script; the directory shell stays easy to scan. */
+.projects-main .project-theme--polaroid { --project-title-ink: #f6c934; }
+.projects-main .project-theme--polaroid .directory-title {
+  font-family: "Great Vibes", "Segoe Script", cursive;
+  font-weight: 400;
+  font-size: clamp(2.5rem, 4.6vw, 4rem);
+  line-height: 1.2;
+  letter-spacing: .005em;
+  overflow-wrap: normal;
+  padding-block: .08em .12em;
+}
 .projects-main .directory-description { display: block; max-width: 39ch; margin: 16px 0 0; color: var(--projects-secondary); font-size: 1rem; line-height: 1.5; letter-spacing: -.012em; }
 .projects-main .directory-arrow { display: grid; place-items: center; flex: 0 0 36px; width: 36px; height: 36px; border: 1px solid #424246; border-radius: 50%; color: #dedee3; font-size: 0.8125rem; line-height: 1; transition: background-color 160ms ease, border-color 160ms ease; }
 .projects-main .directory-arrow svg { transition: transform 240ms cubic-bezier(.2,.7,.2,1); }
@@ -133,6 +151,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
   .projects-main :is(.project-feature, .project-card) .directory-link, .projects-main .directory-arrow { background: Canvas; color: LinkText; border-color: LinkText; }
   .projects-main .directory-link:focus-visible { outline-color: Highlight; }
   .projects-main .directory-description, .projects-main .project-kind { color: CanvasText; }
+  .projects-main .project-theme--polaroid { --project-title-ink: LinkText; }
   .projects-main .photo-print { transform: translate(-50%, -50%) !important; border-color: CanvasText; box-shadow: none; }
   .projects-main .photo-emulsion, .projects-main .photo-sheen, .projects-main .project-preview--stars { display: none !important; }
   .projects-main .project-feature .directory-link:has([data-project-effect="stars"]) { background: Canvas; }
@@ -141,6 +160,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
   .projects-main, .projects-footer { color: #000; --projects-ink: #000; --projects-secondary: #333; --projects-line: #999; width: 100%; }
   .projects-main :is(.project-feature, .project-card) .directory-link { break-inside: avoid; background: none; border-color: #999; }
   .projects-main .directory > li { break-inside: avoid; }
+  .projects-main .project-theme--polaroid { --project-title-ink: #000; }
   .projects-footer a, .projects-skip { display: none; }
   .projects-main .photo-print { transform: translate(-50%, -50%) !important; box-shadow: none; }
   .projects-main .photo-emulsion, .projects-main .photo-sheen, .projects-main .project-preview--stars { display: none !important; }

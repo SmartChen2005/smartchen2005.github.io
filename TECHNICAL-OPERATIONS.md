@@ -103,6 +103,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-04 — Bring Polaroid's own title artwork into its card
+
+- Release the Apple-only visual constraint in the Projects design context, keeping a shared browsing structure while allowing each project's own art direction.
+- Add a named Polaroid theme that reuses the detail page's Great Vibes font and yellow title. Keep the color during hover/focus, reserve script ink clearance, and adapt it for forced colors/print. Site/icon/pointer checks, renderer idempotence, strict design audit, responsive inspection and keyboard navigation pass; see `design-qa.md`.
+
 ### 2026-11-04 — Add more stars and show the Music Station device
 
 - Increase Gran Turismo's static starfield from 56 to 160 points, with 72 visible points on phones instead of 33. Keep the same three-layer pointer interaction and foreground image slot.

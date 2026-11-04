@@ -1,3 +1,25 @@
+# Projects: Polaroid's own yellow script title
+
+Date: 2026-11-04. Scope: begin the user's project-specific art direction with Polaroid's actual title font/color. The clear common grid remains; Apple Design is no longer a visual restriction. Earlier QA is retained below.
+
+Artifacts: `C:/Users/15811/.codex/visualizations/2026/11/04/01a1a74e-c80a-7101-82ef-3b23eb02d719/projects-polaroid-type/`.
+
+- Baseline: `71e5466`, `before-desktop.png`. Source art: `source-project.png` and live computed `.wall-title` styles from the detail page confirm Great Vibes 400 / `rgb(246, 201, 52)`. The existing font and license are reused, with no new assets or dependencies.
+- Implementation: `after-desktop.png`, `after-phone.png`, `after-narrow.png` inspected at native aspect ratios. The title becomes the card's identifying artwork; photo treatment, body readability, layout rhythm and surrounding cards remain coherent. Script descenders/flourishes have 1.2 leading and padding; the full title is visible at 320px.
+
+| Before | After | Why |
+| --- | --- | --- |
+| White system-font Polaroid title | Project's yellow Great Vibes title | Make the entry reflect the game's own art. |
+| Apple styling described as the overall direction | Shared browsing structure with named project themes | Support the user's creative portfolio direction without losing a clear overview. |
+
+Real in-app browser verification at 1440, 768, 390 and 320 CSS pixels confirms the loaded font, exact yellow, contained title/heading and no horizontal overflow (`browser-results.json`). Pointer hover and keyboard focus retain the yellow. Visible Tab focus, Enter navigation into Polaroid and Back restoration pass (`keyboard-results.json`). Responsive captures were made after returning the active tab to Projects; temporary viewport changes are reset before handoff.
+
+Passed `node tools/validate-site.mjs`, `node tools/test-site-icons.mjs`, `node tools/test-site-cursor.mjs`, renderer byte-for-byte idempotence and `git diff --check`. Strict `dist/` design audit records zero findings. Reduced-motion behavior and the photo/star/press controllers are unchanged; no new OS-preference, physical-phone or cross-browser test is claimed. Forced-color/print title tokens are explicitly adapted in CSS.
+
+final result: passed
+
+---
+
 # Projects: denser stars and the Music Station device
 
 Date: 2026-11-04. Scope: more stars on Gran Turismo and the existing Music Station device in its card. The implementation reuses the project's existing SVG reconstruction, not a new illustration or a changed model. Earlier QA remains below.

@@ -11,7 +11,7 @@ assert.equal(current, header, 'Preserve the existing shared Header exactly.');
 const room = imageRendition('projects/polaroid-of-yesterday/assets/room.jpg');
 assert(room, 'Reuse the existing optimized Polaroid screenshot.');
 const projects = [
-  {href:'polaroid-of-yesterday/',title:'Polaroid of Yesterday',kind:'Narrative puzzle game',description:'A first-person game about photography, memory, and the stories we construct.',effect:'polaroid',image:`<img ${renditionAttributes(room,'../',{sizes:'(max-width: 700px) calc(100vw - 80px), 520px',priority:true})} alt="" decoding="async" fetchpriority="high" draggable="false">`},
+  {href:'polaroid-of-yesterday/',title:'Polaroid of Yesterday',kind:'Narrative puzzle game',description:'A first-person game about photography, memory, and the stories we construct.',theme:'polaroid',effect:'polaroid',image:`<img ${renditionAttributes(room,'../',{sizes:'(max-width: 700px) calc(100vw - 80px), 520px',priority:true})} alt="" decoding="async" fetchpriority="high" draggable="false">`},
   {href:'gran-turismo/',title:'Gran Turismo',kind:'VR exploration',description:'A journey through the ruins of a lost civilization.',effect:'stars',previewImage:'assets/project-placeholder.svg'},
   {href:'figures-of-speech/',title:'Figures of Speech',kind:'Motion & interface design',description:'An evolving collection of interactive studies from VegShark.com.',previewImage:'assets/project-placeholder.svg'},
   {href:'https://handbook.vegshark.com/',title:'The Vibe Coding Game Design Handbook',kind:'Game design resource',description:'handbook.vegshark.com',external:true,previewImage:'assets/project-placeholder.svg'},
@@ -40,13 +40,13 @@ function preview(project) {
 }
 const entries = projects.map((p,i)=>{
   const media=preview(p);
-  return `<li class="${p.effect?'project-feature':'project-card'}"><a class="directory-link" href="${p.href}"${p.external?' target="_blank" rel="noopener noreferrer"':''} draggable="false">${p.effect?'':media}<div class="project-copy"><p class="project-kind">${p.kind}${p.external?' <span class="project-external">· Opens in a new tab</span>':''}</p><div class="project-heading"><h2 class="directory-title"${i===0?' id="polaroid-link-title"':''}>${p.title}</h2><span class="directory-arrow" aria-hidden="true">${northEastArrow}</span></div><p class="directory-description">${p.description}</p></div>${p.effect?media:''}</a></li>`;
+  return `<li class="${p.effect?'project-feature':'project-card'}${p.theme?` project-theme--${p.theme}`:''}"><a class="directory-link" href="${p.href}"${p.external?' target="_blank" rel="noopener noreferrer"':''} draggable="false">${p.effect?'':media}<div class="project-copy"><p class="project-kind">${p.kind}${p.external?' <span class="project-external">· Opens in a new tab</span>':''}</p><div class="project-heading"><h2 class="directory-title"${i===0?' id="polaroid-link-title"':''}>${p.title}</h2><span class="directory-arrow" aria-hidden="true">${northEastArrow}</span></div><p class="directory-description">${p.description}</p></div>${p.effect?media:''}</a></li>`;
 }).join('\n');
 fs.writeFileSync(output, `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#070707"><meta name="description" content="Games, tools, and experiments in interaction by Smart Chen.">
 <title>Projects — Smart Chen</title>${siteFavicon('../')}
-<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="projects.css?rev=20261104-device-stars">
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="projects.css?rev=20261104-project-art">
 ${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261104-stars"></script></head>
 <body class="projects-directory" id="top"><a class="projects-skip" href="#main">Skip to projects</a>
 ${header}
