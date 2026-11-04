@@ -101,6 +101,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-04 — Redesign only the Projects homepage with Apple Design
+
+- Retain the shared Header exactly. Replace the rest of `/projects/` with system typography, a clear content hierarchy, two stacked game preview cards, a quieter native-link directory and a new minimal footer. Put Gran Turismo directly below Polaroid of Yesterday.
+- Reuse the existing optimized Polaroid screenshot and retain the supplied Gran Turismo video's public thumbnail locally with its source/hash. Add a bounded, interruptible press spring, reduced-motion/static fallbacks and responsive layouts without new dependencies.
+- Regenerate with `node tools/render-projects.mjs`. Check Header parity at desktop/phone sizes, all seven destinations/order, keyboard/native links, narrow layout and press cancellation. No project detail or Gallery files are changed.
+
 ### 2026-11-03 — Add the supplied Gran Turismo video
 
 - Embed `https://youtu.be/OFylHWSwYDY` in `/projects/gran-turismo/` using the YouTube privacy host, responsive dimensions, no autoplay and a direct Watch on YouTube fallback. Keep the rest of the page minimal.

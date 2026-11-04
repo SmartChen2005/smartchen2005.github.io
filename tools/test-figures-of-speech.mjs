@@ -77,5 +77,5 @@ for(const study of studies){
 }
 assert(fs.readFileSync(path.join(root,'dist/projects/index.html'),'utf8').includes('href="figures-of-speech/"'),'Projects must expose the archive');
 const directory=[...fs.readFileSync(path.join(root,'dist/projects/index.html'),'utf8').matchAll(/class="directory-link" href="([^"]+)"/g)].map(match=>match[1]);
-assert.deepEqual(directory.slice(0,2),['polaroid-of-yesterday/','figures-of-speech/'],'Place the archive immediately after Polaroid');
+assert.deepEqual(directory.slice(0,3),['polaroid-of-yesterday/','gran-turismo/','figures-of-speech/'],'Place Gran Turismo immediately below Polaroid, then the archive');
 console.log(`Passed: ${studies.length} isolated studies; ${manifests.reduce((sum,item)=>sum+item.files.length,0)} immutable payload hashes across ${manifests.length} editions and dependency closure; no homepage context or extra start gate; source/render parity; ${studies.reduce((n,study)=>n+study.history.length,0)} dated records${shallow ? ' (Git history check skipped in shallow checkout)' : ' verified against Git'}; Projects order.`);

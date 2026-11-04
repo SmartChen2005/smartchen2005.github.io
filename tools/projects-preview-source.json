@@ -1,0 +1,11 @@
+{
+  "source": "https://www.youtube.com/watch?v=OFylHWSwYDY",
+  "metadata": "https://www.youtube.com/oembed?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DOFylHWSwYDY&format=json",
+  "thumbnail": "https://i.ytimg.com/vi/OFylHWSwYDY/hqdefault.jpg",
+  "retrieved": "2026-11-04",
+  "asset": "dist/projects/assets/gran-turismo-demo.jpg",
+  "width": 480,
+  "height": 360,
+  "sha256": "11e0fc25cc166f7866a4edc74d08ef662a7a0850387ff8f42b090f5917d9e328",
+  "presentation": "A 16:9 preview removes the supplied YouTube thumbnail's black letterbox bars. Source bytes are retained unchanged."
+}
