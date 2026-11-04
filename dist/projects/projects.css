@@ -23,13 +23,15 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
 .projects-intro { text-align: center; margin: 0 0 clamp(40px, 5vw, 64px); }
 .projects-intro h1 { margin: 0; font-size: clamp(3rem, 6vw, 4.75rem); font-weight: 650; line-height: 1.04; letter-spacing: -.055em; }
 .projects-intro > p { margin: 20px 0 0; font-size: clamp(1.1875rem, 2vw, 1.5625rem); line-height: 1.4; letter-spacing: -.022em; color: var(--projects-secondary); }
-.projects-main .directory { list-style: none; display: grid; gap: 20px; padding: 0; margin: 0; border: 0; }
+.projects-main .directory { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; padding: 0; margin: 0; border: 0; }
 .projects-main .directory > li { min-width: 0; }
+.projects-main .project-feature { grid-column: 1 / -1; }
 .projects-main .directory-link { color: inherit; text-decoration: none; cursor: pointer; border: 0; padding: 0; transform-origin: center; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .projects-main .directory-link:focus-visible { outline: 3px solid var(--projects-focus); outline-offset: 5px; }
-.projects-main .project-feature .directory-link { display: grid; grid-template-columns: 1fr 1.1fr; align-items: center; gap: 28px; min-height: 300px; padding: 28px 28px 28px 40px; border: 1px solid #252528; border-radius: 28px; background: var(--projects-surface); transition: background-color 160ms ease, border-color 160ms ease; }
-.projects-main .project-feature .directory-link:hover { background: #1b1b1e; border-color: #414145; }
-.projects-main .project-feature .directory-link:active { background: #222225; }
+.projects-main :is(.project-feature, .project-card) .directory-link { border: 1px solid #252528; background: var(--projects-surface); transition: background-color 160ms ease, border-color 160ms ease; }
+.projects-main :is(.project-feature, .project-card) .directory-link:hover { background: #1b1b1e; border-color: #414145; }
+.projects-main :is(.project-feature, .project-card) .directory-link:active { background: #222225; }
+.projects-main .project-feature .directory-link { display: grid; grid-template-columns: 1fr 1.1fr; align-items: center; gap: 28px; min-height: 300px; padding: 28px 28px 28px 40px; border-radius: 28px; }
 .projects-main .project-copy { min-width: 0; max-width: none; margin: 0; font: inherit; }
 .projects-main .project-kind { margin: 0 0 14px; color: var(--projects-secondary); font-size: 0.75rem; font-weight: 550; line-height: 1.4; letter-spacing: .035em; }
 .projects-main .project-heading { display: flex; align-items: center; gap: 24px; justify-content: space-between; }
@@ -42,19 +44,24 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
 .projects-main .directory-link:is(:hover,:focus-visible) .directory-arrow svg { transform: translate(1px,-1px); }
 .projects-main .project-preview { aspect-ratio: 16 / 9; overflow: hidden; border-radius: 16px; background: #090909; }
 .projects-main .project-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.projects-main .project-feature + .project-row { margin-top: 28px; }
-.projects-main .project-row { border-bottom: 1px solid var(--projects-line); }
-.projects-main .project-row .directory-link { display: block; padding: 24px 8px 30px; border-radius: 14px; }
-.projects-main .project-row .directory-link:is(:hover,:active) { background: #111113; }
-.projects-main .project-row .directory-title { font-size: clamp(1.5rem, 2.4vw, 2rem); letter-spacing: -.032em; }
-.projects-main .project-row .directory-description { max-width: 65ch; margin-top: 10px; }
-.projects-main .project-row .project-kind { margin-bottom: 9px; }
+.projects-main .project-feature:has(+ .project-card) { margin-bottom: 8px; }
+.projects-main .project-card .directory-link { display: flex; align-items: stretch; height: 100%; min-height: 248px; padding: 28px; border-radius: 24px; }
+.projects-main .project-card .project-copy { display: flex; flex-direction: column; width: 100%; }
+.projects-main .project-card .project-heading { align-items: flex-start; gap: 16px; }
+.projects-main .project-card .directory-title { font-size: 1.5rem; line-height: 1.15; letter-spacing: -.032em; text-wrap: pretty; }
+.projects-main .project-card .directory-description { max-width: 32ch; margin-top: auto; padding-top: 20px; font-size: .9375rem; overflow-wrap: anywhere; }
+.projects-main .project-card .project-kind { margin-bottom: 12px; }
+.projects-main .project-card .directory-arrow { width: 32px; height: 32px; flex-basis: 32px; }
 .projects-main .project-external { white-space: nowrap; }
+.projects-main .project-card .project-external { white-space: normal; }
 .projects-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding-block: 32px 40px; margin-top: 48px; font-size: 0.8125rem; line-height: 1.4; color: var(--projects-secondary); }
 .projects-footer p { margin: 0; }
 .projects-footer a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-decoration: none; cursor: pointer; }
 .projects-footer a:hover { color: var(--projects-ink); }
 .projects-footer a:focus-visible { outline-color: var(--projects-focus); }
+@media (max-width: 980px) {
+  .projects-main .directory { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 @media (max-width: 700px) {
   .projects-main .project-feature .directory-link { grid-template-columns: 1fr; gap: 24px; padding: 24px; border-radius: 24px; min-height: 0; }
   .projects-main .directory-title { font-size: 2rem; letter-spacing: -.04em; }
@@ -62,10 +69,13 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
   .projects-main .project-kind { margin-bottom: 10px; }
   .projects-main .directory-description { margin-top: 12px; font-size: 0.9375rem; }
   .projects-main .project-preview { border-radius: 12px; }
-  .projects-main .project-row .directory-link { padding: 20px 4px 26px; }
-  .projects-main .project-row .directory-title { font-size: 1.5625rem; }
+  .projects-main .project-card .directory-link { padding: 24px; }
   .projects-main .directory-arrow { width: 32px; height: 32px; flex-basis: 32px; }
   .projects-footer { margin-top: 24px; }
+}
+@media (max-width: 600px) {
+  .projects-main .directory { grid-template-columns: 1fr; }
+  .projects-main .project-card .directory-link { min-height: 208px; }
 }
 @media (max-width: 380px) {
   .projects-main .project-feature .directory-link { padding: 20px; }
@@ -78,19 +88,19 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
 }
 @media (prefers-contrast: more) {
   .projects-main, .projects-footer { --projects-secondary: #d1d1d6; --projects-line: #77777e; }
-  .projects-main .project-feature .directory-link { border-color: #77777e; }
+  .projects-main :is(.project-feature, .project-card) .directory-link { border-color: #77777e; }
 }
 @media (forced-colors: active) {
   html:has(.projects-directory) { scrollbar-color: auto; }
   .projects-main, .projects-footer { color: CanvasText; --projects-ink: CanvasText; --projects-secondary: CanvasText; --projects-line: CanvasText; --projects-focus: Highlight; }
   .projects-main .directory-link { forced-color-adjust: auto; }
-  .projects-main .project-feature .directory-link, .projects-main .directory-arrow { background: Canvas; color: LinkText; border-color: LinkText; }
+  .projects-main :is(.project-feature, .project-card) .directory-link, .projects-main .directory-arrow { background: Canvas; color: LinkText; border-color: LinkText; }
   .projects-main .directory-link:focus-visible { outline-color: Highlight; }
   .projects-main .directory-description, .projects-main .project-kind { color: CanvasText; }
 }
 @media print {
   .projects-main, .projects-footer { color: #000; --projects-ink: #000; --projects-secondary: #333; --projects-line: #999; width: 100%; }
-  .projects-main .project-feature .directory-link { break-inside: avoid; background: none; border-color: #999; }
-  .projects-main .project-row { break-inside: avoid; }
+  .projects-main :is(.project-feature, .project-card) .directory-link { break-inside: avoid; background: none; border-color: #999; }
+  .projects-main .directory > li { break-inside: avoid; }
   .projects-footer a, .projects-skip { display: none; }
 }
