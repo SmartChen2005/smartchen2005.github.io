@@ -101,6 +101,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-03 — Add the supplied Gran Turismo video
+
+- Embed `https://youtu.be/OFylHWSwYDY` in `/projects/gran-turismo/` using the YouTube privacy host, responsive dimensions, no autoplay and a direct Watch on YouTube fallback. Keep the rest of the page minimal.
+- Regenerate with `node tools/render-gran-turismo.mjs`; validate exact video identity, local assets, responsive player geometry and working links.
+
 ### 2026-11-03 — Restore Selected and compact parallel Stills cards
 
 - Preserve the independent CMS-selected feature at the top, then Photography, Stills and Film in that order. Put TIDA and Gran Turismo into equal left/right Stills cards using the Film image-above-caption pattern with smaller, contained images.

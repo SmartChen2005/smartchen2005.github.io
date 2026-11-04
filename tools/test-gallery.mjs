@@ -63,7 +63,10 @@ for (const file of pages) assert.match(fs.readFileSync(file,'utf8'), /href="(?:\
 const projectDirectory=fs.readFileSync(new URL('dist/projects/index.html',root),'utf8');
 assert.match(projectDirectory, /class="directory-link" href="gran-turismo\/"/);
 const projectPage=fs.readFileSync(new URL('dist/projects/gran-turismo/index.html',root),'utf8');
-assert.equal(projectPage.match(/<main[^>]*>([\s\S]*?)<\/main>/)[1], '<h1>Gran Turismo</h1>', 'The requested project page stays unfilled');
+assert(projectPage.includes('<h1>Gran Turismo</h1>'));
+assert.match(projectPage, /src="https:\/\/www\.youtube-nocookie\.com\/embed\/OFylHWSwYDY"/, 'Embed the exact user-supplied video');
+assert(projectPage.includes('href="https://youtu.be/OFylHWSwYDY"'), 'Keep a native direct-video link');
+assert(!projectPage.includes('autoplay=1'), 'The video starts only when requested');
 const gameStills=fs.readFileSync(new URL('gran-turismo/index.html',gallery),'utf8');
 assert(gameStills.includes('Game Screenshots') && gameStills.includes('<h1>Gran Turismo</h1>'));
 assert(!/<img[^>]*class="(?:print|story-image)|class="story-body"/.test(gameStills), 'No invented screenshots or article copy');
