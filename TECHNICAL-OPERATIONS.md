@@ -101,6 +101,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-03 — Refine portrait scale and Gallery image viewing
+
+- Hyphenate Trauma-Induced in the exhibition title. Make portrait long edges match landscape short edges in Spiral and Index; remove Index category captions and their reserved spacing.
+- Keep the actual Gallery masthead and working navigation inside the open viewer, with restoration on close. Group Close and its cross into one compact control. Decode capped images before one geometry-stable swap and prepare neighboring images, preserving late-load guards, original access and retry.
+- Verify static site/collection/media checks and real Chrome across seven viewport shapes. Additional browser assertions measure portrait scales, caption-free Index, header preservation/navigation, grouped Close, and frame-by-frame geometry across Next/Previous. See `tools/STILLS-QA.md`.
+
 ### 2026-11-03 — Combine TIDA concept art and Polaroid screenshots
 
 - Make `/gallery/trauma-induced-dissociative-amnesia/` the single Gallery exhibition, retaining its title and the shared article shell. Combine eleven current TIDA photographs, explicitly labeled Concept art, with all twenty in-game screenshots in a reproducible shuffled order shared by Spiral, Index and the original Stills viewer.

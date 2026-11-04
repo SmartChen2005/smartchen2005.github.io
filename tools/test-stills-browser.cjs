@@ -14,8 +14,8 @@ const enter = async page => {
 };
 const clear = async page => {
   const boxes = await page.locator('.print').evaluateAll(items => items.map(e => {
-    const a = e.querySelector('.print-paper').getBoundingClientRect(), b = e.querySelector('.print-caption').getBoundingClientRect();
-    return { left: a.left, right: a.right, top: a.top, bottom: Math.max(a.bottom, b.bottom) };
+    const a = e.querySelector('.print-paper').getBoundingClientRect();
+    return { left: a.left, right: a.right, top: a.top, bottom: a.bottom };
   }));
   for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
     const a = boxes[i], b = boxes[j];
@@ -31,9 +31,10 @@ const clear = async page => {
     page.on('pageerror', e => errors.push(e.message));
     await page.goto(url); await ready(page); await page.evaluate(() => document.fonts.ready);
     assert.equal(await page.locator('.print').count(), 31);
-    assert.equal(await page.locator('h1').textContent(), 'Trauma Induced Dissociative Amnesia');
+    assert.equal(await page.locator('h1').textContent(), 'Trauma-Induced Dissociative Amnesia');
     assert.equal(await page.locator('.gallery-header, .gallery-footer').count(), 2);
-    const categories = await page.locator('.print-caption').allTextContents();
+    const categories = await page.locator('.print').evaluateAll(es => es.map(e => e.dataset.kind));
+    assert.equal(await page.locator('.print-caption').count(), 0, 'Index is images only');
     assert.equal(categories.filter(s => s === 'Concept art').length, 11);
     assert.equal(categories.filter(s => s === 'In-game screenshot').length, 20);
     const order = await page.locator('.print').evaluateAll(es => es.map(e => e.id));
@@ -44,32 +45,69 @@ const clear = async page => {
     await page.mouse.wheel(0, 650); await settle(page);
     assert.notEqual(await page.locator('.print').first().getAttribute('style'), before, 'Native scroll advances the helix');
     await page.screenshot({ path: path.join(output, 'combined-desktop-spiral.png') });
+    const portraitScales = await page.locator('.print').evaluateAll(async es => {
+      const {spiralPose} = await import('/projects/polaroid-of-yesterday/photography/stills-layout.mjs');
+      const ref = Number(document.querySelector('.exhibition').dataset.referenceRatio);
+      return es.filter(e => e.querySelector('img').height > e.querySelector('img').width).map(e => {
+        const i=e.querySelector('img'), index=Number(e.dataset.index), expected=spiralPose(index,0,document.documentElement.clientWidth,document.querySelector('.installation').clientHeight,es.length).width*ref*Number(i.getAttribute('width'))/Number(i.getAttribute('height'));
+        return Math.abs(parseFloat(e.style.width)-expected)<.002;
+      });
+    });
+    assert(portraitScales.length > 0 && portraitScales.every(Boolean), 'Spiral portraits use the landscape short-edge scale');
+
     await page.locator('button[data-view=gallery]').click(); await settle(page);
     assert(page.url().includes('view=gallery'));
     await enter(page); await clear(page);
     assert.deepEqual(await page.locator('.print').evaluateAll(es => es.map(e => e.id)), order, 'Switching views preserves mixed order');
     assert(await page.locator('.print').evaluateAll(es => es.every(e => e.style.opacity === '1' && /,\s*0(?:\.0+)?px\)/.test(e.style.transform))), 'Index has no depth or image tint');
     await page.screenshot({ path: path.join(output, 'combined-desktop-index.png') });
+    const portraitHeights = await page.locator('.print img').evaluateAll(es => {
+      const ref=Number(document.querySelector('.exhibition').dataset.referenceRatio);
+      return es.filter(i=>i.height>i.width).map(i=>Math.abs(i.clientHeight-i.closest('.print-paper').clientWidth*ref)<2 && i.clientWidth<i.closest('.print-paper').clientWidth*.8);
+    });
+    assert(portraitHeights.length > 0 && portraitHeights.every(Boolean), 'Index portrait long edges align with landscape short edges');
+
     const first = page.locator('.print-link').first();
+    await page.evaluate(() => {
+      window.viewerFrames = [];
+      const observe = () => { if(!window.viewerFrames)return; const i=document.querySelector('.viewer-image'); if(document.querySelector('.photo-viewer').open && !i.hidden) window.viewerFrames.push({src:i.getAttribute('src'),width:i.getBoundingClientRect().width,height:i.getBoundingClientRect().height}); if(window.viewerFrames)requestAnimationFrame(observe); };
+      requestAnimationFrame(observe);
+    });
+
     await first.click();
     assert(await page.locator('.photo-viewer').evaluate(e => e.open));
-    await page.waitForFunction(() => { const i = document.querySelector('.viewer-image'); return i.complete && i.naturalWidth > 0; });
+    await page.waitForFunction(() => { const i = document.querySelector('.viewer-image'); return document.querySelector('.viewer-stage').getAttribute('aria-busy') === 'false' && !i.hidden && i.complete && i.naturalWidth > 0; });
     assert.equal(await page.locator('#viewer-title').textContent(), categories[0]);
     assert.equal(await page.locator('#viewer-kind').isVisible(), false, 'Viewer has one category description');
     assert(await page.locator('.viewer-close').evaluate(e => document.activeElement === e));
     assert(await page.locator('#previous-photo').isDisabled());
     const dimensions = await page.locator('.viewer-image').evaluate(i => ({ w: i.clientWidth, h: i.clientHeight, ratio: i.naturalWidth / i.naturalHeight }));
     assert(Math.abs(dimensions.w / dimensions.h - dimensions.ratio) < .02, 'Viewer retains the complete image ratio');
+    assert.equal(await page.locator('.photo-viewer > .gallery-header').count(), 1, 'The actual Gallery masthead stays in the viewer');
+    const close = await page.locator('.viewer-close').evaluate(e => ({width:e.offsetWidth, gap:parseFloat(getComputedStyle(e).gap), icon:e.querySelector('svg')?.closest('button')===e}));
+    assert(close.icon && close.gap <= 8 && close.width >= 80, 'Close text/icon form one compact target');
     await page.screenshot({ path: path.join(output, 'combined-desktop-viewer.png') });
+
+    await page.waitForTimeout(500);
+    await page.keyboard.press('ArrowRight'); await page.waitForTimeout(400);
+    await page.keyboard.press('ArrowLeft'); await page.waitForTimeout(400);
+    const frames = await page.evaluate(() => { const frames=window.viewerFrames; window.viewerFrames=null; return frames; });
+    assert(frames.length > 2);
+    const shownSources = new Set(frames.map(f=>f.src));
+    assert.equal(shownSources.size, 2, 'Next/Previous show only the two capped image URLs, without preview upgrades');
+    for(const source of shownSources){const samples=frames.filter(f=>f.src===source);assert(Math.max(...samples.map(f=>f.width))-Math.min(...samples.map(f=>f.width))<.5 && Math.max(...samples.map(f=>f.height))-Math.min(...samples.map(f=>f.height))<.5, 'Each decoded image keeps one geometry while flipping');}
     const scroll = await page.evaluate(() => scrollY);
     await page.keyboard.press('ArrowRight');
+    await page.waitForFunction(() => { const i = document.querySelector('.viewer-image'); return document.querySelector('.viewer-stage').getAttribute('aria-busy') === 'false' && !i.hidden && i.complete && i.naturalWidth > 0; });
     assert.equal(await page.locator('#viewer-title').textContent(), categories[1]);
     await page.mouse.wheel(0, 700);
     assert.equal(await page.evaluate(() => scrollY), scroll, 'Viewer locks the background');
     await page.keyboard.press('Escape');
     assert(await first.evaluate(e => document.activeElement === e), 'Escape restores the source focus');
+    assert.equal(await page.locator('body > .gallery-header').count(), 1, 'Close restores the original shared header');
     await page.locator('.print-link').nth(categories.indexOf('Concept art')).focus();
     await page.keyboard.press('Enter');
+    await page.waitForFunction(() => { const i = document.querySelector('.viewer-image'); return document.querySelector('.viewer-stage').getAttribute('aria-busy') === 'false' && !i.hidden && i.complete && i.naturalWidth > 0; });
     assert.equal(await page.locator('#viewer-title').textContent(), 'Concept art');
     await page.locator('.viewer-close').click();
     await page.locator('button[data-view=spiral]').click(); await settle(page);
@@ -87,7 +125,7 @@ const clear = async page => {
       assert(await page.locator('.view-switch button').evaluateAll(es => es.every(e => e.getBoundingClientRect().height >= 44)));
       await page.screenshot({ path: path.join(output, `combined-index-${width}.png`) });
       await first.click();
-      await page.waitForFunction(() => { const i = document.querySelector('.viewer-image'); return i.complete && i.naturalWidth > 0; });
+      await page.waitForFunction(() => { const i = document.querySelector('.viewer-image'); return document.querySelector('.viewer-stage').getAttribute('aria-busy') === 'false' && !i.hidden && i.complete && i.naturalWidth > 0; });
       const box = await page.locator('.viewer-image').boundingBox();
       assert(box.x >= 0 && box.y >= 0 && box.x + box.width <= width + 1 && box.y + box.height <= height + 1, 'Viewer fits each viewport');
       await page.screenshot({ path: path.join(output, `combined-viewer-${width}.png`) });
@@ -125,6 +163,14 @@ const clear = async page => {
     await broken.unroute('**/gallery/assets/optimized/**');
     await broken.locator('#retry-photo').click();
     await broken.waitForFunction(() => { const i = document.querySelector('.viewer-image'); return !i.hidden && i.complete && i.naturalWidth > 0; });
+
+    const headerNavigation = await context.newPage();
+    await headerNavigation.goto(url+'?view=gallery'); await ready(headerNavigation); await enter(headerNavigation);
+    await headerNavigation.locator('.print-link').first().click();
+    await headerNavigation.locator('.photo-viewer .gallery-person a[href="#contact"]').click();
+    await headerNavigation.waitForURL('**#contact');
+    assert.equal(await headerNavigation.locator('body > .gallery-header').count(),1,'Viewer header links restore the shared masthead before navigation');
+    assert(!(await headerNavigation.locator('.photo-viewer').evaluate(e=>e.open)));
     const navigation = await context.newPage();
     await navigation.route('https://www.youtube.com/**', r => r.abort());
     await navigation.goto(origin + '/projects/');

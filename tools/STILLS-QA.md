@@ -2,9 +2,9 @@
 
 Current route: `/gallery/trauma-induced-dissociative-amnesia/`. This revision supersedes the original standalone-page instructions below.
 
-- Title: Trauma Induced Dissociative Amnesia. Subtitle: Concept Photography and In-Game Screenshots for Polaroid of Yesterday.
+- Title: Trauma-Induced Dissociative Amnesia. Subtitle: Concept Photography and In-Game Screenshots for Polaroid of Yesterday.
 - Source: current TIDA Notion page plus all twenty existing screenshot records. Eleven concepts use the requested Concept art category; twenty screenshots use In-game screenshot. `tools/polaroid-exhibition.mjs` verifies cached originals and responsive renditions, mixes the whole collection reproducibly and renders one shared semantic sequence.
-- The shared Gallery shell remains in `tools/render-gallery.mjs`; the image body reuses the existing Stills runtime/geometry/viewer with `dist/gallery/polaroid-exhibition.css`. No new dependencies or image copies. Only category descriptions are visible in Index and viewer. Original source snapshots and original bytes remain archived.
+- The shared Gallery shell remains in `tools/render-gallery.mjs`; the image body reuses the existing Stills runtime/geometry/viewer with `dist/gallery/polaroid-exhibition.css`. No new dependencies or image copies. Index is images only; category descriptions are visible only in the viewer. Original source snapshots and original bytes remain archived.
 - Gallery's Stills nav and the Polaroid room camera now open this one page. The Gallery project count excludes the former duplicate standalone exhibition. The old Stills URL redirects while preserving query and fragment; without JavaScript it supplies a native link and meta redirect.
 
 Regenerate: `node tools/render-gallery.mjs`, then `node tools/render-stills.mjs`. Existing Notion sync runs the shared Gallery renderer, so future TIDA body image changes also enter this composition. Original-image preparation is unnecessary when reusing existing assets.
@@ -15,6 +15,8 @@ Browser reproduction: serve `dist/` locally, set `STILLS_PREVIEW_URL` to that or
 
 
 Premium audit evidence: `tools/stills-qa/combined-premium-audit.json`. The repository-wide parser reports 26 `affordance.actionless-button` matches in preserved lab/import HTML and generated test fixtures. It checks only inline `onclick` and cannot resolve this site's external `addEventListener` bindings; the six combined-exhibition matches are bound in the reused Stills module and exercised by the real Chrome suite. These are reviewed parser limitations, not a passing zero-finding audit. No unrelated lab/import files were changed. No `designmd` linter is installed; the additive design note was reviewed against the existing Gallery tokens and article CSS.
+
+Refinement verification (2026-11-03): portrait long edges match landscape short edges in both modes, with an image-only landscape-slot Index. Browser checks assert actual portrait scale and the absence of captions, retain the real Gallery header inside the modal, exercise its Contact navigation and restoration, measure the one compact Close target, and sample every animation frame across Next/Previous to verify each image uses one capped URL and one fixed geometry. The viewer decodes first and prepares neighbors; it never displays a smaller preview before the high-resolution copy.
 
 ---
 

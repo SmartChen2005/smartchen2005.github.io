@@ -53,7 +53,9 @@ const html=fs.readFileSync(new URL('index.html',route),'utf8');
 assert(html.includes(exhibitionSubtitle));
 assert.equal((html.match(/class="print-link"/g)||[]).length, photos.length);
 assert.deepEqual([...html.matchAll(/<figure class="print"[^>]*id="([^"]+)"/g)].map(m=>m[1]),photos.map(p=>p.id), 'Both views use one mixed DOM sequence');
-assert.deepEqual([...html.matchAll(/class="print-caption"><span>([^<]+)<\/span><\/span>/g)].map(m=>m[1]),photos.map(p=>p.kind),'Only media categories are shown as descriptions');
+assert.deepEqual([...html.matchAll(/data-kind="([^"]+)"/g)].map(m=>m[1]),photos.map(p=>p.kind),'Media categories remain available in the viewer');
+assert(!html.includes('class="print-caption"'), 'Index has no visible labels');
+assert(html.includes('Trauma-Induced Dissociative Amnesia'));
 for (const [,ref] of html.matchAll(/(?:src|href)="([^"]+)"/g)) {
   if (/^(?:#|https?:|data:|mailto:)/.test(ref)) continue;
   assert(fs.existsSync(new URL(ref,route)),`Missing local dependency: ${ref}`);

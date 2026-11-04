@@ -1,12 +1,12 @@
-import { clamp, spiralMetrics, spiralPose, galleryLayout, interpolatePose } from './stills-layout.mjs?gallery=20261013';
+import { clamp, spiralMetrics, spiralPose, galleryLayout, interpolatePose } from './stills-layout.mjs?rev=20261103-proportions';
 
 const figures = [...document.querySelectorAll('.print')];
 // The semantic HTML is the collection source at runtime. No fetch or WebGL is
 // needed to enter the exhibition, and the static gallery survives JS failure.
 const photos = figures.map(figure => {
   const image = figure.querySelector('img');
-  return { id: figure.id, title: figure.querySelector('.print-caption span').textContent,
-    kind: figure.querySelector('.print-caption span:last-child').textContent,
+  return { id: figure.id, title: figure.dataset.kind || figure.querySelector('.print-caption span')?.textContent,
+    kind: figure.dataset.kind || figure.querySelector('.print-caption span:last-child')?.textContent,
     source: figure.querySelector('a').href, preview: image.currentSrc||image.src, view: figure.querySelector('a').dataset.viewSrc||image.src, alt: image.alt,
     width: Number(image.getAttribute('width')), height: Number(image.getAttribute('height')) };
 });
@@ -16,6 +16,12 @@ const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
 const stage = document.querySelector('.installation');
 const exhibition = document.querySelector('.exhibition');
 const embedded = Boolean(exhibition);
+const referenceRatio = Number(exhibition?.dataset.referenceRatio) || 2 / 3;
+const galleryHeader = document.querySelector('.gallery-header');
+const viewerStage = viewer.querySelector('.viewer-stage');
+const viewerLoading = viewer.querySelector('.viewer-loading');
+const preparedImages = new Map();
+let headerPlaceholder, displayedPhoto = null, loadingTimer;
 const header = document.querySelector('.exhibition-header');
 const intro = document.querySelector(embedded ? '.story-hero' : '.exhibition-intro');
 const scrollOrigin = () => embedded ? exhibition.getBoundingClientRect().top + window.scrollY - document.querySelector('.gallery-header').offsetHeight : 0;
@@ -41,12 +47,7 @@ function updateViewport() {
     exhibition.style.setProperty('--exhibition-height', `${height}px`);
   }
   metrics = spiralMetrics(width, height, photos.length);
-  gallery = galleryLayout(width, height, photos, window.innerWidth);
-  if (embedded) {
-    const offset = gallery.items[0].y - gallery.slotHeight / 2 - 24;
-    gallery.items.forEach(item => { item.y -= offset; });
-    gallery.height -= offset;
-  }
+  gallery = galleryLayout(width, height, photos, window.innerWidth, embedded ? {referenceRatio, captions: false, top: 24} : {});
   stage.style.perspective = `${metrics.perspective}px`;
   spacer.style.height = embedded
     ? `${mode === 'spiral' ? metrics.distance : Math.max(0, gallery.height - height)}px`
@@ -54,9 +55,12 @@ function updateViewport() {
 }
 
 function poseAt(index, scrollPosition) {
-  return mode === 'spiral'
-    ? spiralPose(index, clamp(scrollPosition / metrics.distance), width, height, photos.length)
-    : { ...gallery.items[index], y: gallery.items[index].y - scrollPosition - height / 2 };
+  if (mode === 'spiral') {
+    const pose = spiralPose(index, clamp(scrollPosition / metrics.distance), width, height, photos.length);
+    if (embedded && photos[index].height > photos[index].width) pose.width *= referenceRatio * photos[index].width / photos[index].height;
+    return pose;
+  }
+  return { ...gallery.items[index], y: gallery.items[index].y - scrollPosition - height / 2 };
 }
 
 function paint(pose, index) {
@@ -141,26 +145,72 @@ function switchMode(next) {
   schedule();
 }
 
+function fitViewerImage(photo) {
+  const style = getComputedStyle(viewerStage);
+  const availableWidth = viewerStage.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+  const availableHeight = viewerStage.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
+  const ratio = photo.width / photo.height;
+  const fittedWidth = Math.max(1, Math.min(1120, availableWidth, availableHeight * ratio));
+  viewerImage.style.width = `${fittedWidth}px`;
+  viewerImage.style.height = `${fittedWidth / ratio}px`;
+}
+function prepareViewerImage(photo) {
+  if (!preparedImages.has(photo.view)) {
+    const image = new Image();
+    image.decoding = 'async';
+    image.src = photo.view;
+    const ready = image.decode().then(() => image);
+    preparedImages.set(photo.view, ready);
+    ready.catch(() => { if (preparedImages.get(photo.view) === ready) preparedImages.delete(photo.view); });
+  }
+  return preparedImages.get(photo.view);
+}
 function setViewerPhoto(index) {
   selected = clamp(index, 0, photos.length - 1);
   const photo = photos[selected], generation = ++imageGeneration;
-  viewerImage.hidden = false;
-  viewerImage.alt = photo.alt;
-  viewerImage.width = photo.width;
-  viewerImage.height = photo.height;
-  viewerImage.src = photo.preview;
+  const caption = () => {
+    document.querySelector('#viewer-title').textContent = embedded ? photo.kind : photo.title;
+    document.querySelector('#viewer-kind').textContent = photo.kind;
+    document.querySelector('#viewer-counter').textContent = `${pad(selected + 1)} / ${pad(photos.length)}`;
+    document.querySelector('#viewer-original').href = photo.source;
+    document.querySelector('#error-original').href = photo.source;
+  };
+  if (!displayedPhoto) caption();
   viewer.querySelector('.viewer-error').hidden = true;
-  document.querySelector('#viewer-title').textContent = embedded ? photo.kind : photo.title;
-  document.querySelector('#viewer-kind').textContent = photo.kind;
-  document.querySelector('#viewer-counter').textContent = `${pad(selected + 1)} / ${pad(photos.length)}`;
-  document.querySelector('#viewer-original').href = photo.source;
-  document.querySelector('#error-original').href = photo.source;
   document.querySelector('#previous-photo').disabled = selected === 0;
   document.querySelector('#next-photo').disabled = selected === photos.length - 1;
-  // Upgrade after entry; only the current load may change the displayed image.
-  const highResolution = new Image();
-  highResolution.onload = () => { if (viewer.open && generation === imageGeneration) viewerImage.src = photo.view; };
-  highResolution.src = photo.view;
+  clearTimeout(loadingTimer);
+  if (viewerLoading) viewerLoading.hidden = true;
+  viewerStage.setAttribute('aria-busy', 'true');
+  loadingTimer = setTimeout(() => { if (viewerLoading && viewer.open && generation === imageGeneration) viewerLoading.hidden = false; }, 150);
+  const neighbors = photos.slice(Math.max(0, selected - 1), selected + 2);
+  const retained = new Set(neighbors.map(item => item.view));
+  for (const key of preparedImages.keys()) if (!retained.has(key)) preparedImages.delete(key);
+  // Decode the capped image before one atomic swap. Never show a smaller preview
+  // first, or size the visible image from an asynchronously changing naturalWidth.
+  prepareViewerImage(photo).then(image => {
+    if (!viewer.open || generation !== imageGeneration) return;
+    clearTimeout(loadingTimer);
+    displayedPhoto = photo;
+    viewerImage.alt = photo.alt;
+    viewerImage.width = photo.width;
+    viewerImage.height = photo.height;
+    fitViewerImage(photo);
+    viewerImage.src = image.src;
+    viewerImage.hidden = false;
+    caption();
+    viewerStage.setAttribute('aria-busy', 'false');
+    if (viewerLoading) viewerLoading.hidden = true;
+  }, () => {
+    if (!viewer.open || generation !== imageGeneration) return;
+    clearTimeout(loadingTimer);
+    viewerImage.hidden = true;
+    viewer.querySelector('.viewer-error').hidden = false;
+    caption();
+    viewerStage.setAttribute('aria-busy', 'false');
+    if (viewerLoading) viewerLoading.hidden = true;
+  });
+  neighbors.filter(item => item !== photo).forEach(item => prepareViewerImage(item).catch(() => {}));
 }
 function openViewer(index, trigger) {
   if (typeof viewer.showModal !== 'function') return false;
@@ -168,12 +218,31 @@ function openViewer(index, trigger) {
   scrollBeforeViewer = window.scrollY;
   transition = null;
   document.body.dataset.transitioning = 'false';
+  if (galleryHeader && embedded) {
+    headerPlaceholder = document.createElement('div');
+    headerPlaceholder.setAttribute('aria-hidden', 'true');
+    headerPlaceholder.style.height = `${galleryHeader.offsetHeight}px`;
+    galleryHeader.before(headerPlaceholder);
+    viewer.prepend(galleryHeader);
+  }
+  viewerImage.hidden = true;
   viewer.showModal();
   document.documentElement.style.overflow = 'hidden';
   setViewerPhoto(index);
   return true;
 }
 function closeViewer() { viewer.close(); }
+// Move the real shared masthead into the modal's top layer so its links remain
+// usable. Restore it before following a same-page anchor or another route.
+galleryHeader?.addEventListener('click', event => {
+  const link = event.target.closest('a');
+  if (!viewer.open || !link || event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  event.preventDefault();
+  const destination = link.href;
+  viewer.addEventListener('close', () => location.assign(destination), {once: true});
+  closeViewer();
+});
+
 
 figures.forEach((figure, index) => {
   const image = figure.querySelector('img'), link = figure.querySelector('a');
@@ -208,7 +277,7 @@ document.querySelector('#previous-photo').addEventListener('click', () => setVie
 document.querySelector('#next-photo').addEventListener('click', () => setViewerPhoto(selected + 1));
 document.querySelector('#retry-photo').addEventListener('click', () => setViewerPhoto(selected));
 viewerImage.addEventListener('error', () => { viewerImage.hidden = true; viewer.querySelector('.viewer-error').hidden = false; });
-viewerImage.addEventListener('load', () => { viewerImage.hidden = false; viewer.querySelector('.viewer-error').hidden = true; });
+
 viewer.addEventListener('keydown', event => {
   if (event.key === 'ArrowLeft' && selected > 0) { event.preventDefault(); setViewerPhoto(selected - 1); }
   if (event.key === 'ArrowRight' && selected < photos.length - 1) { event.preventDefault(); setViewerPhoto(selected + 1); }
@@ -222,6 +291,12 @@ viewer.addEventListener('pointerup', event => {
 viewer.addEventListener('pointercancel', () => { backdropDown = false; });
 viewer.addEventListener('close', () => {
   ++imageGeneration;
+  clearTimeout(loadingTimer);
+  displayedPhoto = null;
+  viewerImage.hidden = true;
+  viewerStage.setAttribute('aria-busy', 'false');
+  if (viewerLoading) viewerLoading.hidden = true;
+  if (headerPlaceholder) { headerPlaceholder.replaceWith(galleryHeader); headerPlaceholder = null; }
   document.documentElement.style.overflow = '';
   window.scrollTo({ top: scrollBeforeViewer, behavior: 'instant' });
   dismissedFromPointer = true;
@@ -235,7 +310,9 @@ document.addEventListener('scroll', schedule, { passive: true });
 window.addEventListener('resize', () => {
   transition = null;
   document.body.dataset.transitioning = 'false';
-  updateViewport(); scroll = window.scrollY; schedule();
+  updateViewport();
+  if (viewer.open && displayedPhoto) fitViewerImage(displayedPhoto);
+  scroll = window.scrollY; schedule();
 });
 motionPreference.addEventListener('change', () => { transition = null; document.body.dataset.transitioning = 'false'; scroll = window.scrollY; schedule(); });
 document.addEventListener('visibilitychange', () => {
