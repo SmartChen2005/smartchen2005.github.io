@@ -16,13 +16,13 @@ const projects = [
   {href:'figures-of-speech/',title:'Figures of Speech',kind:'Motion & interface design',description:'An evolving collection of interactive studies from VegShark.com.',previewImage:'assets/project-placeholder.svg'},
   {href:'https://handbook.vegshark.com/',title:'The Vibe Coding Game Design Handbook',kind:'Game design resource',description:'handbook.vegshark.com',external:true,previewImage:'assets/project-placeholder.svg'},
   {href:'vr-for-skill-learning/',title:'VR for Skill Learning',kind:'VR interaction',description:'Practical skills, procedural guidance, and spatial learning.',previewImage:'assets/project-placeholder.svg'},
-  {href:'world-sensing-music-station/',title:'World Sensing Music Station',kind:'Physical computing',description:'A handheld instrument that turns movement and space into sound.',previewImage:'assets/project-placeholder.svg'},
+  {href:'world-sensing-music-station/',title:'World Sensing Music Station',kind:'Physical computing',description:'A handheld instrument that turns movement and space into sound.',previewImage:'world-sensing-music-station/device.svg',previewWidth:1000,previewHeight:800,previewClass:'device'},
   {href:'multiverse-all-star-battlefront/',title:'Multiverse All-Star Battlefront',kind:'AI game experiment',description:'Imagined characters become pixel-art fighters and generated comics.',previewImage:'assets/project-placeholder.svg'}
 ];
 function starfield() {
   let seed = 4127;
   const random = () => ((seed = (Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
-  return [{depth:.25,count:22},{depth:.55,count:20},{depth:1,count:14}].map(({depth,count})=>{
+  return [{depth:.25,count:64},{depth:.55,count:56},{depth:1,count:40}].map(({depth,count})=>{
     const stars = Array.from({length:count},()=>{
       const x=random()*100, y=random()*100;
       const size=.7+depth*.65+random()*.65;
@@ -33,8 +33,8 @@ function starfield() {
   }).join('');
 }
 function preview(project) {
-  const image = project.image || `<img src="${project.previewImage}" width="960" height="540" alt="" loading="lazy" decoding="async" draggable="false">`;
-  if (!project.effect) return `<div class="project-card-preview" aria-hidden="true">${image}</div>`;
+  const image = project.image || `<img src="${project.previewImage}" width="${project.previewWidth||960}" height="${project.previewHeight||540}" alt="" loading="lazy" decoding="async" draggable="false">`;
+  if (!project.effect) return `<div class="project-card-preview${project.previewClass?` project-card-preview--${project.previewClass}`:''}" aria-hidden="true">${image}</div>`;
   if (project.effect === 'stars') return `<div class="project-preview project-preview--stars" data-project-effect="stars" aria-hidden="true">${starfield()}</div><div class="project-preview project-preview--cover" aria-hidden="true">${image}</div>`;
   return `<div class="project-preview project-preview--polaroid" data-project-effect="polaroid" aria-hidden="true"><div class="photo-print"><div class="photo-image">${image}<span class="photo-emulsion"></span></div><span class="photo-sheen"></span></div></div>`;
 }
@@ -46,7 +46,7 @@ fs.writeFileSync(output, `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#070707"><meta name="description" content="Games, tools, and experiments in interaction by Smart Chen.">
 <title>Projects — Smart Chen</title>${siteFavicon('../')}
-<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="projects.css?rev=20261104-card-images">
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="projects.css?rev=20261104-device-stars">
 ${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261104-stars"></script></head>
 <body class="projects-directory" id="top"><a class="projects-skip" href="#main">Skip to projects</a>
 ${header}

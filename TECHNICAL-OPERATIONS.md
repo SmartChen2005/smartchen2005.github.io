@@ -103,6 +103,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-04 — Add more stars and show the Music Station device
+
+- Increase Gran Turismo's static starfield from 56 to 160 points, with 72 visible points on phones instead of 33. Keep the same three-layer pointer interaction and foreground image slot.
+- Replace Music Station's placeholder with its existing `device.svg` reconstruction, using correct intrinsic dimensions and a contained presentation that keeps the complete device silhouette visible. Reuse the original SVG without changing its model or the detail page. Site/icon/pointer/Music Station checks and desktop/phone visual verification pass; see `design-qa.md`.
+
 ### 2026-11-04 — Reserve an image for every Projects card
 
 - Keep Gran Turismo's starfield as its background and restore a separate 16:9 foreground image slot. Add image-above-copy slots to the five smaller cards, using an explicitly labelled neutral local SVG until real images are supplied.

@@ -1,3 +1,25 @@
+# Projects: denser stars and the Music Station device
+
+Date: 2026-11-04. Scope: more stars on Gran Turismo and the existing Music Station device in its card. The implementation reuses the project's existing SVG reconstruction, not a new illustration or a changed model. Earlier QA remains below.
+
+Artifacts: `C:/Users/15811/.codex/visualizations/2026/11/04/01a1a74e-c80a-7101-82ef-3b23eb02d719/projects-device/`.
+
+- Source: `8cc44af`, fresh `before-desktop.png`. Implementation: `after-desktop.png`. Both are 1424×2026 bitmap captures from CSS viewport 1440×1000/resting state, omitting the same scrollbar strip. `comparison.png` was inspected with source left and implementation right, both scaled to 720px wide. Typography, layout rhythm, page palette, existing image quality and all visible copy remain unchanged outside the requested star density/device cover.
+- Focused inspection: the existing SVG was rasterized only for inspection as `device-source.png`; `preview.png` shows its complete board/LED/sensor silhouette in the actual card and the denser star background. The published asset itself is unchanged. Its stage uses `#111613`, `object-fit: contain` and a small scale to remove unused transparent margins, retaining the 16:9 card slot.
+
+| Before | After | Why |
+| --- | --- | --- |
+| 56 desktop / 33 phone star points | 160 desktop / 72 phone points | Make the requested starfield visibly denser. |
+| Music Station placeholder | Existing 1000×800-viewBox device SVG | Show the actual project reconstruction while keeping the established card layout. |
+
+Real in-app browser checks at CSS widths 1440, 768, 390 and 320 confirm star counts, a loaded/contained device image, no horizontal overflow and no clipped titles. `after-phone.png` and `browser-results.json` record narrow inspection. All seven card links retain visible Tab focus; Music Station native navigation and Back restoration pass (`keyboard-results.json`). Other five placeholders remain available. No new animation loop or runtime controller change is introduced.
+
+Passed site validation; site icons/all-seven-links/renderer-idempotence checks; shared pointer checks; `test-music-station.mjs` including original asset/firmware hashes; `git diff --check`; strict `dist/` design audit (zero findings). Preference behavior uses the unchanged controller; no new OS-preference or physical-phone touch test is claimed. No actionable P0/P1/P2 finding remains in the scoped comparison.
+
+final result: passed
+
+---
+
 # Projects: image placeholders for Gran Turismo and all five smaller projects
 
 Date: 2026-11-04. Scope: the user's clarification that every card retains an image; Gran Turismo's stars are its background. Six explicit neutral placeholders reserve future project images. Earlier QA is retained below.
