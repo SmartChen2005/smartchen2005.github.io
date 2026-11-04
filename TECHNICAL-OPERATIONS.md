@@ -103,6 +103,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-04 — Give the first two Projects cards their own interactions
+
+- Present Polaroid's existing photograph as a paper print with reversible development and pointer-driven reflection/tilt. Tessellate the existing Gran Turismo thumbnail into twelve shallow image fragments that reassemble on hover, with a pointer-driven window perspective. Keep the same image bytes, copy, project destinations, Header, title-only intro and five smaller cards.
+- `tools/render-projects.mjs` owns both static preview structures; `dist/projects/projects.css` and `projects.mjs` own their materials and one sleeping spring loop. Keyboard, touch, motion/contrast preferences, print, no-JS links and lifecycle cancellation retain complete static alternatives. No additional dependencies, image downloads, players or navigation interception.
+- Verification: site, icon/renderer-idempotence and pointer checks; runtime state/mesh/lifecycle checks; desktop/phone comparison and real in-app browser pointer, keyboard and navigation checks. Scope and evidence are recorded in `design-qa.md`.
+
 ### 2026-11-04 — Prevent scheduled Gallery sync from cancelling Pages publication
 
 - Separate the two workflows' cancellation groups and serialize their publishing jobs with a non-cancelling queue. A Gallery run that skips deployment must not cancel a validated website update.

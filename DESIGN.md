@@ -1,6 +1,6 @@
 # Polaroid of Yesterday — Design Context
 
-## Projects homepage — Apple Design (2026-11-04)
+## Projects homepage — interactive project previews (2026-11-04)
 
 Scope is `/projects/` only. The shared Header markup, CSS, assets, navigation, desktop/phone geometry, fonts and colors are retained. Its existing `site.css` tokens remain untouched. This user request supersedes the directory watermark and earlier project ordering below. No project-detail or Gallery route is restyled.
 
@@ -9,6 +9,8 @@ The homepage uses the Apple Design skill's system typography, clear grouping, im
 Polaroid of Yesterday is first, Gran Turismo directly below it, then Figures of Speech, The Vibe Coding Game Design Handbook, VR for Skill Learning, World Sensing Music Station and Multiverse All-Star Battlefront. The first two remain stacked horizontal game cards with real project previews. The other five use smaller text cards in a three-column grid, two columns at 980px and below, and one column at 600px and below. Reuse the featured cards' surface, border, hover/pressed states and spring controller; compact cards have 24px corners, 24px titles, complete descriptions and whole-card native links. Keep natural height for long titles and enlarged text, with descriptions aligned toward the bottom. Featured cards stack their text and previews on phones; all titles remain readable, with visible keyboard focus and native external-link behavior. No filters, carousels or scroll interception are needed for seven entries.
 
 Reuse the existing optimized Polaroid room screenshot without changing it. Gran Turismo uses the supplied public video's original 480×360 YouTube thumbnail, retained locally with provenance/hash in `tools/projects-preview-source.json`; a 16:9 slot removes only its black letterbox bars. Do not fetch videos or initialize players on this directory page. `projects.mjs` gives the links a small, critically damped press spring that retains current value/velocity when interrupted, never delays navigation and sleeps at rest. Reset on blur, hidden/page lifecycle and preference changes. Reduced motion keeps static press feedback; high contrast, forced colors, native scrolling and no-JS links remain functional.
+
+The user's follow-up releases the Apple-only visual constraint and selects project-specific effects for the first two cards. Polaroid presents the unchanged photograph inside an off-white print: fine-pointer movement tilts the paper and its surface reflection; a reversible emulsion wash develops into the full image on hover. Gran Turismo presents the original thumbnail as twelve tessellated image fragments with shallow depth, reassembling into one image on hover while the window follows the pointer. These are decorative previews, not interactive game demos or new illustrations. All titles, descriptions, project ordering, the seven native link destinations, the shared Header, the intro's title-only content, and the other five cards remain intact. One sleeping RAF owns both preview springs and existing press feedback. Touch, keyboard focus, reduced motion, forced colors, print and no-JS retain complete static previews; no additional image sources, dependencies, autoplay, navigation delay, or scroll interception.
 
 ## Gran Turismo pages and Stills directory (2026-11-03)
 

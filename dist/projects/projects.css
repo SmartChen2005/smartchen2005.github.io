@@ -44,6 +44,36 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
 .projects-main .directory-link:is(:hover,:focus-visible) .directory-arrow svg { transform: translate(1px,-1px); }
 .projects-main .project-preview { aspect-ratio: 16 / 9; overflow: hidden; border-radius: 16px; background: #090909; }
 .projects-main .project-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* The real project images become physical previews; copy stays outside. */
+.projects-main .project-preview[data-project-effect] { position: relative; perspective: 850px; pointer-events: none; }
+.projects-main .project-preview--polaroid { overflow: visible; background: transparent; }
+.projects-main .photo-print {
+  position: absolute; left: 50%; top: 50%; width: 84%;
+  padding: clamp(6px, .65vw, 10px); padding-bottom: clamp(18px, 2.4vw, 34px);
+  background: #eeede7; border: 1px solid #fffdf4; border-radius: 2px; overflow: hidden;
+  box-shadow: 1px 2px 1px #ffffff24 inset, 0 16px 28px #0008, 0 2px 4px #0005;
+  transform: translate(-50%, -50%) rotate(-3deg); transform-style: preserve-3d;
+}
+.projects-main .photo-image { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #22231f; }
+.projects-main .photo-emulsion { position: absolute; inset: 0; background: #e6e1d5; opacity: 0; }
+.projects-main .photo-sheen { position: absolute; inset: 0; overflow: hidden; opacity: 0; background: linear-gradient(115deg, transparent 12%, #fff8 38%, #fff1 54%, transparent 78%); mix-blend-mode: screen; }
+.projects-main .project-preview--ruins { background: #090d0e; border: 1px solid #293235; overflow: hidden; }
+.projects-main .ruins-window {
+  position: absolute; left: 50%; top: 50%; width: 88%; aspect-ratio: 16 / 9;
+  border: 1px solid #657173; background: #030506; transform: translate(-50%, -50%);
+  transform-style: preserve-3d; box-shadow: 0 18px 30px #0009, 0 0 0 5px #151c1d;
+}
+.projects-main .ruins-source, .projects-main .ruins-fragments, .projects-main .ruins-fragment, .projects-main .ruins-glass { position: absolute; inset: 0; }
+.projects-main .ruins-fragments { display: none; transform-style: preserve-3d; }
+.projects-main [data-effect-ready] .ruins-fragments { display: block; }
+.projects-main .ruins-fragment { backface-visibility: hidden; }
+.projects-main .ruins-glass { border: 1px solid #c2e3e222; opacity: .2; background: linear-gradient(135deg, #d5ecec16, transparent 42%, #01050620); transform: translateZ(42px); }
+.projects-main .directory-link:focus-visible .photo-print { transform: translate(-50%, -50%) rotate(-1deg) !important; }
+.projects-main .directory-link:focus-visible .photo-emulsion,
+.projects-main .directory-link:focus-visible .photo-sheen { opacity: 0 !important; }
+.projects-main .directory-link:focus-visible .ruins-window { transform: translate(-50%, -50%) !important; }
+.projects-main .directory-link:focus-visible .ruins-source { opacity: 1 !important; }
+.projects-main .directory-link:focus-visible .ruins-fragments { display: none; }
 .projects-main .project-feature:has(+ .project-card) { margin-bottom: 8px; }
 .projects-main .project-card .directory-link { display: flex; align-items: stretch; height: 100%; min-height: 248px; padding: 28px; border-radius: 24px; }
 .projects-main .project-card .project-copy { display: flex; flex-direction: column; width: 100%; }
@@ -85,6 +115,13 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
 @media (prefers-reduced-motion: reduce) {
   .projects-main .directory-link, .projects-main .directory-arrow, .projects-main .directory-arrow svg { transition: none; }
   .projects-main .directory-link, .projects-main .directory-arrow svg { transform: none !important; }
+  .projects-main .photo-print, .projects-main .ruins-window { transform: translate(-50%, -50%) !important; }
+  .projects-main .photo-emulsion, .projects-main .photo-sheen { opacity: 0 !important; }
+  .projects-main .ruins-source { opacity: 1 !important; }
+  .projects-main .ruins-fragments { display: none !important; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .projects-main .photo-sheen, .projects-main .ruins-glass { display: none; }
 }
 @media (prefers-contrast: more) {
   .projects-main, .projects-footer { --projects-secondary: #d1d1d6; --projects-line: #77777e; }
@@ -97,10 +134,16 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
   .projects-main :is(.project-feature, .project-card) .directory-link, .projects-main .directory-arrow { background: Canvas; color: LinkText; border-color: LinkText; }
   .projects-main .directory-link:focus-visible { outline-color: Highlight; }
   .projects-main .directory-description, .projects-main .project-kind { color: CanvasText; }
+  .projects-main .photo-print, .projects-main .ruins-window { transform: translate(-50%, -50%) !important; border-color: CanvasText; box-shadow: none; }
+  .projects-main .photo-emulsion, .projects-main .photo-sheen, .projects-main .ruins-glass, .projects-main .ruins-fragments { display: none !important; }
+  .projects-main .ruins-source { opacity: 1 !important; }
 }
 @media print {
   .projects-main, .projects-footer { color: #000; --projects-ink: #000; --projects-secondary: #333; --projects-line: #999; width: 100%; }
   .projects-main :is(.project-feature, .project-card) .directory-link { break-inside: avoid; background: none; border-color: #999; }
   .projects-main .directory > li { break-inside: avoid; }
   .projects-footer a, .projects-skip { display: none; }
+  .projects-main .photo-print, .projects-main .ruins-window { transform: translate(-50%, -50%) !important; box-shadow: none; }
+  .projects-main .photo-emulsion, .projects-main .photo-sheen, .projects-main .ruins-glass, .projects-main .ruins-fragments { display: none !important; }
+  .projects-main .ruins-source { opacity: 1 !important; }
 }

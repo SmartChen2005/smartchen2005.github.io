@@ -1,3 +1,49 @@
+# Projects: Polaroid and Gran Turismo preview effects
+
+Date: 2026-11-04. Scope: only the first two Projects preview regions, following the user's selection of the proposed photo-development and ruin-reassembly effects. The existing screenshot is the visual reference for retained page structure; the requested effects intentionally change those two previews.
+
+## Evidence
+
+Artifacts are in `C:/Users/15811/.codex/visualizations/2026/11/04/01a1a74e-c80a-7101-82ef-3b23eb02d719/projects-effects/`.
+
+- Source: repository `8d7372f`, `before-desktop.png` and `before-phone.png`.
+- Implementation: local `/projects/`, `after-1440.png`, `after-390.png`, `after-320.png`, `polaroid-active.png` and `gran-turismo-active.png`.
+- Same-input comparisons inspected: `comparison-desktop.png` and `comparison-phone.png`, with the baseline on the left and implementation on the right.
+- Desktop: CSS viewport 1440px wide; both full-page bitmap captures are 1424×1750. Phone: CSS viewport 390×844; both full-page bitmap captures are 374×2264. Browser screenshots omit the scrollbar strip equally. Comparisons apply the same scale to each source/implementation pair, with no density mismatch.
+- States: resting page; real pointer entry/movement; keyboard Tab focus; native project navigation and Back restoration. Additional geometry checks at CSS widths 768 and 320 are in `browser-results.json`; keyboard results are in `keyboard-results.json`.
+- Focused inspection: full-size browser captures of both featured previews, including development opacity, pointer tilt, twelve fragment transforms and the assembled image. These supplement the full-view composition comparisons.
+
+## Findings and comparison history
+
+| Before | After | Why |
+| --- | --- | --- |
+| Two flat project images | Paper print and framed, tessellated image window | The user selected distinct interactions for these two cards. |
+| A moving reflection could extend outside the paper | Clip reflection to the physical print | Keep the material boundary coherent; corrected before final capture. |
+| Print/reduced-motion fragment rules could lose to ready-state specificity | Explicitly hide fragments in static preference/print rules | Preserve the complete base image; corrected before final verification. |
+
+The final comparisons have no actionable P0/P1/P2 findings within scope.
+
+- **Typography:** existing system font, title wrapping, weights, labels and body text remain unchanged. No clipped titles at 1440, 768, 390 or 320px.
+- **Spacing/layout:** Header, page title, featured-card frames, small-card grid and footer retain their layout. Full-page source and implementation capture dimensions match. No horizontal overflow at the four inspected widths. Pointer transforms stay inside the decorative preview region and do not move titles or link targets.
+- **Colors/tokens:** existing page palette and focus states remain. Local CSS owns off-white paper/emulsion and the dark ruin frame. The partially developed resting photograph is intentional; hovered and keyboard-focused photographs show the full image.
+- **Image fidelity:** same local photograph/rendition and original YouTube-thumbnail bytes. Fragments clone the same image source and share polygon boundaries; their total area covers the complete image. No fabricated scenery or replacement assets.
+- **Copy/content:** all seven project names, descriptions, destinations and ordering remain. The intro remains title-only. Decorations are hidden from accessibility APIs.
+- **Interaction:** real pointer input develops/tilts the photo and assembles/tilts the ruin window. All seven native links receive visible Tab focus; focused featured previews expose their full static image. Gran Turismo navigation and browser Back restoration work. No click handler or navigation delay is added.
+
+## Verification and limits
+
+- Passed `node tools/validate-site.mjs`, `node tools/test-site-icons.mjs` (including renderer idempotence and all seven links), `node tools/test-site-cursor.mjs`, JavaScript syntax and `git diff --check`.
+- Strict static design audit of `dist/`: zero findings.
+- The artifact `runtime-check.cjs` executes the actual controller with controlled input/preferences. It passed full fragment coverage, reversible development/reassembly, press cancellation/restoration, idle RAF sleep, hidden/offscreen/resize cleanup, reduced-motion/forced-colors/coarse-pointer fallbacks and native navigation ownership.
+- Preference fallbacks were checked with the controlled runtime and CSS inspection; no claim of an OS-level preference switch or physical-phone touch test is made.
+- The in-app browser recorded a MutationObserver error before this change and on subsequent reloads. It is a baseline observation, not a new error signature from this controller; the new controller uses IntersectionObserver. Pointer effects, focus and navigation were observed working. Shared scripts are outside this scoped change.
+
+final result: passed
+
+---
+
+The earlier 404 verification is retained below as historical evidence.
+
 # Interactive 404 — fluid motion and Clear cloud puffs QA
 
 Verified 2026-10-09. Final result: passed.
