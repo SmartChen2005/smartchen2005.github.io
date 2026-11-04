@@ -17,9 +17,9 @@ for(const p of projects){
  assert(fs.statSync(new URL(`assets/${p.id}.jpg`,gallery)).size>0);
 }
 // The original catalog preserves provenance; public routes follow the active CMS.
-const pages=[new URL('index.html',gallery),...published.map(p=>new URL(`${p.properties.Slug}/index.html`,gallery))];
+const pages=[new URL('index.html',gallery),new URL('gran-turismo/index.html',gallery),new URL('dist/projects/gran-turismo/index.html',root),...published.map(p=>new URL(`${p.properties.Slug}/index.html`,gallery))];
 const managed=JSON.parse(fs.readFileSync(new URL('generated-pages.json',gallery),'utf8'));
-assert.deepEqual(new Set(managed),new Set(['index.html',...published.map(p=>p.properties.Slug+'/index.html')]),'Managed routes match published CMS projects');
+assert.deepEqual(new Set(managed),new Set(['index.html','gran-turismo/index.html',...published.map(p=>p.properties.Slug+'/index.html')]),'Managed routes match published CMS projects');
 for(const file of pages){
  const html=fs.readFileSync(file,'utf8');
  assert.equal((html.match(/<h1(?:\s|>)/g)||[]).length,1,`One page heading: ${file}`);
@@ -43,13 +43,24 @@ const stillCss=fs.readFileSync(new URL('dist/projects/polaroid-of-yesterday/phot
 assert.match(stillCss,/@import url\('\.\.\/\.\.\/\.\.\/gallery\/gallery-base.css'\)/);
 for(const file of ['gallery.css','gallery-base.css'])assert(!/object-fit:\s*cover|filter:|box-shadow:/.test(fs.readFileSync(new URL(file,gallery),'utf8')),'Neutral, uncropped photographs');
 const galleryHome=fs.readFileSync(new URL('index.html',gallery),'utf8');
-assert(galleryHome.includes(`${published.length} projects`),'The combined exhibition is counted once');
+assert(galleryHome.includes(`${published.length+1} projects`),'The combined exhibition is counted once');
 const publishedSlugs=new Set(published.map(p=>p.properties.Slug));
 for(const p of projects.filter(p=>!publishedSlugs.has(p.id))){
  assert(!fs.existsSync(new URL(`${p.id}/index.html`,gallery)),`Removed CMS project has no public article: ${p.id}`);
  assert(!galleryHome.includes(`href="${p.id}/"`),`Removed CMS project has no homepage entry: ${p.id}`);
 }
 assert(galleryHome.includes('trauma-induced-dissociative-amnesia/'));
+const stillsSection = galleryHome.match(/id="stills"[\s\S]*?(?=<section class="gallery-section" id="photography")/)?.[0];
+assert(stillsSection?.includes('href="trauma-induced-dissociative-amnesia/"') && stillsSection.includes('href="gran-turismo/"'), 'Stills links to both independent exhibitions');
+assert(stillsSection.includes('2 projects') && stillsSection.includes('Game Screenshots'));
+for (const file of pages) assert.match(fs.readFileSync(file,'utf8'), /href="(?:\.\.\/)?#stills">Stills<\/a>|data-project-header/, 'Gallery Stills navigation returns to the two-entry section');
+const projectDirectory=fs.readFileSync(new URL('dist/projects/index.html',root),'utf8');
+assert.match(projectDirectory, /class="directory-link" href="gran-turismo\/"/);
+const projectPage=fs.readFileSync(new URL('dist/projects/gran-turismo/index.html',root),'utf8');
+assert.equal(projectPage.match(/<main[^>]*>([\s\S]*?)<\/main>/)[1], '<h1>Gran Turismo</h1>', 'The requested project page stays unfilled');
+const gameStills=fs.readFileSync(new URL('gran-turismo/index.html',gallery),'utf8');
+assert(gameStills.includes('Game Screenshots') && gameStills.includes('<h1>Gran Turismo</h1>'));
+assert(!/<img[^>]*class="(?:print|story-image)|class="story-body"/.test(gameStills), 'No invented screenshots or article copy');
 assert(!galleryHome.includes('class="stills-feature"'),'No duplicate standalone Stills entry');
 assert.match(room,/href="\.\.\/\.\.\/gallery\/trauma-induced-dissociative-amnesia\/"/);
 assert.match(room,/>Concept Photography and Game Screenshots<\/span>/);

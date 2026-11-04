@@ -63,6 +63,11 @@
 .stills-feature { margin-top: 84px; scroll-margin-top: calc(var(--gallery-header-height) + 24px); border-top: 1px solid var(--photo-rule); padding-top: 32px; }
 .stills-feature .feature-copy { padding-right: 0; padding-left: 4vw; }
 .stills-feature .feature h2 { font-size: clamp(40px, 4.45vw, 64px); }
+.stills-entry { margin-top: 40px; border-top: 1px solid var(--photo-rule); }
+.stills-entry > a { display: block; padding: 28px 0; }
+.stills-entry h3 { margin: 0 0 8px; font-size: clamp(28px, 3vw, 44px); line-height: 1.1; font-weight: 400; letter-spacing: -.035em; }
+.stills-entry p { margin: 0; color: var(--photo-secondary); font-size: 12px; }
+.stills-entry a:hover h3 { text-decoration: underline; text-underline-offset: 6px; }
 .gallery-footer { margin: 0 var(--margin); border-top: 1px solid var(--photo-rule); padding: 26px 0 34px; display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
 .gallery-footer p { display: flex; align-items: center; min-height: 44px; font-size: 12px; color: var(--photo-secondary); margin: 0; }
 .gallery-footer-signature { display: flex; align-items: flex-end; gap: 28px; }

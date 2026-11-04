@@ -18,6 +18,6 @@ for (const relative of fs.readdirSync('dist', { recursive: true })) {
   arrows += (html.match(/data-site-arrow="north-east"/g) || []).length;
   pages++;
 }
-assert.equal((fs.readFileSync('dist/projects/index.html', 'utf8').match(/data-site-arrow="north-east"/g) || []).length, 6);
+assert.equal((fs.readFileSync('dist/projects/index.html', 'utf8').match(/data-site-arrow="north-east"/g) || []).length, 7);
 assert(northEastArrow.includes('stroke:currentColor'));
-console.log(`Passed: ${pages} maintained pages, ${arrows} font-independent SVG arrows; all six Projects links; accessible/native links; idempotent generation.`);
+console.log(`Passed: ${pages} maintained pages, ${arrows} font-independent SVG arrows; all seven Projects links; accessible/native links; idempotent generation.`);

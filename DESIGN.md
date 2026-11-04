@@ -1,5 +1,11 @@
 # Polaroid of Yesterday — Design Context
 
+## Gran Turismo pages and Stills directory (2026-11-03)
+
+`/projects/gran-turismo/` is an intentionally unfilled project page, reached by the seventh Projects directory link. Keep only its title and the shared Projects header until content is supplied. `tools/render-gran-turismo.mjs` regenerates it using the existing dark site tokens and typography.
+
+The Gallery's Stills navigation now opens `/gallery/#stills`, containing two independent entries: **Trauma-Induced Dissociative Amnesia** (its complete existing mixed Polaroid exhibition) and **Gran Turismo — Game Screenshots** at `/gallery/gran-turismo/`. The new Gallery page has only its title, category and shared navigation/footer. Do not invent a cover, screenshots or description. `tools/render-gallery.mjs` owns the local Gran Turismo route alongside CMS articles, retaining it through Notion synchronization. Stills counts both entries; Photography excludes the mixed TIDA exhibition. Existing photo/film bodies and the 31-image Polaroid collection remain intact. Gallery typography, white canvas, focus, native links and responsive rules are reused.
+
 ## Browser tab icon (2026-10-28)
 
 Every page uses one solid white square with no border, inset, lettering or transparent pixels. `dist/favicon.ico` supplies 16px and 32px versions, with shared includes from `tools/site-favicon.mjs`. Archived independent studies use the root favicon fallback.
@@ -277,7 +283,7 @@ Runtime token owner (Model B): `room.css` owns `--letterbox: #000000`, `--projec
 
 ## Combined Polaroid exhibition (2026-11-03)
 
-The current user request supersedes the older standalone Stills and TIDA layout rules below. The one canonical route is `/gallery/trauma-induced-dissociative-amnesia/`, titled **Trauma-Induced Dissociative Amnesia**, with **Concept Photography and In-Game Screenshots for Polaroid of Yesterday** below it. Keep The Gallery's shared masthead, uppercase article title, serif introduction, byline, next-project section and footer. Only the image body uses the existing **Spiral / Index** exhibition; Spiral remains the default. Gallery lists/counts this project once. Stills navigation and the Polaroid room camera open the same route; the room caption is **Concept Photography and Game Screenshots**. The former `/projects/polaroid-of-yesterday/photography/` is a compatibility redirect preserving view queries and image fragments.
+The current user request supersedes the older standalone Stills and TIDA layout rules below. The one canonical route is `/gallery/trauma-induced-dissociative-amnesia/`, titled **Trauma-Induced Dissociative Amnesia**, with **Concept Photography and In-Game Screenshots for Polaroid of Yesterday** below it. Keep The Gallery's shared masthead, uppercase article title, serif introduction, byline, next-project section and footer. Only the image body uses the existing **Spiral / Index** exhibition; Spiral remains the default. Gallery lists/counts this project once. The Polaroid room camera opens this route; Stills navigation opens the two-entry `/gallery/#stills` section; the room caption is **Concept Photography and Game Screenshots**. The former `/projects/polaroid-of-yesterday/photography/` is a compatibility redirect preserving view queries and image fragments.
 
 `tools/polaroid-exhibition.mjs` combines the current TIDA Notion body photographs (eleven at this revision) with all twenty `tools/stills-collection.json` screenshots. The original TIDA photographs are explicitly **Concept art**; screenshots remain **In-game screenshot**. This is an author-supplied classification, independent of visual style. Index contains photographs only, with no visible captions; the open viewer alone shows the media category, without invented image titles. Original alt text, files and natural proportions remain. Reproducible hash shuffling mixes the full collection, while Spiral, Index and previous/next all share one DOM order. The original Notion source and its former groupings remain archived; this public composition overrides them and survives ordinary Notion regeneration.
 

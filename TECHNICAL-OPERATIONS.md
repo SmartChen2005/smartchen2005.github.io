@@ -101,6 +101,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-03 — Add Gran Turismo project and game screenshot pages
+
+- Add the unfilled `/projects/gran-turismo/` page and Projects link. The shared header and title are the only page content; regenerate with `node tools/render-gran-turismo.mjs`.
+- Make Gallery Stills a two-entry section: the existing Trauma-Induced Dissociative Amnesia exhibition and the new `/gallery/gran-turismo/` Game Screenshots page. Keep its empty content intentional and preserve it through ordinary `node tools/render-gallery.mjs` / Notion sync runs.
+- Retain the full mixed Polaroid collection, original files and viewer. Reuse existing site/Gallery tokens and navigation. Verification is recorded in the commit body.
+
 ### 2026-11-03 — Refine portrait scale and Gallery image viewing
 
 - Hyphenate Trauma-Induced in the exhibition title. Make portrait long edges match landscape short edges in Spiral and Index; remove Index category captions and their reserved spacing.
