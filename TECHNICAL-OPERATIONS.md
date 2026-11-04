@@ -101,6 +101,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-03 — Restore Selected and compact parallel Stills cards
+
+- Preserve the independent CMS-selected feature at the top, then Photography, Stills and Film in that order. Put TIDA and Gran Turismo into equal left/right Stills cards using the Film image-above-caption pattern with smaller, contained images.
+- Give Gran Turismo an explicit neutral SVG image placeholder. Retain both columns on phones and the unfilled project/detail pages. Original artwork, full exhibitions and existing viewer behavior remain intact.
+- Verify category order, separate Selected placement, peer links, image sizing and responsive keyboard navigation; exact checks are recorded in the commit body.
+
 ### 2026-11-03 — Add Gran Turismo project and game screenshot pages
 
 - Add the unfilled `/projects/gran-turismo/` page and Projects link. The shared header and title are the only page content; regenerate with `node tools/render-gran-turismo.mjs`.
