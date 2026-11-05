@@ -1,0 +1,105 @@
+{
+  "source": "tools\\font-sources\\gotham.zip",
+  "sourceSha256": "2bbfdcf8fe2006a82587fed59ce1b181f85f2001d4cd1aa24a3229015626a09a",
+  "faces": [
+    {
+      "source": "Gotham/Gotham Thin/Gotham Thin.otf",
+      "sourceSha256": "0067c3687ed2ca64869c72a00e3c4654c57426d7d8636caf4466ede4264fc9a8",
+      "file": "gotham-thin.woff2",
+      "weight": 100,
+      "style": "normal",
+      "postScriptName": "Gotham-Thin",
+      "sha256": "f5ad26e693cc3c05802836ef3ccca2bcae118797b5fa5f91dcf8d372dfd50262"
+    },
+    {
+      "source": "Gotham/Gotham Thin Italic/Gotham Thin Italic.otf",
+      "sourceSha256": "1226201433a672b07999423c91930fdacb2a68ae8607cf0dc001f051a2457c64",
+      "file": "gotham-thin-italic.woff2",
+      "weight": 100,
+      "style": "italic",
+      "postScriptName": "Gotham-ThinItalic",
+      "sha256": "a02bffcccb6aa54f44e6aaf5fa2a8790fd6c31d0e645beb64cd52d6aceb1f9b1"
+    },
+    {
+      "source": "Gotham/Gotham Extra Light/Gotham Extra Light.otf",
+      "sourceSha256": "af462ba7d9b199fbd0fed5e00cee566fc25f64d8c6d6f0a617f530b6fd7c1a8c",
+      "file": "gotham-extra-light.woff2",
+      "weight": 200,
+      "style": "normal",
+      "postScriptName": "Gotham-ExtraLight",
+      "sha256": "6ba0e73e63ab0f0e5c4c72432ab9a3b881a6f700338d88f89025c412e3f7978d"
+    },
+    {
+      "source": "Gotham/Gotham Extra Light Italic/Gotham Extra Light Italic.otf",
+      "sourceSha256": "dd9e8517a04672d3b5e83bf66e702360165e7cbd5661ea2c5da630c0cba16b46",
+      "file": "gotham-extra-light-italic.woff2",
+      "weight": 200,
+      "style": "italic",
+      "postScriptName": "Gotham-ExtraLightItalic",
+      "sha256": "865691b8af87627055e680ae667299c7b1d9c518a3014f5270d4a6c47627397a"
+    },
+    {
+      "source": "Gotham/Gotham Light/Gotham Light.otf",
+      "sourceSha256": "eb5f2c3557023f9aebd1315f78deceb2f5852d3680124fe1e96effc075df3170",
+      "file": "gotham-light.woff2",
+      "weight": 300,
+      "style": "normal",
+      "postScriptName": "Gotham-Light",
+      "sha256": "491b0f08ef3a2653c5bb0a5b65e8af8ba9d280a356c0dbccb19107e47985f16b"
+    },
+    {
+      "source": "Gotham/Gotham Book/Gotham Book.otf",
+      "sourceSha256": "d3c79bd7ec9e3b465f0b821cf931be66542bff3694f7c70e0aeae0f6d7036756",
+      "file": "gotham-book.woff2",
+      "weight": 400,
+      "style": "normal",
+      "postScriptName": "Gotham-Book",
+      "sha256": "549ab7d85c572621f0052e6835f7af883c56d56c530ed47a8bfc167fc573e0ac"
+    },
+    {
+      "source": "Gotham/Gotham Medium/Gotham Medium.otf",
+      "sourceSha256": "e8183507b37f3df80ea253b144745ed58784f5b4465b5216fbf9e314df592d06",
+      "file": "gotham-medium.woff2",
+      "weight": 500,
+      "style": "normal",
+      "postScriptName": "Gotham-Medium",
+      "sha256": "145418db5344f05f2385f81346b58ccfb2704dcad2ffec77cd39734d77597a62"
+    },
+    {
+      "source": "Gotham/Gotham Bold/Gotham Bold.otf",
+      "sourceSha256": "88b3795f97ee469c9e30430b54d35c11cdf28c96e3e71d0122e37e6bf025c0b8",
+      "file": "gotham-bold.woff2",
+      "weight": 700,
+      "style": "normal",
+      "postScriptName": "Gotham-Bold",
+      "sha256": "eea93d77f18db0f835467d9ac245962b17a9d8373dd26591d00ee3c33f26d9c3"
+    },
+    {
+      "source": "Gotham/Gotham ItalicBold/Gotham ItalicBold.otf",
+      "sourceSha256": "afc31df1dde0e15510be6fcff03ca960823bad06f58f9c70a3464af7e377acbb",
+      "file": "gotham-italicbold.woff2",
+      "weight": 700,
+      "style": "italic",
+      "postScriptName": "Gotham-BoldItalic",
+      "sha256": "b86a614f3619a84cc1b805be257ae15875b1dff42cc3d47fdf2a5281db65f41c"
+    },
+    {
+      "source": "Gotham/Gotham Black/Gotham Black.otf",
+      "sourceSha256": "99b87c0c6bf6947cd0034d9636fc2b8926dd1007281edf7a108b74e78636c5b0",
+      "file": "gotham-black.woff2",
+      "weight": 900,
+      "style": "normal",
+      "postScriptName": "Gotham-Black",
+      "sha256": "d9cbd27994e96c1833aa41e1033dd36e179d47d0e3e23c1c73cfab1501770c6d"
+    },
+    {
+      "source": "Gotham/Gotham Ultra/Gotham Ultra.otf",
+      "sourceSha256": "62e6cfad51a25f7fe79b990792c451aa6001282a63d36f0698428deb8143d721",
+      "file": "gotham-ultra.woff2",
+      "weight": 950,
+      "style": "normal",
+      "postScriptName": "Gotham-Ultra",
+      "sha256": "31ec19eab5a01c9c6913c5981dd9ea5589128e03b8831df390065c1dd9f35f67"
+    }
+  ]
+}
