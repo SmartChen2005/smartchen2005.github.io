@@ -19,7 +19,9 @@ Load the stylesheet when a page needs Gotham:
 Normal weights: 100 Thin, 200 Extra Light, 300 Light, 400 Book, 500 Medium,
 700 Bold, 900 Black, 950 Ultra. Italic faces exist for 100, 200 and 700.
 Other italic weights may be synthesized by browsers. Chinese characters use
-the page's fallback fonts. Existing pages do not load this stylesheet yet.
+the page's fallback fonts. The Projects homepage loads this stylesheet for its
+default typography; its shared header and explicit project-title themes retain
+their own font families.
 
 The source mixes font versions and contains conflicting internal names:
 `Gotham Regular.otf` identifies itself as Gotham-Black; `Gotham Italic.otf`
