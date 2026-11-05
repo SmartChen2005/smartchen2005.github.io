@@ -90,8 +90,9 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
 .projects-main .project-card .directory-link { display: flex; flex-direction: column; align-items: stretch; gap: 20px; height: 100%; min-height: 248px; padding: 28px; border-radius: 24px; }
 .projects-main .project-card-preview { position: relative; flex: none; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid #343438; border-radius: 12px; background: #1b1b1e; }
 .projects-main .project-card-preview img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
-.projects-main .project-card-preview--device { background: #111613; }
-.projects-main .project-card-preview--device img { object-fit: contain; transform: scale(1.18); }
+.projects-main .project-card-preview--device { background: #111613; perspective: 700px; pointer-events: none; }
+.projects-main .project-card-preview--device img { object-fit: contain; transform: scale(1.18); transform-origin: 50% 55%; }
+.projects-main .directory-link:focus-visible .project-card-preview--device img { transform: scale(1.18) !important; }
 .projects-main .project-card .project-copy { display: flex; flex: 1; flex-direction: column; width: 100%; }
 .projects-main .project-card .project-heading { align-items: flex-start; gap: 16px; }
 .projects-main .project-card .directory-title { font-size: 1.5rem; line-height: 1.15; letter-spacing: -.032em; text-wrap: pretty; }
@@ -136,6 +137,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
   .projects-main .photo-print { transform: translate(-50%, -50%) !important; }
   .projects-main .photo-emulsion, .projects-main .photo-sheen { opacity: 0 !important; }
   .projects-main .starfield-layer { transform: none !important; }
+  .projects-main .project-card-preview--device img { transform: scale(1.18) !important; }
 }
 @media (prefers-reduced-transparency: reduce) {
   .projects-main .photo-sheen { display: none; }
@@ -152,6 +154,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
   .projects-main .directory-link:focus-visible { outline-color: Highlight; }
   .projects-main .directory-description, .projects-main .project-kind { color: CanvasText; }
   .projects-main .project-theme--polaroid { --project-title-ink: LinkText; }
+  .projects-main .project-card-preview--device img { transform: scale(1.18) !important; }
   .projects-main .photo-print { transform: translate(-50%, -50%) !important; border-color: CanvasText; box-shadow: none; }
   .projects-main .photo-emulsion, .projects-main .photo-sheen, .projects-main .project-preview--stars { display: none !important; }
   .projects-main .project-feature .directory-link:has([data-project-effect="stars"]) { background: Canvas; }
@@ -161,6 +164,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
   .projects-main :is(.project-feature, .project-card) .directory-link { break-inside: avoid; background: none; border-color: #999; }
   .projects-main .directory > li { break-inside: avoid; }
   .projects-main .project-theme--polaroid { --project-title-ink: #000; }
+  .projects-main .project-card-preview--device img { transform: scale(1.18) !important; }
   .projects-footer a, .projects-skip { display: none; }
   .projects-main .photo-print { transform: translate(-50%, -50%) !important; box-shadow: none; }
   .projects-main .photo-emulsion, .projects-main .photo-sheen, .projects-main .project-preview--stars { display: none !important; }

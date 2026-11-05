@@ -14,6 +14,8 @@ const effects = [...document.querySelectorAll('[data-project-effect]')].map(elem
     effect.surface = element.querySelector('.photo-print');
     effect.emulsion = element.querySelector('.photo-emulsion');
     effect.sheen = element.querySelector('.photo-sheen');
+  } else if (kind === 'device') {
+    effect.surface = element.querySelector('img');
   } else {
     effect.layers = [...element.querySelectorAll('[data-star-depth]')].map(layer=>({element:layer,depth:Number(layer.dataset.starDepth)}));
   }
@@ -39,6 +41,8 @@ function render(effect) {
     effect.emulsion.style.opacity = (.42*(1-develop.value)).toFixed(4);
     effect.sheen.style.opacity = (.06+active.value*.2).toFixed(4);
     effect.sheen.style.transform = `translate(${x.value*18}%,${y.value*6}%)`;
+  } else if (effect.kind === 'device') {
+    effect.surface.style.transform = `translate3d(${x.value*3}px,${y.value*2-active.value*3}px,0) rotateX(${-y.value*9}deg) rotateY(${x.value*12}deg) scale(1.18)`;
   } else {
     for (const layer of effect.layers) {
       layer.element.style.transform = `translate3d(${-x.value*layer.depth*22}px,${-y.value*layer.depth*14}px,0)`;

@@ -1,3 +1,27 @@
+# Projects: pointer-following Music Station preview
+
+Date: 2026-11-04. Scope: tilt the existing Music Station device preview toward the pointer and return it smoothly to rest. Earlier QA remains below.
+
+Artifacts: `C:/Users/15811/.codex/visualizations/2026/11/04/01a1a74e-c80a-7101-82ef-3b23eb02d719/projects-device-tilt/`.
+
+- Baseline: `b8d9060`, `before-desktop.png`. Final: `after-rest.png`, `hover-right.png` and `hover-left.png`, CSS viewport 1440×1000. `comparison.png` compares the same card crop before and during the upper-right hover. Inspected both directions: the complete sensor/board/LED silhouette remains inside the fixed stage, and the surrounding card text/layout remain steady.
+- The existing SVG gets a perspective transform, following the detail page's existing model-presentation technique. No geometry, SVG, LED color, detail-page code or new dependency changes. The preview stays above the copy in its original compact grid position.
+
+| Before | After | Why |
+| --- | --- | --- |
+| Static device preview | Clamped two-axis pointer tilt with a gentle lift | Let visitors inspect the device's physical character. |
+| No model response in the card | Shared interruptible spring, neutral return and sleeping RAF | Give smooth feedback without an idle loop or competing animation controller. |
+
+Real in-app browser checks record opposite tilt signs (upper-right approximately +6.7° X / +9.3° Y, lower-left approximately −6.0° X / −9.7° Y), a stationary card layout, and native Music Station navigation/Back. At 768, 390 and 320 CSS pixels, the image loads, stays a compact card and causes no horizontal overflow (`browser-results.json`, `after-phone.png`). Tab focus is visible and gives the static 1.18 image scale (`keyboard-results.json`). Temporary viewports are reset before handoff.
+
+`runtime-check.cjs` tests pointer response/opposite directions, angle bounds, interruption continuity, leave/cancel neutral return, frame-loop sleep, touch/secondary-pointer exclusion, keyboard/hidden/offscreen/resize/lifecycle/preference cleanup, static preference fallbacks, existing photo/star/press behavior and native links. These are controlled VM tests, not OS-preference or physical-touch browser tests.
+
+Passed the motion check; `node tools/validate-site.mjs`; `node tools/test-site-icons.mjs`; `node tools/test-site-cursor.mjs`; `node tools/test-music-station.mjs` including original asset/firmware hashes; renderer byte-for-byte idempotence; `git diff --check`; strict `dist/` design audit (zero findings). No actionable issue remains in this scoped check.
+
+final result: passed
+
+---
+
 # Projects: Polaroid's own yellow script title
 
 Date: 2026-11-04. Scope: begin the user's project-specific art direction with Polaroid's actual title font/color. The clear common grid remains; Apple Design is no longer a visual restriction. Earlier QA is retained below.

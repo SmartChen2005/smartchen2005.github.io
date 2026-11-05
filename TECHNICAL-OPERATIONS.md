@@ -103,6 +103,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-04 — Tilt the Music Station preview toward the pointer
+
+- Add two-axis pointer tilt to the existing device preview, using a fixed perspective stage and the shared interruptible spring controller. Keep the compact card layout and native navigation; return to rest on leave and retain static keyboard/touch/reduced-motion fallbacks.
+- Reuse the original SVG without changing the device/detail page. Site/icon/cursor/Music Station checks, renderer idempotence, motion lifecycle/regression checks, strict design audit and real browser responsive/navigation checks pass; see `design-qa.md`.
+
 ### 2026-11-04 — Bring Polaroid's own title artwork into its card
 
 - Release the Apple-only visual constraint in the Projects design context, keeping a shared browsing structure while allowing each project's own art direction.
