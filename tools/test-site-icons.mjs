@@ -18,6 +18,8 @@ for (const relative of fs.readdirSync('dist', { recursive: true })) {
   arrows += (html.match(/data-site-arrow="north-east"/g) || []).length;
   pages++;
 }
-assert.equal((fs.readFileSync('dist/projects/index.html', 'utf8').match(/data-site-arrow="north-east"/g) || []).length, 7);
+const projectsHTML = fs.readFileSync('dist/projects/index.html', 'utf8');
+assert.equal((projectsHTML.match(/data-site-arrow="north-east"/g) || []).length, 6, 'The artwork-only Music Station card omits its arrow');
+assert.equal((projectsHTML.match(/class="directory-link"/g) || []).length, 7, 'All seven native project links remain');
 assert(northEastArrow.includes('stroke:currentColor'));
 console.log(`Passed: ${pages} maintained pages, ${arrows} font-independent SVG arrows; all seven Projects links; accessible/native links; idempotent generation.`);

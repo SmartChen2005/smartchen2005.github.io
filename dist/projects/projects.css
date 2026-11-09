@@ -53,7 +53,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .projects-intro { text-align: center; margin: 0 0 clamp(40px, 5vw, 64px); }
 .projects-intro h1 { margin: 0; font-size: clamp(3rem, 6vw, 4.75rem); font-weight: 650; line-height: 1.04; letter-spacing: -.055em; }
 .projects-intro > p { margin: 20px 0 0; font-size: clamp(1.1875rem, 2vw, 1.5625rem); line-height: 1.4; letter-spacing: -.022em; color: var(--projects-secondary); }
-.projects-main .directory { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; padding: 0; margin: 0; border: 0; }
+.projects-main .directory { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; padding: 0; margin: 0; border: 0; }
 .projects-main .directory > :where(li) {
   min-width: 0;
   --projects-ink: #fff;
@@ -132,8 +132,8 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .projects-main .directory-link:focus-visible .photo-sheen { opacity: 0 !important; }
 .projects-main .directory-link:focus-visible .starfield-layer { transform: none !important; opacity: .85 !important; }
 .projects-main .project-feature:has(+ .project-card) { margin-bottom: 8px; }
-.projects-main .project-card .directory-link { display: flex; flex-direction: column; align-items: stretch; gap: 20px; height: 100%; min-height: 248px; padding: 28px; border-radius: var(--projects-card-radius); }
-.projects-main .project-card-preview { position: relative; flex: none; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--projects-line); border-radius: var(--projects-preview-radius); background: var(--projects-preview-surface); }
+.projects-main .project-card .directory-link { display: flex; flex-direction: column; align-items: stretch; gap: 14px; height: 100%; min-height: 0; padding: 20px; border-radius: var(--projects-card-radius); }
+.projects-main .project-card-preview { position: relative; flex: none; width: 100%; height: 100px; overflow: hidden; border: 1px solid var(--projects-line); border-radius: var(--projects-preview-radius); background: var(--projects-preview-surface); }
 .projects-main .project-card-preview img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
 .projects-main .project-card-preview--device { perspective: 700px; pointer-events: none; }
 .projects-main .project-card-preview--device img { object-fit: contain; transform: scale(1.18); transform-origin: 50% 55%; }
@@ -141,17 +141,21 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .projects-main .project-card .project-copy { display: flex; flex: 1; flex-direction: column; width: 100%; }
 .projects-main .project-card .project-heading { align-items: flex-start; gap: 16px; }
 .projects-main .project-card .directory-title { font-size: 1.5rem; line-height: 1.15; letter-spacing: -.032em; text-wrap: pretty; }
-.projects-main .project-card .directory-description { max-width: 32ch; margin-top: auto; padding-top: 20px; font-size: .9375rem; overflow-wrap: anywhere; }
-.projects-main .project-card .project-kind { margin-bottom: 12px; }
+.projects-main .project-card .directory-description { max-width: 48ch; margin-top: 10px; padding-top: 0; font-size: .9375rem; overflow-wrap: anywhere; }
+.projects-main .project-card .project-kind { margin-bottom: 6px; }
 .projects-main .project-card .directory-arrow { width: 32px; height: 32px; flex-basis: 32px; }
-.projects-main .project-card--figures .directory-link { justify-content: space-between; gap: 28px; }
-.figures-title-stack { container-type: inline-size; width: calc(100% + 40px); margin-inline: -20px; }
-.figures-title-stack > * { display: block; margin: 0; white-space: nowrap; font: 500 clamp(28px, 3.5vw, 52px)/.98 "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 14.2cqi; letter-spacing: -.065em; }
+.projects-main .project-card--figures .directory-link { justify-content: flex-start; gap: 14px; }
+.figures-title-stack { container-type: inline-size; width: calc(100% + 24px); margin-inline: -12px; }
+.figures-title-stack > * { display: block; margin: 0; white-space: nowrap; font: 500 clamp(28px, 3.5vw, 68px)/.98 "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 14.2cqi; letter-spacing: -.065em; }
 .figures-dictionary { font: 14px/1.5 Georgia, "Times New Roman", serif; }
 .figures-dictionary p { margin: 0; }
-.figures-dictionary-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.figures-dictionary-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 5px; }
 .figures-pronunciation { color: var(--projects-secondary); }
 .figures-dictionary dfn { font-style: normal; font-weight: 700; }
+.projects-main .project-card--music .directory-link { position: relative; isolation: isolate; padding: 10px 16px 18px; gap: 0; justify-content: center; overflow: hidden; }
+.projects-main .project-card--music .project-card-preview--device { height: 220px; overflow: visible; border: 0; background: transparent; z-index: 1; }
+.projects-main .project-card--music .project-card-preview--device img { object-fit: contain; }
+.project-card--music h2 { position: relative; z-index: 0; text-align: center; margin: -38px 0 0; font-size: clamp(30px, 3.6vw, 48px); font-weight: 600; line-height: .95; letter-spacing: -.055em; }
 .projects-main .project-external { white-space: nowrap; }
 .projects-main .project-card .project-external { white-space: normal; }
 .projects-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding-block: 32px 40px; margin-top: 48px; font-size: 0.8125rem; line-height: 1.4; color: var(--projects-secondary); }
@@ -168,7 +172,8 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   .projects-main .project-heading { gap: 16px; }
   .projects-main .project-kind { margin-bottom: 10px; }
   .projects-main .directory-description { margin-top: 12px; font-size: 0.9375rem; }
-  .projects-main .project-card .directory-link { padding: 24px; }
+  .projects-main .project-card .directory-link { padding: 18px; }
+  .projects-main .project-card--music .directory-link { padding: 8px 12px 18px; }
   .projects-main .project-feature .directory-link:has([data-project-effect="stars"]) { min-height: 280px; }
   .projects-main .starfield-star:nth-child(n+25) { display: none; }
   .projects-main .directory-arrow { width: 32px; height: 32px; flex-basis: 32px; }
@@ -176,7 +181,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 }
 @media (max-width: 600px) {
   .projects-main .directory { grid-template-columns: 1fr; }
-  .projects-main .project-card .directory-link { min-height: 208px; }
+  .projects-main .project-card .directory-link { min-height: 0; }
 }
 @media (max-width: 380px) {
   .projects-main .project-feature .directory-link { padding: 20px; }

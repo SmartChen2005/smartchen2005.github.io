@@ -1,5 +1,9 @@
 # Polaroid of Yesterday — Design Context
 
+## Projects — wider compact cards (2026-11-09)
+
+The latest request supersedes the lower directory's three-column/tall-card treatment: use two wider columns above 600px, one below, with 14px internal gaps, 18–20px padding and short 100px image slots. Figures keeps three larger full-width lines and the shared dictionary directly below with less vertical space. Music Station becomes an artwork/title-only variant: center the original device in a transparent 220px stage, keep its tilt, and place a large two-line World Sensing / Music Station title underneath with a 38px overlap and the device in front. Omit its kind, description and arrow. Preserve all seven destinations, the first two featured cards and the concave background.
+
 ## Figures — Notion copy and footer (2026-11-09)
 
 The Index displays figure numbers in descending DOM order, FIG. 008 through FIG. 001. Keep each study's existing number and stable source ID; only the index presentation changes. Chronology retains its recorded date ordering. The first displayed thumbnail receives high fetch priority.
