@@ -13,6 +13,7 @@ assert.equal(studies.length, new Set(studies.map(study=>study.id)).size, 'Archiv
 assert.equal(fs.readFileSync(path.join(root,'tools/figures-of-speech.mjs'),'utf8'),fs.readFileSync(path.join(archive,'catalogue.mjs'),'utf8'),'Browser data must match the editorial source');
 assert.equal(studies.length,8,'The catalogue must show eight studies');
 assert.deepEqual(studies.map(study=>study.number),['001','002','003','004','005','006','007','008'],'Visible figures must be numbered consecutively');
+assert.deepEqual([...html.matchAll(/<span>FIG\. (\d{3})<\/span>/g)].map(match=>match[1]),['008','007','006','005','004','003','002','001'],'The index must display descending figure numbers without renumbering studies');
 assert(!studies.some(study=>study.experiment==='filmmaker'),'Filmmaker must be hidden from the active catalogue');
 assert(!/data-(?:study|panel)="004"|filmmaker-isolated\.jpg|>Filmmaker</.test(html),'Hidden Filmmaker must not appear in the index, notes or chronology');
 assert(!/<iframe\b/.test(html),'The index must not boot hidden rendering contexts');

@@ -10,9 +10,10 @@ const emphasis = value => escape(value).replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
 const date = value => value.replaceAll('-', '.');
 const revision = (item, study) => `<li><time datetime="${item[0]}">${date(item[0])}</time><span>${escape(item[2])}</span><a href="https://github.com/SmartChen2005/smartchen2005.github.io/commit/${item[1]}" target="_blank" rel="noopener noreferrer" aria-label="Source record for ${escape(study.title)} on ${item[0]} (opens in a new tab)">Record</a></li>`;
 
-const grid = studies.map(study => `<a class="specimen" href="${experimentURL(study)}" data-study="${study.id}" aria-label="Open ${escape(study.title)} study">
+const indexStudies = [...studies].sort((a, b) => Number(b.number) - Number(a.number));
+const grid = indexStudies.map((study, index) => `<a class="specimen" href="${experimentURL(study)}" data-study="${study.id}" aria-label="Open ${escape(study.title)} study">
       <div class="specimen-top"><span>FIG. ${study.number}</span><span>${escape(study.kind)}</span></div>
-      <figure class="specimen-image specimen-image--${study.world}"><img src="assets/${study.image}" alt="${escape(study.alt)}" width="1280" height="720" ${study.id === '001' ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></figure>
+      <figure class="specimen-image specimen-image--${study.world}"><img src="assets/${study.image}" alt="${escape(study.alt)}" width="1280" height="720" ${index === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></figure>
       <div class="specimen-caption"><h2>${escape(study.title)}</h2><p>${escape(study.location)}</p><div><time datetime="${study.first}">${date(study.first)}</time><span class="specimen-open">View study</span></div></div>
     </a>`).join('\n');
 

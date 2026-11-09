@@ -2,6 +2,8 @@
 
 ## Figures — Notion copy and footer (2026-11-09)
 
+The Index displays figure numbers in descending DOM order, FIG. 008 through FIG. 001. Keep each study's existing number and stable source ID; only the index presentation changes. Chronology retains its recorded date ordering. The first displayed thumbnail receives high fetch priority.
+
 Notion's Figures of Speech page (`408abc37-a86f-80d0-a20e-c3ce996a3b22`, Fig. 008, edited 2026-11-09T21:56:28.759Z) owns the current blue study's text: title **Artificial Dome**, description **#061B62**, perspective **Inspired by Untergrundbahn, German underground metro station.** The targeted source snapshot is `tools/figures-notion/artificial-dome.json`; `tools/render-artificial-dome.mjs` verifies this copy and creates the text-revised `2026-11-09-artificial-dome` edition with byte-identical SVGs. This supersedes the earlier 蓝色星空 title and Chinese description while preserving their immutable editions and all surface geometry.
 
 The catalogue footer contains only the existing Virgil Abloh / Figures of Speech, 2019 visual-reference paragraph, aligned at the left content edge. Remove the design/development credit and index-opened/continuation paragraphs. The renderer and route stylesheet own this treatment on desktop and phones.
