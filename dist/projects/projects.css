@@ -6,11 +6,20 @@ html:has(.projects-directory) {
 }
 .projects-directory {
   font-family: "Gotham", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-  /* A regular ceiling-light rhythm, kept separate from each project's artwork. */
+  isolation: isolate;
   background-color: var(--projects-canvas);
-  background-image: radial-gradient(circle, #ffffffb3 0 .65px, #ffffff26 1px, transparent 1.8px);
-  background-size: 72px 72px;
-  background-position: center 20px;
+}
+/* Keep the approved shallow arc fitted to the viewport as the cards scroll. */
+.projects-directory::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--projects-canvas) url("assets/blue-concave-sky.svg") center / 100% 100% no-repeat;
+}
+@media (max-width: 600px) and (orientation: portrait) {
+  .projects-directory::before { background-image: url("assets/blue-concave-sky-mobile.svg"); }
 }
 @font-face {
   font-family: "Great Vibes";
@@ -190,6 +199,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 }
 @media (forced-colors: active) {
   html:has(.projects-directory), .projects-directory { background: Canvas; }
+  .projects-directory::before { display: none; }
   html:has(.projects-directory) { scrollbar-color: auto; }
   .projects-main, .projects-footer { color: CanvasText; --projects-ink: CanvasText; --projects-secondary: CanvasText; --projects-line: CanvasText; --projects-focus: Highlight; }
   .projects-main .directory > li { --projects-ink: LinkText; --projects-secondary: CanvasText; --projects-surface: Canvas; --projects-surface-hover: Canvas; --projects-surface-pressed: Canvas; --projects-line: LinkText; --projects-hover-line: LinkText; --projects-preview-surface: Canvas; }
@@ -205,6 +215,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 }
 @media print {
   html:has(.projects-directory), .projects-directory { background: #fff; }
+  .projects-directory::before { display: none; }
   .projects-main, .projects-footer { color: #000; --projects-ink: #000; --projects-secondary: #333; --projects-line: #999; width: 100%; }
   .projects-main .directory > li { --projects-ink: #000; --projects-secondary: #333; --projects-surface: #fff; --projects-surface-hover: #fff; --projects-surface-pressed: #fff; --projects-line: #999; --projects-hover-line: #999; }
   .projects-main :is(.project-feature, .project-card) .directory-link:any-link { break-inside: avoid; background: none; border-color: #999; }

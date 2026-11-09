@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-09 — Share the approved Figures curved sky with Projects
+
+- Apply the approved FIG. 008 concave blue surface to the Projects homepage; `tools/render-projects-sky.mjs` verifies the immutable edition payload SHA-256 values and copies its desktop/phone SVGs byte-for-byte to `dist/projects/assets/blue-concave-sky.svg` and `blue-concave-sky-mobile.svg`.
+- Use a fixed, non-interactive negative-layer pseudo-element within the body's isolated stacking context, select the phone image for portrait viewports at 600px and below, hide it for forced colors and print, and preserve the shared Header, cards and interactions; before publication, verify asset parity, renderer idempotence, site/archive/icon/cursor checks and responsive background/overlay behavior, recording actual results in the commit.
+
 ### 2026-11-09 — Give the Figures blue sky a shallow inward curve
 
 - Update FIG. 008, stable source ID 010, to a flattened concave blue surface with regular white light points, retaining “Inspired by 德国地铁站。” The native SVG projection places the center farther away and the sides closer, with independently sampled desktop and phone versions and a matching catalogue plate.
