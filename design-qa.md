@@ -1,16 +1,3 @@
-# Projects: matte station stone cards
-
-Date: 2026-11-09. Scope: translate the reference station's wall/platform palette into the Projects cards, without brick joints or block textures.
-
-- Replace the common near-black shells with matte `#535657` stone gray, a graphite `#2b2f30` image stage, restrained inset edges and smaller 8px card/4px image-and-arrow corners. Gran Turismo keeps its black starfield; Polaroid keeps the original yellow script and physical print. No image bytes, shared Header, project links, card dimensions or interaction runtime changed.
-- Contrast calculations for normal/hover/pressed surfaces: off-white text 6.77/6.08/7.56:1, secondary text 5.53/4.96/6.17:1, and large yellow script 4.70/4.21/5.24:1. Focus is at least 3.94:1 against the gray surfaces. High-contrast text/edges use brighter tokens. Forced-colors and print omit shadows; print overrides hover/pressed fills. These preference fallbacks were checked in CSS, not through OS-level emulation.
-- Real Chrome checks at 1440, 768, 390 and 320 CSS pixels confirm all seven images loaded, 3/2/1 columns, 8px corners at every size and no horizontal overflow. Inspected featured and compact cards; computed device-stage color is `rgb(43, 47, 48)`. Keyboard focus remains visible; Music Station navigation and Back work. The existing 160-star field remains intact. Temporary viewport reset.
-- Passed site validation, site-icon and shared-cursor checks, byte-for-byte Projects renderer idempotence and `git diff --check`. Strict `dist/` design audit has zero findings; saved as `projects-stone-audit.json` in the task visualization workspace. A separate read-only review found no remaining blocker.
-
-final result: passed
-
----
-
 # Projects: deep-blue ceiling background
 
 Date: 2026-11-09. Scope: the Projects homepage background, inspired by the user's blue Museumsinsel station photograph and request for regular white light points with minimalist restraint.

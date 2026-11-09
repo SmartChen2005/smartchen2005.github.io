@@ -103,11 +103,6 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
-### 2026-11-09 — Bring station stone colors into the Projects cards
-
-- Use a matte medium-gray common card shell, graphite image stages, fine inset edges and tighter corners to echo the user's wall/platform reference without tile patterns. Preserve project artwork, native links, existing motion and Gran Turismo's black starfield.
-- Increase secondary-text contrast on the gray surfaces; retain system-color/print fallbacks and synchronize the CSS revision. Site/icon/cursor checks, renderer idempotence, contrast calculations, strict design audit and responsive keyboard/navigation browser checks pass; see `design-qa.md`.
-
 ### 2026-11-09 — Give the Projects homepage a blue ceiling background
 
 - Apply a route-local deep-blue canvas and restrained, regular white light points inspired by the user's station photograph. Keep the Header, project cards, links and interactions intact; synchronize browser theme metadata and the CSS revision.
