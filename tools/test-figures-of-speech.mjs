@@ -11,8 +11,8 @@ const html = fs.readFileSync(path.join(archive,'index.html'),'utf8');
 const shallow = execFileSync('git',['rev-parse','--is-shallow-repository'],{cwd:root,encoding:'utf8'}).trim() === 'true';
 assert.equal(studies.length, new Set(studies.map(study=>study.id)).size, 'Archive IDs must remain unique');
 assert.equal(fs.readFileSync(path.join(root,'tools/figures-of-speech.mjs'),'utf8'),fs.readFileSync(path.join(archive,'catalogue.mjs'),'utf8'),'Browser data must match the editorial source');
-assert.equal(studies.length,7,'The catalogue must show seven studies');
-assert.deepEqual(studies.map(study=>study.number),['001','002','003','004','005','006','007'],'Visible figures must be numbered consecutively');
+assert.equal(studies.length,8,'The catalogue must show eight studies');
+assert.deepEqual(studies.map(study=>study.number),['001','002','003','004','005','006','007','008'],'Visible figures must be numbered consecutively');
 assert(!studies.some(study=>study.experiment==='filmmaker'),'Filmmaker must be hidden from the active catalogue');
 assert(!/data-(?:study|panel)="004"|filmmaker-isolated\.jpg|>Filmmaker</.test(html),'Hidden Filmmaker must not appear in the index, notes or chronology');
 assert(!/<iframe\b/.test(html),'The index must not boot hidden rendering contexts');
@@ -59,8 +59,12 @@ for(const study of studies){
   assert(html.includes(`<span>FIG. ${study.number}</span>`),`Missing displayed figure number for ${study.title}`);
   assert(html.includes(`data-panel="${study.id}"`),`Missing study notes ${study.id}`);
   const asset = fs.readFileSync(path.join(archive,'assets',study.image));
-  assert(asset.length>2000,`Missing or empty real thumbnail ${study.image}`);
-  assert.equal(asset.subarray(0,3).toString('hex'),'ffd8ff',`Expected a real JPEG capture for ${study.id}`);
+  if(study.id === '010') {
+    assert(asset.toString('utf8').includes('<pattern') && asset.toString('utf8').includes('#061b62'),'Blue sky must retain its native blue/light-grid artwork');
+  } else {
+    assert(asset.length>2000,`Missing or empty real thumbnail ${study.image}`);
+    assert.equal(asset.subarray(0,3).toString('hex'),'ffd8ff',`Expected a real JPEG capture for ${study.id}`);
+  }
   const target = new URL(experimentURL(study),'https://example.org/projects/figures-of-speech/');
   assert(fs.existsSync(path.join(root,'dist',target.pathname,target.pathname.endsWith('/')?'index.html':'')),`Broken experience route ${target.pathname}`);
   assert(target.pathname.startsWith(`/projects/figures-of-speech/editions/${studyEdition(study)}/`),'Every experience must use a fixed independent edition');

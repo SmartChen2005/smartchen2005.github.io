@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-09 — Add 蓝色星空 to Figures of Speech
+
+- Add FIG. 008 with the user's title and “Inspired by 德国地铁站。” Preserve the Projects blue/white light grid in a static independent edition with a hashed manifest and native SVG plate; keep prior editions intact.
+- Regenerate the index/browser catalogue and update the eight-study verification. Archive hashes/dependency closure, dated source record, site/icon/cursor checks and local browser dialog/preview verification pass.
+
 ### 2026-11-09 — Make Pages retries select one unambiguous artifact
 
 - The `c10de37` run passed all validation and upload steps but timed out after ten minutes in Pages `syncing_files`. Retrying its deploy job produced two default-named `github-pages` artifacts and failed metadata selection.
