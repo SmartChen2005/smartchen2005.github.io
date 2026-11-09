@@ -1,5 +1,9 @@
 # Polaroid of Yesterday — Design Context
 
+## Projects homepage — blue ceiling background (2026-11-09)
+
+The user's Museumsinsel station image supplies the Projects directory's deep-blue and white-light direction, with Bauhaus order and minimalist restraint. Only `/projects/` uses the solid `#061b62` canvas: `html:has(.projects-directory)` owns `--projects-canvas` in `dist/projects/projects.css`, and the body and scrollbar track consume it. A static CSS radial-gradient repeats tiny white light points on a 72px square grid, centered horizontally with a 20px vertical origin. Keep the points behind opaque cards, without randomness, twinkling, parallax, extra shapes or runtime work. The renderer supplies matching browser theme metadata and the stylesheet revision. Preserve the shared Header, title, seven project links, existing card artwork, layout and interactions. Forced colors uses Canvas and print uses white, both without the decorative light pattern. This supersedes the earlier black-canvas instruction for this route; other pages keep their palettes.
+
 ## Projects homepage — interactive project previews (2026-11-04)
 
 Scope is `/projects/` only. The shared Header markup, CSS, assets, navigation, desktop/phone geometry, fonts and colors are retained. Its existing `site.css` tokens remain untouched. This user request supersedes the directory watermark and earlier project ordering below. No project-detail or Gallery route is restyled.

@@ -103,6 +103,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-09 — Give the Projects homepage a blue ceiling background
+
+- Apply a route-local deep-blue canvas and restrained, regular white light points inspired by the user's station photograph. Keep the Header, project cards, links and interactions intact; synchronize browser theme metadata and the CSS revision.
+- Use static CSS without new assets or runtime work, with plain forced-colors/print fallbacks. Required site/icon/cursor checks, renderer idempotence, strict design audit and desktop/phone browser checks pass; see `design-qa.md`.
+
 ### 2026-11-09 — Extend the unlisted halftone experiment into five motion studies
 
 - Add independently addressable Exposure, Lunar, Botanical, Shoal and Tide animations plus an unlisted collection under `halftone-bloom/studies/`. Only the original Bloom page links to the collection; the public Figures catalogue and editions remain unchanged.

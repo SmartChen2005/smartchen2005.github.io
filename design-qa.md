@@ -1,3 +1,16 @@
+# Projects: deep-blue ceiling background
+
+Date: 2026-11-09. Scope: the Projects homepage background, inspired by the user's blue Museumsinsel station photograph and request for regular white light points with minimalist restraint.
+
+- A solid `#061b62` canvas and static 72px white-light grid use CSS only. Existing Header, seven native links, card artwork and interaction runtime are unchanged. Browser theme metadata and the stylesheet revision are synchronized by the renderer.
+- Real Chrome checks at 1440, 768, 390 and 320 CSS pixels: all seven project images loaded, the existing 3/2/1-column layout remains intact, and no horizontal overflow occurs. Inspected desktop, narrow phone, keyboard focus and the bottom of the long page. Back to top returns to `scrollY: 0`; Polaroid retains its visible light-blue keyboard outline.
+- Forced-colors and print background resets were verified by CSS inspection, not OS-level preference emulation. No new motion, layered elements or pointer handlers were introduced.
+- Passed `node tools/validate-site.mjs`, `node tools/test-site-icons.mjs`, `node tools/test-site-cursor.mjs`, byte-for-byte Projects renderer idempotence and `git diff --check`. Strict `dist/` design audit: zero findings; JSON saved to the task's visualization workspace as `projects-background-audit.json`.
+
+final result: passed
+
+---
+
 # Projects: pointer-following Music Station preview
 
 Date: 2026-11-04. Scope: tilt the existing Music Station device preview toward the pointer and return it smoothly to rest. Earlier QA remains below.

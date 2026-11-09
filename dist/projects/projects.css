@@ -1,6 +1,16 @@
 /* Projects homepage only. The shared Header keeps its existing styles and tokens. */
+html:has(.projects-directory) {
+  --projects-canvas: #061b62;
+  background: var(--projects-canvas);
+  scrollbar-color: #8798c1 var(--projects-canvas);
+}
 .projects-directory {
   font-family: "Gotham", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  /* A regular ceiling-light rhythm, kept separate from each project's artwork. */
+  background-color: var(--projects-canvas);
+  background-image: radial-gradient(circle, #ffffffb3 0 .65px, #ffffff26 1px, transparent 1.8px);
+  background-size: 72px 72px;
+  background-position: center 20px;
 }
 @font-face {
   font-family: "Great Vibes";
@@ -22,11 +32,10 @@
   width: min(calc(100% - clamp(32px, 8vw, 112px)), 1120px);
   margin-inline: auto;
 }
-html:has(.projects-directory) { scrollbar-color: #56565c #070707; }
-html:has(.projects-directory)::-webkit-scrollbar-thumb { background: #56565c; border-radius: 8px; }
-html:has(.projects-directory)::-webkit-scrollbar-thumb:hover { background: #77777e; }
-html:has(.projects-directory)::-webkit-scrollbar-thumb:active { background: #a1a1a6; }
-html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
+html:has(.projects-directory)::-webkit-scrollbar-thumb { background: #8798c1; border-radius: 8px; }
+html:has(.projects-directory)::-webkit-scrollbar-thumb:hover { background: #a9b8d9; }
+html:has(.projects-directory)::-webkit-scrollbar-thumb:active { background: #d0daf0; }
+html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--projects-canvas); }
 .projects-skip { position: absolute; z-index: 20; left: 1rem; top: 1rem; padding: .75rem 1rem; background: #f5f5f7; color: #070707; border-radius: .6rem; transform: translateY(-200%); }
 .projects-skip:focus { transform: none; }
 .projects-main { padding-top: clamp(48px, 6vw, 88px); }
@@ -150,6 +159,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
   .projects-main :is(.project-feature, .project-card) .directory-link { border-color: #77777e; }
 }
 @media (forced-colors: active) {
+  html:has(.projects-directory), .projects-directory { background: Canvas; }
   html:has(.projects-directory) { scrollbar-color: auto; }
   .projects-main, .projects-footer { color: CanvasText; --projects-ink: CanvasText; --projects-secondary: CanvasText; --projects-line: CanvasText; --projects-focus: Highlight; }
   .projects-main .directory-link { forced-color-adjust: auto; }
@@ -163,6 +173,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: #070707; }
   .projects-main .project-feature .directory-link:has([data-project-effect="stars"]) { background: Canvas; }
 }
 @media print {
+  html:has(.projects-directory), .projects-directory { background: #fff; }
   .projects-main, .projects-footer { color: #000; --projects-ink: #000; --projects-secondary: #333; --projects-line: #999; width: 100%; }
   .projects-main :is(.project-feature, .project-card) .directory-link { break-inside: avoid; background: none; border-color: #999; }
   .projects-main .directory > li { break-inside: avoid; }
