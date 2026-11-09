@@ -145,8 +145,8 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .projects-main .project-card .project-kind { margin-bottom: 12px; }
 .projects-main .project-card .directory-arrow { width: 32px; height: 32px; flex-basis: 32px; }
 .projects-main .project-card--figures .directory-link { justify-content: space-between; gap: 28px; }
-.figures-title-stack { container-type: inline-size; width: 100%; }
-.figures-title-stack > * { display: block; margin: 0; white-space: nowrap; font: 500 clamp(24px, 3vw, 44px)/.98 "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13.8cqi; letter-spacing: -.065em; }
+.figures-title-stack { container-type: inline-size; width: calc(100% + 40px); margin-inline: -20px; }
+.figures-title-stack > * { display: block; margin: 0; white-space: nowrap; font: 500 clamp(28px, 3.5vw, 52px)/.98 "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 14.2cqi; letter-spacing: -.065em; }
 .figures-dictionary { font: 14px/1.5 Georgia, "Times New Roman", serif; }
 .figures-dictionary p { margin: 0; }
 .figures-dictionary-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }

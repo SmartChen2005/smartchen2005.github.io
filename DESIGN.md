@@ -2,6 +2,8 @@
 
 ## Projects — Figures typography cover (2026-11-09)
 
+The latest size refinement extends the title stack 20px into each side gutter and sizes its three lines at 14.2cqi, bringing the title close to the card edges while the dictionary retains the standard inset. Keep each full title readable on one line at desktop and phone widths.
+
 The Figures of Speech card uses the same single-column, vertically arranged card footprint as its peers. Replace its placeholder and horizontal image/copy layout with three tightly stacked, full-width title lines above the dictionary entry. Use its own cover typography: Helvetica Neue / Helvetica / Arial, weight 500, .98 line-height and -.065em tracking; container-relative sizing keeps each title on one line. One semantic h2 names the native card link; the two visual repetitions are aria-hidden. Below, use the cover's 14px Georgia/Times pronunciation and definition, with the shared arrow at the pronunciation's right. `tools/figures-cover.mjs` owns the verbatim dictionary copy for both renderers. Keep the white/black card palette, normal padding, hover/focus behavior and responsive grid. The standalone Figures page's rendered cover remains intact.
 
 ## Figures of Speech — 蓝色星空 (2026-11-09)
