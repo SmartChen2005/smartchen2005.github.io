@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-09 — Project the Projects light grid onto a shallow concave surface
+
+- Add a deterministic native-SVG generator for desktop/phone elliptical point projections. Keep the blue flat and convey depth through point placement, radius and spacing, without adding a rendering loop or changing cards.
+- Regenerate with `node tools/render-projects-sky.mjs` and `node tools/render-projects.mjs`. Site/icon/cursor/eight-study immutable-archive checks pass; local browser checks at desktop, 768, 390 and 320px confirm the fixed non-interactive layer and no horizontal overflow.
+
 ### 2026-11-09 — Add 蓝色星空 to Figures of Speech
 
 - Add FIG. 008 with the user's title and “Inspired by 德国地铁站。” Preserve the Projects blue/white light grid in a static independent edition with a hashed manifest and native SVG plate; keep prior editions intact.

@@ -1,5 +1,9 @@
 # Polaroid of Yesterday — Design Context
 
+## Projects — shallow concave sky (2026-11-09)
+
+The user requests a flattened inward-curving blue surface, expressed primarily through the white dots. `tools/render-projects-sky.mjs` projects a shallow elliptical cylinder into desktop/phone SVGs; its center recedes while the sides grow slightly larger and row spacing fans outward. Keep the solid blue unchanged, with no visible mesh, outlines, motion or lighting gradients. A non-interactive fixed body pseudo-element holds the static projection behind the cards; phone geometry is separately sampled to retain the arc on narrow screens. Forced colors/print hide the projection. Regenerate both assets with `node tools/render-projects-sky.mjs`. The original flat 蓝色星空 edition remains immutable; this change affects only the live Projects background.
+
 ## Figures of Speech — 蓝色星空 (2026-11-09)
 
 FIG. 008 (stable source ID 010) preserves the Projects blue ceiling as an independent static study, titled 蓝色星空 with the perspective “Inspired by 德国地铁站。” Reuse the exact `#061b62`, 72px grid, tiny white radial lights and centered/20px background origin. No twinkling, pointer animation or extra visible overlay. Its native SVG index plate and self-contained `2026-11-09-blue-sky` edition are local, with a SHA-256 manifest. Existing seven studies and earlier edition payloads remain unchanged. The source record is `b9281de`; the shared catalogue/dialog/new-page and chronology flows include the new study.
