@@ -103,6 +103,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-09 — Extend the unlisted halftone experiment into five motion studies
+
+- Add independently addressable Exposure, Lunar, Botanical, Shoal and Tide animations plus an unlisted collection under `halftone-bloom/studies/`. Only the original Bloom page links to the collection; the public Figures catalogue and editions remain unchanged.
+- Reuse the existing self-portrait without changing its bytes. Four other scenes are deterministic native Canvas artwork. Shared white-square dithering, replay, pause, native timeline, density/speed, preference fallbacks and interruption cleanup belong to the new study runtime.
+- Regenerate with `node tools/render-halftone-studies.mjs`; run the new studies checks, original Bloom checks and existing site/archive/cursor/icon gates. Browser evidence and verification limits are recorded in `tools/HALFTONE-STUDIES-QA.md`.
+
 ### 2026-11-09 — Add an unlisted Halftone Bloom motion study
 
 - Add the independent `/projects/figures-of-speech/halftone-bloom/` experiment without changing the Figures of Speech catalogue, chronology, numbering or immutable editions. Its HTML, CSS and ES modules are maintained directly in `dist/`; no generation step is needed.

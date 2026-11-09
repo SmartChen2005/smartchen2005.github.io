@@ -3,6 +3,20 @@
 An independent, unlisted motion study at `/projects/figures-of-speech/halftone-bloom/`.
 The Figures of Speech catalogue, numbering, chronology and preserved editions do not include this experiment.
 
+## Five additional studies (2026-11-09)
+
+`studies/` is the unlisted collection, linked only from the original Bloom page. Each case has its own independent URL: `exposure/`, `lunar/`, `botanical/`, `shoal/` and `tide/`. The main Figures of Speech catalogue remains unchanged.
+
+- **Exposure:** square pixels follow staggered, grid-snapped curved paths into the complete existing self-portrait. The original `dist/assets/selfportrait-light.webp` is reused without modification, cropping or a new image dependency.
+- **Lunar:** cached procedural crater relief and maria respond to changing illumination; a shadow crosses the sphere before a near-full final moon. This is an artistic phase study, not an astronomical ephemeris.
+- **Botanical:** layered curved petals open from a bud, with veins, curled edges, stamens, leaves and a stem.
+- **Shoal:** individually modeled small fish follow curved swimming paths into a larger fish silhouette with a negative-space eye.
+- **Tide:** a shaded engraved wave rises, curls, sheds ballistic spray and settles into a lower crest.
+
+`sources/*.mjs` own each deterministic scene and metadata. `halftone.mjs` samples those grayscale scenes onto a fixed white square grid; `studies.mjs` owns playback, replay/R, pause, native keyboard/scrub timeline, density/speed, image retry and lifecycle. `studies.css` extends the original monochrome material without changing the original animation. Reduced motion shows a poster with manual timeline access. Hidden/page exit interrupts playback; returning does not autoplay. Completion and paused states request no frames. Grid work is capped at 110,000 cells and the output canvas around eight million pixels.
+
+Regenerate all six new HTML pages with `node tools/render-halftone-studies.mjs`; run `node tools/test-halftone-studies.mjs`. Collection previews render the actual scenes once. No new libraries, image-generation charges, videos, APIs, external services or persistent state are used. Source renders are 640×640; all displayed dots have white ink, fixed grid thresholds and physical-pixel snapping.
+
 ## Source and design
 
 These HTML/CSS/ES modules are maintained directly; there is no build step or third-party rendering dependency. The only shared dependencies are the existing favicon and adaptive cursor. No images, web fonts, network requests, sound or persistent state are needed by the artwork.

@@ -32,6 +32,7 @@ jobs:
           node tools/test-site-icons.mjs
           node tools/test-figures-of-speech.mjs
           node tools/test-halftone-bloom.mjs
+          node tools/test-halftone-studies.mjs
           node tools/test-camera.mjs
           node tools/test-camera.mjs --archive
           node tools/test-gallery-carousels.mjs

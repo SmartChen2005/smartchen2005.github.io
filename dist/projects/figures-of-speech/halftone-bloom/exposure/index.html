@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#000000">
+  <meta name="robots" content="noindex">
+  <meta name="description" content="Scattered pixels find their place. A photograph emerges from the noise.">
+  <title>Exposure · Halftone Studies</title>
+  <link rel="icon" href="../../../../favicon.ico">
+  <link rel="stylesheet" href="../../../../site-cursor.css?rev=20261028-drag-axis">
+  <script type="module" src="../../../../site-cursor.mjs?rev=20261028-drag-axis"></script>
+  <link rel="stylesheet" href="../bloom.css">
+  <link rel="stylesheet" href="../studies.css">
+  <script type="module" src="../studies.mjs"></script>
+</head>
+<body class="study-page" data-study="exposure">
+  <main class="experiment" id="experiment">
+    <header class="masthead"><p>Halftone / 01</p><a href="../studies/">All studies</a></header>
+    <div class="art-stage"><canvas id="field" aria-hidden="true"></canvas></div>
+    <div class="study-heading"><h1>Exposure</h1><p>Scattered pixels find their place. A photograph emerges from the noise.</p></div>
+    <footer class="controls" id="controls" hidden>
+      <button class="replay" id="replay" type="button" aria-keyshortcuts="R" disabled>Replay <kbd aria-hidden="true">R</kbd></button>
+      <button class="play" id="play" type="button" aria-label="Pause animation" disabled>Pause</button>
+      <div class="timeline"><label class="visually-hidden" for="seek">Animation timeline</label><input id="seek" type="range" min="0" max="1000" step="1" value="0" disabled><output class="time" id="clock" aria-live="off">0.0 / 8.0 s</output></div>
+      <a class="next-study" href="../lunar/">Next: Lunar</a>
+      <details class="adjust" id="adjust"><summary>Adjust <span class="toggle-mark" aria-hidden="true">+</span></summary>
+        <div class="adjust-panel">
+          <label for="density">Density <output id="density-value" for="density" aria-live="off">100%</output></label>
+          <input id="density" type="range" min="50" max="150" step="5" value="100">
+          <label for="speed">Speed <output id="speed-value" for="speed" aria-live="off">1.0×</output></label>
+          <input id="speed" type="range" min="0.5" max="2" step="0.1" value="1">
+          <p>Pause or scrub to explore a moment.</p>
+        </div>
+      </details>
+    </footer>
+    <div class="fallback" id="failure" hidden><p>The artwork could not load.</p><button id="retry" type="button" disabled>Retry</button></div>
+    <p class="visually-hidden" id="status" role="status"></p>
+    <noscript><p class="fallback">Enable JavaScript to play this study.</p></noscript>
+  </main>
+</body>
+</html>

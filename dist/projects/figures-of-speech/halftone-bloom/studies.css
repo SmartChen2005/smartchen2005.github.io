@@ -1,0 +1,90 @@
+/* The original Bloom palette and native controls remain the canonical material. */
+.study-page .experiment { min-height: 480px; }
+.study-page h1 { font-size: clamp(38px, 5.5vw, 78px); line-height: .98; letter-spacing: -.055em; padding: 0; }
+.study-heading { position: absolute; z-index: 1; left: var(--gutter); bottom: 102px; max-width: 34ch; pointer-events: none; }
+.study-heading p { max-width: 36ch; margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.art-stage { position: absolute; top: 50%; left: 50%; width: min(91vw, 83svh); aspect-ratio: 1; transform: translate(-50%, -55%); }
+.art-stage canvas { display: block; width: 100%; height: 100%; }
+.study-page .controls { display: grid; grid-template-columns: auto auto minmax(100px, 1fr) auto auto; gap: clamp(16px, 2vw, 30px); }
+.study-page .play { min-width: 40px; text-align: left; }
+.study-page .play:hover { text-decoration: underline; text-underline-offset: 5px; }
+.study-page .timeline { min-width: 0; max-width: 360px; margin-left: auto; width: 100%; display: flex; align-items: center; gap: 14px; }
+.study-page .timeline input { margin: 0; height: 44px; min-width: 60px; }
+.study-page .time { white-space: nowrap; color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.study-page .study-number { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.study-page .fallback { bottom: 178px; z-index: 3; }
+.study-page .fallback button { margin: 12px auto 0; display: block; text-decoration: underline; }
+.study-page #field { position: static; }
+.study-page .next-study { display: inline-grid; align-items: center; min-height: 44px; color: var(--muted); text-decoration: none; }
+.study-page .next-study:hover { color: var(--white); text-decoration: underline; text-underline-offset: 5px; }
+.study-page .adjust-panel { bottom: 58px; }
+
+.studies-page { background: var(--black); }
+.studies-page .masthead { position: relative; top: auto; left: auto; right: auto; width: calc(100% - 2 * var(--gutter)); margin: 0 auto; height: 76px; }
+.studies-page .masthead p { font-size: 11px; letter-spacing: .04em; }
+.collection { width: min(1280px, calc(100% - 2 * var(--gutter))); margin: 50px auto 90px; }
+.collection h1 { font-size: clamp(56px, 8.5vw, 128px); line-height: .91; letter-spacing: -.055em; white-space: normal; padding: 0; }
+.collection-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: 56px; }
+.collection-intro p { max-width: 28ch; margin: 0 0 6px; font-size: 13px; line-height: 1.7; color: var(--muted); }
+.study-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 24px; }
+.study-card { display: block; min-width: 0; color: var(--white); text-decoration: none; }
+.study-card:first-child { grid-column: 1 / -1; }
+.poster { position: relative; display: grid; place-items: center; aspect-ratio: 1.4; overflow: clip; border: 1px solid #292929; background: #000; }
+.study-card:first-child .poster { aspect-ratio: 2.35; }
+.poster canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: .83; }
+.study-card:hover .poster canvas, .study-card:focus-visible .poster canvas { opacity: 1; }
+.study-card:hover .poster { border-color: var(--muted); }
+.study-card:active .poster { border-color: var(--white); }
+.poster-fallback { position: absolute; width: 100%; text-align: center; color: var(--muted); font-size: 12px; }
+.poster canvas[data-ready='true'] + .poster-fallback { display: none; }
+.study-caption { display: grid; grid-template-columns: auto 1fr auto; align-items: baseline; gap: 16px; padding-top: 15px; }
+.study-caption .number { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.study-caption h2 { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 29px; font-weight: 400; letter-spacing: -.03em; }
+.study-caption .open { color: var(--muted); font-size: 12px; }
+.study-card p { margin: 8px 0 0 33px; color: var(--muted); font-size: 12px; line-height: 1.7; max-width: 52ch; }
+.collection-footer { margin-top: 68px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 24px; color: var(--muted); font-size: 12px; }
+.collection-footer a { color: var(--white); text-underline-offset: 5px; }
+.collection-footer a:hover { color: var(--muted); }
+
+@media (min-width: 1100px) {
+  .art-stage { left: 56%; }
+  .study-heading { bottom: 114px; }
+}
+
+@media (max-width: 600px) {
+  .study-heading { bottom: 119px; }
+  .study-heading p { max-width: 31ch; font-size: 11px; margin-top: 10px; }
+  .art-stage { top: 44%; width: min(96vw, 58svh); transform: translate(-50%, -50%); }
+  .study-page .controls { grid-template-columns: auto auto 1fr auto; column-gap: 19px; row-gap: 5px; bottom: max(15px, env(safe-area-inset-bottom)); }
+  .study-page .timeline { grid-row: 1; grid-column: 1 / -1; max-width: none; }
+  .study-page .controls > .replay, .study-page .controls > .play, .study-page .controls > .next-study, .study-page .controls > .adjust { grid-row: 2; }
+  .study-page .next-study { justify-self: end; }
+  .study-page .time { font-size: 10px; }
+  .study-page .adjust-panel { bottom: 55px; }
+  .collection { margin-top: 28px; }
+  .collection-intro { display: block; margin-bottom: 34px; }
+  .collection-intro p { margin-top: 24px; max-width: 33ch; font-size: 12px; }
+  .study-grid { grid-template-columns: 1fr; gap: 34px; }
+  .study-card:first-child { grid-column: auto; }
+  .study-card:first-child .poster { aspect-ratio: 1.4; }
+  .study-caption h2 { font-size: 26px; }
+  .study-card p { font-size: 11px; }
+  .collection-footer { display: block; line-height: 2; }
+  .collection-footer span { display: block; }
+}
+
+@media (max-height: 500px) and (min-width: 601px) {
+  .study-page .experiment { min-height: 320px; }
+  .art-stage { width: min(68vw, 85svh); top: 45%; }
+  .study-heading { bottom: 84px; max-width: 28ch; }
+  .study-page h1 { font-size: 38px; }
+  .study-heading p { max-width: 25ch; font-size: 10px; }
+  .study-page .controls { gap: 18px; }
+  .study-page .adjust-panel { bottom: 48px; padding: 15px 20px; }
+}
+
+@media (forced-colors: active) {
+  .art-stage, .poster canvas { display: none; }
+  .poster { border-color: CanvasText; }
+  .poster-fallback { display: block !important; }
+}
