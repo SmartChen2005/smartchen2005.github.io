@@ -103,6 +103,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-09 — Add an unlisted Halftone Bloom motion study
+
+- Add the independent `/projects/figures-of-speech/halftone-bloom/` experiment without changing the Figures of Speech catalogue, chronology, numbering or immutable editions. Its HTML, CSS and ES modules are maintained directly in `dist/`; no generation step is needed.
+- Keep large white typography stationary while deterministic square pixels proliferate across a glyph-aware, organically varied grid. Include replay and density/size/speed controls, static reduced-motion behavior and a sleeping final frame.
+- Run the experiment's model/lifecycle checks, required site validation and archive/cursor/icon checks. Real-browser coverage and actual outcomes are recorded in `tools/HALFTONE-BLOOM-QA.md`.
+
 ### 2026-11-04 — Tilt the Music Station preview toward the pointer
 
 - Add two-axis pointer tilt to the existing device preview, using a fixed perspective stage and the shared interruptible spring controller. Keep the compact card layout and native navigation; return to rest on leave and retain static keyboard/touch/reduced-motion fallbacks.

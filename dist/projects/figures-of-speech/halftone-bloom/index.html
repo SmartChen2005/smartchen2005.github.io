@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="A monochrome motion experiment. A quiet word, surrounded by a rapidly growing field of halftone pixels.">
+  <meta name="robots" content="noindex">
+  <title>Halftone Bloom — Figures of Speech</title>
+  <link rel="icon" href="../../../favicon.ico">
+  <link rel="stylesheet" href="../../../site-cursor.css?rev=20261028-drag-axis">
+  <script type="module" src="../../../site-cursor.mjs?rev=20261028-drag-axis"></script>
+  <link rel="stylesheet" href="bloom.css">
+  <script type="module" src="bloom.mjs"></script>
+</head>
+<body>
+  <main class="experiment" id="experiment">
+    <canvas id="field" aria-hidden="true"></canvas>
+    <header class="masthead">
+      <p>Halftone bloom</p>
+      <a href="../">Figures of Speech</a>
+    </header>
+    <div class="type-stage">
+      <h1><span id="word">Bloom</span><span id="baseline" aria-hidden="true"></span></h1>
+    </div>
+    <footer class="controls" id="controls" hidden>
+      <button class="replay" id="replay" type="button" aria-keyshortcuts="R" disabled>Replay <kbd aria-hidden="true">R</kbd></button>
+      <output id="count" aria-label="Visible particles" aria-live="off">0 dots</output>
+      <details class="adjust" id="adjust">
+        <summary>Adjust <span class="toggle-mark" aria-hidden="true">+</span></summary>
+        <div class="adjust-panel">
+          <label for="density">Density <output id="density-value" for="density" aria-live="off">100%</output></label>
+          <input id="density" type="range" min="45" max="155" step="5" value="100">
+          <label for="size">Dot size <output id="size-value" for="size" aria-live="off">1.5 px</output></label>
+          <input id="size" type="range" min="1" max="2.5" step="0.25" value="1.5">
+          <label for="speed">Speed <output id="speed-value" for="speed" aria-live="off">1.0×</output></label>
+          <input id="speed" type="range" min="0.5" max="2" step="0.1" value="1">
+          <p>Changes replay the same field.</p>
+        </div>
+      </details>
+    </footer>
+    <p class="visually-hidden" id="status" role="status"></p>
+    <noscript><p class="fallback">Enable JavaScript to grow the particle field.</p></noscript>
+  </main>
+</body>
+</html>
