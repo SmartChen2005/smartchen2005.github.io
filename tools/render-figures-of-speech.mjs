@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { figuresPronunciation, figuresDefinition } from './figures-cover.mjs';
 import { normalizeSiteArrows } from './site-icons.mjs';
 import { siteFavicon } from './site-favicon.mjs';
 import { studies, experimentURL, preservedEdition, studyEdition } from './figures-of-speech.mjs';
@@ -39,8 +40,8 @@ const html = `<!doctype html>
     <header class="archive-cover">
       <h1>Figures of Speech</h1>
       <div class="cover-definition">
-        <p class="cover-pronunciation">/ˌfiɡyər əv ˈspēCH/</p>
-        <p>A <dfn>figure of speech</dfn> is a word or phrase that departs from literal meaning to express ideas in a more vivid, creative, or impactful way</p>
+        <p class="cover-pronunciation">${figuresPronunciation}</p>
+        <p>${figuresDefinition}</p>
       </div>
       <div class="cover-bottom"><p>Studies in Motion &amp; Interface Design</p><p>An evolving index of objects, interactions,<br>and the ideas behind this website.</p></div>
     </header>

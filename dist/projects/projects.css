@@ -144,10 +144,14 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .projects-main .project-card .directory-description { max-width: 32ch; margin-top: auto; padding-top: 20px; font-size: .9375rem; overflow-wrap: anywhere; }
 .projects-main .project-card .project-kind { margin-bottom: 12px; }
 .projects-main .project-card .directory-arrow { width: 32px; height: 32px; flex-basis: 32px; }
-.projects-main .project-card--landscape { grid-column: span 2; }
-.projects-main .project-card--landscape .directory-link { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 28px; }
-.projects-main .project-card--landscape .directory-title { font-size: clamp(1.75rem, 2.8vw, 2.5rem); line-height: 1.08; }
-.projects-main .project-card--landscape .directory-description { margin-top: 20px; padding-top: 0; }
+.projects-main .project-card--figures .directory-link { justify-content: space-between; gap: 28px; }
+.figures-title-stack { container-type: inline-size; width: 100%; }
+.figures-title-stack > * { display: block; margin: 0; white-space: nowrap; font: 500 clamp(24px, 3vw, 44px)/.98 "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 13.8cqi; letter-spacing: -.065em; }
+.figures-dictionary { font: 14px/1.5 Georgia, "Times New Roman", serif; }
+.figures-dictionary p { margin: 0; }
+.figures-dictionary-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.figures-pronunciation { color: var(--projects-secondary); }
+.figures-dictionary dfn { font-style: normal; font-weight: 700; }
 .projects-main .project-external { white-space: nowrap; }
 .projects-main .project-card .project-external { white-space: normal; }
 .projects-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding-block: 32px 40px; margin-top: 48px; font-size: 0.8125rem; line-height: 1.4; color: var(--projects-secondary); }
@@ -173,9 +177,6 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 @media (max-width: 600px) {
   .projects-main .directory { grid-template-columns: 1fr; }
   .projects-main .project-card .directory-link { min-height: 208px; }
-  .projects-main .project-card--landscape { grid-column: auto; }
-  .projects-main .project-card--landscape .directory-link { display: flex; gap: 20px; }
-  .projects-main .project-card--landscape .directory-title { font-size: 1.5rem; line-height: 1.15; }
 }
 @media (max-width: 380px) {
   .projects-main .project-feature .directory-link { padding: 20px; }

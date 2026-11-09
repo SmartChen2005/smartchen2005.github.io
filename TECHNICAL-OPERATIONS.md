@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-09 — Give the Figures Projects card a typography cover
+
+- Replace its wide placeholder layout with a compact card: three stacked titles in the Figures cover typography, then its pronunciation and dictionary definition. Share the exact dictionary copy between the two renderers through `tools/figures-cover.mjs`; preserve the standalone cover output and native card navigation.
+- Regenerate Projects and Figures with their renderers; verify site, archive, icon/cursor checks, responsive title fit and keyboard/native-link behavior before publishing.
+
 ### 2026-11-09 — Share the approved Figures curved sky with Projects
 
 - Apply the approved FIG. 008 concave blue surface to the Projects homepage; `tools/render-projects-sky.mjs` verifies the immutable edition payload SHA-256 values and copies its desktop/phone SVGs byte-for-byte to `dist/projects/assets/blue-concave-sky.svg` and `blue-concave-sky-mobile.svg`.

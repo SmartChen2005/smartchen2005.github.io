@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { figuresPronunciation, figuresDefinition } from './figures-cover.mjs';
 import assert from 'node:assert/strict';
 import { projectHeader, projectHeaderAssets } from './project-header.mjs';
 import { siteFavicon } from './site-favicon.mjs';
@@ -13,7 +14,7 @@ assert(room, 'Reuse the existing optimized Polaroid screenshot.');
 const projects = [
   {href:'polaroid-of-yesterday/',title:'Polaroid of Yesterday',kind:'Narrative puzzle game',description:'A first-person game about photography, memory, and the stories we construct.',tone:'light',theme:'polaroid',effect:'polaroid',image:`<img ${renditionAttributes(room,'../',{sizes:'(max-width: 700px) calc(100vw - 80px), 520px',priority:true})} alt="" decoding="async" fetchpriority="high" draggable="false">`},
   {href:'gran-turismo/',title:'Gran Turismo',kind:'VR exploration',description:'A journey through the ruins of a lost civilization.',effect:'stars',previewImage:'assets/project-placeholder.svg'},
-  {href:'figures-of-speech/',title:'Figures of Speech',kind:'Motion & interface design',description:'An evolving collection of interactive studies from VegShark.com.',tone:'light',layout:'landscape',previewImage:'assets/project-placeholder.svg'},
+  {href:'figures-of-speech/',title:'Figures of Speech',tone:'light',layout:'figures'},
   {href:'https://handbook.vegshark.com/',title:'The Vibe Coding Game Design Handbook',kind:'Game design resource',description:'handbook.vegshark.com',external:true,previewImage:'assets/project-placeholder.svg'},
   {href:'vr-for-skill-learning/',title:'VR for Skill Learning',kind:'VR interaction',description:'Practical skills, procedural guidance, and spatial learning.',previewImage:'assets/project-placeholder.svg'},
   {href:'world-sensing-music-station/',title:'World Sensing Music Station',kind:'Physical computing',description:'A handheld instrument that turns movement and space into sound.',tone:'light',previewImage:'world-sensing-music-station/device.svg',previewWidth:1000,previewHeight:800,previewClass:'device',previewEffect:'device'},
@@ -39,6 +40,7 @@ function preview(project) {
   return `<div class="project-preview project-preview--polaroid" data-project-effect="polaroid" aria-hidden="true"><div class="photo-print"><div class="photo-image">${image}<span class="photo-emulsion"></span></div><span class="photo-sheen"></span></div></div>`;
 }
 const entries = projects.map((p,i)=>{
+  if (p.layout === 'figures') return `<li class="project-card project-tone--light project-card--figures"><a class="directory-link" href="${p.href}" aria-labelledby="figures-card-title" draggable="false"><div class="figures-title-stack"><h2 id="figures-card-title">${p.title}</h2><span aria-hidden="true">${p.title}</span><span aria-hidden="true">${p.title}</span></div><div class="figures-dictionary"><div class="figures-dictionary-heading"><p class="figures-pronunciation">${figuresPronunciation}</p><span class="directory-arrow" aria-hidden="true">${northEastArrow}</span></div><p>${figuresDefinition}</p></div></a></li>`;
   const media=preview(p);
   return `<li class="${p.effect?'project-feature':'project-card'} project-tone--${p.tone||'dark'}${p.layout?` project-card--${p.layout}`:''}${p.theme?` project-theme--${p.theme}`:''}"><a class="directory-link" href="${p.href}"${p.external?' target="_blank" rel="noopener noreferrer"':''} draggable="false">${p.effect?'':media}<div class="project-copy"><p class="project-kind">${p.kind}${p.external?' <span class="project-external">· Opens in a new tab</span>':''}</p><div class="project-heading"><h2 class="directory-title"${i===0?' id="polaroid-link-title"':''}>${p.title}</h2><span class="directory-arrow" aria-hidden="true">${northEastArrow}</span></div><p class="directory-description">${p.description}</p></div>${p.effect?media:''}</a></li>`;
 }).join('\n');
@@ -47,7 +49,7 @@ fs.writeFileSync(output, `<!doctype html>
 <meta name="theme-color" content="#061b62"><meta name="description" content="Games, tools, and experiments in interaction by Smart Chen.">
 <title>Projects — Smart Chen</title>${siteFavicon('../')}
 <link rel="preload" href="../assets/fonts/gotham/gotham-book.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261109-concave-sky">
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261109-figures-cover">
 ${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261104-device-tilt"></script></head>
 <body class="projects-directory" id="top"><a class="projects-skip" href="#main">Skip to projects</a>
 ${header}
