@@ -106,15 +106,6 @@ export const studies = [
       ['2026-10-28', '8c39410', 'Free objects gain four-way arrows; sliders retain directional two-way arrows.'],
     ],
   },
-  {
-    id: '010', title: '蓝色星空', kind: 'Surface / Pattern', location: 'Projects / Background',
-    image: 'blue-starry-sky.svg', alt: 'Deep blue with tiny white lights arranged on a regular square grid.', experiment: 'blue-starry-sky',
-    edition: '2026-11-09-blue-sky', world: 'sky', first: '2026-11-09', revised: '2026-11-09',
-    description: '深蓝色背景与规则排列的白色微光。',
-    perspective: 'Inspired by 德国地铁站。',
-    instruction: '静静观看这片蓝色星空。',
-    history: [['2026-11-09', 'b9281de', 'The blue background and regular white lights are introduced on Projects.']],
-  },
 // Keep source IDs stable while numbering only the visible catalogue entries.
 ].filter(study => !study.hidden).map((study, index) => ({ ...study, number: String(index + 1).padStart(3, '0') }));
 
