@@ -26,6 +26,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     env:
       NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      PAGES_ARTIFACT_NAME: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -60,7 +61,10 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         if: steps.configured.outputs.ready == 'true'
         with:
+          name: ${{ env.PAGES_ARTIFACT_NAME }}
           path: dist
       - uses: actions/deploy-pages@v4
         id: deployment
         if: steps.configured.outputs.ready == 'true'
+        with:
+          artifact_name: ${{ env.PAGES_ARTIFACT_NAME }}

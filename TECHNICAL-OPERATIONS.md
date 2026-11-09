@@ -97,11 +97,18 @@ The workflow intentionally deploys the existing `dist/` directory as-is. This ke
 
 Pages push publication and Gallery Notion synchronization use workflow-specific concurrency groups (`github.workflow` + `github.ref`), so a scheduled synchronization cannot cancel a normal website update. Their publishing jobs share `pages-deploy` with `cancel-in-progress: false` and `queue: max`: publication stays serial and waiting jobs are retained. The Gallery job still skips export and deployment when its Notion connection is not configured.
 
+Both publishing jobs name their artifact `github-pages-${{ github.run_id }}-${{ github.run_attempt }}` via `PAGES_ARTIFACT_NAME`, and pass that same value to upload `name` and deploy `artifact_name`. Re-running a failed deployment may leave earlier artifacts in the workflow run; attempt-specific names prevent `deploy-pages` from finding several indistinguishable `github-pages` artifacts. A Pages service timeout can be retried without changing the validated website or deleting earlier artifacts.
+
 ## Current baseline
 
 At the time this standard was added, the repository contains the complete current static archive, its local image assets, the Notion source, the renderer, the validator, and the design context. The baseline is published by the commit that adds this document and the Pages workflow.
 
 ## Change log
+
+### 2026-11-09 — Make Pages retries select one unambiguous artifact
+
+- The `c10de37` run passed all validation and upload steps but timed out after ten minutes in Pages `syncing_files`. Retrying its deploy job produced two default-named `github-pages` artifacts and failed metadata selection.
+- Give each run attempt a unique artifact name and use the same job-level value for upload/deploy in both publishing workflows. Preserve permissions, concurrency, content and the black/white card design. Check upload/deploy name pairing, distinct retry names and the static site before publishing the fix; GitHub Actions validates the workflow syntax when it starts.
 
 ### 2026-11-09 — Use black and white station-sign cards in Projects
 
