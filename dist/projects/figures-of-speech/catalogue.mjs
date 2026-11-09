@@ -108,12 +108,15 @@ export const studies = [
   },
   {
     id: '010', title: '蓝色星空', kind: 'Surface / Pattern', location: 'Projects / Background',
-    image: 'blue-starry-sky.svg', alt: 'Deep blue with tiny white lights arranged on a regular square grid.', experiment: 'blue-starry-sky',
-    edition: '2026-11-09-blue-sky', world: 'sky', first: '2026-11-09', revised: '2026-11-09',
-    description: '深蓝色背景与规则排列的白色微光。',
+    image: 'blue-concave-sky.svg', alt: 'A shallow blue surface curves into the screen, with regular white lights receding at the center.', experiment: 'blue-starry-sky',
+    edition: '2026-11-09-concave-sky', world: 'sky', first: '2026-11-09', revised: '2026-11-09',
+    description: '深蓝色弧面缓缓向屏幕内凹，白色微光沿曲面规则排列。',
     perspective: 'Inspired by 德国地铁站。',
-    instruction: '静静观看这片蓝色星空。',
-    history: [['2026-11-09', 'b9281de', 'The blue background and regular white lights are introduced on Projects.']],
+    instruction: '静静观看光点随浅弧面退向屏幕深处。',
+    history: [
+      ['2026-11-09', 'b9281de', 'The blue background and regular white lights are introduced on Projects.'],
+      ['2026-11-09', '995f8f0', 'The flat blue sky is preserved as an independent Figures of Speech study.'],
+    ],
   },
 // Keep source IDs stable while numbering only the visible catalogue entries.
 ].filter(study => !study.hidden).map((study, index) => ({ ...study, number: String(index + 1).padStart(3, '0') }));

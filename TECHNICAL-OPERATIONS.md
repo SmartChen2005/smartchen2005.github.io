@@ -105,6 +105,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-09 — Give the Figures blue sky a shallow inward curve
+
+- Update FIG. 008, stable source ID 010, to a flattened concave blue surface with regular white light points, retaining “Inspired by 德国地铁站。” The native SVG projection places the center farther away and the sides closer, with independently sampled desktop and phone versions and a matching catalogue plate.
+- `tools/render-figures-sky.mjs` owns the reproducible assets and the new `2026-11-09-concave-sky` edition. Keep the original flat edition, all previous payloads and the Projects directory background intact. Regenerate the catalogue with `node tools/render-figures-of-speech.mjs`.
+- Site, immutable archive/dependency closure, icon and cursor checks pass; the sky generator produces byte-identical output. Strict route audit reports zero findings. Real-browser desktop and 390px phone checks confirm the blue arc, loaded SVGs, catalogue/dialog/new-page routes, Escape/Close focus restoration and preview iframe cleanup. The official DESIGN.md linter could not run because this environment has no `npx` command.
+
 ### 2026-11-09 — Add 蓝色星空 to Figures of Speech
 
 - Add FIG. 008 with the user's title and “Inspired by 德国地铁站。” Preserve the Projects blue/white light grid in a static independent edition with a hashed manifest and native SVG plate; keep prior editions intact.

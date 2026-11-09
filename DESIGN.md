@@ -2,7 +2,9 @@
 
 ## Figures of Speech — 蓝色星空 (2026-11-09)
 
-FIG. 008 (stable source ID 010) preserves the Projects blue ceiling as an independent static study, titled 蓝色星空 with the perspective “Inspired by 德国地铁站。” Reuse the exact `#061b62`, 72px grid, tiny white radial lights and centered/20px background origin. No twinkling, pointer animation or extra visible overlay. Its native SVG index plate and self-contained `2026-11-09-blue-sky` edition are local, with a SHA-256 manifest. Existing seven studies and earlier edition payloads remain unchanged. The source record is `b9281de`; the shared catalogue/dialog/new-page and chronology flows include the new study.
+FIG. 008 (stable source ID 010) is titled 蓝色星空 with the perspective “Inspired by 德国地铁站。” The user's follow-up turns this independent study into a shallow, inward-curving blue surface with regular small white lights. Project the lights onto a horizontal elliptical cylinder with a half-angle of about 0.83 radians: the center recedes and the sides approach the viewer, creating a broad, flattened arc into the screen. The user clarified 弧面 (curved surface); the intended material is the station's blue surface. Keep `#061b62` as the main blue and let the projected light spacing express the curvature. No twinkling, pointer animation or visible UI overlay.
+
+`tools/render-figures-sky.mjs` generates separate native desktop and phone SVGs, the catalogue plate `assets/blue-concave-sky.svg`, and the self-contained `2026-11-09-concave-sky` edition with its SHA-256 manifest. The catalogue, dialog and new-page link share this edition. Preserve the original flat `2026-11-09-blue-sky` edition, its assets and every earlier edition byte-for-byte; the other seven studies and the live Projects directory background retain their existing treatment. Regenerate the catalogue with `node tools/render-figures-of-speech.mjs` and verify the new payload hashes, dependency closure, source/render parity, desktop/phone presentation and dialog/new-page behavior before publication. The flat study's original source record remains `b9281de`.
 
 ## Projects homepage — black and white station signs (2026-11-09)
 

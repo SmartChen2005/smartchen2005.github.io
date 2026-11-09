@@ -60,7 +60,9 @@ for(const study of studies){
   assert(html.includes(`data-panel="${study.id}"`),`Missing study notes ${study.id}`);
   const asset = fs.readFileSync(path.join(archive,'assets',study.image));
   if(study.id === '010') {
-    assert(asset.toString('utf8').includes('<pattern') && asset.toString('utf8').includes('#061b62'),'Blue sky must retain its native blue/light-grid artwork');
+    const artwork = asset.toString('utf8');
+    assert(artwork.includes('data-surface="shallow-concave"') && artwork.includes('#061b62') && artwork.includes('data-light-grid="projected"'),'Blue sky must use native projected lights on its shallow blue surface');
+    assert(Number(artwork.match(/data-arc-radians="([^"]+)"/)[1]) < Math.PI,'The inward arc must be shallower than a semicircle');
   } else {
     assert(asset.length>2000,`Missing or empty real thumbnail ${study.image}`);
     assert.equal(asset.subarray(0,3).toString('hex'),'ffd8ff',`Expected a real JPEG capture for ${study.id}`);

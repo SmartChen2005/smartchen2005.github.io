@@ -1,0 +1,28 @@
+{
+  "edition": "2026-11-09-concave-sky",
+  "sourceCommit": "5213e83a35d0a16c790c3a3a5f7b01c776add573",
+  "preserved": "2026-11-09",
+  "description": "A shallow inward-curved blue surface with projected white station lights. Revised from the flat blue-sky edition at the user’s request; inspired by German underground stations.",
+  "source": "tools/render-figures-sky.mjs",
+  "studies": [
+    {
+      "slug": "blue-starry-sky",
+      "kind": "sky",
+      "title": "蓝色星空"
+    }
+  ],
+  "files": [
+    {
+      "path": "blue-starry-sky/index.html",
+      "sha256": "644b58954642bec05cf875d8dce1b5c189176b24a6f9c9c305595211f216a25d"
+    },
+    {
+      "path": "blue-starry-sky/surface.svg",
+      "sha256": "d3d756c2ed286c9e0eb0ea7483fc8ea9813cfb9489d486690ddd93a3a08f4d79"
+    },
+    {
+      "path": "blue-starry-sky/surface-mobile.svg",
+      "sha256": "5326e88512c513621739122764b1b3367ea8c7605dab5fa367361056116a094d"
+    }
+  ]
+}

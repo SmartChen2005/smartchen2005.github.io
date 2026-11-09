@@ -1,4 +1,4 @@
-import { studies, experimentURL, studyEdition } from './catalogue.mjs?rev=20261109-blue-sky';
+import { studies, experimentURL, studyEdition } from './catalogue.mjs?rev=20261109-concave-sky';
 
 const dialog = document.querySelector('.study-dialog');
 const close = document.querySelector('#close-study');
