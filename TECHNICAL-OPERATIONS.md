@@ -103,6 +103,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-09 — Use black and white station-sign cards in Projects
+
+- Translate the user's latest reference into explicit white/black card variants and a wider horizontal Figures card, with narrow-screen stacking and the same seven project destinations. Retain the blue ceiling, project imagery and existing interactions; Polaroid's script becomes black on white.
+- Use palette-local hover/focus/preference states and synchronize the generated stylesheet revision. Normalize Header line endings before its strict preservation assertion so Windows Git checkouts render reliably. Site/icon/cursor checks, CRLF/idempotence, strict audit, contrast and responsive/navigation checks pass; see `design-qa.md`.
+
 ### 2026-11-09 — Give the Projects homepage a blue ceiling background
 
 - Apply a route-local deep-blue canvas and restrained, regular white light points inspired by the user's station photograph. Keep the Header, project cards, links and interactions intact; synchronize browser theme metadata and the CSS revision.

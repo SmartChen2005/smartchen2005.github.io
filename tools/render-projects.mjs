@@ -6,17 +6,17 @@ import { northEastArrow } from './site-icons.mjs';
 import { imageRendition, renditionAttributes } from './gallery-media.mjs';
 const output = new URL('../dist/projects/index.html', import.meta.url);
 const header = projectHeader({base:'../', current:true});
-const current = fs.readFileSync(output, 'utf8').match(/<header class="project-header\b[\s\S]*?<\/header>/)?.[0];
+const current = fs.readFileSync(output, 'utf8').replace(/\r\n/g, '\n').match(/<header class="project-header\b[\s\S]*?<\/header>/)?.[0];
 assert.equal(current, header, 'Preserve the existing shared Header exactly.');
 const room = imageRendition('projects/polaroid-of-yesterday/assets/room.jpg');
 assert(room, 'Reuse the existing optimized Polaroid screenshot.');
 const projects = [
-  {href:'polaroid-of-yesterday/',title:'Polaroid of Yesterday',kind:'Narrative puzzle game',description:'A first-person game about photography, memory, and the stories we construct.',theme:'polaroid',effect:'polaroid',image:`<img ${renditionAttributes(room,'../',{sizes:'(max-width: 700px) calc(100vw - 80px), 520px',priority:true})} alt="" decoding="async" fetchpriority="high" draggable="false">`},
+  {href:'polaroid-of-yesterday/',title:'Polaroid of Yesterday',kind:'Narrative puzzle game',description:'A first-person game about photography, memory, and the stories we construct.',tone:'light',theme:'polaroid',effect:'polaroid',image:`<img ${renditionAttributes(room,'../',{sizes:'(max-width: 700px) calc(100vw - 80px), 520px',priority:true})} alt="" decoding="async" fetchpriority="high" draggable="false">`},
   {href:'gran-turismo/',title:'Gran Turismo',kind:'VR exploration',description:'A journey through the ruins of a lost civilization.',effect:'stars',previewImage:'assets/project-placeholder.svg'},
-  {href:'figures-of-speech/',title:'Figures of Speech',kind:'Motion & interface design',description:'An evolving collection of interactive studies from VegShark.com.',previewImage:'assets/project-placeholder.svg'},
+  {href:'figures-of-speech/',title:'Figures of Speech',kind:'Motion & interface design',description:'An evolving collection of interactive studies from VegShark.com.',tone:'light',layout:'landscape',previewImage:'assets/project-placeholder.svg'},
   {href:'https://handbook.vegshark.com/',title:'The Vibe Coding Game Design Handbook',kind:'Game design resource',description:'handbook.vegshark.com',external:true,previewImage:'assets/project-placeholder.svg'},
   {href:'vr-for-skill-learning/',title:'VR for Skill Learning',kind:'VR interaction',description:'Practical skills, procedural guidance, and spatial learning.',previewImage:'assets/project-placeholder.svg'},
-  {href:'world-sensing-music-station/',title:'World Sensing Music Station',kind:'Physical computing',description:'A handheld instrument that turns movement and space into sound.',previewImage:'world-sensing-music-station/device.svg',previewWidth:1000,previewHeight:800,previewClass:'device',previewEffect:'device'},
+  {href:'world-sensing-music-station/',title:'World Sensing Music Station',kind:'Physical computing',description:'A handheld instrument that turns movement and space into sound.',tone:'light',previewImage:'world-sensing-music-station/device.svg',previewWidth:1000,previewHeight:800,previewClass:'device',previewEffect:'device'},
   {href:'multiverse-all-star-battlefront/',title:'Multiverse All-Star Battlefront',kind:'AI game experiment',description:'Imagined characters become pixel-art fighters and generated comics.',previewImage:'assets/project-placeholder.svg'}
 ];
 function starfield() {
@@ -40,14 +40,14 @@ function preview(project) {
 }
 const entries = projects.map((p,i)=>{
   const media=preview(p);
-  return `<li class="${p.effect?'project-feature':'project-card'}${p.theme?` project-theme--${p.theme}`:''}"><a class="directory-link" href="${p.href}"${p.external?' target="_blank" rel="noopener noreferrer"':''} draggable="false">${p.effect?'':media}<div class="project-copy"><p class="project-kind">${p.kind}${p.external?' <span class="project-external">· Opens in a new tab</span>':''}</p><div class="project-heading"><h2 class="directory-title"${i===0?' id="polaroid-link-title"':''}>${p.title}</h2><span class="directory-arrow" aria-hidden="true">${northEastArrow}</span></div><p class="directory-description">${p.description}</p></div>${p.effect?media:''}</a></li>`;
+  return `<li class="${p.effect?'project-feature':'project-card'} project-tone--${p.tone||'dark'}${p.layout?` project-card--${p.layout}`:''}${p.theme?` project-theme--${p.theme}`:''}"><a class="directory-link" href="${p.href}"${p.external?' target="_blank" rel="noopener noreferrer"':''} draggable="false">${p.effect?'':media}<div class="project-copy"><p class="project-kind">${p.kind}${p.external?' <span class="project-external">· Opens in a new tab</span>':''}</p><div class="project-heading"><h2 class="directory-title"${i===0?' id="polaroid-link-title"':''}>${p.title}</h2><span class="directory-arrow" aria-hidden="true">${northEastArrow}</span></div><p class="directory-description">${p.description}</p></div>${p.effect?media:''}</a></li>`;
 }).join('\n');
 fs.writeFileSync(output, `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#061b62"><meta name="description" content="Games, tools, and experiments in interaction by Smart Chen.">
 <title>Projects — Smart Chen</title>${siteFavicon('../')}
 <link rel="preload" href="../assets/fonts/gotham/gotham-book.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261109-restored-dark-cards">
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261109-station-signs">
 ${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261104-device-tilt"></script></head>
 <body class="projects-directory" id="top"><a class="projects-skip" href="#main">Skip to projects</a>
 ${header}

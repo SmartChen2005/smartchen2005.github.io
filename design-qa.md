@@ -1,3 +1,16 @@
+# Projects: black and white station signs
+
+Date: 2026-11-09. Scope: the user's Weinmeisterstraße reference, using black-on-white and white-on-black cards with flexible proportions.
+
+- Explicit catalog tones put Polaroid, Figures and Music Station on white; GT, Handbook, VR and Multiverse remain dark. Figures spans two columns with horizontal image/copy, returning to the common vertical card at 600px and below. Flat fills, fine borders and 4px card/2px media corners replace the old large rounded shells. The blue ceiling, shared Header, seven native links/order, all image bytes and interaction runtime are retained. Polaroid uses its actual script in black with a softer print shadow; GT retains all 160 stars.
+- Real Chrome checks at 1440, 768, 390 and 320 CSS pixels: all seven images loaded; 3/2/1 columns; Figures switches from two-column grid to one-column flex; no horizontal overflow. Computed light titles are `rgb(17, 17, 17)` on white; dark titles white on `#0b0b0b` (GT black). Inspected featured/compact cards and the settled 320px layout. Keyboard focus remains visible; Figures navigation and Back work. Temporary viewport reset.
+- Static review of hover/pressed/high-contrast/system-color/print states confirms palette-local colors and card-layer resets. Worst pressed text contrast: light primary/secondary 15.55/6.44:1; dark 16.29/8.21:1. Focus ring against blue 9.30:1. System-color/print preferences were reviewed in CSS, not OS-level emulation.
+- Passed `validate-site`, `test-site-icons`, `test-site-cursor`, CRLF-input generation and byte-for-byte Projects renderer idempotence, strict `dist/` design audit (zero findings), and `git diff --check`. Audit JSON is `projects-signs-audit.json` in the task visualization workspace. A separate read-only implementation review found no blocker.
+
+final result: passed
+
+---
+
 # Projects: deep-blue ceiling background
 
 Date: 2026-11-09. Scope: the Projects homepage background, inspired by the user's blue Museumsinsel station photograph and request for regular white light points with minimalist restraint.
