@@ -30,8 +30,8 @@ const html = `<!doctype html>
   ${siteFavicon('../../')}
   <title>Figures of Speech — Smart Chen</title>
   ${projectHeaderAssets('../../')}
-  <link rel="stylesheet" href="figures.css?v=20261029-definition">
-  <script type="module" src="figures.mjs?v=20261109-concave-sky"></script>
+  <link rel="stylesheet" href="figures.css?v=20261109-colophon">
+  <script type="module" src="figures.mjs?v=20261109-artificial-dome"></script>
 </head>
 <body>
   <a class="skip-link" href="#index">Skip to the index</a>
@@ -48,7 +48,7 @@ const html = `<!doctype html>
     <div class="index-bar" id="index"><p><span id="view-label">Index</span> <span class="entry-count">/ ${studies.length} studies</span></p><div class="view-switch" aria-label="Archive view" hidden><button type="button" data-view="index" aria-pressed="true">Index</button><button type="button" data-view="chronology" aria-pressed="false">Chronology</button></div></div>
     <section class="specimen-grid" id="index-view" aria-label="Design studies">${grid}</section>
     <section id="chronology-view" aria-label="Recorded design chronology" hidden><p class="chronology-intro">Selected moments in the development of VegShark.com. Dates follow the source archive.</p><ol class="chronology-list">${chronology}</ol></section>
-    <footer class="archive-colophon"><p>Design &amp; direction: Smart Chen<br>Developed through design experiments with AI.</p><p>Visual reference: Virgil Abloh,<br><a href="https://mcachicago.org/stories/editorial/virgil-abloh-figures-of-speech/" target="_blank" rel="noopener noreferrer">Figures of Speech, 2019</a></p><p>Index opened 2026.10.27<br>To be continued.</p></footer>
+    <footer class="archive-colophon"><p>Visual reference: Virgil Abloh,<br><a href="https://mcachicago.org/stories/editorial/virgil-abloh-figures-of-speech/" target="_blank" rel="noopener noreferrer">Figures of Speech, 2019</a></p></footer>
   </main>
   <dialog class="study-dialog" aria-labelledby="study-title">
     <div class="dialog-header"><p id="study-number"></p><h2 id="study-title"></h2><button type="button" id="close-study" autofocus>Close</button></div>

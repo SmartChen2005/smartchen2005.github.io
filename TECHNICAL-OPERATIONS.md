@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-09 — Sync Artificial Dome text and simplify the Figures footer
+
+- Import only Notion Fig. 008's title, description and design perspective, retaining a dated source snapshot. Preserve the approved blue artwork byte-for-byte in a text-revised independent edition; regenerate catalogue labels and dialog copy.
+- Remove the requested credit/date paragraphs from the footer and left-align the existing visual reference. Check source-copy parity, immutable payloads, site/icon/cursor validation and rendered footer/dialog behavior.
+
 ### 2026-11-09 — Give the Figures Projects card a typography cover
 
 - Replace its wide placeholder layout with a compact card: three stacked titles in the Figures cover typography, then its pronunciation and dictionary definition. Share the exact dictionary copy between the two renderers through `tools/figures-cover.mjs`; preserve the standalone cover output and native card navigation.

@@ -1,5 +1,11 @@
 # Polaroid of Yesterday — Design Context
 
+## Figures — Notion copy and footer (2026-11-09)
+
+Notion's Figures of Speech page (`408abc37-a86f-80d0-a20e-c3ce996a3b22`, Fig. 008, edited 2026-11-09T21:56:28.759Z) owns the current blue study's text: title **Artificial Dome**, description **#061B62**, perspective **Inspired by Untergrundbahn, German underground metro station.** The targeted source snapshot is `tools/figures-notion/artificial-dome.json`; `tools/render-artificial-dome.mjs` verifies this copy and creates the text-revised `2026-11-09-artificial-dome` edition with byte-identical SVGs. This supersedes the earlier 蓝色星空 title and Chinese description while preserving their immutable editions and all surface geometry.
+
+The catalogue footer contains only the existing Virgil Abloh / Figures of Speech, 2019 visual-reference paragraph, aligned at the left content edge. Remove the design/development credit and index-opened/continuation paragraphs. The renderer and route stylesheet own this treatment on desktop and phones.
+
 ## Projects — Figures typography cover (2026-11-09)
 
 The latest size refinement extends the title stack 20px into each side gutter and sizes its three lines at 14.2cqi, bringing the title close to the card edges while the dictionary retains the standard inset. Keep each full title readable on one line at desktop and phone widths.

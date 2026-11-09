@@ -1,4 +1,4 @@
-import { studies, experimentURL, studyEdition } from './catalogue.mjs?rev=20261109-concave-sky';
+import { studies, experimentURL, studyEdition } from './catalogue.mjs?rev=20261109-artificial-dome';
 
 const dialog = document.querySelector('.study-dialog');
 const close = document.querySelector('#close-study');
