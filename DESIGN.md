@@ -1,5 +1,13 @@
 # Polaroid of Yesterday — Design Context
 
+## Projects — shallow concave sky (2026-11-09)
+
+The user requests a flattened inward-curving blue surface, expressed primarily through the white dots. `tools/render-projects-sky.mjs` projects a shallow elliptical cylinder into desktop/phone SVGs; its center recedes while the sides grow slightly larger and row spacing fans outward. Keep the solid blue unchanged, with no visible mesh, outlines, motion or lighting gradients. A non-interactive fixed body pseudo-element holds the static projection behind the cards; phone geometry is separately sampled to retain the arc on narrow screens. Forced colors/print hide the projection. Regenerate both assets with `node tools/render-projects-sky.mjs`. The original flat 蓝色星空 edition remains immutable; this change affects only the live Projects background.
+
+## Figures of Speech — 蓝色星空 (2026-11-09)
+
+FIG. 008 (stable source ID 010) preserves the Projects blue ceiling as an independent static study, titled 蓝色星空 with the perspective “Inspired by 德国地铁站。” Reuse the exact `#061b62`, 72px grid, tiny white radial lights and centered/20px background origin. No twinkling, pointer animation or extra visible overlay. Its native SVG index plate and self-contained `2026-11-09-blue-sky` edition are local, with a SHA-256 manifest. Existing seven studies and earlier edition payloads remain unchanged. The source record is `b9281de`; the shared catalogue/dialog/new-page and chronology flows include the new study.
+
 ## Projects homepage — black and white station signs (2026-11-09)
 
 The user's Weinmeisterstraße photograph now directs the cards: clear black-on-white and white-on-black signs, with flexible proportions and flat surfaces. Preserve the blue ceiling background and shared Header. `tools/render-projects.mjs` owns explicit per-project `tone` and optional `layout` values. Polaroid, Figures of Speech and Music Station are light; Gran Turismo, Handbook, VR and Multiverse are dark. Avoid a mechanical alternating sequence. `dist/projects/projects.css` maps the named `project-tone--light/dark` classes to card-local `--projects-*` tokens: white `#fff` / black ink `#111` / secondary `#525252`, or near-black `#0b0b0b` / white ink `#fff` / secondary `#b8b8b8`. Light hover/pressed surfaces are `#f5f5f5` / `#e9e9e9`; dark equivalents `#151515` / `#202020`. Arrow frames invert within the active palette. Keep flat fills, fine borders, 4px card corners and 2px media/arrow corners, without surface texture or invented station labels.
