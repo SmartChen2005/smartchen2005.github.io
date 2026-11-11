@@ -22,24 +22,24 @@
   text-transform: uppercase;
 }
 
+.project-main.statement-main {
+  padding-inline: clamp(8px, 1.2vw, 24px);
+}
+
 .personal-statement {
-  max-inline-size: 1100px;
-  margin-inline: auto;
   padding-block: clamp(12px, 3vw, 48px);
+  text-align: center;
 }
 
 .personal-statement .story-text {
   max-width: none;
   margin: 0 0 1em;
   font-family: var(--font);
-  font-size: clamp(1.1875rem, 1rem + .7vw, 1.625rem);
+  font-size: clamp(1.375rem, 1rem + 1.4vw, 2.25rem);
+  line-height: 1.23;
   text-transform: uppercase;
 }
 
 .personal-statement .story-text:last-child {
   margin-bottom: 0;
-}
-
-@media (max-width: 700px) {
-  .project-main.statement-main { padding-inline: 14px; }
 }
