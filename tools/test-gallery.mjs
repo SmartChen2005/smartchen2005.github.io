@@ -59,10 +59,10 @@ assert(galleryHome.indexOf('id="photography"') < galleryHome.indexOf('id="stills
 assert.equal((stillsSection.match(/class="project-card"/g)||[]).length,2, 'Stills has two peer cards');
 assert(stillsSection.indexOf('href="trauma-induced-dissociative-amnesia/"') < stillsSection.indexOf('href="gran-turismo/"'), 'TIDA is the left card and Gran Turismo the right card');
 assert(stillsSection.includes('assets/gran-turismo-placeholder.svg'), 'Gran Turismo has an explicit image placeholder');
-const statementOpening='The artist is not the ultimate authority on their own art.';
+const statementOpening='I believe the artist is not the ultimate authority on their own art.';
 assert.match(galleryHome, /class="feature"[\s\S]*?href="trauma-induced-dissociative-amnesia\/"[\s\S]*?<\/section>\s*<div class="statement-card">/);
 assert(!stillsSection.includes('class="statement-card"'));
-assert(galleryHome.includes(`<span class="statement-card-quote">${statementOpening}</span>`));
+assert(galleryHome.includes('<span class="statement-card-quote">The artist is not the ultimate authority on their own art.</span>'));
 const statementPage=fs.readFileSync(new URL(statementRoute,gallery),'utf8');
 assert(statementPage.includes('class="gallery-header"'));
 assert.deepEqual([...statementPage.matchAll(/<strong>([^<]*)<\/strong>/g)].map(match=>match[1]),[statementOpening]);

@@ -1,4 +1,4 @@
-**The artist is not the ultimate authority on their own art.**
+**I believe the artist is not the ultimate authority on their own art.**
 
 …
 
@@ -70,7 +70,7 @@ What draws me to USC is not only its programs in Game Design and Interactive Med
 
 My goal isn't just to make games with more choices or more endings. Nor do I want to create mechanics simply because they're "fun," or visuals simply because they look "cool."
 
-I want every design decision to be intentional. Whether it's a game mechanic, an interaction, or a visual choice, I want it to have a reason to exist. I want interaction itself to become a language of storytelling, capable of expressing meaning rather than merely making a story more entertaining.
+I want every design decision to be intentional. Whether it's a game mechanic, an interaction, or a visual choice, it should have a reason to exist. Above all, I want interaction itself to become an invitation to participate in the storytelling, an expressive language rather than merely a way to make the story more entertaining.
 
 As a child, I was taught to search for the one correct interpretation hidden in every story. Now, as a creator, I want to do something different. Instead of telling a story on my own and asking players to understand it, I want to create experiences in which the story takes shape through our participation together.
 
