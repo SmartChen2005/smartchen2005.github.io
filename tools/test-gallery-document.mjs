@@ -173,7 +173,7 @@ fs.writeFileSync(curatedPath,JSON.stringify(curatedSnapshot));
 const curatedOutput=path.join(qa,'curated-site');
 const curated=spawnSync(process.execPath,['tools/render-gallery.mjs','--snapshot',curatedPath,'--out',curatedOutput],{encoding:'utf8'});
 assert.equal(curated.status,0,curated.stderr);
-const photoSection=fs.readFileSync(path.join(curatedOutput,'index.html'),'utf8').split('id="photography"')[1].split('id="films"')[0];
+const photoSection=fs.readFileSync(path.join(curatedOutput,'index.html'),'utf8').split('id="photography"')[1].split('id="stills"')[0];
 const destinations=[...photoSection.matchAll(/<article class="project-card[^\"]*"><a href="([^\"]+)"/g)].map(m=>m[1]);
 const expected=snapshot.pages.filter(p=>p.properties.Type==='Photography'&&p.properties.Featured!=='__YES__'&&!unpublished.has(p.properties.Slug)).map(p=>p.properties.Slug+'/');
 assert.deepEqual(destinations.sort(),expected.sort(),'Unpublishing curated projects must retain each remaining project once');

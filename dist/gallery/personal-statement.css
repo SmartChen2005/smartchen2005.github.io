@@ -1,0 +1,49 @@
+@font-face {
+  font-family: Anton;
+  src: url('../assets/fonts/anton-regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+.statement-card {
+  container-type: inline-size;
+  margin-top: clamp(24px, 3vw, 44px);
+}
+
+.statement-card > a {
+  display: grid;
+  place-items: center;
+  min-block-size: clamp(56px, 8vw, 112px);
+  padding: 12px 3%;
+  border: 1px solid var(--photo-rule);
+  background: var(--photo-placeholder);
+  text-align: center;
+}
+
+.statement-card > a:hover {
+  border-color: var(--photo-ink);
+}
+
+.statement-card-quote {
+  font: 400 clamp(.5625rem, 3.1cqi, 3.5rem)/1.12 Anton, var(--font);
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+}
+
+.personal-statement {
+  max-inline-size: 64ch;
+  margin-inline: auto;
+  padding-block: clamp(12px, 3vw, 48px);
+  color: var(--photo-ink);
+  font: clamp(1.0625rem, .875rem + .68vw, 1.5rem)/1.6 var(--editorial-font);
+}
+
+.personal-statement .story-text {
+  max-width: none;
+  margin: 0 0 1em;
+  color: inherit;
+  font: inherit;
+}
+
+.personal-statement .story-text:last-child {
+  margin-bottom: 0;
+}
