@@ -4,6 +4,10 @@
   border-top: 1px solid var(--photo-rule);
 }
 
+.statement-card + #photography {
+  margin-block-start: 0;
+}
+
 .statement-card > a {
   display: grid;
   place-items: center;
@@ -27,7 +31,9 @@
 .personal-statement .story-text {
   max-width: none;
   margin: 0 0 1em;
+  font-family: var(--font);
   font-size: clamp(1.1875rem, 1rem + .7vw, 1.625rem);
+  text-transform: uppercase;
 }
 
 .personal-statement .story-text:last-child {
