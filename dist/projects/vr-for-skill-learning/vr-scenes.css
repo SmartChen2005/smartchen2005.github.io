@@ -15,15 +15,15 @@
 }
 
 [data-theme="shop"] {
-  --paper: #faf0eb;
-  --ink: #31201f;
-  --blue: #a32b34;
-  --muted: #665151;
-  --rule: #d9bdb9;
-  --wash: #f2dfdc;
-  --scene-bg: #f9dbcc;
-  --scene-ink: #402320;
-  --scene-accent: #932932;
+  --paper: #edf1f5;
+  --ink: #1b2835;
+  --blue: #225687;
+  --muted: #4c6072;
+  --rule: #bbc9d5;
+  --wash: #e1e9f0;
+  --scene-bg: #18293b;
+  --scene-ink: #f4f8fb;
+  --scene-accent: #f8d482;
 }
 
 [data-theme="camp"] {
@@ -194,36 +194,21 @@
   border-top: 8px solid #ba774f;
   transform: skewY(8deg);
 }
-.prop-tire { --size: clamp(5.4rem, 32cqw, 15rem); left: 19%; bottom: 10%; --move-x: -8px; --turn: -13deg; }
-.prop-wrench { --size: clamp(3.5rem, 19cqw, 9rem); right: 12%; top: 17%; --move-y: -7px; --turn: 10deg; }
+.prop-tire { --size: clamp(3.25rem, 15cqw, 5.5rem); left: 34%; bottom: 12%; --move-x: -8px; --turn: -13deg; }
+.prop-wrench { --size: clamp(2rem, 10cqw, 4rem); right: 14%; top: 28%; --move-y: -7px; --turn: 10deg; }
 
-/* Parts store: striped canopy, stocked shelving and red checkerboard tile. */
-[data-theme="shop"] .scene-art::before {
-  inset: 13% 0 19% 7%;
-  background: linear-gradient(95deg, #f9dbcc, #ffc9b4 45%, #e3998c);
-  clip-path: polygon(0 17%, 100% 0, 100% 100%, 0 100%);
+/* Fade the parts aisle into the solid chapter title surface. */
+.shop-interior {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 56%;
+  mask-image: linear-gradient(90deg, transparent, #000 27%);
 }
-[data-theme="shop"] .scene-art::after {
-  inset: 77% -2% 0 0;
-  z-index: 1;
-  background: conic-gradient(#f5d2c4 25%, #c06864 0 50%, #f5d2c4 0 75%, #c06864 0) 0 0 / clamp(28px, 7cqw, 65px) clamp(24px, 5cqw, 50px);
-  clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%);
-}
-.shop-shelf {
-  inset: 19% 7% 22% 25%;
-  background: repeating-linear-gradient(0deg, #a34d49 0 5%, transparent 5% 29%, #e2b7a5 29% 33%), repeating-linear-gradient(90deg, #8f4b49 0 6%, #eec0aa 6% 8%, #b37164 8% 14%, #f1c5ab 14% 16%, #9e5f5b 16% 22%);
-  border: 8px solid #ad5852;
-  box-shadow: inset 0 0 30px #683f3988;
-}
-.shop-awning {
-  inset: 8% 4% 70% 20%;
-  z-index: 2;
-  background: repeating-linear-gradient(90deg, #b0343c 0 12.5%, #ffe8d7 12.5% 25%);
-  border-bottom: 9px solid #a34847;
-  clip-path: polygon(8% 0, 92% 0, 100% 100%, 0 100%);
-}
-.prop-cart { --size: clamp(5.3rem, 32cqw, 15rem); left: 13%; bottom: 8%; --move-x: 13px; --turn: 4deg; }
-.prop-toolbox { --size: clamp(3.3rem, 20cqw, 9rem); right: 10%; bottom: 15%; --move-y: -9px; --turn: -5deg; }
+.prop-cart { --size: clamp(2.5rem, 12cqw, 4.5rem); left: 24%; bottom: 9%; --move-x: 13px; --turn: 4deg; }
+.prop-toolbox { --size: clamp(1.75rem, 8cqw, 3.25rem); right: 12%; bottom: 13%; --move-y: -9px; --turn: -5deg; }
 
 /* Forest clearing: offset ridgelines and paired facets give each pine a lit side. */
 [data-theme="camp"] .scene-art::before {
@@ -270,14 +255,14 @@
 .camp-glow::after {
   content: "";
   position: absolute;
-  inset: auto 29% 11% 40%;
+  inset: auto 47% 11% 40%;
   height: 11%;
   background: linear-gradient(172deg, #a36d45 50%, #553e2d 51%);
   clip-path: polygon(0 24%, 83% 0, 100% 46%, 95% 84%, 13% 100%);
 }
-.prop-tent { --size: clamp(4.6rem, 27cqw, 13rem); left: 23%; bottom: 12%; --move-y: -6px; --turn: -3deg; }
-.prop-tree { --size: clamp(3rem, 16cqw, 7.5rem); right: 4%; bottom: 13%; --turn: 5deg; }
-.prop-fire { --size: clamp(3.2rem, 18cqw, 8.4rem); left: 58%; bottom: 7%; --move-y: -5px; --turn: -5deg; }
+.prop-tent { --size: clamp(2.75rem, 15cqw, 5.5rem); left: 31%; bottom: 12%; --move-y: -6px; --turn: -3deg; }
+.prop-tree { --size: clamp(1.65rem, 8cqw, 3.25rem); right: 10%; bottom: 13%; --turn: 5deg; }
+.prop-fire { --size: clamp(2rem, 10cqw, 4.25rem); left: 59%; bottom: 7%; --move-y: -5px; --turn: -5deg; }
 
 .scene-cover.is-in-view .scene-prop {
   animation: scene-settle 1.5s cubic-bezier(.38, 0, .26, 1) both;
@@ -314,6 +299,7 @@
   .scene-copy { padding: 22px 20px 0; }
   .scene-cover h2 { text-wrap: wrap; }
   .scene-art { min-height: clamp(145px, 47vw, 285px); }
+  .shop-interior { mask-image: linear-gradient(180deg, transparent, #000 27%); }
   .assignment { scroll-margin-top: calc(-1 * min(45svh, 370px) + 12px); }
 }
 

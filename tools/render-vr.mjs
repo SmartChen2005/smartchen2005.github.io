@@ -23,7 +23,7 @@ const scenes = {
   },
   shop: {
     icon: '🛒',
-    backdrop: '<span class="shop-shelf"></span><span class="shop-awning"></span>',
+    backdrop: '<img class="shop-interior" src="assets/auto-parts-store.webp" alt="" loading="lazy" decoding="async">',
     props: [['cart', '🛒'], ['toolbox', '🧰']],
   },
   camp: {
@@ -76,7 +76,7 @@ const html = `<!doctype html>
   <title>${e(content.title)} | Smart Chen</title>
   <link rel="canonical" href="https://smartchen2005.github.io/projects/vr-for-skill-learning/">
   <link rel="stylesheet" href="vr.css?v=chapter-scenes">
-  <link rel="stylesheet" href="vr-scenes.css?v=1">
+  <link rel="stylesheet" href="vr-scenes.css?v=2">
   ${projectHeaderAssets('../../')}
   <script type="module" src="vr.mjs?v=chapter-scenes"></script>
 </head>

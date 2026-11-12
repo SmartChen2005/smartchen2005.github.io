@@ -121,6 +121,11 @@ if (output) fs.mkdirSync(output, { recursive: true });
         return getComputedStyle(e).transform !== 'none';
       }), `The ${id} artwork moves on entry`);
     }
+    const shopArt = page.locator('.shop-interior');
+    await shopArt.evaluate(img => img.scrollIntoView({ block: 'center', behavior: 'instant' }));
+    await shopArt.evaluate(img => img.decode());
+    assert.equal(await shopArt.evaluate(img => img.naturalWidth), 1536, 'The shop cover loads the full-resolution aisle image');
+    assert(await page.locator('.scene-prop').evaluateAll(props => props.every(prop => parseFloat(getComputedStyle(prop).fontSize) <= 88)), 'Cover emoji stay within their size cap');
     assert.equal(await page.locator('.collaboration-study').count(), 0);
     await page.emulateMedia({ reducedMotion: 'reduce' });
     assert(await page.locator('.scene-prop').evaluateAll(props => props.every(prop => prop.getAnimations().length === 0)), 'Reduced motion keeps all emoji still');
