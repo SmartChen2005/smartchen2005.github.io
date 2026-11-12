@@ -105,6 +105,13 @@
       "detail": "One player hosts a two-player session over the local network. The host validates task order and grants each object to the first valid grab request. Player poses, object state, and progress stay synchronized. A late joiner receives the current state. If a client leaves, held objects reset and completed progress remains. The session ends when the host leaves."
     }
   ],
+  "concept": {
+    "id": "tag",
+    "title": "TAG!",
+    "topic": "Concept Presentation",
+    "description": "Learn the art of graffiti in VR through recorded gestures.",
+    "presentation": "https://slides.vegshark.com/vr-graffiti/"
+  },
   "closing": "A sequence to follow. A space to remember. A task to share.",
   "reflection": "These projects explore procedural guidance, spatial familiarity, and coordination with a partner. The collection will grow as new assignments explore other skills and interaction systems. Learning benefits remain design goals."
 }

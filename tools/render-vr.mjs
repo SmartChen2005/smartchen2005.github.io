@@ -65,6 +65,16 @@ function assignment(a) {
   </div></section>`;
 }
 
+function chapterLink({ id, title, theme, label, icon }) {
+  return `<a data-theme="${theme}" href="#${id}"><span class="chapter-icon" aria-hidden="true">${icon}</span><span><strong>${e(title)}</strong><small>${e(label)}</small></span><span class="chapter-arrow" aria-hidden="true">↓</span></a>`;
+}
+
+const concept = content.concept;
+const directory = [
+  ...content.assignments.map(a => ({ ...a, label: a.setting, icon: scenes[a.theme].icon })),
+  { ...concept, theme: 'tag', label: concept.topic, icon: '🎨' },
+];
+
 const html = `<!doctype html>
 <html lang="en">
 <head>
@@ -76,7 +86,7 @@ const html = `<!doctype html>
   <title>${e(content.title)} | Smart Chen</title>
   <link rel="canonical" href="https://smartchen2005.github.io/projects/vr-for-skill-learning/">
   <link rel="stylesheet" href="vr.css?v=chapter-scenes">
-  <link rel="stylesheet" href="vr-scenes.css?v=2">
+  <link rel="stylesheet" href="vr-scenes.css?v=3">
   ${projectHeaderAssets('../../')}
   <script type="module" src="vr.mjs?v=chapter-scenes"></script>
 </head>
@@ -87,9 +97,15 @@ const html = `<!doctype html>
     <section class="hero wrap" aria-labelledby="page-title">
       <div class="hero-top utility"><span>VR / Interaction Design</span><span>${e(content.year)}</span></div>
       <div class="hero-composition"><h1 id="page-title"><span>VR for</span> <span>Skill Learning.</span></h1><p>${e(content.subtitle)}</p></div>
-      <nav class="chapter-links" aria-label="Project assignments">${content.assignments.map(a => `<a data-theme="${a.theme}" href="#${a.id}"><span class="chapter-icon" aria-hidden="true">${scenes[a.theme].icon}</span><span><strong>${e(a.title)}</strong><small>${e(a.setting)}</small></span><span class="chapter-arrow" aria-hidden="true">↓</span></a>`).join('')}</nav>
+      <nav class="chapter-links" aria-label="Project chapters">${directory.map(chapterLink).join('')}</nav>
     </section>
     ${content.assignments.map(assignment).join('\n')}
+    <section class="assignment concept-chapter" data-theme="tag" id="${concept.id}" aria-labelledby="${concept.id}-title"><div class="wrap">
+      <div class="concept-panel">
+        <div><p class="scene-setting">${e(concept.topic)}</p><h2 id="${concept.id}-title">${e(concept.title)}</h2><p>${e(concept.description)}</p></div>
+        <a class="concept-link" href="${e(concept.presentation)}">Open concept presentation <span aria-hidden="true">↗</span></a>
+      </div>
+    </div></section>
     <section class="closing wrap" aria-labelledby="closing-title"><h2 id="closing-title">${e(content.closing)}</h2><div><p>${e(content.reflection)}</p><a class="return-link" href="../">All projects <span aria-hidden="true">↗</span></a></div></section>
   </main>
   <footer class="footer wrap"><a href="../../">Smart Chen</a><span>VR for Skill Learning</span><a href="#main">Back to top ↑</a></footer>

@@ -19,6 +19,9 @@ for (const asset of assets.documents) {
   assert.equal(createHash('sha256').update(bytes).digest('hex'), asset.sha256, 'Original PDF must be preserved byte-for-byte');
 }
 assert.equal((html.match(/<iframe /g) || []).length, source.assignments.length);
+assert(html.includes(`href="#${source.concept.id}"`), 'The directory links to the concept chapter');
+const concept = html.split(`id="${source.concept.id}"`)[1].split('</section>')[0];
+assert(concept.includes(`href="${source.concept.presentation}"`), 'The concept chapter links to the source presentation');
 for (const a of source.assignments) {
   assert(html.includes(`id="${a.id}"`));
   assert(html.includes(`youtube-nocookie.com/embed/${a.video}?start=${a.start}`));

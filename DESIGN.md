@@ -102,7 +102,7 @@ All six shared-header routes (the Projects directory and five local project land
 
 ## VR for Skill Learning — illustrated chapters (2026-11-12)
 
-Route: `/projects/vr-for-skill-learning/`. This ongoing collection contains Wheel Removal Training, Garage Ready, and Pitch Together. The opening uses large Archivo type, system body type, and three direct chapter links. The chapter links preview each assignment's palette and use the same setting labels as the covers.
+Route: `/projects/vr-for-skill-learning/`. This ongoing collection contains Wheel Removal Training, Garage Ready, Pitch Together, and the TAG! concept presentation. The opening uses large Archivo type, system body type, and direct chapter links. Assignment links preview their cover palettes and setting labels. TAG! uses a compact concept section with a link to the hosted slide deck.
 
 The route's `vr.css` owns type, diagrams, media and scrollbars. `vr-scenes.css` owns the chapter surfaces and locally sets the shared paper, ink, accent, rule, and wash variables. Home Garage pairs graphite and warm orange with a sectional door, perforated tool wall, steel workbench, tire and wrench. Auto Parts Store uses slate blue and amber with an illustrated aisle of stocked metal shelves, oil jugs, filters and tires. Forest Camp uses deep greens and amber with faceted pines, ridgelines, a tent and a fire.
 
