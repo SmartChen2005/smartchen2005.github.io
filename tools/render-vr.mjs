@@ -10,15 +10,39 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const content = JSON.parse(fs.readFileSync(path.join(root, 'tools/vr-source/content.json'), 'utf8'));
 const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 const e = escape;
-function interaction(a) {
-  if (a.collaboration) {
-    const { title, roles, sharedTitle, sharedDescription } = a.collaboration;
-    return `<div class="study collaboration-study">
-    <div class="study-top"><h3>${e(title)}</h3></div>
-    <div class="collaboration-roles">${roles.map(role => `<div class="collaboration-role"><h4 class="utility">${e(role.title)}</h4><p>${e(role.description)}</p></div>`).join('')}</div>
-    <div class="shared-lift"><h4>${e(sharedTitle)}</h4><p>${e(sharedDescription)}</p></div>
+
+const pines = [
+  [1, 16, 86], [10, 11, 61], [18, 10, 55], [27, 11, 59],
+  [68, 14, 61], [78, 16, 78], [89, 16, 94], [96, 13, 77],
+];
+const scenes = {
+  garage: {
+    icon: '🛞',
+    backdrop: '<span class="garage-door"></span><span class="garage-pegboard"></span><span class="garage-bench"></span>',
+    props: [['tire', '🛞'], ['wrench', '🔧']],
+  },
+  shop: {
+    icon: '🛒',
+    backdrop: '<span class="shop-shelf"></span><span class="shop-awning"></span>',
+    props: [['cart', '🛒'], ['toolbox', '🧰']],
+  },
+  camp: {
+    icon: '⛺',
+    backdrop: `<span class="camp-moon"></span><span class="camp-ridge"></span><span class="camp-ground"></span>${pines.map(([x, width, height]) => `<span class="camp-pine" style="--x:${x}%;--width:${width}%;--height:${height}%"></span>`).join('')}<span class="camp-glow"></span>`,
+    props: [['tent', '⛺'], ['tree', '🌲'], ['fire', '🔥']],
+  },
+};
+
+function sceneCover(a) {
+  const { backdrop, props } = scenes[a.theme];
+  return `<div class="scene-cover">
+    <div class="scene-copy"><p class="scene-setting">A${Number(a.number)} <span aria-hidden="true">·</span> ${e(a.setting)}</p><h2 id="${a.id}-title">${e(a.title)}</h2><p class="scene-topic">${e(a.topic)}</p></div>
+    <div class="scene-art" aria-hidden="true">${backdrop}${props.map(([name, emoji]) => `<span class="scene-prop prop-${name}">${emoji}</span>`).join('')}</div>
   </div>`;
-  }
+}
+
+function interaction(a) {
+  if (!a.steps && !a.journey) return '';
   const procedure = Boolean(a.steps);
   const items = procedure ? a.steps : a.journey;
   const caption = procedure ? 'procedure-caption' : 'space-caption';
@@ -30,15 +54,15 @@ function interaction(a) {
 }
 
 function assignment(a) {
-  return `<section class="assignment wrap" id="${a.id}" aria-labelledby="${a.id}-title">
-    <div class="assignment-heading"><span class="assignment-number" aria-hidden="true">${a.number}</span><div class="assignment-name"><p class="utility">${e(a.topic)}</p><h2 id="${a.id}-title">${e(a.title)}</h2></div></div>
-    ${interaction(a)}
+  const study = interaction(a);
+  return `<section class="assignment" data-theme="${a.theme}" id="${a.id}" aria-labelledby="${a.id}-title"><div class="wrap">
+    ${sceneCover(a)}${study ? `\n    ${study}` : ''}
     <p class="description">${e(a.description)}</p>
     <div class="project-body"><div class="project-media"><figure class="video"><iframe width="960" height="540" src="https://www.youtube-nocookie.com/embed/${a.video}?start=${a.start}&amp;rel=0" title="${e(a.title)} — demonstration" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowfullscreen></iframe><figcaption><span class="utility">${a.number} / Project demonstration</span><a href="https://www.youtube.com/watch?v=${a.video}&amp;t=${a.start}s" target="_blank" rel="noopener noreferrer">Watch on YouTube <span aria-hidden="true">↗</span></a></figcaption></figure>
     </div><aside class="project-notes"><div class="focus-note"><p class="utility">The learning focus</p><h3>${e(a.focus)}</h3><p>${e(a.note)}</p></div>
     <a class="document-link" href="files/${a.pdf}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 32 40" aria-hidden="true"><path d="M3 1H21L29 9V39H3ZM21 1V10H29M9 20H23M9 26H23M9 32H18"/></svg><span><span class="utility">A${Number(a.number)} / Design document</span><span>Read the original <span aria-hidden="true">↗</span></span><small>PDF · ${a.pages} ${a.pages===1?'page':'pages'} · opens in a new tab</small></span></a>
     <details><summary>${e(a.detailTitle)}</summary><p>${e(a.detail)}</p></details></aside></div>
-  </section>`;
+  </div></section>`;
 }
 
 const html = `<!doctype html>
@@ -46,14 +70,15 @@ const html = `<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f3f2ec">
+  <meta name="theme-color" content="#f7f6f2">
   <meta name="description" content="${e(content.subtitle)}">
   ${siteFavicon('../../')}
   <title>${e(content.title)} | Smart Chen</title>
   <link rel="canonical" href="https://smartchen2005.github.io/projects/vr-for-skill-learning/">
-  <link rel="stylesheet" href="vr.css?v=interaction-4">
+  <link rel="stylesheet" href="vr.css?v=chapter-scenes">
+  <link rel="stylesheet" href="vr-scenes.css?v=1">
   ${projectHeaderAssets('../../')}
-  <script type="module" src="vr.mjs?v=interaction-3"></script>
+  <script type="module" src="vr.mjs?v=chapter-scenes"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -61,12 +86,11 @@ const html = `<!doctype html>
   <main id="main">
     <section class="hero wrap" aria-labelledby="page-title">
       <div class="hero-top utility"><span>VR / Interaction Design</span><span>${e(content.year)}</span></div>
-      <div class="hero-composition"><h1 id="page-title"><span>VR for</span><span>Skill Learning<span class="title-period">.</span></span></h1>
-      </div>
-      <div class="hero-bottom"><p>${e(content.subtitle)}</p><nav aria-label="Project assignments"><span class="utility">${String(content.assignments.length).padStart(2,'0')} Projects</span>${content.assignments.map(a=>`<a href="#${a.id}"><span class="utility">${a.number}</span> ${e(a.title)} <span aria-hidden="true">↓</span></a>`).join('')}</nav></div>
+      <div class="hero-composition"><h1 id="page-title"><span>VR for</span> <span>Skill Learning.</span></h1><p>${e(content.subtitle)}</p></div>
+      <nav class="chapter-links" aria-label="Project assignments">${content.assignments.map(a => `<a data-theme="${a.theme}" href="#${a.id}"><span class="chapter-icon" aria-hidden="true">${scenes[a.theme].icon}</span><span><strong>${e(a.title)}</strong><small>${e(a.setting)}</small></span><span class="chapter-arrow" aria-hidden="true">↓</span></a>`).join('')}</nav>
     </section>
     ${content.assignments.map(assignment).join('\n')}
-    <section class="closing wrap" aria-labelledby="closing-title"><p class="utility">An ongoing exploration</p><div><h2 id="closing-title">${e(content.closing)}</h2><p>${e(content.reflection)}</p><a class="return-link" href="../">All projects <span aria-hidden="true">↗</span></a></div><div class="closing-mark" aria-hidden="true"><span></span><span></span><span></span></div></section>
+    <section class="closing wrap" aria-labelledby="closing-title"><h2 id="closing-title">${e(content.closing)}</h2><div><p>${e(content.reflection)}</p><a class="return-link" href="../">All projects <span aria-hidden="true">↗</span></a></div></section>
   </main>
   <footer class="footer wrap"><a href="../../">Smart Chen</a><span>VR for Skill Learning</span><a href="#main">Back to top ↑</a></footer>
 </body>

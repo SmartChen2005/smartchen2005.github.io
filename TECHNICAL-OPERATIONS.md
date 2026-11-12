@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-12 — Give the VR collection three illustrated settings
+
+- Replace the A3 role diagram with a low-poly forest camp and give the earlier chapters a home garage and auto parts store. The three covers use distinct palettes, native color emoji and short on-entry motion.
+- Regenerate with `node tools/render-vr.mjs` and verify site, icon and VR source parity. The browser suite covers the covers, responsive chapter links, reduced motion, original interaction studies, video and document links.
+
 ### 2026-11-09 — Sync Artificial Dome text and simplify the Figures footer
 
 - Import only Notion Fig. 008's title, description and design perspective, retaining a dated source snapshot. Preserve the approved blue artwork byte-for-byte in a text-revised independent edition; regenerate catalogue labels and dialog copy.

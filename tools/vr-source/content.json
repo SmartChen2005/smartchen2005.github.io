@@ -9,6 +9,8 @@
       "assignment": "Assignment 1",
       "topic": "Procedural Task Training",
       "title": "Wheel Removal Training",
+      "setting": "Home Garage",
+      "theme": "garage",
       "description": "A VR procedural training experience that teaches the sequence of removing a vehicle wheel through direct interaction with tools, guided actions, and immediate feedback.",
       "video": "oPTZlXH334Q",
       "start": 17,
@@ -43,6 +45,8 @@
       "assignment": "Assignment 2",
       "topic": "Spatial Navigation, Teleportation and Scene Switching",
       "title": "Garage Ready",
+      "setting": "Auto Parts Store",
+      "theme": "shop",
       "description": "A VR learning experience where users navigate between a home garage and an auto parts store, locate supplies, organize equipment, and reuse tools across multiple preparation tasks.",
       "video": "BIA2i71Cy2g",
       "start": 11,
@@ -88,6 +92,8 @@
       "assignment": "Assignment 3",
       "topic": "Multiuser Design",
       "title": "Pitch Together",
+      "setting": "Forest Camp",
+      "theme": "camp",
       "description": "A two-player VR lesson in pitching a tent in a forest clearing. Either player can place the tent body. Each then assembles a pole, helps raise the frame, secures their side, and completes a final inspection.",
       "video": "dZAPvBlLmd4",
       "start": 0,
@@ -96,22 +102,7 @@
       "focus": "Learning to coordinate",
       "note": "Tracked head and hand movements make a partner’s gestures visible. A shared progress board, matching part markings, placement cues, and a Signal partner control help the pair agree on what to do next.",
       "detailTitle": "Networking and shared state",
-      "detail": "One player hosts a two-player session over the local network. The host validates task order and grants each object to the first valid grab request. Player poses, object state, and progress stay synchronized. A late joiner receives the current state. If a client leaves, held objects reset and completed progress remains. The session ends when the host leaves.",
-      "collaboration": {
-        "title": "Raise the frame together",
-        "roles": [
-          {
-            "title": "Cyan / West",
-            "description": "Assemble pole A and take the west lift handle. After the lift, install both west stakes and inspect the west side."
-          },
-          {
-            "title": "Amber / East",
-            "description": "Assemble pole B and take the east lift handle. After the lift, install both east stakes and inspect the east side."
-          }
-        ],
-        "sharedTitle": "4 seconds together",
-        "sharedDescription": "Both players hold their assigned handles at the same time. If either lets go early, the frame lowers so they can try again."
-      }
+      "detail": "One player hosts a two-player session over the local network. The host validates task order and grants each object to the first valid grab request. Player poses, object state, and progress stay synchronized. A late joiner receives the current state. If a client leaves, held objects reset and completed progress remains. The session ends when the host leaves."
     }
   ],
   "closing": "A sequence to follow. A space to remember. A task to share.",

@@ -3,18 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f3f2ec">
+  <meta name="theme-color" content="#f7f6f2">
   <meta name="description" content="Exploring how virtual reality can support practical skill learning through physical interaction, procedural guidance, and spatial exploration.">
   <link rel="icon" type="image/x-icon" href="../../favicon.ico?rev=20261028-white">
   <title>VR for Skill Learning | Smart Chen</title>
   <link rel="canonical" href="https://smartchen2005.github.io/projects/vr-for-skill-learning/">
-  <link rel="stylesheet" href="vr.css?v=interaction-4">
+  <link rel="stylesheet" href="vr.css?v=chapter-scenes">
+  <link rel="stylesheet" href="vr-scenes.css?v=1">
   <link rel="stylesheet" href="../../project-header.css?v=20261027-aligned">
   <link rel="stylesheet" href="../../gallery-entry.css?rev=20261024-shared-entry">
   <script type="module" src="../../gallery-entry.mjs?rev=20261024-shared-entry"></script>
   <link rel="stylesheet" href="../../site-cursor.css?rev=20261028-drag-axis">
   <script type="module" src="../../site-cursor.mjs?rev=20261028-drag-axis"></script>
-  <script type="module" src="vr.mjs?v=interaction-3"></script>
+  <script type="module" src="vr.mjs?v=chapter-scenes"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -28,12 +29,14 @@
   <main id="main">
     <section class="hero wrap" aria-labelledby="page-title">
       <div class="hero-top utility"><span>VR / Interaction Design</span><span>2026 — Ongoing</span></div>
-      <div class="hero-composition"><h1 id="page-title"><span>VR for</span><span>Skill Learning<span class="title-period">.</span></span></h1>
-      </div>
-      <div class="hero-bottom"><p>Exploring how virtual reality can support practical skill learning through physical interaction, procedural guidance, and spatial exploration.</p><nav aria-label="Project assignments"><span class="utility">03 Projects</span><a href="#wheel-removal-training"><span class="utility">01</span> Wheel Removal Training <span aria-hidden="true">↓</span></a><a href="#garage-ready"><span class="utility">02</span> Garage Ready <span aria-hidden="true">↓</span></a><a href="#pitch-together"><span class="utility">03</span> Pitch Together <span aria-hidden="true">↓</span></a></nav></div>
+      <div class="hero-composition"><h1 id="page-title"><span>VR for</span> <span>Skill Learning.</span></h1><p>Exploring how virtual reality can support practical skill learning through physical interaction, procedural guidance, and spatial exploration.</p></div>
+      <nav class="chapter-links" aria-label="Project assignments"><a data-theme="garage" href="#wheel-removal-training"><span class="chapter-icon" aria-hidden="true">🛞</span><span><strong>Wheel Removal Training</strong><small>Home Garage</small></span><span class="chapter-arrow" aria-hidden="true">↓</span></a><a data-theme="shop" href="#garage-ready"><span class="chapter-icon" aria-hidden="true">🛒</span><span><strong>Garage Ready</strong><small>Auto Parts Store</small></span><span class="chapter-arrow" aria-hidden="true">↓</span></a><a data-theme="camp" href="#pitch-together"><span class="chapter-icon" aria-hidden="true">⛺</span><span><strong>Pitch Together</strong><small>Forest Camp</small></span><span class="chapter-arrow" aria-hidden="true">↓</span></a></nav>
     </section>
-    <section class="assignment wrap" id="wheel-removal-training" aria-labelledby="wheel-removal-training-title">
-    <div class="assignment-heading"><span class="assignment-number" aria-hidden="true">01</span><div class="assignment-name"><p class="utility">Procedural Task Training</p><h2 id="wheel-removal-training-title">Wheel Removal Training</h2></div></div>
+    <section class="assignment" data-theme="garage" id="wheel-removal-training" aria-labelledby="wheel-removal-training-title"><div class="wrap">
+    <div class="scene-cover">
+    <div class="scene-copy"><p class="scene-setting">A1 <span aria-hidden="true">·</span> Home Garage</p><h2 id="wheel-removal-training-title">Wheel Removal Training</h2><p class="scene-topic">Procedural Task Training</p></div>
+    <div class="scene-art" aria-hidden="true"><span class="garage-door"></span><span class="garage-pegboard"></span><span class="garage-bench"></span><span class="scene-prop prop-tire">🛞</span><span class="scene-prop prop-wrench">🔧</span></div>
+  </div>
     <div class="study procedure" data-procedure data-step="0">
     <div class="study-top"><h3>One action leads to the next.</h3></div>
     <div class="study-stage"><div class="study-visual"><div class="diagram-figure"><svg viewBox="0 0 840 520" aria-hidden="true" class="wheel-diagram">
@@ -66,9 +69,12 @@
     </div><aside class="project-notes"><div class="focus-note"><p class="utility">The learning focus</p><h3>Learning a sequence</h3><p>Wall-mounted instructions and object highlights guide each action. Step gates keep the procedure in order; corrective messages explain what to do next while preserving valid progress.</p></div>
     <a class="document-link" href="files/A1_VR_Wheel_Removal_Training.pdf" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 32 40" aria-hidden="true"><path d="M3 1H21L29 9V39H3ZM21 1V10H29M9 20H23M9 26H23M9 32H18"/></svg><span><span class="utility">A1 / Design document</span><span>Read the original <span aria-hidden="true"><svg class="site-arrow" data-site-arrow="north-east" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 12 12" aria-hidden="true" focusable="false" style="display:inline-block;width:1em;height:1em;vertical-align:-.125em;flex:none;fill:none;stroke:currentColor;stroke-width:1.15"><path d="M2.5 9.5 9.5 2.5M3 2.5h6.5V9"/></svg></span></span><small>PDF · 2 pages · opens in a new tab</small></span></a>
     <details><summary>Guidance through interaction</summary><p>Snap targets reduce placement precision, while the wrench still requires socket alignment. The next suggested lug nut glows green in a star pattern; the remaining nuts glow blue. After 18 seconds without progress, required highlights become brighter and pulse faster.</p></details></aside></div>
-  </section>
-<section class="assignment wrap" id="garage-ready" aria-labelledby="garage-ready-title">
-    <div class="assignment-heading"><span class="assignment-number" aria-hidden="true">02</span><div class="assignment-name"><p class="utility">Spatial Navigation, Teleportation and Scene Switching</p><h2 id="garage-ready-title">Garage Ready</h2></div></div>
+  </div></section>
+<section class="assignment" data-theme="shop" id="garage-ready" aria-labelledby="garage-ready-title"><div class="wrap">
+    <div class="scene-cover">
+    <div class="scene-copy"><p class="scene-setting">A2 <span aria-hidden="true">·</span> Auto Parts Store</p><h2 id="garage-ready-title">Garage Ready</h2><p class="scene-topic">Spatial Navigation, Teleportation and Scene Switching</p></div>
+    <div class="scene-art" aria-hidden="true"><span class="shop-shelf"></span><span class="shop-awning"></span><span class="scene-prop prop-cart">🛒</span><span class="scene-prop prop-toolbox">🧰</span></div>
+  </div>
     <div class="study navigation-study" data-navigation data-space="garage">
     <div class="study-top"><h3>Two spaces. One preparation loop.</h3></div>
     <div class="study-stage"><div class="study-visual"><div class="diagram-figure"><svg viewBox="0 0 840 520" aria-hidden="true" class="space-diagram">
@@ -100,21 +106,19 @@
     </div><aside class="project-notes"><div class="focus-note"><p class="utility">The learning focus</p><h3>Learning across spaces</h3><p>Three tasks cover tire care, wiper care, and oil service preparation. Inventory and storage locations persist between scenes during the session, so earlier purchases can become tools for later tasks.</p></div>
     <a class="document-link" href="files/A2_Design_Document.pdf" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 32 40" aria-hidden="true"><path d="M3 1H21L29 9V39H3ZM21 1V10H29M9 20H23M9 26H23M9 32H18"/></svg><span><span class="utility">A2 / Design document</span><span>Read the original <span aria-hidden="true"><svg class="site-arrow" data-site-arrow="north-east" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 12 12" aria-hidden="true" focusable="false" style="display:inline-block;width:1em;height:1em;vertical-align:-.125em;flex:none;fill:none;stroke:currentColor;stroke-width:1.15"><path d="M2.5 9.5 9.5 2.5M3 2.5h6.5V9"/></svg></span></span><small>PDF · 1 page · opens in a new tab</small></span></a>
     <details><summary>Movement and wayfinding</summary><p>Teleportation, continuous movement, and 45-degree snap turning are available together. Overhead signs, a store directory, north-up maps, and a left-hand checklist support wayfinding. Labeled exit doors switch scenes with a fade and a short arrival sound. Headset comfort still needs evaluation.</p></details></aside></div>
-  </section>
-<section class="assignment wrap" id="pitch-together" aria-labelledby="pitch-together-title">
-    <div class="assignment-heading"><span class="assignment-number" aria-hidden="true">03</span><div class="assignment-name"><p class="utility">Multiuser Design</p><h2 id="pitch-together-title">Pitch Together</h2></div></div>
-    <div class="study collaboration-study">
-    <div class="study-top"><h3>Raise the frame together</h3></div>
-    <div class="collaboration-roles"><div class="collaboration-role"><h4 class="utility">Cyan / West</h4><p>Assemble pole A and take the west lift handle. After the lift, install both west stakes and inspect the west side.</p></div><div class="collaboration-role"><h4 class="utility">Amber / East</h4><p>Assemble pole B and take the east lift handle. After the lift, install both east stakes and inspect the east side.</p></div></div>
-    <div class="shared-lift"><h4>4 seconds together</h4><p>Both players hold their assigned handles at the same time. If either lets go early, the frame lowers so they can try again.</p></div>
+  </div></section>
+<section class="assignment" data-theme="camp" id="pitch-together" aria-labelledby="pitch-together-title"><div class="wrap">
+    <div class="scene-cover">
+    <div class="scene-copy"><p class="scene-setting">A3 <span aria-hidden="true">·</span> Forest Camp</p><h2 id="pitch-together-title">Pitch Together</h2><p class="scene-topic">Multiuser Design</p></div>
+    <div class="scene-art" aria-hidden="true"><span class="camp-moon"></span><span class="camp-ridge"></span><span class="camp-ground"></span><span class="camp-pine" style="--x:1%;--width:16%;--height:86%"></span><span class="camp-pine" style="--x:10%;--width:11%;--height:61%"></span><span class="camp-pine" style="--x:18%;--width:10%;--height:55%"></span><span class="camp-pine" style="--x:27%;--width:11%;--height:59%"></span><span class="camp-pine" style="--x:68%;--width:14%;--height:61%"></span><span class="camp-pine" style="--x:78%;--width:16%;--height:78%"></span><span class="camp-pine" style="--x:89%;--width:16%;--height:94%"></span><span class="camp-pine" style="--x:96%;--width:13%;--height:77%"></span><span class="camp-glow"></span><span class="scene-prop prop-tent">⛺</span><span class="scene-prop prop-tree">🌲</span><span class="scene-prop prop-fire">🔥</span></div>
   </div>
     <p class="description">A two-player VR lesson in pitching a tent in a forest clearing. Either player can place the tent body. Each then assembles a pole, helps raise the frame, secures their side, and completes a final inspection.</p>
     <div class="project-body"><div class="project-media"><figure class="video"><iframe width="960" height="540" src="https://www.youtube-nocookie.com/embed/dZAPvBlLmd4?start=0&amp;rel=0" title="Pitch Together — demonstration" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowfullscreen></iframe><figcaption><span class="utility">03 / Project demonstration</span><a href="https://www.youtube.com/watch?v=dZAPvBlLmd4&amp;t=0s" target="_blank" rel="noopener noreferrer">Watch on YouTube <span aria-hidden="true"><svg class="site-arrow" data-site-arrow="north-east" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 12 12" aria-hidden="true" focusable="false" style="display:inline-block;width:1em;height:1em;vertical-align:-.125em;flex:none;fill:none;stroke:currentColor;stroke-width:1.15"><path d="M2.5 9.5 9.5 2.5M3 2.5h6.5V9"/></svg></span></a></figcaption></figure>
     </div><aside class="project-notes"><div class="focus-note"><p class="utility">The learning focus</p><h3>Learning to coordinate</h3><p>Tracked head and hand movements make a partner’s gestures visible. A shared progress board, matching part markings, placement cues, and a Signal partner control help the pair agree on what to do next.</p></div>
     <a class="document-link" href="files/Pitch_Together_Design_Document.pdf" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 32 40" aria-hidden="true"><path d="M3 1H21L29 9V39H3ZM21 1V10H29M9 20H23M9 26H23M9 32H18"/></svg><span><span class="utility">A3 / Design document</span><span>Read the original <span aria-hidden="true"><svg class="site-arrow" data-site-arrow="north-east" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 12 12" aria-hidden="true" focusable="false" style="display:inline-block;width:1em;height:1em;vertical-align:-.125em;flex:none;fill:none;stroke:currentColor;stroke-width:1.15"><path d="M2.5 9.5 9.5 2.5M3 2.5h6.5V9"/></svg></span></span><small>PDF · 2 pages · opens in a new tab</small></span></a>
     <details><summary>Networking and shared state</summary><p>One player hosts a two-player session over the local network. The host validates task order and grants each object to the first valid grab request. Player poses, object state, and progress stay synchronized. A late joiner receives the current state. If a client leaves, held objects reset and completed progress remains. The session ends when the host leaves.</p></details></aside></div>
-  </section>
-    <section class="closing wrap" aria-labelledby="closing-title"><p class="utility">An ongoing exploration</p><div><h2 id="closing-title">A sequence to follow. A space to remember. A task to share.</h2><p>These projects explore procedural guidance, spatial familiarity, and coordination with a partner. The collection will grow as new assignments explore other skills and interaction systems. Learning benefits remain design goals.</p><a class="return-link" href="../">All projects <span aria-hidden="true"><svg class="site-arrow" data-site-arrow="north-east" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 12 12" aria-hidden="true" focusable="false" style="display:inline-block;width:1em;height:1em;vertical-align:-.125em;flex:none;fill:none;stroke:currentColor;stroke-width:1.15"><path d="M2.5 9.5 9.5 2.5M3 2.5h6.5V9"/></svg></span></a></div><div class="closing-mark" aria-hidden="true"><span></span><span></span><span></span></div></section>
+  </div></section>
+    <section class="closing wrap" aria-labelledby="closing-title"><h2 id="closing-title">A sequence to follow. A space to remember. A task to share.</h2><div><p>These projects explore procedural guidance, spatial familiarity, and coordination with a partner. The collection will grow as new assignments explore other skills and interaction systems. Learning benefits remain design goals.</p><a class="return-link" href="../">All projects <span aria-hidden="true"><svg class="site-arrow" data-site-arrow="north-east" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 12 12" aria-hidden="true" focusable="false" style="display:inline-block;width:1em;height:1em;vertical-align:-.125em;flex:none;fill:none;stroke:currentColor;stroke-width:1.15"><path d="M2.5 9.5 9.5 2.5M3 2.5h6.5V9"/></svg></span></a></div></section>
   </main>
   <footer class="footer wrap"><a href="../../">Smart Chen</a><span>VR for Skill Learning</span><a href="#main">Back to top ↑</a></footer>
 </body>

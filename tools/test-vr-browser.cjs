@@ -36,8 +36,8 @@ if (output) fs.mkdirSync(output, { recursive: true });
       assert((await page.locator('#space-caption').textContent()).includes(item.title));
       assert.equal(await page.locator('[data-navigation]').getAttribute('data-space'), item.space);
     }
-    await page.waitForTimeout(1600);
-    assert(await page.locator('[data-navigation]').evaluate(e => Number(e.style.getPropertyValue('--ready')) > .99), 'The return journey deposits purchases and readies a reusable tool');
+    await page.locator('[data-journey-button="2"]').press('End');
+    await page.waitForFunction(() => Number(document.querySelector('[data-navigation]').style.getPropertyValue('--ready')) > .99);
     await page.locator('[data-journey-button="2"]').press('Home');
     assert.equal(await page.locator('[data-navigation]').getAttribute('data-journey'), '0');
 
@@ -96,22 +96,34 @@ if (output) fs.mkdirSync(output, { recursive: true });
       await page.evaluate(() => window.scrollTo({top:0,behavior:'instant'}));
       await page.waitForTimeout(150);
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), `No horizontal overflow at ${width}px`);
-      const titleTop = await page.locator('#wheel-removal-training-title').evaluate(e => e.getBoundingClientRect().top);
-      assert(titleTop < (width > 760 ? 660 : 680), `The opening leads directly into the first assignment at ${width}px`);
+      const firstCoverTop = await page.locator('#wheel-removal-training .scene-cover').evaluate(e => e.getBoundingClientRect().top);
+      assert(firstCoverTop < 680, `The opening leads directly into the first assignment at ${width}px`);
       const boxes = await page.locator('.video iframe').evaluateAll(es => es.map(e => { const b = e.getBoundingClientRect(); return [b.width, b.height]; }));
       boxes.forEach(([w, h]) => assert(Math.abs(w / h - 16 / 9) < .02, 'Videos retain 16:9'));
-      const directoryColumns = await page.locator('.hero-bottom nav a').evaluateAll(links => links.map(link => link.getBoundingClientRect().left));
-      assert(directoryColumns.every(left => left === directoryColumns[0]), `Assignment links align at ${width}px`);
-      const study = page.locator('#pitch-together .collaboration-study');
-      assert(await study.isVisible());
+      const directoryAxis = await page.locator('.chapter-links a').evaluateAll((links, mobile) => links.map(link => link.getBoundingClientRect()[mobile ? 'left' : 'top']), width <= 760);
+      assert(directoryAxis.every(position => position === directoryAxis[0]), `Assignment links align at ${width}px`);
       if (output && [1440,390,320].includes(width)) {
         await page.waitForTimeout(750);
         await page.screenshot({ path: path.join(output, `vr-${width}.png`) });
-        await study.screenshot({ path: path.join(output, `pitch-together-${width}.png`) });
+        for (const { id } of content.assignments) {
+          await page.locator(`#${id} .scene-cover`).screenshot({ path: path.join(output, `${id}-${width}.png`) });
+        }
       }
     }
+    for (const { id } of content.assignments) {
+      const cover = page.locator(`#${id} .scene-cover`);
+      await cover.evaluate(e => e.scrollIntoView({ block: 'center', behavior: 'instant' }));
+      await page.locator(`#${id} .scene-cover.is-in-view`).waitFor();
+      assert(await cover.locator('.scene-prop').first().evaluate(e => {
+        const animation = e.getAnimations()[0];
+        if (!animation) return false;
+        animation.currentTime = 720;
+        return getComputedStyle(e).transform !== 'none';
+      }), `The ${id} artwork moves on entry`);
+    }
+    assert.equal(await page.locator('.collaboration-study').count(), 0);
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    assert.equal(await page.locator('.hero-art').count(), 0, 'The meaningless opening decoration is removed');
+    assert(await page.locator('.scene-prop').evaluateAll(props => props.every(prop => prop.getAnimations().length === 0)), 'Reduced motion keeps all emoji still');
     await page.locator('[data-step-button="1"]').click();
     await alignStop(page.locator('[data-step-button="3"]'));
     assert.equal(await page.locator('[data-procedure]').getAttribute('data-step'), '1', 'Reduced motion keeps manual control');
@@ -133,7 +145,8 @@ if (output) fs.mkdirSync(output, { recursive: true });
     assert(await fallback.getByText(content.assignments[1].journey[2].description, { exact: true }).isVisible());
     await fallback.getByRole('navigation', { name: 'Project assignments' }).getByRole('link', { name: /Pitch Together/ }).press('Enter');
     assert.equal(new URL(fallback.url()).hash, '#pitch-together');
-    assert(await fallback.getByRole('heading', { name: '4 seconds together' }).isVisible());
+    assert(await fallback.getByRole('heading', { name: 'Pitch Together' }).isVisible());
+    assert.equal(await fallback.locator('#pitch-together .scene-prop').count(), 3, 'The camp props are present without scripting');
     await fallback.locator('#pitch-together summary').press('Enter');
     assert(await fallback.getByText(content.assignments[2].detail, { exact: true }).isVisible());
     await nojs.close();

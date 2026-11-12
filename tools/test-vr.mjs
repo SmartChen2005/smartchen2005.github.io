@@ -32,20 +32,22 @@ for (const [, ref] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
     assert(fs.existsSync(path.resolve(root, ref.split('?')[0])), `Missing local file ${ref}`);
   }
 }
-assert(!html.includes('hero-art'), 'Remove the purposeless hero decoration');
+assert(!html.includes('collaboration-study'), 'The forest cover replaces the A3 role diagram');
 for (const a of source.assignments) {
   const section = html.split(`id="${a.id}"`)[1].split('</section>')[0];
-  assert(section.indexOf('class="study ') < section.indexOf('class="description"'), 'The interaction precedes explanatory copy');
-  assert(section.indexOf('class="study ') < section.indexOf('<iframe '), 'The interaction precedes the video');
+  const cover = section.indexOf('class="scene-cover"');
+  assert(cover >= 0 && cover < section.indexOf('class="description"'), 'The themed cover leads the assignment');
+  assert(section.includes('class="scene-art" aria-hidden="true"'), 'Decorative artwork is hidden from assistive technology');
+  if (a.steps || a.journey) {
+    const study = section.indexOf('class="study ');
+    assert(study > cover && study < section.indexOf('class="description"'), 'The interactive study precedes explanatory copy');
+  }
 }
 assert(fs.readFileSync('dist/projects/index.html', 'utf8').includes('href="vr-for-skill-learning/"'));
 for (const assignment of source.assignments) {
-  const studyItems = assignment.steps ?? assignment.journey ?? assignment.collaboration.roles;
+  const studyItems = assignment.steps ?? assignment.journey ?? [];
   for (const item of studyItems) {
     assert(html.includes(`<p>${item.description}</p>`), 'Every explanation must remain in readable HTML without JavaScript');
-  }
-  if (assignment.collaboration) {
-    assert(html.includes(`<p>${assignment.collaboration.sharedDescription}</p>`), 'The shared action must remain readable without JavaScript');
   }
 }
 console.log('Passed: source/render parity, original PDF checksums, video mappings/timestamps, local assets, section anchors, no-JS notes and Projects entrance.');

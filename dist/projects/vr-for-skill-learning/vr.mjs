@@ -2,6 +2,17 @@ import data from './interaction-data.mjs';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const forced = matchMedia('(forced-colors: active)');
+
+// Each prop settles once per visit to the cover. Static art is the no-JS fallback.
+if ('IntersectionObserver' in window) {
+  const sceneObserver = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      entry.target.classList.toggle('is-in-view', entry.isIntersecting);
+    }
+  }, { rootMargin: '0px 0px -48px 0px' });
+  document.querySelectorAll('.scene-cover').forEach(cover => sceneObserver.observe(cover));
+}
+
 const clamp = value => Math.max(0, Math.min(1, value));
 const range = (value, start, end) => clamp((value - start) / (end - start));
 const ease = value => value * value * (3 - 2 * value);
