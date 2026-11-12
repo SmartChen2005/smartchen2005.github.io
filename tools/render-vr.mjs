@@ -11,6 +11,14 @@ const content = JSON.parse(fs.readFileSync(path.join(root, 'tools/vr-source/cont
 const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 const e = escape;
 function interaction(a) {
+  if (a.collaboration) {
+    const { title, roles, sharedTitle, sharedDescription } = a.collaboration;
+    return `<div class="study collaboration-study">
+    <div class="study-top"><h3>${e(title)}</h3></div>
+    <div class="collaboration-roles">${roles.map(role => `<div class="collaboration-role"><h4 class="utility">${e(role.title)}</h4><p>${e(role.description)}</p></div>`).join('')}</div>
+    <div class="shared-lift"><h4>${e(sharedTitle)}</h4><p>${e(sharedDescription)}</p></div>
+  </div>`;
+  }
   const procedure = Boolean(a.steps);
   const items = procedure ? a.steps : a.journey;
   const caption = procedure ? 'procedure-caption' : 'space-caption';
@@ -43,7 +51,7 @@ const html = `<!doctype html>
   ${siteFavicon('../../')}
   <title>${e(content.title)} | Smart Chen</title>
   <link rel="canonical" href="https://smartchen2005.github.io/projects/vr-for-skill-learning/">
-  <link rel="stylesheet" href="vr.css?v=interaction-3">
+  <link rel="stylesheet" href="vr.css?v=interaction-4">
   ${projectHeaderAssets('../../')}
   <script type="module" src="vr.mjs?v=interaction-3"></script>
 </head>
@@ -58,7 +66,7 @@ const html = `<!doctype html>
       <div class="hero-bottom"><p>${e(content.subtitle)}</p><nav aria-label="Project assignments"><span class="utility">${String(content.assignments.length).padStart(2,'0')} Projects</span>${content.assignments.map(a=>`<a href="#${a.id}"><span class="utility">${a.number}</span> ${e(a.title)} <span aria-hidden="true">↓</span></a>`).join('')}</nav></div>
     </section>
     ${content.assignments.map(assignment).join('\n')}
-    <section class="closing wrap" aria-labelledby="closing-title"><p class="utility">03 / An ongoing exploration</p><div><h2 id="closing-title">${e(content.closing)}</h2><p>${e(content.reflection)}</p><a class="return-link" href="../">All projects <span aria-hidden="true">↗</span></a></div><div class="closing-mark" aria-hidden="true"><span></span><span></span><span></span></div></section>
+    <section class="closing wrap" aria-labelledby="closing-title"><p class="utility">An ongoing exploration</p><div><h2 id="closing-title">${e(content.closing)}</h2><p>${e(content.reflection)}</p><a class="return-link" href="../">All projects <span aria-hidden="true">↗</span></a></div><div class="closing-mark" aria-hidden="true"><span></span><span></span><span></span></div></section>
   </main>
   <footer class="footer wrap"><a href="../../">Smart Chen</a><span>VR for Skill Learning</span><a href="#main">Back to top ↑</a></footer>
 </body>

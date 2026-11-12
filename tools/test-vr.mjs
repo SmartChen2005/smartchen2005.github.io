@@ -12,6 +12,7 @@ execFileSync(process.execPath, ['tools/render-vr.mjs']);
 assert.equal(fs.readFileSync(`${root}/index.html`, 'utf8'), html, 'Published HTML must match the maintained source');
 assert.equal(fs.readFileSync(`${root}/interaction-data.mjs`, 'utf8'), data, 'Interaction descriptions must match the maintained source');
 const assets = JSON.parse(fs.readFileSync('tools/vr-source/sources.json', 'utf8'));
+assert.deepEqual(assets.documents.map(({ file, pages }) => [file, pages]), source.assignments.map(({ pdf, pages }) => [pdf, pages]), 'Every linked PDF has matching archive metadata');
 for (const asset of assets.documents) {
   const bytes = fs.readFileSync(path.join(root, 'files', asset.file));
   assert(bytes.subarray(0, 5).equals(Buffer.from('%PDF-')), 'Document links must resolve to real PDFs');
@@ -39,8 +40,12 @@ for (const a of source.assignments) {
 }
 assert(fs.readFileSync('dist/projects/index.html', 'utf8').includes('href="vr-for-skill-learning/"'));
 for (const assignment of source.assignments) {
-  for (const item of assignment.steps || assignment.journey) {
+  const studyItems = assignment.steps ?? assignment.journey ?? assignment.collaboration.roles;
+  for (const item of studyItems) {
     assert(html.includes(`<p>${item.description}</p>`), 'Every explanation must remain in readable HTML without JavaScript');
   }
+  if (assignment.collaboration) {
+    assert(html.includes(`<p>${assignment.collaboration.sharedDescription}</p>`), 'The shared action must remain readable without JavaScript');
+  }
 }
-console.log('Passed: source/render parity, both original PDF checksums, video mappings/timestamps, local assets, section anchors, no-JS notes and Projects entrance.');
+console.log('Passed: source/render parity, original PDF checksums, video mappings/timestamps, local assets, section anchors, no-JS notes and Projects entrance.');

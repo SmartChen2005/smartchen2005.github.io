@@ -100,9 +100,14 @@ if (output) fs.mkdirSync(output, { recursive: true });
       assert(titleTop < (width > 760 ? 660 : 680), `The opening leads directly into the first assignment at ${width}px`);
       const boxes = await page.locator('.video iframe').evaluateAll(es => es.map(e => { const b = e.getBoundingClientRect(); return [b.width, b.height]; }));
       boxes.forEach(([w, h]) => assert(Math.abs(w / h - 16 / 9) < .02, 'Videos retain 16:9'));
+      const directoryColumns = await page.locator('.hero-bottom nav a').evaluateAll(links => links.map(link => link.getBoundingClientRect().left));
+      assert(directoryColumns.every(left => left === directoryColumns[0]), `Assignment links align at ${width}px`);
+      const study = page.locator('#pitch-together .collaboration-study');
+      assert(await study.isVisible());
       if (output && [1440,390,320].includes(width)) {
         await page.waitForTimeout(750);
         await page.screenshot({ path: path.join(output, `vr-${width}.png`) });
+        await study.screenshot({ path: path.join(output, `pitch-together-${width}.png`) });
       }
     }
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -122,10 +127,15 @@ if (output) fs.mkdirSync(output, { recursive: true });
     const nojs = await browser.newContext({ javaScriptEnabled: false });
     const fallback = await nojs.newPage();
     await fallback.goto(origin + route, { waitUntil: 'domcontentloaded' });
-    assert.equal(await fallback.locator('iframe').count(), 2);
-    assert.equal(await fallback.locator('.document-link').count(), 2);
+    assert.equal(await fallback.locator('iframe').count(), content.assignments.length);
+    assert.equal(await fallback.locator('.document-link').count(), content.assignments.length);
     assert(await fallback.getByText(content.assignments[0].steps[3].description, { exact: true }).isVisible());
     assert(await fallback.getByText(content.assignments[1].journey[2].description, { exact: true }).isVisible());
+    await fallback.getByRole('navigation', { name: 'Project assignments' }).getByRole('link', { name: /Pitch Together/ }).press('Enter');
+    assert.equal(new URL(fallback.url()).hash, '#pitch-together');
+    assert(await fallback.getByRole('heading', { name: '4 seconds together' }).isVisible());
+    await fallback.locator('#pitch-together summary').press('Enter');
+    assert(await fallback.getByText(content.assignments[2].detail, { exact: true }).isVisible());
     await nojs.close();
     assert.deepEqual(errors, []);
     console.log('Passed: four procedure actions and three preparation stages; real wheel progression/reversal at desktop/phone widths; larger drawings and slower reading distance; sticky placement; manual override and idle stability; keyboard access; PDF responses; five viewport widths; reduced motion; forced colors; no-JS content; zero page exceptions.');

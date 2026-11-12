@@ -8,6 +8,8 @@ Imported 2026-10-19 from the user's two original PDFs and portfolio brief. PDFs 
 - `sources.json`: source filenames, page counts and SHA-256 checksums of the byte-for-byte public PDFs in `dist/projects/vr-for-skill-learning/files/`.
 - YouTube mapping is confirmed by each PDF's demo URL: A1 `oPTZlXH334Q`; A2 `BIA2i71Cy2g`. Playback starts at the timestamps in the user's supplied links, 17s and 11s. Each embed also has a direct watch link.
 
+On 2026-11-12, the user supplied the original two-page Pitch Together design document for A3 / Multiuser Design. Its demo link maps to `dZAPvBlLmd4` and starts at the beginning. The collaboration study documents the assigned roles and four-second shared lift in static HTML.
+
 `node tools/render-vr.mjs` builds the complete semantic page and shared interaction data from `content.json`. The route owns `vr.css` and `vr.mjs` directly, following the existing static project-page convention. `node tools/test-vr.mjs` checks render parity, checksums, routes and video assignments. `tools/test-vr-browser.cjs` exercises the interactive and fallback paths using the existing bundled Playwright runtime; set `PLAYWRIGHT_MODULE`, `VR_PREVIEW_URL` and optionally `VR_QA_OUTPUT` for the environment.
 
 The user's 2026-10-19 follow-up replaces the oversized cover with a compact opening and requests natural-scroll-driven studies while preserving the graphic language and small directory. `vr.mjs` shares one controller between both studies; the left paragraphs remain readable with or without JavaScript and the right SVG stays beside them while scrolling. Manual controls remain available and reduced motion turns off automatic state changes. This later request supersedes the initial brief's click-only supporting diagram treatment.

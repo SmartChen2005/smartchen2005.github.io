@@ -14,6 +14,14 @@
       "pages": 1,
       "bytes": 75419,
       "sha256": "03f36ceb655e29573d9656b682c84f4b6d75a2b2d45cf6d9bb07ee880f01e614"
+    },
+    {
+      "file": "Pitch_Together_Design_Document.pdf",
+      "source": "User-supplied PDF attachment",
+      "imported": "2026-11-12",
+      "pages": 2,
+      "bytes": 112517,
+      "sha256": "1068b78bbedff1212366f6938fb1ba69a53c39ce09d54f26c2910561359a6fec"
     }
   ]
 }
