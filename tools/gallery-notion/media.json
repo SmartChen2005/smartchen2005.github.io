@@ -3492,5 +3492,53 @@
     "original": "assets/works/rhythms-do1070176.jpg",
     "displayWidth": 5048,
     "displayHeight": 3784
+  },
+  "notion-asset:a2c04c61-bcc4-43d5-8bb2-deeb302508d3": {
+    "display": "assets/works/cathedrals-do1050186.jpg",
+    "original": "assets/works/cathedrals-do1050186.jpg",
+    "displayWidth": 5868,
+    "displayHeight": 3912
+  },
+  "notion-asset:242f90dd-fdea-4310-aa39-cf3858193f5b": {
+    "display": "assets/works/cathedrals-do1050162.jpg",
+    "original": "assets/works/cathedrals-do1050162.jpg",
+    "displayWidth": 6000,
+    "displayHeight": 4000
+  },
+  "notion-asset:5ec812a4-9218-44ca-bdb3-8637a7b0de16": {
+    "display": "assets/works/cathedrals-do1040663.jpg",
+    "original": "assets/works/cathedrals-do1040663.jpg",
+    "displayWidth": 6000,
+    "displayHeight": 4000
+  },
+  "notion-asset:3dc5763b-043c-46ea-908e-8e3416de8416": {
+    "display": "assets/works/cathedrals-do1040397.jpg",
+    "original": "assets/works/cathedrals-do1040397.jpg",
+    "displayWidth": 6000,
+    "displayHeight": 4000
+  },
+  "notion-asset:0506c3f1-4675-4cf6-93bf-1b8e73817f6c": {
+    "display": "assets/works/cathedrals-do1040384.jpg",
+    "original": "assets/works/cathedrals-do1040384.jpg",
+    "displayWidth": 5708,
+    "displayHeight": 3805
+  },
+  "notion-asset:3ddcf587-a169-4601-bfb0-04bb8206daa9": {
+    "display": "assets/works/cathedrals-do1040299.jpg",
+    "original": "assets/works/cathedrals-do1040299.jpg",
+    "displayWidth": 6000,
+    "displayHeight": 4000
+  },
+  "https://prod-files-secure.s3.us-west-2.amazonaws.com/caeabc37-a86f-8101-a6fd-00033dd9a3dd/7a9bc547-84a3-4a27-aa7d-399e396544d8/DO1050162.jpg": {
+    "display": "assets/works/cathedrals-do1050162.jpg",
+    "original": "assets/works/cathedrals-do1050162.jpg",
+    "displayWidth": 6000,
+    "displayHeight": 4000
+  },
+  "notion-asset:7a9bc547-84a3-4a27-aa7d-399e396544d8": {
+    "display": "assets/works/cathedrals-do1050162.jpg",
+    "original": "assets/works/cathedrals-do1050162.jpg",
+    "displayWidth": 6000,
+    "displayHeight": 4000
   }
 }

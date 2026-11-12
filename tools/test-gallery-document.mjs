@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { parseNotionMarkdown, adaptNotionBlocks, renderDocument, allImages, canonicalMediaUrl, mediaIdentity, publicationNodes, withImageCaptions } from './gallery-document.mjs';
+import { parseNotionMarkdown, adaptNotionBlocks, renderDocument, allImages, canonicalMediaUrl, mediaIdentity, inline, publicationNodes, withImageCaptions } from './gallery-document.mjs';
 import { NotionGalleryClient, galleryPageSnapshot } from './gallery-notion-client.mjs';
 import { imageDimensions } from './gallery-image.mjs';
 import { imageRendition } from './gallery-media.mjs';
@@ -108,7 +108,13 @@ for(const p of snapshot.pages){
   assert(photos.length>0&&grid,`Current Notion photographs have an index: ${slug}`);
   const titleOnly=galleryLayouts.titleOnlyIndexes.includes(slug);
   assert.deepEqual([...grid.matchAll(/href="\.\.\/([^\"]+)"/g)].map(m=>m[1]),photos.map(image=>local(image.src)?.original),`Current Notion image order and originals: ${slug}`);
-  assert.deepEqual([...grid.matchAll(/<figcaption>(.*?)<\/figcaption>/g)].map(m=>m[1]),photos.map((_,i)=>String(i+1).padStart(2,'0')),`Index captions: ${slug}`);
+  const captioned=galleryLayouts.captionedIndexes.includes(slug);
+  const expectedCaptions=(captioned?allImages(withImageCaptions(published)):photos).map((photo,i)=>{
+   const number=String(i+1).padStart(2,'0');
+   const location=captioned?inline(photo.caption).trim():'';
+   return location?`${number} · ${location}`:number;
+  });
+  assert.deepEqual([...grid.matchAll(/<figcaption>(.*?)<\/figcaption>/g)].map(m=>m[1]),expectedCaptions,`Index captions: ${slug}`);
   if(titleOnly){
    assert.match(article,/<div class="story-title"><h1>Cathedrals of Light<\/h1><\/div>/);
    assert.doesNotMatch(article,/class="(?:story-intro|project-meta|story-source|related)"/);

@@ -111,7 +111,7 @@ for(const p of projects){
  const paragraphMatches=(nodes,text)=>Boolean(text)&&nodes.some(n=>n.type==='paragraph'&&(Array.isArray(n.text)?n.text.map(t=>t.plain_text??t.text?.content??'').join(''):n.text).trim()===text.trim()||n.children&&paragraphMatches(n.children,text)||n.columns?.some(c=>paragraphMatches(c.children,text)));
  const sourceSummaryInBody=sourceLayout&&paragraphMatches(p.nodes,p.summary);
  const sourceCoverIncluded=p.category==='Film'||layout==='index'||sourceLayout&&allImages(p.nodes).some(image=>resolveMedia(image.src).original===resolveMedia(p.coverSourceUrl).original);
- const document=layout==='index'?renderImageIndex(p.nodes,imageOptions):practice?.document??renderDocument(p.category==='Film'?filmSections(p.nodes):withReadingLanguages(sourceLayout?withImageCaptions(p.nodes):p.nodes,layouts.readingLanguages?.[p.id]),{...imageOptions,omitIntro:sourceLayout?'':p.summary,omitFirstImage:!sourceLayout&&heroIsFirst?firstImage.src:'',paragraphCaptions:!sourceLayout});
+ const document=layout==='index'?renderImageIndex(p.nodes,{...imageOptions,showCaptions:layouts.captionedIndexes?.includes(p.id)}):practice?.document??renderDocument(p.category==='Film'?filmSections(p.nodes):withReadingLanguages(sourceLayout?withImageCaptions(p.nodes):p.nodes,layouts.readingLanguages?.[p.id]),{...imageOptions,omitIntro:sourceLayout?'':p.summary,omitFirstImage:!sourceLayout&&heroIsFirst?firstImage.src:'',paragraphCaptions:!sourceLayout});
  const originalCover=resolveMedia(p.coverSourceUrl).original;
  const coverHref=p.coverSourceUrl===catalog.find(seed=>seed.id===p.id)?.coverSourceUrl?`../assets/${p.id}.jpg`:originalCover.startsWith('assets/')?'../'+originalCover:originalCover;
  const body=titleOnly?

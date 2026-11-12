@@ -16,6 +16,7 @@
     }
   },
   "titleOnlyIndexes": ["cathedrals-of-light"],
+  "captionedIndexes": ["cathedrals-of-light"],
   "articles": {
     "trauma-induced-dissociative-amnesia": "source",
     "rhythms-of-chaos": "index",
