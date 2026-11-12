@@ -258,6 +258,11 @@
     "gallery/assets/works/cathedrals-do1040663.jpg": "gallery/assets/works/cathedrals-do1040663.jpg",
     "gallery/assets/works/cathedrals-do1050162.jpg": "gallery/assets/works/cathedrals-do1050162.jpg",
     "gallery/assets/works/cathedrals-do1050186.jpg": "gallery/assets/works/cathedrals-do1050186.jpg",
+    "gallery/assets/works/cathedrals-dsc00311.jpg": "gallery/assets/works/cathedrals-dsc00311.jpg",
+    "gallery/assets/works/cathedrals-dsc00736.jpg": "gallery/assets/works/cathedrals-dsc00736.jpg",
+    "gallery/assets/works/cathedrals-img_1466.jpg": "gallery/assets/works/cathedrals-img_1466.jpg",
+    "gallery/assets/works/cathedrals-img_5202.jpg": "gallery/assets/works/cathedrals-img_5202.jpg",
+    "gallery/assets/works/cathedrals-snapseed.jpg": "gallery/assets/works/cathedrals-snapseed.jpg",
     "gallery/assets/works/cb7c641fa2ae4d862644.jpg": "gallery/assets/works/cb7c641fa2ae4d862644.jpg",
     "gallery/assets/works/cb7c641fa2ae4d862644.webp": "gallery/assets/works/cb7c641fa2ae4d862644.jpg",
     "gallery/assets/works/ccfb026880cf2a44cd27.jpg": "gallery/assets/works/ccfb026880cf2a44cd27.jpg",
@@ -4313,6 +4318,221 @@
           "height": 2000,
           "bytes": 704074,
           "sha256": "88d485fad025b1c44380f134d143e7bef184e79013d2b3ee620d0bf16873071f"
+        }
+      ]
+    },
+    "gallery/assets/works/cathedrals-dsc00311.jpg": {
+      "sha256": "6f7255cbb8139aa0a8835d7c23fa373e6e63cc611d82665cfde458064f3bf5b1",
+      "bytes": 4021381,
+      "width": 6000,
+      "height": 4000,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/6b210b68776181856708d270-480x320.webp",
+          "width": 480,
+          "height": 320,
+          "bytes": 24022,
+          "sha256": "6b210b68776181856708d270964d2e9a9d8c20de8e859ed0e77e485256b14cda"
+        },
+        {
+          "path": "gallery/assets/optimized/751fdb7a7742734bc37cc9b4-960x640.webp",
+          "width": 960,
+          "height": 640,
+          "bytes": 75250,
+          "sha256": "751fdb7a7742734bc37cc9b4280516a67d88fc99eb74c1cd379e9ebcecfe68e8"
+        },
+        {
+          "path": "gallery/assets/optimized/998564db897145fdb507da74-1600x1067.webp",
+          "width": 1600,
+          "height": 1067,
+          "bytes": 181452,
+          "sha256": "998564db897145fdb507da74a01d6840880973fc6bc8894b426d7b02476b4c56"
+        },
+        {
+          "path": "gallery/assets/optimized/34cf9c1565ce3881a231322b-2400x1600.webp",
+          "width": 2400,
+          "height": 1600,
+          "bytes": 380442,
+          "sha256": "34cf9c1565ce3881a231322beb5ed8755244ce0d92002eb4132b8572f6e825cb"
+        },
+        {
+          "path": "gallery/assets/optimized/89d0c35d8a35c9d4bd1a7231-3000x2000.webp",
+          "width": 3000,
+          "height": 2000,
+          "bytes": 611914,
+          "sha256": "89d0c35d8a35c9d4bd1a7231773197305ef55bf38c0dc4cf8b9c842563acd8ce"
+        }
+      ]
+    },
+    "gallery/assets/works/cathedrals-dsc00736.jpg": {
+      "sha256": "f989887b55eebe4b833994e6a223afcc08e06a5e00e2cdbd3c6506a4cee365cc",
+      "bytes": 2435158,
+      "width": 6000,
+      "height": 4000,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/0de5e46d1fc3d3b168d9d9a3-480x320.webp",
+          "width": 480,
+          "height": 320,
+          "bytes": 19410,
+          "sha256": "0de5e46d1fc3d3b168d9d9a35d87c91a05c2e871c0407667129b32f8aec6707e"
+        },
+        {
+          "path": "gallery/assets/optimized/5abe8ec154b46b149b96fa16-960x640.webp",
+          "width": 960,
+          "height": 640,
+          "bytes": 54218,
+          "sha256": "5abe8ec154b46b149b96fa168524f7f9aabbdc6d040df887200646ad25597f4e"
+        },
+        {
+          "path": "gallery/assets/optimized/3681b6d4849981159af80de2-1600x1067.webp",
+          "width": 1600,
+          "height": 1067,
+          "bytes": 117982,
+          "sha256": "3681b6d4849981159af80de221882b07b5fb9a1f89c6cd1d1ce86ee1a9d4821a"
+        },
+        {
+          "path": "gallery/assets/optimized/c7d2b9e417db9df240297105-2400x1600.webp",
+          "width": 2400,
+          "height": 1600,
+          "bytes": 243648,
+          "sha256": "c7d2b9e417db9df240297105860745ac88dd40fd042948609ff3f6a9bf7b746e"
+        },
+        {
+          "path": "gallery/assets/optimized/fc70392f114c1fe6470f3f95-3000x2000.webp",
+          "width": 3000,
+          "height": 2000,
+          "bytes": 405126,
+          "sha256": "fc70392f114c1fe6470f3f952d44c10bb75db56c22f39d6590915773acad266d"
+        }
+      ]
+    },
+    "gallery/assets/works/cathedrals-img_1466.jpg": {
+      "sha256": "462c91681889d465c907b7e817453f750ce9e619a9ec9a1829ec4757a6f06e8e",
+      "bytes": 3871992,
+      "width": 3024,
+      "height": 4032,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/d821e3733a10a667c8883acb-360x480.webp",
+          "width": 360,
+          "height": 480,
+          "bytes": 45112,
+          "sha256": "d821e3733a10a667c8883acb685ceba6ad7a20cf509a111b0e106360dcc523f4"
+        },
+        {
+          "path": "gallery/assets/optimized/38ff4c6d0e39150316f08728-720x960.webp",
+          "width": 720,
+          "height": 960,
+          "bytes": 141926,
+          "sha256": "38ff4c6d0e39150316f087288525d8f2f698e457388161eac97b2c9645deb769"
+        },
+        {
+          "path": "gallery/assets/optimized/f051c1d8577046f5f42db2a8-1200x1600.webp",
+          "width": 1200,
+          "height": 1600,
+          "bytes": 315076,
+          "sha256": "f051c1d8577046f5f42db2a88a66b9a33de2b2b96636556a3bf8e4d59db52917"
+        },
+        {
+          "path": "gallery/assets/optimized/ce2b3d9259591d3ff64bea60-1800x2400.webp",
+          "width": 1800,
+          "height": 2400,
+          "bytes": 600860,
+          "sha256": "ce2b3d9259591d3ff64bea60e664f7529c93f9864d70b52bea97a2b6046ded43"
+        },
+        {
+          "path": "gallery/assets/optimized/71888f01d8e680e3b69103f3-2250x3000.webp",
+          "width": 2250,
+          "height": 3000,
+          "bytes": 837636,
+          "sha256": "71888f01d8e680e3b69103f32224d9df64ce7ece1b4664e6d3aa31209c994f8c"
+        }
+      ]
+    },
+    "gallery/assets/works/cathedrals-img_5202.jpg": {
+      "sha256": "eb92902a02892a3a3b9072b7d8c8c57614a7818301af517dd9029228aacbbc2d",
+      "bytes": 3438957,
+      "width": 2599,
+      "height": 3465,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/2df4b1736cc235977c18f00c-360x480.webp",
+          "width": 360,
+          "height": 480,
+          "bytes": 27498,
+          "sha256": "2df4b1736cc235977c18f00c3b12913895026215afa89325e891767b941568b3"
+        },
+        {
+          "path": "gallery/assets/optimized/dec47ff39bb52c5d3debddb0-720x960.webp",
+          "width": 720,
+          "height": 960,
+          "bytes": 124270,
+          "sha256": "dec47ff39bb52c5d3debddb0cbf996ab6f77900ab4aad4945c2029b1a0d5dd32"
+        },
+        {
+          "path": "gallery/assets/optimized/2242a2d4ba16ce66cf5f8641-1200x1600.webp",
+          "width": 1200,
+          "height": 1600,
+          "bytes": 406636,
+          "sha256": "2242a2d4ba16ce66cf5f86410c2b07a883ee06dfae8c44bdd494927cbfbcadcd"
+        },
+        {
+          "path": "gallery/assets/optimized/22cc2f70c9272b9a4e81f63c-1800x2400.webp",
+          "width": 1800,
+          "height": 2400,
+          "bytes": 943094,
+          "sha256": "22cc2f70c9272b9a4e81f63c133516130c1733b13f49bbd0b0a76eaa3b31b844"
+        },
+        {
+          "path": "gallery/assets/optimized/be3f37643a0ffc73563635a9-2250x3000.webp",
+          "width": 2250,
+          "height": 3000,
+          "bytes": 1553134,
+          "sha256": "be3f37643a0ffc73563635a9d23c9c2b8ce78f0ca3fa3cfd9907c93dafd21271"
+        }
+      ]
+    },
+    "gallery/assets/works/cathedrals-snapseed.jpg": {
+      "sha256": "5ae50aab15e5518449c8dd2693e31a061b40d736212bab85fb558c6932b4356b",
+      "bytes": 18277598,
+      "width": 6048,
+      "height": 8064,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/34d09ea77f2b9ba453d737b9-360x480.webp",
+          "width": 360,
+          "height": 480,
+          "bytes": 30342,
+          "sha256": "34d09ea77f2b9ba453d737b9132f955ea5d2390b51e40ed7a3f6561ceb12c242"
+        },
+        {
+          "path": "gallery/assets/optimized/190183a1f0486b928b216016-720x960.webp",
+          "width": 720,
+          "height": 960,
+          "bytes": 95194,
+          "sha256": "190183a1f0486b928b216016da1b64cce5cc6ac6a52b474208d5750a9f8c2c03"
+        },
+        {
+          "path": "gallery/assets/optimized/c0f5dd51cdf99b1dc3455e8e-1200x1600.webp",
+          "width": 1200,
+          "height": 1600,
+          "bytes": 284074,
+          "sha256": "c0f5dd51cdf99b1dc3455e8e0595208069be17032d7214559c735b423c5c7505"
+        },
+        {
+          "path": "gallery/assets/optimized/fada21965a6f1d33aac00708-1800x2400.webp",
+          "width": 1800,
+          "height": 2400,
+          "bytes": 771868,
+          "sha256": "fada21965a6f1d33aac00708ffc4b0ec381144573c680875db1f186ccf548440"
+        },
+        {
+          "path": "gallery/assets/optimized/1b74e3be1afd261db2fd25dd-2250x3000.webp",
+          "width": 2250,
+          "height": 3000,
+          "bytes": 1286392,
+          "sha256": "1b74e3be1afd261db2fd25dd4da74f2e950b06e59e520c25ab80c185ce9a21ae"
         }
       ]
     },
