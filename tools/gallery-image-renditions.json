@@ -295,6 +295,9 @@
     "gallery/assets/works/fabe4c883af3b9294694.webp": "gallery/assets/works/fabe4c883af3b9294694.jpg",
     "gallery/assets/works/feb135529bcc5949a90f.jpg": "gallery/assets/works/feb135529bcc5949a90f.jpg",
     "gallery/assets/works/feb135529bcc5949a90f.webp": "gallery/assets/works/feb135529bcc5949a90f.jpg",
+    "gallery/assets/works/rhythms-do1070176.jpg": "gallery/assets/works/rhythms-do1070176.jpg",
+    "gallery/assets/works/rhythms-do1070454.jpg": "gallery/assets/works/rhythms-do1070454.jpg",
+    "gallery/assets/works/rhythms-do1070834.jpg": "gallery/assets/works/rhythms-do1070834.jpg",
     "projects/polaroid-of-yesterday/assets/room.jpg": "projects/polaroid-of-yesterday/assets/room.jpg",
     "projects/polaroid-of-yesterday/game-design-document/assets/asset-001.png": "projects/polaroid-of-yesterday/game-design-document/assets/asset-001.png",
     "projects/polaroid-of-yesterday/game-design-document/assets/asset-003.png": "projects/polaroid-of-yesterday/game-design-document/assets/asset-003.png",
@@ -4719,6 +4722,135 @@
           "height": 853,
           "bytes": 86588,
           "sha256": "8183da84664d80a6904b2997f830a5a87967c77b60966570deb0cbc53a3e6e33"
+        }
+      ]
+    },
+    "gallery/assets/works/rhythms-do1070176.jpg": {
+      "sha256": "ec379de90ede8dd8233d5d6e274a85f638c8f2e2146f14c20a59bb7a3a62968c",
+      "bytes": 6355484,
+      "width": 5048,
+      "height": 3784,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/88aa749e30d8e989c4f5a360-480x360.webp",
+          "width": 480,
+          "height": 360,
+          "bytes": 44198,
+          "sha256": "88aa749e30d8e989c4f5a36013ce5f995e60099eeccdce44678935dc0aea6bcc"
+        },
+        {
+          "path": "gallery/assets/optimized/d59e623948d41f0a0dfc8590-960x720.webp",
+          "width": 960,
+          "height": 720,
+          "bytes": 200530,
+          "sha256": "d59e623948d41f0a0dfc85904bcb251eeff65149b780c83948ba9527112d3e1c"
+        },
+        {
+          "path": "gallery/assets/optimized/7c64f35518d5744e3616e869-1600x1199.webp",
+          "width": 1600,
+          "height": 1199,
+          "bytes": 594078,
+          "sha256": "7c64f35518d5744e3616e869db69041f77fcd67d69b1b58d2d94b496a461d47e"
+        },
+        {
+          "path": "gallery/assets/optimized/bd8e32de9b36a9deefa35f96-2400x1799.webp",
+          "width": 2400,
+          "height": 1799,
+          "bytes": 1299138,
+          "sha256": "bd8e32de9b36a9deefa35f96c96e4462dd9a624b07cd44db8493c13b86cc0f4c"
+        },
+        {
+          "path": "gallery/assets/optimized/38f18e5ed726c7401f7a1c1b-3000x2249.webp",
+          "width": 3000,
+          "height": 2249,
+          "bytes": 1918878,
+          "sha256": "38f18e5ed726c7401f7a1c1befc7a4c10ac2f0095c17e31b5823cbeab0c7e68a"
+        }
+      ]
+    },
+    "gallery/assets/works/rhythms-do1070454.jpg": {
+      "sha256": "99b89d91e224eed7e3b1d45bee560e269f93fb2e3c2b17467853f799711be4d6",
+      "bytes": 4281716,
+      "width": 6000,
+      "height": 4000,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/273c85b26ee3b1831174e665-480x320.webp",
+          "width": 480,
+          "height": 320,
+          "bytes": 32536,
+          "sha256": "273c85b26ee3b1831174e66568a19a307c54203c75c61f358066adaa07b52032"
+        },
+        {
+          "path": "gallery/assets/optimized/badd45f1dcfcdb1853694e0d-960x640.webp",
+          "width": 960,
+          "height": 640,
+          "bytes": 95442,
+          "sha256": "badd45f1dcfcdb1853694e0d4729f57e78b45a30e50c63ce1df833dac5c2ec34"
+        },
+        {
+          "path": "gallery/assets/optimized/746441a5ba9571b4d5ce6de1-1600x1067.webp",
+          "width": 1600,
+          "height": 1067,
+          "bytes": 198438,
+          "sha256": "746441a5ba9571b4d5ce6de1a3577f5e0b545d973e89be1f83ce734c74274772"
+        },
+        {
+          "path": "gallery/assets/optimized/d966096b2a8e60c1b59615c5-2400x1600.webp",
+          "width": 2400,
+          "height": 1600,
+          "bytes": 362838,
+          "sha256": "d966096b2a8e60c1b59615c5ed94a3fcf1d4dd3e10f9597644fbc9e04db4868e"
+        },
+        {
+          "path": "gallery/assets/optimized/167bcb8e774063864e7d3824-3000x2000.webp",
+          "width": 3000,
+          "height": 2000,
+          "bytes": 500132,
+          "sha256": "167bcb8e774063864e7d3824d7a708ea1ae71fe96ac75e8b6b3b0400b19e34e4"
+        }
+      ]
+    },
+    "gallery/assets/works/rhythms-do1070834.jpg": {
+      "sha256": "6753478640bfdc9cfb6d21833cb39a1fe12ef2d8bcdbc6164b04363313cffc1f",
+      "bytes": 3925266,
+      "width": 6000,
+      "height": 4000,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/e687123d2d315990e1604ec2-480x320.webp",
+          "width": 480,
+          "height": 320,
+          "bytes": 28138,
+          "sha256": "e687123d2d315990e1604ec23ac639a9e594631ee049402c14a08f515356ecf6"
+        },
+        {
+          "path": "gallery/assets/optimized/df464b41c4ec9aeb3b373f95-960x640.webp",
+          "width": 960,
+          "height": 640,
+          "bytes": 92292,
+          "sha256": "df464b41c4ec9aeb3b373f9553f25d337e46a1b78bf10d7e9fbedf6f246717a9"
+        },
+        {
+          "path": "gallery/assets/optimized/0e59a596053be4c76dfc669c-1600x1067.webp",
+          "width": 1600,
+          "height": 1067,
+          "bytes": 223420,
+          "sha256": "0e59a596053be4c76dfc669cbaa3fc2033c122cde534a4b6d8592899efe3077d"
+        },
+        {
+          "path": "gallery/assets/optimized/b251c75f2c15ecb8221fe30b-2400x1600.webp",
+          "width": 2400,
+          "height": 1600,
+          "bytes": 455956,
+          "sha256": "b251c75f2c15ecb8221fe30bfbfc90fee06f52615d358efe7d5c6be5d492a3b4"
+        },
+        {
+          "path": "gallery/assets/optimized/0119d7ae903070d8aa9e3aed-3000x2000.webp",
+          "width": 3000,
+          "height": 2000,
+          "bytes": 694516,
+          "sha256": "0119d7ae903070d8aa9e3aedc9c0c75be4da0b7d31cf1afea4fd46ab0a3331aa"
         }
       ]
     },

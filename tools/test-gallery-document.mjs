@@ -51,7 +51,8 @@ assert(!('PrivateNotes' in galleryPageSnapshot({id:'test',properties:props}).pro
 const snapshot=JSON.parse(fs.readFileSync(new URL('gallery-notion/snapshot.json',import.meta.url),'utf8'));
 assert.equal(new Set(snapshot.pages.map(p=>p.id)).size,snapshot.pages.length,'Each current CMS project appears once');
 const sourceCounts=snapshot.pages.map(page=>allImages(page.blocks?adaptNotionBlocks(page.blocks):parseNotionMarkdown(page.markdown)).length);
-const articleLayouts=JSON.parse(fs.readFileSync(new URL('gallery-layouts.json',import.meta.url),'utf8')).articles;
+const galleryLayouts=JSON.parse(fs.readFileSync(new URL('gallery-layouts.json',import.meta.url),'utf8'));
+const articleLayouts=galleryLayouts.articles;
 const indexed=p=>articleLayouts[p.properties.Slug]==='index';
 const archiveCount=snapshot.pages.filter(p=>!indexed(p)).reduce((count,p)=>count+JSON.parse(fs.readFileSync(new URL(`gallery-source/${p.properties.Slug}.json`,import.meta.url),'utf8')).sections.flatMap(s=>s.items).filter(i=>i.tag==='IMG').length,0);
 assert.equal(snapshot.pages.reduce((count,p,i)=>count+(indexed(p)?0:sourceCounts[i]),0),archiveCount,'Unchanged archive projects retain their source photographs');
@@ -105,9 +106,14 @@ for(const p of snapshot.pages){
  if(indexed(p)){
   const photos=allImages(published),grid=article.match(/<section class="image-index"[^>]*>[\s\S]*?<\/section>/)?.[0];
   assert(photos.length>0&&grid,`Current Notion photographs have an index: ${slug}`);
+  const photoOnly=galleryLayouts.photoOnlyIndexes.includes(slug);
   assert.deepEqual([...grid.matchAll(/href="\.\.\/([^\"]+)"/g)].map(m=>m[1]),photos.map(image=>local(image.src)?.original),`Current Notion image order and originals: ${slug}`);
-  assert.deepEqual([...grid.matchAll(/<figcaption>(.*?)<\/figcaption>/g)].map(m=>m[1]),photos.map((_,i)=>String(i+1).padStart(2,'0')),`Number-only captions: ${slug}`);
-  assert(normalized(article).includes(normalized(p.properties.Summary)),`Current Notion introduction: ${slug}`);
+  assert.deepEqual([...grid.matchAll(/<figcaption>(.*?)<\/figcaption>/g)].map(m=>m[1]),photoOnly?[]:photos.map((_,i)=>String(i+1).padStart(2,'0')),`Index captions: ${slug}`);
+  if(photoOnly){
+   assert.match(article,/<h1 class="sr-only">/);
+   assert.doesNotMatch(article,/class="(?:story-hero|story-source|related)"/);
+  }
+  if(!photoOnly)assert(normalized(article).includes(normalized(p.properties.Summary)),`Current Notion introduction: ${slug}`);
   assert(!article.includes('Website layout notes'),`Editor notes stay private: ${slug}`);
   continue;
  }

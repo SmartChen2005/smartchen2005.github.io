@@ -3474,5 +3474,23 @@
     "height": 683,
     "displayWidth": 1024,
     "displayHeight": 683
+  },
+  "notion-asset:62595271-57b1-47a0-928c-a40727745f38": {
+    "display": "assets/works/rhythms-do1070834.jpg",
+    "original": "assets/works/rhythms-do1070834.jpg",
+    "displayWidth": 6000,
+    "displayHeight": 4000
+  },
+  "notion-asset:603c23b4-09be-4aa9-beb2-e85f9744be93": {
+    "display": "assets/works/rhythms-do1070454.jpg",
+    "original": "assets/works/rhythms-do1070454.jpg",
+    "displayWidth": 6000,
+    "displayHeight": 4000
+  },
+  "notion-asset:cec0ef5e-8cc1-41b1-abca-1ba16c1d2fe0": {
+    "display": "assets/works/rhythms-do1070176.jpg",
+    "original": "assets/works/rhythms-do1070176.jpg",
+    "displayWidth": 5048,
+    "displayHeight": 3784
   }
 }

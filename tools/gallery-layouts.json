@@ -15,13 +15,14 @@
       "translation": { "code": "en", "label": "English", "source": "English translation" }
     }
   },
+  "photoOnlyIndexes": ["cathedrals-of-light"],
   "articles": {
     "trauma-induced-dissociative-amnesia": "source",
     "rhythms-of-chaos": "index",
     "analog-and-digital": "source",
     "deliberate-practice": "practice",
     "intro-to-darkroom": "source",
-    "cathedrals-of-light": "source",
+    "cathedrals-of-light": "index",
     "surface-of-the-moon": "source",
     "morning-unwoken": "source",
     "cursed-stage": "source",
