@@ -15,7 +15,7 @@
       "translation": { "code": "en", "label": "English", "source": "English translation" }
     }
   },
-  "photoOnlyIndexes": ["cathedrals-of-light"],
+  "titleOnlyIndexes": ["cathedrals-of-light"],
   "articles": {
     "trauma-induced-dissociative-amnesia": "source",
     "rhythms-of-chaos": "index",

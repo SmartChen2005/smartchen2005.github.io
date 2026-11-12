@@ -98,7 +98,7 @@ for(const p of projects){
   continue;
  }
  const layout=layouts.articles[p.id];
- const photoOnly=layout==='index'&&layouts.photoOnlyIndexes?.includes(p.id);
+ const titleOnly=layout==='index'&&layouts.titleOnlyIndexes?.includes(p.id);
  if(layout&&!['offset','centered','practice','source','index'].includes(layout))throw new Error('Unknown article layout: '+layout);
  const firstImage=allImages(p.nodes)[0];
  const firstImageIndex=p.nodes.indexOf(firstImage);
@@ -111,11 +111,11 @@ for(const p of projects){
  const paragraphMatches=(nodes,text)=>Boolean(text)&&nodes.some(n=>n.type==='paragraph'&&(Array.isArray(n.text)?n.text.map(t=>t.plain_text??t.text?.content??'').join(''):n.text).trim()===text.trim()||n.children&&paragraphMatches(n.children,text)||n.columns?.some(c=>paragraphMatches(c.children,text)));
  const sourceSummaryInBody=sourceLayout&&paragraphMatches(p.nodes,p.summary);
  const sourceCoverIncluded=p.category==='Film'||layout==='index'||sourceLayout&&allImages(p.nodes).some(image=>resolveMedia(image.src).original===resolveMedia(p.coverSourceUrl).original);
- const document=layout==='index'?renderImageIndex(p.nodes,{...imageOptions,showNumbers:!photoOnly}):practice?.document??renderDocument(p.category==='Film'?filmSections(p.nodes):withReadingLanguages(sourceLayout?withImageCaptions(p.nodes):p.nodes,layouts.readingLanguages?.[p.id]),{...imageOptions,omitIntro:sourceLayout?'':p.summary,omitFirstImage:!sourceLayout&&heroIsFirst?firstImage.src:'',paragraphCaptions:!sourceLayout});
+ const document=layout==='index'?renderImageIndex(p.nodes,imageOptions):practice?.document??renderDocument(p.category==='Film'?filmSections(p.nodes):withReadingLanguages(sourceLayout?withImageCaptions(p.nodes):p.nodes,layouts.readingLanguages?.[p.id]),{...imageOptions,omitIntro:sourceLayout?'':p.summary,omitFirstImage:!sourceLayout&&heroIsFirst?firstImage.src:'',paragraphCaptions:!sourceLayout});
  const originalCover=resolveMedia(p.coverSourceUrl).original;
  const coverHref=p.coverSourceUrl===catalog.find(seed=>seed.id===p.id)?.coverSourceUrl?`../assets/${p.id}.jpg`:originalCover.startsWith('assets/')?'../'+originalCover:originalCover;
- const body=photoOnly?
-  `<main class="project-main" id="main"><article data-project="${esc(p.id)}" class="story story--index"><h1 class="sr-only">${esc(p.title)}</h1><div class="story-body">${document}</div></article></main>`:
+ const body=titleOnly?
+  `<main class="project-main" id="main"><article data-project="${esc(p.id)}" class="story story--index"><header class="story-hero"><div class="story-title"><h1>${esc(p.title)}</h1></div></header><div class="story-body">${document}</div></article></main>`:
   `<main class="project-main" id="main"><article data-project="${esc(p.id)}" class="story${p.category==='Film'?' story--film':''}${layout?' story--'+layout:''}"><header class="story-hero"><div class="story-title"><p class="eyebrow">${esc(p.contentKind||p.category)}${p.format?' · '+esc(p.format):''}</p><h1>${esc(p.title)}</h1>${p.subtitle?`<p class="story-subtitle" lang="zh-Hans">${esc(p.subtitle)}</p>`:''}${p.summary&&!sourceSummaryInBody?`<p class="story-intro">${esc(p.summary)}</p>`:''}${p.category==='Film'?'':`<div class="project-meta"><span>${esc(p.credit||'Smart Chen')}</span>${p.date?`<span>${esc(p.date)}</span>`:''}</div>`}${practice?.index||''}${p.relatedProject==='Polaroid of Yesterday'?'<a class="text-link story-related-project" href="../../projects/polaroid-of-yesterday/photography/">View Polaroid of Yesterday stills</a>':''}</div>${sourceCoverIncluded?'':`<a class="story-cover story-image-open" href="${esc(coverHref)}" data-image-title="${esc(p.title)} — published cover" ${galleryViewerAttributes({original:originalCover,display:p.cover},'../')}>${media(p,'../',true)}</a>`}</header><div class="story-body">${document}</div><p class="story-source"><a href="${esc(p.sourceUrl)}">Originally published on VegShark.com</a></p></article><section class="related" aria-labelledby="next-title"><div class="section-heading"><h2 id="next-title">Next project</h2><a class="text-link" href="../">All projects</a></div><div class="project-grid">${card(next,'../')}</div></section></main>`;
  rendered.set(p.id+'/index.html',shell(p.title,body,'../',layout,p.category==='Film'));
 }

@@ -4,7 +4,6 @@
 .story--index .story-title h1 { font-size: clamp(44px, 4.5vw, 64px); }
 .story--index .story-intro { font-size: 22px; line-height: 1.35; }
 .story--index .story-body { margin-top: 32px; }
-.story--index > .sr-only + .story-body { margin-top: 0; }
 .image-index { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 44px 24px; align-items: start; }
 .index-print { margin: 0; min-width: 0; }
 .index-print .story-image-open { cursor: zoom-in; }

@@ -106,14 +106,14 @@ for(const p of snapshot.pages){
  if(indexed(p)){
   const photos=allImages(published),grid=article.match(/<section class="image-index"[^>]*>[\s\S]*?<\/section>/)?.[0];
   assert(photos.length>0&&grid,`Current Notion photographs have an index: ${slug}`);
-  const photoOnly=galleryLayouts.photoOnlyIndexes.includes(slug);
+  const titleOnly=galleryLayouts.titleOnlyIndexes.includes(slug);
   assert.deepEqual([...grid.matchAll(/href="\.\.\/([^\"]+)"/g)].map(m=>m[1]),photos.map(image=>local(image.src)?.original),`Current Notion image order and originals: ${slug}`);
-  assert.deepEqual([...grid.matchAll(/<figcaption>(.*?)<\/figcaption>/g)].map(m=>m[1]),photoOnly?[]:photos.map((_,i)=>String(i+1).padStart(2,'0')),`Index captions: ${slug}`);
-  if(photoOnly){
-   assert.match(article,/<h1 class="sr-only">/);
-   assert.doesNotMatch(article,/class="(?:story-hero|story-source|related)"/);
+  assert.deepEqual([...grid.matchAll(/<figcaption>(.*?)<\/figcaption>/g)].map(m=>m[1]),photos.map((_,i)=>String(i+1).padStart(2,'0')),`Index captions: ${slug}`);
+  if(titleOnly){
+   assert.match(article,/<div class="story-title"><h1>Cathedrals of Light<\/h1><\/div>/);
+   assert.doesNotMatch(article,/class="(?:story-intro|project-meta|story-source|related)"/);
   }
-  if(!photoOnly)assert(normalized(article).includes(normalized(p.properties.Summary)),`Current Notion introduction: ${slug}`);
+  if(!titleOnly)assert(normalized(article).includes(normalized(p.properties.Summary)),`Current Notion introduction: ${slug}`);
   assert(!article.includes('Website layout notes'),`Editor notes stay private: ${slug}`);
   continue;
  }
