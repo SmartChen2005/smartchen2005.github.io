@@ -11,11 +11,18 @@ const current = fs.readFileSync(output, 'utf8').replace(/\r\n/g, '\n').match(/<h
 assert.equal(current, header, 'Preserve the existing shared Header exactly.');
 const room = imageRendition('projects/polaroid-of-yesterday/assets/room.jpg');
 assert(room, 'Reuse the existing optimized Polaroid screenshot.');
+const aiGameDesign = {
+  href: 'ai-game-design/',
+  title: 'Beyond Vibe Coding: Experiments in Human–AI Game Design',
+  kind: 'Game design resource',
+  description: 'Includes the Vibe Coding Game Design Handbook.',
+  previewImage: 'assets/project-placeholder.svg'
+};
 const projects = [
   {href:'polaroid-of-yesterday/',title:'Polaroid of Yesterday',kind:'Narrative puzzle game',description:'A first-person game about photography, memory, and the stories we construct.',tone:'light',theme:'polaroid',effect:'polaroid',image:`<img ${renditionAttributes(room,'../',{sizes:'(max-width: 700px) calc(100vw - 80px), 520px',priority:true})} alt="" decoding="async" fetchpriority="high" draggable="false">`},
   {href:'gran-turismo/',title:'Gran Turismo',kind:'VR exploration',description:'A journey through the ruins of a lost civilization.',effect:'stars',previewImage:'assets/project-placeholder.svg'},
   {href:'figures-of-speech/',title:'Figures of Speech',tone:'light',layout:'figures'},
-  {href:'https://handbook.vegshark.com/',title:'The Vibe Coding Game Design Handbook',kind:'Game design resource',description:'handbook.vegshark.com',external:true,previewImage:'assets/project-placeholder.svg'},
+  aiGameDesign,
   {href:'vr-for-skill-learning/',title:'VR for Skill Learning',kind:'VR interaction',description:'Practical skills, procedural guidance, and spatial learning.',previewImage:'assets/project-placeholder.svg'},
   {href:'world-sensing-music-station/',title:'World Sensing Music Station',kind:'Physical computing',description:'A handheld instrument that turns movement and space into sound.',tone:'light',previewImage:'world-sensing-music-station/device.svg',previewWidth:1000,previewHeight:800,previewClass:'device',previewEffect:'device'},
   {href:'multiverse-all-star-battlefront/',title:'Multiverse All-Star Battlefront',kind:'AI game experiment',description:'Imagined characters become pixel-art fighters and generated comics.',previewImage:'assets/project-placeholder.svg'}
@@ -57,4 +64,22 @@ ${header}
 <main class="projects-main" id="main"><div class="projects-intro"><h1 id="page-title">Projects</h1></div>
 <ol class="directory" role="list" aria-label="Portfolio projects">${entries}</ol></main>
 <footer class="projects-footer"><p>Smart Chen</p><a href="#top">Back to top</a></footer></body></html>\n`);
-console.log('Rendered Projects: preserved Header, seven native links, Polaroid followed by Gran Turismo.');
+const placeholder = new URL(aiGameDesign.href, output);
+fs.mkdirSync(placeholder, { recursive: true });
+fs.writeFileSync(new URL('index.html', placeholder), `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#061b62">
+<title>${aiGameDesign.title} — Smart Chen</title>${siteFavicon('../../')}
+<link rel="stylesheet" href="../../site.css">
+<link rel="stylesheet" href="../../assets/fonts/gotham/gotham.css">
+<link rel="stylesheet" href="../projects.css?rev=20261109-tight-figures">
+${projectHeaderAssets('../../')}</head>
+<body class="projects-directory"><a class="projects-skip" href="#main">Skip to content</a>
+${projectHeader()}
+<main class="projects-main" id="main"><div class="projects-intro">
+<h1>${aiGameDesign.title}</h1>
+<p>Project page in progress.</p>
+<p><a class="directory-link" href="https://handbook.vegshark.com/">Read the Handbook ${northEastArrow}</a></p>
+</div></main></body></html>
+`);
+console.log('Rendered Projects and the AI Game Design placeholder.');
