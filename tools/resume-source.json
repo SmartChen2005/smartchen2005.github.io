@@ -1,5 +1,5 @@
 {
-  "imported": "2026-10-30",
+  "imported": "2026-11-15",
   "source": "https://www.figma.com/design/a1pN9pSULQNTnTz1QuIVUg/Hongyi-Chen-Resume?node-id=2014-2",
   "nodeId": "2014:2",
   "nodeName": "Résumé - English",
@@ -7,6 +7,6 @@
   "file": "dist/assets/hongyi-chen-resume.pdf",
   "pages": 1,
   "pageSizePoints": [595, 842],
-  "bytes": 1758108,
-  "sha256": "0a304ab5cdda9f5ac8a773b0489754f47e288aeff946c31bee7b7a73f59e73ff"
+  "bytes": 1781912,
+  "sha256": "99989082daa2da0b140be4a9d318734535f73cd37c7e1daf82268e9d26b4f49b"
 }
