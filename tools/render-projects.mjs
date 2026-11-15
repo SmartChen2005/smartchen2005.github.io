@@ -64,11 +64,13 @@ ${header}
 <main class="projects-main" id="main"><div class="projects-intro"><h1 id="page-title">Projects</h1></div>
 <ol class="directory" role="list" aria-label="Portfolio projects">${entries}</ol></main>
 <footer class="projects-footer"><p>Smart Chen</p><a href="#top">Back to top</a></footer></body></html>\n`);
+const handbookUrl = 'https://handbook.vegshark.com/';
 const placeholder = new URL(aiGameDesign.href, output);
 fs.mkdirSync(placeholder, { recursive: true });
 fs.writeFileSync(new URL('index.html', placeholder), `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#061b62">
+<meta http-equiv="refresh" content="0; url=${handbookUrl}">
 <title>${aiGameDesign.title} — Smart Chen</title>${siteFavicon('../../')}
 <link rel="stylesheet" href="../../site.css">
 <link rel="stylesheet" href="../../assets/fonts/gotham/gotham.css">
@@ -78,8 +80,8 @@ ${projectHeaderAssets('../../')}</head>
 ${projectHeader()}
 <main class="projects-main" id="main"><div class="projects-intro">
 <h1>${aiGameDesign.title}</h1>
-<p>Project page in progress.</p>
-<p><a class="directory-link" href="https://handbook.vegshark.com/">Read the Handbook ${northEastArrow}</a></p>
+<p>Opening the Handbook…</p>
+<p><a class="directory-link" href="${handbookUrl}">Read the Handbook ${northEastArrow}</a></p>
 </div></main></body></html>
 `);
 console.log('Rendered Projects and the AI Game Design placeholder.');
