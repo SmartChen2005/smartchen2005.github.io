@@ -188,6 +188,118 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   .projects-main .directory-title { font-size: 1.8125rem; }
   .projects-main .project-heading { gap: 12px; }
 }
+
+.projects-main .project-card--vr { --projects-surface: #000; }
+.vr-card-cover {
+  display: grid;
+  flex: 1;
+  align-self: center;
+  width: min(100%, 23rem);
+  min-height: 14rem;
+  grid-template-areas: "wheel cart" "title title" "camp tag";
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: 1fr auto 1fr;
+  place-items: center;
+  gap: .375rem;
+}
+.vr-card-cover h2 {
+  grid-area: title;
+  margin: 0;
+  text-align: center;
+  text-wrap: balance;
+  font-size: clamp(1.375rem, 2.7vw, 2.0625rem);
+  line-height: 1.1;
+  letter-spacing: -.045em;
+  overflow-wrap: anywhere;
+}
+.vr-card-icon {
+  --vr-rise: -7px;
+  --vr-lean: -9deg;
+  font: clamp(2.25rem, 4vw, 3.625rem)/1.25 "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  transition: transform 360ms cubic-bezier(.2,.7,.2,1);
+}
+.vr-card-icon:nth-of-type(1) { grid-area: wheel; }
+.vr-card-icon:nth-of-type(2) { grid-area: cart; --vr-lean: 8deg; --vr-delay: 90ms; }
+.vr-card-icon:nth-of-type(3) { grid-area: camp; --vr-lean: 7deg; --vr-delay: 180ms; }
+.vr-card-icon:nth-of-type(4) { grid-area: tag; --vr-delay: 270ms; }
+@media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  .vr-card-cover.is-in-view .vr-card-icon { animation: vr-card-float 780ms ease-in-out var(--vr-delay, 0ms); }
+  .project-card--vr .directory-link:focus-visible .vr-card-icon { transform: translateY(var(--vr-rise)) rotate(var(--vr-lean)); }
+  @media (hover: hover) {
+    .project-card--vr .directory-link:hover .vr-card-icon { transform: translateY(var(--vr-rise)) rotate(var(--vr-lean)); }
+  }
+}
+@keyframes vr-card-float {
+  50% { translate: 0 var(--vr-rise); rotate: var(--vr-lean); }
+}
+
+.projects-main .project-card--battlefront {
+  --battlefront-paper: #f1f0ea;
+  --battlefront-ink: #181916;
+  --battlefront-vermilion: #f13d24;
+  --projects-surface: var(--battlefront-paper);
+}
+.projects-main .project-card--battlefront .directory-link { gap: 0; padding: 0; }
+.battlefront-matchup {
+  position: relative;
+  flex: 1;
+  min-height: clamp(9rem, 17vw, 12rem);
+  overflow: hidden;
+  border-radius: var(--projects-preview-radius) var(--projects-preview-radius) 0 0;
+  border-bottom: 2px solid var(--battlefront-ink);
+  background: var(--battlefront-ink);
+}
+.battlefront-panel {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: var(--battlefront-paper);
+  background-image: radial-gradient(#18191627 .7px, transparent .9px);
+  background-size: 5px 5px;
+}
+.battlefront-panel--guardian { clip-path: polygon(0 0, 60% 0, 43% 100%, 0 100%); }
+.battlefront-panel--duelist {
+  clip-path: polygon(61% 0, 100% 0, 100% 100%, 44% 100%);
+  background-color: var(--battlefront-vermilion);
+}
+.battlefront-panel svg {
+  position: absolute;
+  top: 1%;
+  left: 0;
+  width: 49%;
+  height: 157%;
+  color: var(--battlefront-ink);
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 360ms cubic-bezier(.2,.7,.2,1);
+}
+.battlefront-panel--duelist svg { right: 0; left: auto; }
+.battlefront-panel .fighter-line { stroke-width: 1.5; }
+.battlefront-panel .fighter-contour { fill: var(--battlefront-paper); stroke-width: 3; }
+.battlefront-panel .fighter-shadow { fill: currentColor; stroke: none; }
+.battlefront-panel--guardian .fighter-accent .fighter-contour { fill: var(--battlefront-vermilion); }
+.battlefront-panel--duelist .fighter-accent .fighter-contour { fill: var(--battlefront-ink); }
+.battlefront-panel--duelist .fighter-accent .fighter-detail { stroke: var(--battlefront-paper); }
+.battlefront-panel .fighter-accent-line { stroke: var(--battlefront-vermilion); }
+.project-card--battlefront .directory-link:is(:hover, :focus-visible) .battlefront-panel--guardian svg { transform: translate(5px, 3px) scale(1.05); }
+.project-card--battlefront .directory-link:is(:hover, :focus-visible) .battlefront-panel--duelist svg { transform: translate(-5px, 3px) scale(1.05); }
+.battlefront-caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px clamp(14px, 2.1vw, 22px);
+}
+.battlefront-caption h2 {
+  margin: 0;
+  font: 750 clamp(1.25rem, 2.5vw, 1.875rem)/1 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .projects-main .directory-link, .projects-main .directory-arrow, .projects-main .directory-arrow svg { transition: none; }
   .projects-main .directory-link, .projects-main .directory-arrow svg { transform: none !important; }
@@ -195,6 +307,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   .projects-main .photo-emulsion, .projects-main .photo-sheen { opacity: 0 !important; }
   .projects-main .starfield-layer { transform: none !important; }
   .projects-main .project-card-preview--device img { transform: scale(1.18) !important; }
+  .project-card--battlefront .battlefront-panel svg { transition: none; transform: none !important; }
 }
 @media (prefers-reduced-transparency: reduce) {
   .projects-main .photo-sheen { display: none; }
@@ -218,6 +331,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   .projects-main .photo-print { transform: translate(-50%, -50%) !important; border-color: CanvasText; box-shadow: none; }
   .projects-main .photo-emulsion, .projects-main .photo-sheen, .projects-main .project-preview--stars { display: none !important; }
   .projects-main .project-feature .directory-link:has([data-project-effect="stars"]) { background: Canvas; }
+  .battlefront-matchup { display: none; }
 }
 @media print {
   html:has(.projects-directory), .projects-directory { background: #fff; }
@@ -232,4 +346,5 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   .projects-main .photo-print { transform: translate(-50%, -50%) !important; box-shadow: none; }
   .projects-main .photo-emulsion, .projects-main .photo-sheen, .projects-main .project-preview--stars { display: none !important; }
   .projects-main .project-feature .directory-link:has([data-project-effect="stars"]) { background: none; min-height: 0; }
+  .battlefront-matchup { display: none; }
 }

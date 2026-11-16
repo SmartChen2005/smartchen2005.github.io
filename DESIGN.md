@@ -1,5 +1,11 @@
 # Polaroid of Yesterday — Design Context
 
+## Projects — VR and Battlefront covers (2026-11-16)
+
+VR for Skill Learning follows Figures of Speech and occupies its right-hand slot in the two-column grid. Beyond Vibe Coding takes the former VR slot. The VR card centers its title on black with the four chapter icons from `tools/vr-source/content.json` around it. The icons rise in sequence once when the card enters view, then respond to hover and keyboard focus. The full card links to the collection.
+
+Multiverse All-Star Battlefront uses a two-panel comic cover. The Winged Guardian and Shadow Duelist drawings come from `tools/masb-fighters.mjs`, with the project’s paper, ink, and vermilion palette. The diagonal gutter divides the fighters, and they shift slightly toward each other on hover or focus. The main title and shared directory arrow sit in the caption. Both covers stay static with reduced motion.
+
 ## Projects — wider compact cards (2026-11-09)
 
 The latest request supersedes the lower directory's three-column/tall-card treatment: use two wider columns above 600px, one below, with 14px internal gaps, 18–20px padding and short 100px image slots. Figures keeps three larger full-width lines and the shared dictionary directly below with less vertical space. Music Station becomes an artwork/title-only variant: center the original device in a transparent 220px stage, keep its tilt, and place a large two-line World Sensing / Music Station title underneath with a 38px overlap and the device in front. Omit its kind, description and arrow. Preserve all seven destinations, the first two featured cards and the concave background.

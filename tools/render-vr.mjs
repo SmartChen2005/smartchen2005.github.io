@@ -17,17 +17,14 @@ const pines = [
 ];
 const scenes = {
   garage: {
-    icon: '🛞',
     backdrop: '<span class="garage-door"></span><span class="garage-pegboard"></span><span class="garage-bench"></span>',
     props: [['tire', '🛞'], ['wrench', '🔧']],
   },
   shop: {
-    icon: '🛒',
     backdrop: '<img class="shop-interior" src="assets/auto-parts-store.webp" alt="" loading="lazy" decoding="async">',
     props: [['cart', '🛒'], ['toolbox', '🧰']],
   },
   camp: {
-    icon: '⛺',
     backdrop: `<span class="camp-moon"></span><span class="camp-ridge"></span><span class="camp-ground"></span>${pines.map(([x, width, height]) => `<span class="camp-pine" style="--x:${x}%;--width:${width}%;--height:${height}%"></span>`).join('')}<span class="camp-glow"></span>`,
     props: [['tent', '⛺'], ['tree', '🌲'], ['fire', '🔥']],
   },
@@ -71,8 +68,8 @@ function chapterLink({ id, title, theme, label, icon }) {
 
 const concept = content.concept;
 const directory = [
-  ...content.assignments.map(a => ({ ...a, label: a.setting, icon: scenes[a.theme].icon })),
-  { ...concept, theme: 'tag', label: concept.topic, icon: '🎨' },
+  ...content.assignments.map(a => ({ ...a, label: a.setting })),
+  { ...concept, theme: 'tag', label: concept.topic },
 ];
 
 const html = `<!doctype html>

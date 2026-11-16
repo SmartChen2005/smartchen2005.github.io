@@ -5,12 +5,15 @@ import { projectHeader, projectHeaderAssets } from './project-header.mjs';
 import { siteFavicon } from './site-favicon.mjs';
 import { northEastArrow } from './site-icons.mjs';
 import { imageRendition, renditionAttributes } from './gallery-media.mjs';
+import { lineFighter } from './masb-fighters.mjs';
 const output = new URL('../dist/projects/index.html', import.meta.url);
 const header = projectHeader({base:'../', current:true});
 const current = fs.readFileSync(output, 'utf8').replace(/\r\n/g, '\n').match(/<header class="project-header\b[\s\S]*?<\/header>/)?.[0];
 assert.equal(current, header, 'Preserve the existing shared Header exactly.');
 const room = imageRendition('projects/polaroid-of-yesterday/assets/room.jpg');
 assert(room, 'Reuse the existing optimized Polaroid screenshot.');
+const vr = JSON.parse(fs.readFileSync(new URL('./vr-source/content.json', import.meta.url), 'utf8'));
+const { example: matchup } = JSON.parse(fs.readFileSync(new URL('./masb-source/experience.json', import.meta.url), 'utf8'));
 const aiGameDesign = {
   href: 'ai-game-design/',
   title: 'Beyond Vibe Coding: Experiments in Human–AI Game Design',
@@ -22,10 +25,10 @@ const projects = [
   {href:'polaroid-of-yesterday/',title:'Polaroid of Yesterday',kind:'Narrative puzzle game',description:'A first-person game about photography, memory, and the stories we construct.',tone:'light',theme:'polaroid',effect:'polaroid',image:`<img ${renditionAttributes(room,'../',{sizes:'(max-width: 700px) calc(100vw - 80px), 520px',priority:true})} alt="" decoding="async" fetchpriority="high" draggable="false">`},
   {href:'gran-turismo/',title:'Gran Turismo',kind:'VR exploration',description:'A journey through the ruins of a lost civilization.',effect:'stars',previewImage:'assets/project-placeholder.svg'},
   {href:'figures-of-speech/',title:'Figures of Speech',tone:'light',layout:'figures'},
+  {href:'vr-for-skill-learning/',title:vr.title,layout:'vr'},
   aiGameDesign,
-  {href:'vr-for-skill-learning/',title:'VR for Skill Learning',kind:'VR interaction',description:'Practical skills, procedural guidance, and spatial learning.',previewImage:'assets/project-placeholder.svg'},
   {href:'world-sensing-music-station/',title:'World Sensing Music Station',kind:'Physical computing',description:'A handheld instrument that turns movement and space into sound.',tone:'light',previewImage:'world-sensing-music-station/device.svg',previewWidth:1000,previewHeight:800,previewClass:'device',previewEffect:'device'},
-  {href:'multiverse-all-star-battlefront/',title:'Multiverse All-Star Battlefront',kind:'AI game experiment',description:'Imagined characters become pixel-art fighters and generated comics.',previewImage:'assets/project-placeholder.svg'}
+  {href:'multiverse-all-star-battlefront/',title:'Multiverse All-Star Battlefront',tone:'light',layout:'battlefront'}
 ];
 function starfield() {
   let seed = 4127;
@@ -46,7 +49,17 @@ function preview(project) {
   if (project.effect === 'stars') return `<div class="project-preview project-preview--stars" data-project-effect="stars" aria-hidden="true">${starfield()}</div><div class="project-preview project-preview--cover" aria-hidden="true">${image}</div>`;
   return `<div class="project-preview project-preview--polaroid" data-project-effect="polaroid" aria-hidden="true"><div class="photo-print"><div class="photo-image">${image}<span class="photo-emulsion"></span></div><span class="photo-sheen"></span></div></div>`;
 }
+function vrCard(project) {
+  const icons = [...vr.assignments, vr.concept].map(({ icon }) => `<span class="vr-card-icon" aria-hidden="true">${icon}</span>`).join('');
+  return `<li class="project-card project-tone--dark project-card--vr"><a class="directory-link" href="${project.href}" aria-labelledby="vr-card-title" draggable="false"><div class="vr-card-cover"><h2 id="vr-card-title">${project.title}</h2>${icons}</div></a></li>`;
+}
+function battlefrontCard(project) {
+  const panels = [matchup.player, matchup.opponent].map(({ drawing, name }) => `<div class="battlefront-panel battlefront-panel--${drawing}">${lineFighter(drawing, name)}</div>`).join('');
+  return `<li class="project-card project-tone--light project-card--battlefront"><a class="directory-link" href="${project.href}" aria-labelledby="battlefront-card-title" draggable="false"><div class="battlefront-matchup" aria-hidden="true">${panels}</div><div class="battlefront-caption"><h2 id="battlefront-card-title">${project.title}</h2><span class="directory-arrow" aria-hidden="true">${northEastArrow}</span></div></a></li>`;
+}
 const entries = projects.map((p,i)=>{
+  if (p.layout === 'vr') return vrCard(p);
+  if (p.layout === 'battlefront') return battlefrontCard(p);
   if (p.previewEffect === 'device') return `<li class="project-card project-tone--light project-card--music"><a class="directory-link" href="${p.href}" aria-labelledby="music-card-title" draggable="false"><div class="project-card-preview project-card-preview--device" data-project-effect="device" aria-hidden="true"><img src="${p.previewImage}" width="1000" height="800" alt="" loading="lazy" decoding="async" draggable="false"></div><h2 id="music-card-title">World Sensing<br>Music Station</h2></a></li>`;
   if (p.layout === 'figures') return `<li class="project-card project-tone--light project-card--figures"><a class="directory-link" href="${p.href}" aria-labelledby="figures-card-title" draggable="false"><div class="figures-title-stack"><h2 id="figures-card-title">${p.title}</h2><span aria-hidden="true">${p.title}</span><span aria-hidden="true">${p.title}</span></div><div class="figures-dictionary"><div class="figures-dictionary-heading"><p class="figures-pronunciation">${figuresPronunciation}</p><span class="directory-arrow" aria-hidden="true">${northEastArrow}</span></div><p>${figuresDefinition}</p></div></a></li>`;
   const media=preview(p);
@@ -57,8 +70,8 @@ fs.writeFileSync(output, `<!doctype html>
 <meta name="theme-color" content="#061b62"><meta name="description" content="Games, tools, and experiments in interaction by Smart Chen.">
 <title>Projects — Smart Chen</title>${siteFavicon('../')}
 <link rel="preload" href="../assets/fonts/gotham/gotham-book.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261109-tight-figures">
-${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261104-device-tilt"></script></head>
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261116-project-covers">
+${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261116-project-covers"></script></head>
 <body class="projects-directory" id="top"><a class="projects-skip" href="#main">Skip to projects</a>
 ${header}
 <main class="projects-main" id="main"><div class="projects-intro"><h1 id="page-title">Projects</h1></div>

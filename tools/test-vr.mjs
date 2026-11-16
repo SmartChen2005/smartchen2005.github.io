@@ -46,7 +46,13 @@ for (const a of source.assignments) {
     assert(study > cover && study < section.indexOf('class="description"'), 'The interactive study precedes explanatory copy');
   }
 }
-assert(fs.readFileSync('dist/projects/index.html', 'utf8').includes('href="vr-for-skill-learning/"'));
+const projects = fs.readFileSync('dist/projects/index.html', 'utf8');
+const projectOrder = [...projects.matchAll(/class="directory-link" href="([^"]+)"/g)].map(([, href]) => href);
+assert.deepEqual(projectOrder.slice(2, 5), ['figures-of-speech/', 'vr-for-skill-learning/', 'ai-game-design/']);
+const chapterIcons = [...html.matchAll(/class="chapter-icon" aria-hidden="true">([^<]+)</g)].map(([, icon]) => icon);
+const cardIcons = [...projects.matchAll(/class="vr-card-icon" aria-hidden="true">([^<]+)</g)].map(([, icon]) => icon);
+assert.equal(chapterIcons.length, 4);
+assert.deepEqual(cardIcons, chapterIcons, 'Projects uses the four VR chapter icons in order');
 for (const assignment of source.assignments) {
   const studyItems = assignment.steps ?? assignment.journey ?? [];
   for (const item of studyItems) {

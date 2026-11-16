@@ -19,7 +19,11 @@ for (const relative of fs.readdirSync('dist', { recursive: true })) {
   pages++;
 }
 const projectsHTML = fs.readFileSync('dist/projects/index.html', 'utf8');
-assert.equal((projectsHTML.match(/data-site-arrow="north-east"/g) || []).length, 6, 'The artwork-only Music Station card omits its arrow');
-assert.equal((projectsHTML.match(/class="directory-link"/g) || []).length, 7, 'All seven native project links remain');
+const projectCards = [...projectsHTML.matchAll(/<li\b[^>]*>(<a class="directory-link" href="([^"]+)"[^>]*>[\s\S]*?)<\/li>/g)];
+assert.equal(projectCards.length, 7, 'All seven native project links remain');
+for (const [, card, route] of projectCards) {
+  const artworkOnly = ['vr-for-skill-learning/', 'world-sensing-music-station/'].includes(route);
+  assert.equal((card.match(/data-site-arrow="north-east"/g) || []).length, artworkOnly ? 0 : 1, `Project arrow for ${route}`);
+}
 assert(northEastArrow.includes('stroke:currentColor'));
 console.log(`Passed: ${pages} maintained pages, ${arrows} font-independent SVG arrows; all seven Projects links; accessible/native links; idempotent generation.`);

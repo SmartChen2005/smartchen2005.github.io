@@ -127,14 +127,23 @@ for (const effect of effects) {
   effect.link.addEventListener('pointercancel',()=>leave(effect));
   effect.link.addEventListener('focusout',()=>leave(effect));
 }
+const vrCover=document.querySelector('.vr-card-cover');
 const observer=new IntersectionObserver(entries=>{
   for (const entry of entries) {
+    if (entry.target===vrCover) {
+      if (entry.isIntersecting) {
+        if (!reducedMotion.matches && !forcedColors.matches) vrCover.classList.add('is-in-view');
+        observer.unobserve(vrCover);
+      }
+      continue;
+    }
     const effect=effects.find(item=>item.element===entry.target);
     effect.visible=entry.isIntersecting;
     if (!effect.visible) {clearEffect(effect); render(effect);}
   }
 });
 effects.forEach(effect=>observer.observe(effect.element));
+if (vrCover) observer.observe(vrCover);
 window.addEventListener('pointerup',release,{passive:true});
 window.addEventListener('pointercancel',release,{passive:true});
 window.addEventListener('blur',reset);
