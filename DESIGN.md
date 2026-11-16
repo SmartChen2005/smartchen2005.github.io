@@ -2,7 +2,7 @@
 
 ## Projects — VR and Battlefront covers (2026-11-16)
 
-VR for Skill Learning follows Figures of Speech and occupies its right-hand slot in the two-column grid. Beyond Vibe Coding takes the former VR slot. A dark headset with twin blue glass lenses sits behind the centered title and four enlarged chapter icons from `tools/vr-source/content.json`. The lenses open with a brief reflection and the icons come into focus one after another on entry. The existing directory spring moves the headset and icons in opposite directions with a fine pointer. Keyboard focus gently scales the icons. The full card links to the collection.
+VR for Skill Learning follows Figures of Speech and occupies its right-hand slot in the two-column grid. Its artwork is a connected paper map of the garage, auto parts store, forest camp, and graffiti wall. Four slices of the same ImageGen illustration meet at alternating folds. The map unfolds on entry, bends and tilts with a fine pointer, and settles open when the pointer leaves. Reduced motion and no JavaScript show the complete map at rest. The collection title names the native link, and the chapter emoji remain on the collection page.
 
 Multiverse All-Star Battlefront uses a two-panel comic cover with a 12–16rem artwork track so the whole card stays close to the other compact covers in height. The Winged Guardian and Shadow Duelist drawings come from `tools/masb-fighters.mjs`, with the project’s paper, ink, and vermilion palette. The diagonal gutter divides the fighters, and they shift slightly toward each other on hover or focus. The main title and shared directory arrow sit in the caption. Both covers stay static with reduced motion.
 

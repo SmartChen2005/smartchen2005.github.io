@@ -50,9 +50,8 @@ function preview(project) {
   return `<div class="project-preview project-preview--polaroid" data-project-effect="polaroid" aria-hidden="true"><div class="photo-print"><div class="photo-image">${image}<span class="photo-emulsion"></span></div><span class="photo-sheen"></span></div></div>`;
 }
 function vrCard(project) {
-  const icons = [...vr.assignments, vr.concept].map(({ icon }) => `<span class="vr-card-icon" aria-hidden="true">${icon}</span>`).join('');
-  const headset = '<div class="vr-card-headset" aria-hidden="true"><div class="vr-card-visor"><span class="vr-card-lens"></span><span class="vr-card-lens"></span></div></div>';
-  return `<li class="project-card project-tone--dark project-card--vr"><a class="directory-link" href="${project.href}" aria-labelledby="vr-card-title" draggable="false"><div class="vr-card-cover" data-project-effect="vr">${headset}<h2 id="vr-card-title">${project.title}</h2>${icons}</div></a></li>`;
+  const panels = '<span class="vr-card-panel"></span>'.repeat(4);
+  return `<li class="project-card project-tone--dark project-card--vr"><a class="directory-link" href="${project.href}" aria-labelledby="vr-card-title" draggable="false"><div class="vr-card-stage" data-project-effect="vr" aria-hidden="true"><div class="vr-card-map"><div class="vr-card-folds">${panels}</div></div></div><h2 id="vr-card-title">${project.title}</h2></a></li>`;
 }
 function battlefrontCard(project) {
   const panels = [matchup.player, matchup.opponent].map(({ drawing, name }) => `<div class="battlefront-panel battlefront-panel--${drawing}">${lineFighter(drawing, name)}</div>`).join('');
@@ -71,8 +70,8 @@ fs.writeFileSync(output, `<!doctype html>
 <meta name="theme-color" content="#061b62"><meta name="description" content="Games, tools, and experiments in interaction by Smart Chen.">
 <title>Projects — Smart Chen</title>${siteFavicon('../')}
 <link rel="preload" href="../assets/fonts/gotham/gotham-book.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261116-vr-optics">
-${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261116-vr-optics"></script></head>
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261116-vr-foldout">
+${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261116-vr-foldout"></script></head>
 <body class="projects-directory" id="top"><a class="projects-skip" href="#main">Skip to projects</a>
 ${header}
 <main class="projects-main" id="main"><div class="projects-intro"><h1 id="page-title">Projects</h1></div>

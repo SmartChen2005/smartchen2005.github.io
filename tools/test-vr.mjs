@@ -50,9 +50,12 @@ const projects = fs.readFileSync('dist/projects/index.html', 'utf8');
 const projectOrder = [...projects.matchAll(/class="directory-link" href="([^"]+)"/g)].map(([, href]) => href);
 assert.deepEqual(projectOrder.slice(2, 5), ['figures-of-speech/', 'vr-for-skill-learning/', 'ai-game-design/']);
 const chapterIcons = [...html.matchAll(/class="chapter-icon" aria-hidden="true">([^<]+)</g)].map(([, icon]) => icon);
-const cardIcons = [...projects.matchAll(/class="vr-card-icon" aria-hidden="true">([^<]+)</g)].map(([, icon]) => icon);
-assert.equal(chapterIcons.length, 4);
-assert.deepEqual(cardIcons, chapterIcons, 'Projects uses the four VR chapter icons in order');
+assert.deepEqual(chapterIcons, [...source.assignments, source.concept].map(({ icon }) => icon));
+const card = projects.match(/<a class="directory-link" href="vr-for-skill-learning\/"[\s\S]*?<\/a>/)?.[0] ?? '';
+assert(card.includes('aria-labelledby="vr-card-title"') && card.includes(`<h2 id="vr-card-title">${source.title}</h2>`));
+assert(card.includes('class="vr-card-stage" data-project-effect="vr" aria-hidden="true"'));
+assert.equal((card.match(/class="vr-card-panel"/g) ?? []).length, 4, 'The map uses four connected folds');
+assert(fs.existsSync('dist/projects/assets/vr-folding-map.webp'), 'The local map artwork ships with the cover');
 for (const assignment of source.assignments) {
   const studyItems = assignment.steps ?? assignment.journey ?? [];
   for (const item of studyItems) {

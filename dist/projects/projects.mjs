@@ -17,10 +17,7 @@ const effects = [...document.querySelectorAll('[data-project-effect]')].map(elem
   } else if (kind === 'device') {
     effect.surface = element.querySelector('img');
   } else if (kind === 'vr') {
-    effect.surface = element.querySelector('.vr-card-headset');
-    effect.layers = [...element.querySelectorAll('.vr-card-icon')].map((element, index) => ({
-      element, depth: [1.15, .75, .9, 1.3][index] ?? 1
-    }));
+    effect.surface = element.querySelector('.vr-card-map');
   } else {
     effect.layers = [...element.querySelectorAll('[data-star-depth]')].map(layer=>({element:layer,depth:Number(layer.dataset.starDepth)}));
   }
@@ -49,10 +46,8 @@ function render(effect) {
   } else if (effect.kind === 'device') {
     effect.surface.style.transform = `translate3d(${x.value*3}px,${y.value*2-active.value*3}px,0) rotateX(${-y.value*9}deg) rotateY(${x.value*12}deg) scale(1.18)`;
   } else if (effect.kind === 'vr') {
-    effect.surface.style.transform = `translate3d(${-x.value*8}px,${-y.value*5}px,0) rotateX(${-y.value*6}deg) rotateY(${x.value*7}deg)`;
-    for (const {element, depth} of effect.layers) {
-      element.style.transform = `translate3d(${x.value*12*depth}px,${y.value*9*depth-active.value*4}px,0)`;
-    }
+    effect.surface.style.transform = `translate3d(${x.value*6}px,${y.value*4-active.value*5}px,0) rotateX(${-y.value*12}deg) rotateY(${x.value*14}deg)`;
+    effect.surface.style.setProperty('--vr-map-curl', `${Math.abs(x.value)*28}deg`);
   } else {
     for (const layer of effect.layers) {
       layer.element.style.transform = `translate3d(${-x.value*layer.depth*22}px,${-y.value*layer.depth*14}px,0)`;
@@ -108,6 +103,7 @@ function clearEffect(effect) {
   for (const element of [effect.surface,effect.emulsion,effect.sheen,...effect.layers.map(layer=>layer.element)]) {
     element?.style.removeProperty('transform'); element?.style.removeProperty('opacity');
   }
+  if (effect.kind==='vr') effect.surface.style.removeProperty('--vr-map-curl');
 }
 function reset() {
   cancelAnimationFrame(frame); frame=0;
