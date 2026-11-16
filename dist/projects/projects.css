@@ -191,16 +191,76 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 
 .projects-main .project-card--vr { --projects-surface: #000; }
 .vr-card-cover {
+  position: relative;
+  isolation: isolate;
+  perspective: 42rem;
   display: grid;
   flex: 1;
   align-self: center;
-  width: min(100%, 23rem);
+  width: min(100%, 25rem);
   min-height: 14rem;
   grid-template-areas: "wheel cart" "title title" "camp tag";
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-rows: 1fr auto 1fr;
   place-items: center;
   gap: .375rem;
+}
+.vr-card-headset {
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: 105%;
+  height: min(83%, 14rem);
+  translate: -50% -50%;
+  pointer-events: none;
+}
+.vr-card-headset::before {
+  content: "";
+  position: absolute;
+  inset: 30% -2%;
+  border: 1px solid #333d50;
+  border-radius: 1rem;
+  background: linear-gradient(#2a3144, #101521 48%, #090a11 52%, #131925);
+}
+.vr-card-visor {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 1px solid #4b576e;
+  border-bottom-color: #252e40;
+  border-radius: 30% 30% 31% 31% / 42% 42% 46% 46%;
+  background: radial-gradient(ellipse at 50% 7%, #31394b, #141925 44%, #080c14 76%);
+  box-shadow: inset 0 0 0 4px #0a0d15, inset 0 0 0 5px #353e50;
+  mask-image: radial-gradient(ellipse 15% 26% at 50% 106%, transparent 96%, #000 100%);
+}
+.vr-card-lens {
+  position: relative;
+  overflow: hidden;
+  width: 40%;
+  height: 78%;
+  border: 1px solid #576b86;
+  border-radius: 49%;
+  background:
+    radial-gradient(ellipse at 45% 8%, #7689c050, transparent 57%),
+    radial-gradient(ellipse at 35% 70%, #254761, transparent 64%),
+    radial-gradient(ellipse at 60% 65%, #15192e, #090e1d 72%);
+  box-shadow: inset 0 0 0 4px #141e2f, inset 0 0 0 5px #52648880, inset 0 0 18px 7px #050914, 0 0 0 3px #070a10;
+}
+.vr-card-lens + .vr-card-lens {
+  background:
+    radial-gradient(ellipse at 55% 8%, #8992da50, transparent 57%),
+    radial-gradient(ellipse at 60% 70%, #323761, transparent 64%),
+    radial-gradient(ellipse at 40% 65%, #16192e, #090e1d 72%);
+}
+.vr-card-lens::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(114deg, transparent 35%, #aadcff54 47%, #d6efffa6 49%, #aadcff2b 55%, transparent 62%);
+  opacity: 0;
 }
 .vr-card-cover h2 {
   grid-area: title;
@@ -211,26 +271,49 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   line-height: 1.1;
   letter-spacing: -.045em;
   overflow-wrap: anywhere;
+  text-shadow: 0 2px 8px #000, 0 0 18px #000;
 }
 .vr-card-icon {
-  --vr-rise: -7px;
-  --vr-lean: -9deg;
-  font: clamp(2.25rem, 4vw, 3.625rem)/1.25 "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-  transition: transform 360ms cubic-bezier(.2,.7,.2,1);
+  font: clamp(2.625rem, 5vw, 4.375rem)/1.15 "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+  filter: drop-shadow(0 4px 7px #000b);
 }
-.vr-card-icon:nth-of-type(1) { grid-area: wheel; }
-.vr-card-icon:nth-of-type(2) { grid-area: cart; --vr-lean: 8deg; --vr-delay: 90ms; }
-.vr-card-icon:nth-of-type(3) { grid-area: camp; --vr-lean: 7deg; --vr-delay: 180ms; }
-.vr-card-icon:nth-of-type(4) { grid-area: tag; --vr-delay: 270ms; }
+.vr-card-icon:nth-of-type(1) { grid-area: wheel; --vr-entry-x: 25px; --vr-entry-y: 8px; --vr-entry-rotation: 36deg; --vr-delay: 80ms; }
+.vr-card-icon:nth-of-type(2) { grid-area: cart; --vr-entry-x: -34px; --vr-entry-y: 6px; --vr-entry-rotation: -10deg; --vr-delay: 160ms; }
+.vr-card-icon:nth-of-type(3) { grid-area: camp; --vr-entry-x: 8px; --vr-entry-y: 20px; --vr-entry-rotation: -8deg; --vr-delay: 230ms; }
+.vr-card-icon:nth-of-type(4) { grid-area: tag; --vr-entry-x: -20px; --vr-entry-y: 12px; --vr-entry-rotation: -28deg; --vr-delay: 290ms; }
 @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
-  .vr-card-cover.is-in-view .vr-card-icon { animation: vr-card-float 780ms ease-in-out var(--vr-delay, 0ms); }
-  .project-card--vr .directory-link:focus-visible .vr-card-icon { transform: translateY(var(--vr-rise)) rotate(var(--vr-lean)); }
-  @media (hover: hover) {
-    .project-card--vr .directory-link:hover .vr-card-icon { transform: translateY(var(--vr-rise)) rotate(var(--vr-lean)); }
-  }
+  .vr-card-cover.is-in-view .vr-card-visor { animation: vr-lenses-open 880ms cubic-bezier(.2,.8,.26,1); }
+  .vr-card-cover.is-in-view .vr-card-lens::after { animation: vr-lens-glint 960ms ease-out; }
+  .vr-card-cover.is-in-view .vr-card-lens + .vr-card-lens::after { animation-delay: 100ms; }
+  .vr-card-cover.is-in-view .vr-card-icon { animation: vr-icon-focus 790ms cubic-bezier(.23,.64,.28,1) var(--vr-delay) backwards; }
+  .vr-card-icon { transition: scale 300ms ease-out; }
+  .project-card--vr .directory-link:focus-visible .vr-card-icon { scale: 1.07; }
 }
-@keyframes vr-card-float {
-  50% { translate: 0 var(--vr-rise); rotate: var(--vr-lean); }
+@keyframes vr-lenses-open {
+  from { opacity: .54; scale: .96 .85; }
+  62% { opacity: 1; scale: 1.015 1.035; }
+  to { opacity: 1; scale: 1; }
+}
+@keyframes vr-lens-glint {
+  from { opacity: 0; transform: translateX(-60%); }
+  36% { opacity: .48; }
+  to { opacity: 0; transform: translateX(68%); }
+}
+@keyframes vr-icon-focus {
+  from {
+    opacity: .55;
+    translate: var(--vr-entry-x) var(--vr-entry-y);
+    rotate: var(--vr-entry-rotation);
+    scale: .8;
+    filter: blur(2px);
+  }
+  68% {
+    opacity: 1;
+    translate: calc(-.15 * var(--vr-entry-x)) calc(-.25 * var(--vr-entry-y));
+    rotate: calc(-.1 * var(--vr-entry-rotation));
+    scale: 1.075;
+  }
+  to { opacity: 1; translate: 0 0; rotate: 0deg; scale: 1; }
 }
 
 .projects-main .project-card--battlefront {
@@ -243,7 +326,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .battlefront-matchup {
   position: relative;
   flex: 1;
-  min-height: clamp(9rem, 17vw, 12rem);
+  min-height: clamp(12rem, 21vw, 16rem);
   overflow: hidden;
   border-radius: var(--projects-preview-radius) var(--projects-preview-radius) 0 0;
   border-bottom: 2px solid var(--battlefront-ink);
@@ -267,7 +350,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   top: 1%;
   left: 0;
   width: 49%;
-  height: 157%;
+  height: 135%;
   color: var(--battlefront-ink);
   fill: none;
   stroke: currentColor;
@@ -331,7 +414,8 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   .projects-main .photo-print { transform: translate(-50%, -50%) !important; border-color: CanvasText; box-shadow: none; }
   .projects-main .photo-emulsion, .projects-main .photo-sheen, .projects-main .project-preview--stars { display: none !important; }
   .projects-main .project-feature .directory-link:has([data-project-effect="stars"]) { background: Canvas; }
-  .battlefront-matchup { display: none; }
+  .battlefront-matchup, .vr-card-headset { display: none; }
+  .vr-card-cover h2 { text-shadow: none; }
 }
 @media print {
   html:has(.projects-directory), .projects-directory { background: #fff; }
@@ -346,5 +430,6 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   .projects-main .photo-print { transform: translate(-50%, -50%) !important; box-shadow: none; }
   .projects-main .photo-emulsion, .projects-main .photo-sheen, .projects-main .project-preview--stars { display: none !important; }
   .projects-main .project-feature .directory-link:has([data-project-effect="stars"]) { background: none; min-height: 0; }
-  .battlefront-matchup { display: none; }
+  .battlefront-matchup, .vr-card-headset { display: none; }
+  .vr-card-cover h2 { text-shadow: none; }
 }

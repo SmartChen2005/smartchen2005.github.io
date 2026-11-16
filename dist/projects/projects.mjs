@@ -16,6 +16,11 @@ const effects = [...document.querySelectorAll('[data-project-effect]')].map(elem
     effect.sheen = element.querySelector('.photo-sheen');
   } else if (kind === 'device') {
     effect.surface = element.querySelector('img');
+  } else if (kind === 'vr') {
+    effect.surface = element.querySelector('.vr-card-headset');
+    effect.layers = [...element.querySelectorAll('.vr-card-icon')].map((element, index) => ({
+      element, depth: [1.15, .75, .9, 1.3][index] ?? 1
+    }));
   } else {
     effect.layers = [...element.querySelectorAll('[data-star-depth]')].map(layer=>({element:layer,depth:Number(layer.dataset.starDepth)}));
   }
@@ -43,6 +48,11 @@ function render(effect) {
     effect.sheen.style.transform = `translate(${x.value*18}%,${y.value*6}%)`;
   } else if (effect.kind === 'device') {
     effect.surface.style.transform = `translate3d(${x.value*3}px,${y.value*2-active.value*3}px,0) rotateX(${-y.value*9}deg) rotateY(${x.value*12}deg) scale(1.18)`;
+  } else if (effect.kind === 'vr') {
+    effect.surface.style.transform = `translate3d(${-x.value*8}px,${-y.value*5}px,0) rotateX(${-y.value*6}deg) rotateY(${x.value*7}deg)`;
+    for (const {element, depth} of effect.layers) {
+      element.style.transform = `translate3d(${x.value*12*depth}px,${y.value*9*depth-active.value*4}px,0)`;
+    }
   } else {
     for (const layer of effect.layers) {
       layer.element.style.transform = `translate3d(${-x.value*layer.depth*22}px,${-y.value*layer.depth*14}px,0)`;
@@ -127,23 +137,17 @@ for (const effect of effects) {
   effect.link.addEventListener('pointercancel',()=>leave(effect));
   effect.link.addEventListener('focusout',()=>leave(effect));
 }
-const vrCover=document.querySelector('.vr-card-cover');
 const observer=new IntersectionObserver(entries=>{
   for (const entry of entries) {
-    if (entry.target===vrCover) {
-      if (entry.isIntersecting) {
-        if (!reducedMotion.matches && !forcedColors.matches) vrCover.classList.add('is-in-view');
-        observer.unobserve(vrCover);
-      }
-      continue;
-    }
     const effect=effects.find(item=>item.element===entry.target);
     effect.visible=entry.isIntersecting;
+    if (effect.kind==='vr' && entry.intersectionRatio>=.35 && !reducedMotion.matches && !forcedColors.matches) {
+      effect.element.classList.add('is-in-view');
+    }
     if (!effect.visible) {clearEffect(effect); render(effect);}
   }
-});
+},{threshold:[0,.35]});
 effects.forEach(effect=>observer.observe(effect.element));
-if (vrCover) observer.observe(vrCover);
 window.addEventListener('pointerup',release,{passive:true});
 window.addEventListener('pointercancel',release,{passive:true});
 window.addEventListener('blur',reset);
