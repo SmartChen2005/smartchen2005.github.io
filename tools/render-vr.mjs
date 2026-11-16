@@ -82,9 +82,22 @@ const html = `<!doctype html>
   ${siteFavicon('../../')}
   <title>${e(content.title)} | Smart Chen</title>
   <link rel="canonical" href="https://smartchen2005.github.io/projects/vr-for-skill-learning/">
-  <link rel="stylesheet" href="vr.css?v=chapter-scenes">
+  <link rel="stylesheet" href="vr.css?v=stereo-entry">
   <link rel="stylesheet" href="vr-scenes.css?v=3">
   ${projectHeaderAssets('../../')}
+  <script>
+    window.addEventListener('pagereveal', ({ viewTransition }) => {
+      const activation = window.navigation?.activation;
+      if (!viewTransition?.types || activation?.navigationType !== 'push' || !activation.from?.url) return;
+      if (!matchMedia('(prefers-reduced-motion: no-preference) and (forced-colors: none)').matches) return;
+
+      const from = new URL(activation.from.url);
+      const projects = new URL('../', location.href);
+      if (from.origin === projects.origin && [projects.pathname, projects.pathname + 'index.html'].includes(from.pathname)) {
+        viewTransition.types.add('vr-project-entry');
+      }
+    });
+  </script>
   <script type="module" src="vr.mjs?v=chapter-scenes"></script>
 </head>
 <body>

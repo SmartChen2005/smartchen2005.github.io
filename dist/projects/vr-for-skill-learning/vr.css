@@ -69,3 +69,34 @@ button{color:inherit}svg{display:block;max-width:100%}p,h1,h2,h3,figure{margin:0
   :root{--paper:Canvas;--ink:CanvasText;--muted:CanvasText;--rule:GrayText;--blue:LinkText;--wash:Canvas;--orange:Highlight;scrollbar-color:auto}
   a:focus-visible,button:focus-visible,summary:focus-visible{outline-color:Highlight}button[aria-pressed=true]{outline:1px solid Highlight;outline-offset:-1px}
 }
+
+/* Two optical openings merge into the destination's normal field of view. */
+@property --vr-entry-aperture {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+  html:active-view-transition-type(vr-project-entry)::view-transition {
+    background: #0a111f;
+  }
+  html:active-view-transition-type(vr-project-entry)::view-transition-old(root) {
+    animation: vr-entry-depart 430ms cubic-bezier(.21,.62,.33,1) both;
+  }
+  html:active-view-transition-type(vr-project-entry)::view-transition-new(root) {
+    mask-image:
+      radial-gradient(ellipse var(--vr-entry-aperture) calc(var(--vr-entry-aperture) * .82) at 32% 50%, #000 96%, transparent 100%),
+      radial-gradient(ellipse var(--vr-entry-aperture) calc(var(--vr-entry-aperture) * .82) at 68% 50%, #000 96%, transparent 100%);
+    animation: vr-entry-open 620ms ease-out both;
+  }
+}
+@keyframes vr-entry-depart {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.08); }
+}
+@keyframes vr-entry-open {
+  0% { --vr-entry-aperture: 1vmin; opacity: 0; transform: scale(1.06); }
+  25% { --vr-entry-aperture: 17vmin; opacity: 1; }
+  53% { --vr-entry-aperture: 37vmin; }
+  100% { --vr-entry-aperture: 110vmax; opacity: 1; transform: scale(1); }
+}
