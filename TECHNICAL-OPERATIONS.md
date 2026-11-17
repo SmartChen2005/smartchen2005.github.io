@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-17 — Spread the Polaroid prints across a 3D wave
+
+- Keep the center print's size and spread smaller neighbors to either side along a dipping and rising path. Maintain space between the two lead prints at the depth handoff. Edge thumbnails remain readable and open the same viewer.
+- Regenerate with `node tools/render-gallery.mjs`. Run site validation and the Stills browser checks for thumbnail visibility, handoff clearance and full center prints.
+
 ### 2026-11-17 — Bring the central Polaroid print forward in 3D
 
 - Compress vertical spacing and rotate the photos around the helix as scrolling brings them toward the front. The center print faces the reader while adjacent prints turn away and recede. Keyboard focus brings its target to the front, and reduced motion keeps the prints forward-facing.

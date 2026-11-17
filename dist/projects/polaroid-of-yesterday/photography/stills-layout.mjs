@@ -1,14 +1,14 @@
-// The prints follow an elliptical helix. The viewer travels along its axis.
 export const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value));
 export const spiralPortraitScale = 1.32;
 
 export function spiralMetrics(width, height, count) {
   const printWidth = Math.min(450, width * .55, height * .90);
+  const span = Math.min(width * .43, 1050);
   return {
     printWidth,
-    radius: Math.min(width * .24, printWidth * .68),
-    depth: printWidth * 1.28,
-    step: printWidth * .46 + 16,
+    span,
+    shoulder: Math.min(printWidth * .67, span * .84),
+    amplitude: Math.min(height * .18, printWidth * .42),
     distance: Math.max(height, (count - 1) * clamp(printWidth * .90, 240, 390)),
     perspective: width <= 760 ? 680 : 920
   };
@@ -17,23 +17,36 @@ export function spiralMetrics(width, height, count) {
 export function spiralPose(index, position, height, metrics, rotate) {
   const offset = index - position;
   const stagger = Math.sin(index * 2.39);
-  const center = height * .045;
-  const { printWidth, radius, depth, step } = metrics;
+  const { printWidth, span, shoulder, amplitude, perspective } = metrics;
   if (!rotate) {
-    return { x: stagger * printWidth * .13, y: offset * (printWidth * .76 + 22) - center,
+    return { x: stagger * printWidth * .13, y: offset * (printWidth * .76 + 22) - height * .045,
       z: 0, rx: 0, ry: 0, rz: 0, width: printWidth, opacity: 1 };
   }
-  // As a print approaches the center, it follows the arc around to face forward.
-  const angle = offset * .9;
-  const variation = (stagger - Math.sin(position * 2.39)) * step * .13;
-  return { x: Math.sin(angle) * radius,
-    y: offset * step + variation - center,
-    z: (Math.cos(angle) - 1) * depth,
-    rx: -Math.sin(angle) * 5,
-    ry: clamp(angle * 180 / Math.PI, -90, 90),
-    rz: stagger * Math.min(1, Math.abs(offset)) * 6,
-    width: printWidth,
-    opacity: clamp((1.48 - Math.abs(angle)) / .28) };
+  const distance = Math.abs(offset);
+  const side = Math.sign(offset);
+  const inner = clamp(distance);
+  // Give the two lead prints separate screen space before their depth order switches.
+  const across = shoulder * (1 - (1 - inner) ** 2.3) + (span - shoulder) * clamp((distance - 1) / 2.8);
+  const wavePhase = Math.min(distance / 1.22, 2) * Math.PI;
+  const lift = (1 - Math.cos(wavePhase)) * amplitude;
+  const edge = clamp(distance - 2);
+  const edgeDrop = edge ** 2 * (3 - 2 * edge) * amplitude * .52;
+  const variation = (stagger * inner + Math.sin(offset * .92)) * amplitude * .085;
+  const recession = 1 - Math.exp(-distance * 1.3);
+  const z = -printWidth * .75 * recession;
+  const depthScale = 1 - z / perspective;
+  const scale = .23 + .77 * Math.exp(-.52 * distance ** 2);
+  const turn = recession * 60 * (1 - .78 * clamp((distance - 1) / 2.1));
+  return {
+    x: side * across * depthScale,
+    y: (height * .10 - lift + edgeDrop + variation) * depthScale,
+    z,
+    rx: Math.sin(offset * 1.75) * -8,
+    ry: side * turn,
+    rz: stagger * inner * 7,
+    width: printWidth * scale * depthScale,
+    opacity: clamp((3.8 - distance) / .65)
+  };
 }
 
 export function galleryLayout(width, height, photos, viewportWidth = width, options = {}) {

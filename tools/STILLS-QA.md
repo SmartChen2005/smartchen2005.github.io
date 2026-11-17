@@ -2,7 +2,7 @@
 
 The current exhibition uses the 17 files listed in `polaroid-exhibition-photos.json`, ordered by the modification times recorded when the supplied folder was imported. Keep the originals in `dist/gallery/assets/polaroid-exhibition/`. Run `python tools/prepare-gallery-images.py` and `node tools/render-gallery.mjs` to regenerate the responsive copies and the page.
 
-The static checks cover the shared order, original links, and front-facing center pose on the compact 3D helix. The Chrome suite measures each centered photo's stage bounds and click coverage, verifies receding and tilted side prints, and tests scroll-linked rotation, stillness at rest, and front-facing prints with reduced motion. It checks larger portraits in Spiral and Index. At 2508px it also checks that Index aligns the four 16:9 photographs in the third row even when three of them load smaller responsive previews.
+The static checks cover the shared order, original links, and dip–rise–dip profile of the 3D wave. Chrome checks each centered photo's bounds and click coverage, seven visible photos mid-wave, readable and selectable thumbnails, and clearance between the lead prints around their depth handoff. It also checks stillness at rest, front-facing vertical scrolling with reduced motion, the larger portraits, and a 2508px Index row using mixed preview resolutions.
 
 # Combined Gallery exhibition — 2026-11-03 (archived)
 

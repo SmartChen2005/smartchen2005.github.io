@@ -33,12 +33,16 @@ const checkSpiral = async page => {
     const space = document.querySelector('.exhibition-space');
     const prints = [...stage.querySelectorAll('.print')];
     const start = scrollY;
+    const scrollToPosition = async position => {
+      window.scrollTo({ top: start + space.getBoundingClientRect().height * position / (prints.length - 1), behavior: 'instant' });
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    };
     const results = [];
     for (let i = 0; i < prints.length; i++) {
-      window.scrollTo({ top: start + space.getBoundingClientRect().height * i / (prints.length - 1), behavior: 'instant' });
-      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      await scrollToPosition(i);
       const front = prints[i];
-      const r = front.querySelector('img').getBoundingClientRect();
+      const image = front.querySelector('img');
+      const r = image.getBoundingClientRect();
       const stageBox = stage.getBoundingClientRect();
       const pose = new DOMMatrix(front.style.transform);
       let samples = 0;
@@ -49,14 +53,43 @@ const checkSpiral = async page => {
         }
       }
       results.push({ index: i, facing: pose.m33, z: pose.m43, samples,
+        height: image.clientHeight, portrait: front.dataset.orientation === 'portrait',
         fits: r.left >= 0 && r.right <= innerWidth && r.top >= stageBox.top - 1 && r.bottom <= innerHeight + 1 });
     }
+    await scrollToPosition(6);
+    const visible = prints.filter(print => Number(print.style.opacity) >= .95).map(print => {
+      const r = print.querySelector('img').getBoundingClientRect();
+      const center = r.left + r.width / 2;
+      const clear = document.elementFromPoint(center, r.top + r.height / 2)?.closest('.print') === print;
+      return { center, width: r.width, clear, fits: r.left >= 0 && r.right <= innerWidth };
+    });
+    const handoff = [];
+    for (const i of [0, 5, 12, 13, 15]) {
+      for (const offset of [.46, .5, .54]) {
+        await scrollToPosition(i + offset);
+        const a = prints[i].querySelector('img').getBoundingClientRect();
+        const b = prints[i + 1].querySelector('img').getBoundingClientRect();
+        handoff.push({ i, offset, gap: b.left - a.right });
+      }
+    }
     window.scrollTo({ top: start, behavior: 'instant' });
-    return results;
+    return { centered: results, visible, handoff };
   });
-  for (const state of states) {
+  for (const state of states.centered) {
     assert(state.facing > .99 && state.z > -1 && state.fits && state.samples === 9,
       `The centered print is fully visible and clickable at ${page.viewportSize().width}px: ${JSON.stringify(state)}`);
+  }
+  for (const portrait of states.centered.filter(state => state.portrait)) {
+    assert(Math.abs(portrait.height / states.centered[0].height - 1.32) < .03, 'Centered portraits retain their larger display size');
+  }
+  const { visible, handoff } = states;
+  assert.equal(visible.length, 7, 'The middle of the wave shows six surrounding prints');
+  assert(visible.every((item, i) => item.fits && item.clear && (!i || item.center > visible[i - 1].center)),
+    `Thumbs are visible and flow across the viewport in order at ${page.viewportSize().width}px: ${JSON.stringify(visible)}`);
+  assert(visible[0].width < visible[3].width / 2 && visible[6].width < visible[3].width / 2);
+  assert(visible[0].width > 20 && visible[6].width > 20, 'Outer thumbnails stay readable rather than turning edge-on');
+  for (const state of handoff) {
+    assert(state.gap >= 0, `Lead prints are separated at the layer handoff at ${page.viewportSize().width}px: ${JSON.stringify(state)}`);
   }
 };
 (async () => {
@@ -79,13 +112,6 @@ const checkSpiral = async page => {
     await page.screenshot({ path: path.join(output, 'combined-desktop-title.png') });
     await enter(page);
     await checkSpiral(page); await settle(page);
-    const portraitScales = await page.locator('.print[data-orientation=portrait]').evaluateAll(prints => {
-      const ref = Number(document.querySelector('.exhibition').dataset.referenceRatio);
-      const landscape = document.querySelector('.print').querySelector('img');
-      return prints.map(print => print.querySelector('img').clientHeight / (landscape.clientWidth * ref));
-    });
-    assert(portraitScales.length > 0 && portraitScales.every(scale => scale > 1.29 && scale < 1.35),
-      'Spiral portrait height grows by about 32%');
     const side = await page.locator('.print').nth(1).evaluate(print => {
       const pose = new DOMMatrix(print.style.transform);
       return { facing: pose.m33, z: pose.m43 };
@@ -95,11 +121,17 @@ const checkSpiral = async page => {
     const before = await translation(firstPrint);
     await page.mouse.wheel(0, 650); await settle(page);
     const after = await translation(firstPrint);
-    assert.notEqual(after.y, before.y, 'Native scroll advances the helix');
-    assert.notEqual(after.x, before.x, 'Scroll also turns the helix');
+    assert.notEqual(after.y, before.y, 'Native scroll advances the wave');
+    assert.notEqual(after.x, before.x, 'The wave moves across the stage');
     await settle(page);
-    assert.deepEqual(await translation(firstPrint), after, 'The helix rests when scrolling stops');
+    assert.deepEqual(await translation(firstPrint), after, 'The wave rests when scrolling stops');
+    await page.locator('.print-link').nth(6).focus(); await settle(page);
+    await page.locator('.print-link').nth(6).evaluate(link => link.blur());
     await page.screenshot({ path: path.join(output, 'combined-desktop-spiral.png') });
+    await page.locator('.print-link').nth(9).click();
+    assert.equal(await page.locator('#viewer-counter').textContent(), '10 / 17', 'Outer thumbnails open the corresponding photo');
+    await page.keyboard.press('Escape');
+    await page.locator('body > .gallery-header').waitFor({ state: 'attached' });
 
     await page.locator('button[data-view=gallery]').click(); await settle(page);
     assert(page.url().includes('view=gallery'));
@@ -267,6 +299,6 @@ const checkSpiral = async page => {
     assert.equal(await navigation.locator('.gallery-main h2 a[href="trauma-induced-dissociative-amnesia/"]').count(), 1);
     assert.equal(await navigation.locator('.stills-feature').count(), 0);
     assert.equal(errors.length, 0, errors.join('\n'));
-    console.log('Passed: 17 chronologically ordered images; Gallery shell; front-facing 3D helix and unobscured central prints; larger portraits; Index order and non-overlap; category-only viewer; ratio/arrows/Escape/focus/scroll lock; eight viewport sizes; 44px controls; last-image keyboard access; reduced motion/forced colors/offline; footer; legacy query/hash redirect; no-JS originals; image error/retry.');
+    console.log('Passed: 17 chronologically ordered images; seven visible prints at mid-wave; uninterrupted layer handoff; clickable outer thumbnails; centered print dimensions and portrait sizing; Index, viewer, keyboard and reduced motion across eight viewport sizes; no-JS originals and image error recovery.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exit(1); });

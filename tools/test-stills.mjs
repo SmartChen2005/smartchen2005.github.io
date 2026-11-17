@@ -18,26 +18,28 @@ for (const photo of photos) {
 }
 for (const [w,h] of [[1440,1000],[1920,1080],[1024,768],[768,1024],[390,844],[320,568],[844,390]]) {
   const m = spiralMetrics(w,h,photos.length);
-  assert(m.step < m.printWidth * .67 + 18, 'The new helix has a tighter vertical pitch');
   for (const position of [0, .5, 4, 9.5, photos.length - 1]) {
     const poses = photos.map((_, i) => spiralPose(i, position, h, m, true));
     for (const p of poses) {
       assert(Object.values(p).every(Number.isFinite));
-      assert(Math.abs((p.x / m.radius) ** 2 + (p.z / m.depth + 1) ** 2 - 1) < 1e-8, 'Photographs occupy a helix');
       assert(p.z < m.perspective, 'Every image stays in front of the camera plane');
     }
     if (Number.isInteger(position)) {
       const center = poses[position];
-      assert(center.x === 0 && center.z === 0 && center.ry === 0 && center.opacity === 1);
+      assert(center.x === 0 && center.z === 0 && center.ry === 0 && center.opacity === 1 && center.width === m.printWidth);
       const adjacent = poses[position === 0 ? 1 : position - 1];
-      assert(Math.abs(adjacent.ry) > 45 && adjacent.z < -m.depth * .3, 'Side prints rotate away and recede');
+      assert(Math.abs(adjacent.ry) > 40 && adjacent.z < 0 && adjacent.y < center.y, 'Side prints rise and recede');
     }
-    assert(poses.filter(p => p.opacity > 0).length <= 4, 'Far turns of the helix cannot compete with the front arc');
-    assert(poses.slice(1).every((p, i) => p.y > poses[i].y), 'The helix preserves chronological order');
     const pose=poses[3], target={...pose,z:0,ry:0,rz:0};
     assert.deepEqual(interpolatePose(pose,target,0),pose);
     assert.deepEqual(interpolatePose(pose,target,1),target);
   }
+  const wave = [1, 2, 3, 4, 5, 6, 7].map(i => spiralPose(i, 4, h, m, true));
+  const projectedY = p => p.y / (1 - p.z / m.perspective);
+  assert(wave.every(p => p.opacity === 1), 'Seven photos appear around a centered print');
+  assert(projectedY(wave[3]) > projectedY(wave[1]) && projectedY(wave[3]) > projectedY(wave[5]) &&
+    projectedY(wave[0]) > projectedY(wave[1]) && projectedY(wave[6]) > projectedY(wave[5]), 'The wave dips at the center and at its ends');
+  assert(wave[0].width < wave[2].width && wave[6].width < wave[4].width, 'Distant prints become thumbnails');
   const fixed = spiralPose(0, 0, h, m, false);
   const fixedScrolled = spiralPose(0, 4, h, m, false);
   assert(fixedScrolled.x === fixed.x && fixedScrolled.ry === 0 && fixedScrolled.y < fixed.y,
@@ -66,4 +68,4 @@ for (const [,ref] of html.matchAll(/(?:src|href)="([^"]+)"/g)) {
   if (/^(?:#|https?:|data:|mailto:)/.test(ref)) continue;
   assert(fs.existsSync(new URL(ref,route)),`Missing local dependency: ${ref}`);
 }
-console.log('Passed: local assets and original links; media labels; true helix geometry; camera safety; continuous pose interpolation; uncropped, non-overlapping galleries across seven viewports.');
+console.log('Passed: original links and photo order; wave shape, receding thumbnails and interpolation; uncropped Index and reduced motion across seven viewports.');

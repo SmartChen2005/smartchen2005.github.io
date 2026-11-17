@@ -1,4 +1,4 @@
-import { clamp, spiralMetrics, spiralPose, spiralPortraitScale, galleryLayout, interpolatePose } from './stills-layout.mjs?rev=20261117-front-facing';
+import { clamp, spiralMetrics, spiralPose, spiralPortraitScale, galleryLayout, interpolatePose } from './stills-layout.mjs?rev=20261117-photo-wave';
 
 const figures = [...document.querySelectorAll('.print')];
 // The semantic HTML is the collection source at runtime. No fetch or WebGL is
@@ -79,9 +79,9 @@ function paint(pose, index) {
   // Keep pointer hits and paint order aligned when projected prints touch.
   if (embedded) figure.style.zIndex = String(Math.round(pose.z));
   figure.style.opacity = String(pose.opacity);
-  figure.style.pointerEvents = visible ? 'auto' : 'none';
+  if (!embedded) figure.style.pointerEvents = visible ? 'auto' : 'none';
   figure.dataset.visible = String(visible);
-  if (Math.abs(pose.y) < height * 1.2) figure.querySelector('img').loading = 'eager';
+  if (visible) figure.querySelector('img').loading = 'eager';
 }
 
 function render(time) {
@@ -130,7 +130,7 @@ function reflectMode() {
   document.body.dataset.view = mode;
   switches.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === mode)));
   document.querySelector('#view-hint').textContent = mode === 'spiral'
-    ? 'Memory spiral. Select an image to view.' : 'Image index. Select an image to view.';
+    ? 'Scroll through the photo wave. Select an image to view.' : 'Image index. Select an image to view.';
 }
 function switchMode(next) {
   if (mode === next) return;
@@ -150,7 +150,7 @@ function switchMode(next) {
   history.replaceState(null, '', url);
   transition = motionPreference.matches ? null : { from, start: performance.now() };
   document.body.dataset.transitioning = String(Boolean(transition));
-  document.querySelector('#view-status').textContent = `${mode === 'spiral' ? 'Memory spiral' : 'Index'} view. ${photos.length} images.`;
+  document.querySelector('#view-status').textContent = `${mode === 'spiral' ? 'Spiral' : 'Index'} view. ${photos.length} images.`;
   schedule();
 }
 
