@@ -2,7 +2,7 @@
 
 The current exhibition uses the 17 files listed in `polaroid-exhibition-photos.json`, ordered by the modification times recorded when the supplied folder was imported. Keep the originals in `dist/gallery/assets/polaroid-exhibition/`. Run `python tools/prepare-gallery-images.py` and `node tools/render-gallery.mjs` to regenerate the responsive copies and the page.
 
-The static checks cover the shared order, original links and larger print sizes. The Chrome suite below also samples projected print overlap throughout the spiral at each of its seven viewport sizes.
+The static checks cover the shared order, original links, projected print sizes and compact spiral spacing. The Chrome suite samples projected print overlap and verifies scroll-linked rotation, stillness at rest, and the fixed helix angle with reduced motion. At 2508px it also checks that Index aligns the four 16:9 photographs in the third row even when three of them load smaller responsive previews.
 
 # Combined Gallery exhibition — 2026-11-03 (archived)
 

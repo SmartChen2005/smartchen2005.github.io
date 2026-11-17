@@ -19,15 +19,27 @@ for (const photo of photos) {
 for (const [w,h] of [[1440,1000],[1920,1080],[1024,768],[768,1024],[390,844],[320,568],[844,390]]) {
   const m = spiralMetrics(w,h,photos.length);
   const previousWidth = Math.max(125, Math.min(290, 290 * w / 1300));
-  assert(m.printWidth > previousWidth, 'Spiral prints are larger at each supported viewport');
+  assert(m.printWidth > previousWidth, 'Spiral preserves the larger prints');
+  assert(m.step < (m.printWidth * .89 + 26) * .8, 'Spiral closes up the vertical spacing by at least 20%');
+  const first = spiralPose(0, 0, w, h, photos.length);
+  const scrolled = spiralPose(0, .5, w, h, photos.length);
+  const reduced = spiralPose(0, .5, w, h, photos.length, { rotate: false });
+  assert.notEqual(scrolled.x, first.x, 'Scrolling rotates the spiral');
+  assert.equal(reduced.x, first.x, 'Reduced motion freezes the angle');
+  assert(Math.abs(reduced.y / (1 - reduced.z / m.perspective) - scrolled.y / (1 - scrolled.z / m.perspective)) < 1e-8,
+    'Reduced motion preserves vertical scrolling');
   for (const progress of [0,.25,.5,.75,1]) {
     const poses = photos.map((_,i) => spiralPose(i,progress,w,h,photos.length));
     for (const p of poses) {
       assert(Object.values(p).every(Number.isFinite));
-      assert(Math.abs((p.x/m.radius)**2 + (p.z/(m.radius*.7))**2 - 1) < 1e-8, 'Photographs occupy a genuine helix, with circular x/z coordinates');
+      assert(Math.abs((p.x/m.radius)**2 + (p.z/(m.radius*.55))**2 - 1) < 1e-8, 'Photographs occupy a helix');
       assert(p.z < m.perspective, 'Every image stays in front of the camera plane');
+      assert(Math.abs(p.width / (1 - p.z / m.perspective) - m.printWidth) < 1e-8, 'Distance alone does not resize prints');
     }
-    for (let i=1;i<poses.length;i++) assert(poses[i].y > poses[i-1].y, 'Helix advances on the vertical axis');
+    for (let i=1;i<poses.length;i++) {
+      const projectedY = p => p.y / (1 - p.z / m.perspective);
+      assert(Math.abs(projectedY(poses[i]) - projectedY(poses[i - 1]) - m.step) < 1e-8, 'The projected helix advances at a consistent pitch');
+    }
     const pose=poses[3], target={...pose,z:0,ry:0,rz:0};
     assert.deepEqual(interpolatePose(pose,target,0),pose);
     assert.deepEqual(interpolatePose(pose,target,1),target);

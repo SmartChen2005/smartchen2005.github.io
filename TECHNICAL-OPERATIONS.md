@@ -105,6 +105,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-17 — Align Polaroid Index photos and animate the tighter spiral
+
+- Size Index previews from their frames so the responsive source resolution cannot change their display size. Preserve each image's aspect ratio.
+- Tighten the helix and let it turn with native scrolling. Keep projected print widths consistent through depth changes and hold the helix angle fixed for reduced motion.
+- Regenerate with `node tools/render-gallery.mjs`. Check the wide Index with small previews, the Spiral geometry and reduced motion in Chrome, and run `node tools/validate-site.mjs`.
+
 ### 2026-11-17 — Replace the Polaroid exhibition photographs and open up the spiral
 
 - Import the 17 photographs supplied in the local `New Folder` on November 17, 2026. `tools/polaroid-exhibition-photos.json` records their modification times and order. The Gallery page renders that order in Spiral, Index and the viewer.

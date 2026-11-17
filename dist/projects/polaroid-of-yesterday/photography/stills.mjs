@@ -1,4 +1,4 @@
-import { clamp, spiralMetrics, spiralPose, galleryLayout, interpolatePose } from './stills-layout.mjs?rev=20261117-spaced-spiral';
+import { clamp, spiralMetrics, spiralPose, galleryLayout, interpolatePose } from './stills-layout.mjs?rev=20261117-spiral-motion';
 
 const figures = [...document.querySelectorAll('.print')];
 // The semantic HTML is the collection source at runtime. No fetch or WebGL is
@@ -56,7 +56,8 @@ function updateViewport() {
 
 function poseAt(index, scrollPosition) {
   if (mode === 'spiral') {
-    const pose = spiralPose(index, clamp(scrollPosition / metrics.distance), width, height, photos.length);
+    const pose = spiralPose(index, clamp(scrollPosition / metrics.distance), width, height, photos.length,
+      { rotate: !motionPreference.matches });
     if (embedded && photos[index].height > photos[index].width) pose.width *= referenceRatio * photos[index].width / photos[index].height;
     return pose;
   }

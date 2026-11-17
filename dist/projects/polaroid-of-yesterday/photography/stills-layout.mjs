@@ -1,28 +1,27 @@
 // Real world-space positions: x/z describe a circle; y advances along its axis.
 // Both views use the same photographs and the same perspective camera.
 export const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value));
-const sizes = [.98, .77, .91, 1.12, .81, 1.02, .88, .76, 1.06, .83];
-
 export function spiralMetrics(width, height, count) {
   const printWidth = Math.min(410, width * .45, height * 1.12);
-  const radius = Math.min(390, width * .215);
-  // Scale the vertical pitch with the prints so enlarging them leaves space
-  // between photographs, including when both project onto the same side.
-  const step = printWidth * .89 + 26;
+  const radius = Math.min(275, width * .175);
+  const step = printWidth * .67 + 18;
   const end = Math.max(0, (count - 1) * step);
-  const start = Math.min(end, step * .52, height * .13);
+  const start = Math.min(end, step * .46, height * .16);
   return { radius, step, start, end, printWidth,
     distance: Math.max(height, (end - start) * 1.55), perspective: width > 1600 ? 1800 : width <= 760 ? 1000 : 1500 };
 }
 
-export function spiralPose(index, progress, width, height, count) {
+export function spiralPose(index, progress, width, height, count, { rotate = true } = {}) {
   const m = spiralMetrics(width, height, count);
-  const angle = 1.38 + index * .99;
+  const angle = 1.38 + index * .99 - (rotate ? progress * 2.4 : 0);
+  const z = Math.sin(angle) * m.radius * .55;
+  // Counter the perspective change in print width and vertical spacing.
+  const depthScale = 1 - z / m.perspective;
+  const y = index * m.step - (m.start + progress * (m.end - m.start)) - height * .06;
   return { x: Math.cos(angle) * m.radius,
-    y: index * m.step - (m.start + progress * (m.end - m.start)),
-    z: Math.sin(angle) * m.radius * .70,
-    rx: Math.sin(angle) * 3, ry: Math.cos(angle) * -16, rz: 0,
-    width: m.printWidth * sizes[index % sizes.length] };
+    y: y * depthScale,
+    z, rx: Math.sin(angle) * 3, ry: Math.cos(angle) * -11, rz: 0,
+    width: m.printWidth * depthScale };
 }
 
 export function galleryLayout(width, height, photos, viewportWidth = width, options = {}) {

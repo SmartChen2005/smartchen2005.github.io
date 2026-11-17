@@ -9,6 +9,10 @@ const route = '/gallery/trauma-induced-dissociative-amnesia/';
 const url = origin + route;
 const ready = page => page.waitForFunction(() => document.body.classList.contains('is-ready') && document.querySelector('.print').style.transform);
 const settle = page => page.waitForTimeout(350);
+const translation = print => print.evaluate(e => {
+  const matrix = new DOMMatrix(e.style.transform);
+  return { x: matrix.m41, y: matrix.m42, z: matrix.m43 };
+});
 const enter = async page => {
   await page.locator('.exhibition').evaluate(e => window.scrollTo({ top: e.getBoundingClientRect().top + scrollY - document.querySelector('.gallery-header').offsetHeight, behavior: 'instant' }));
   await settle(page);
@@ -74,19 +78,27 @@ const checkSpiralSpacing = async page => {
     await page.screenshot({ path: path.join(output, 'combined-desktop-title.png') });
     await enter(page);
     await checkSpiralSpacing(page); await settle(page);
-    const before = await page.locator('.print').first().getAttribute('style');
-    await page.mouse.wheel(0, 650); await settle(page);
-    assert.notEqual(await page.locator('.print').first().getAttribute('style'), before, 'Native scroll advances the helix');
-    await page.screenshot({ path: path.join(output, 'combined-desktop-spiral.png') });
     const portraitScales = await page.locator('.print').evaluateAll(async es => {
       const {spiralPose} = await import('/projects/polaroid-of-yesterday/photography/stills-layout.mjs');
       const ref = Number(document.querySelector('.exhibition').dataset.referenceRatio);
-      return es.filter(e => e.querySelector('img').height > e.querySelector('img').width).map(e => {
+      return es.filter(e => {
+        const i = e.querySelector('img');
+        return Number(i.getAttribute('height')) > Number(i.getAttribute('width'));
+      }).map(e => {
         const i=e.querySelector('img'), index=Number(e.dataset.index), expected=spiralPose(index,0,document.documentElement.clientWidth,document.querySelector('.installation').clientHeight,es.length).width*ref*Number(i.getAttribute('width'))/Number(i.getAttribute('height'));
         return Math.abs(parseFloat(e.style.width)-expected)<.002;
       });
     });
     assert(portraitScales.length > 0 && portraitScales.every(Boolean), 'Spiral portraits use the landscape short-edge scale');
+    const firstPrint = page.locator('.print').first();
+    const before = await translation(firstPrint);
+    await page.mouse.wheel(0, 650); await settle(page);
+    const after = await translation(firstPrint);
+    assert.notEqual(after.y, before.y, 'Native scroll advances the helix');
+    assert.notEqual(after.x, before.x, 'Scroll also turns the helix');
+    await settle(page);
+    assert.deepEqual(await translation(firstPrint), after, 'The helix rests when scrolling stops');
+    await page.screenshot({ path: path.join(output, 'combined-desktop-spiral.png') });
 
     await page.locator('button[data-view=gallery]').click(); await settle(page);
     assert(page.url().includes('view=gallery'));
@@ -94,11 +106,14 @@ const checkSpiralSpacing = async page => {
     assert.deepEqual(await page.locator('.print').evaluateAll(es => es.map(e => e.id)), order, 'Switching views preserves chronological order');
     assert(await page.locator('.print').evaluateAll(es => es.every(e => e.style.opacity === '1' && /,\s*0(?:\.0+)?px\)/.test(e.style.transform))), 'Index has no depth or image tint');
     await page.screenshot({ path: path.join(output, 'combined-desktop-index.png') });
-    const portraitHeights = await page.locator('.print img').evaluateAll(es => {
-      const ref=Number(document.querySelector('.exhibition').dataset.referenceRatio);
-      return es.filter(i=>i.height>i.width).map(i=>Math.abs(i.clientHeight-i.closest('.print-paper').clientWidth*ref)<2 && i.clientWidth<i.closest('.print-paper').clientWidth*.8);
+    const fittedPrints = await page.locator('.print img').evaluateAll(images => {
+      return images.every(image => {
+        const frame = image.closest('.print-paper');
+        return image.clientWidth === frame.clientWidth && image.clientHeight === frame.clientHeight &&
+          getComputedStyle(image).objectFit === 'contain';
+      });
     });
-    assert(portraitHeights.length > 0 && portraitHeights.every(Boolean), 'Index portrait long edges align with landscape short edges');
+    assert(fittedPrints, 'The Index fits complete photos inside equal frames');
 
     const first = page.locator('.print-link').first();
     await page.evaluate(() => {
@@ -169,6 +184,12 @@ const checkSpiralSpacing = async page => {
       await page.screenshot({ path: path.join(output, `combined-spiral-${width}.png`) });
     }
     await page.emulateMedia({ reducedMotion: 'reduce' });
+    await enter(page);
+    const reducedBefore = await translation(firstPrint);
+    await page.mouse.wheel(0, 650); await settle(page);
+    const reducedAfter = await translation(firstPrint);
+    assert.equal(reducedAfter.x, reducedBefore.x, 'Reduced motion disables the scroll-linked rotation');
+    assert.notEqual(reducedAfter.y, reducedBefore.y, 'Vertical scrolling remains available with reduced motion');
     await page.locator('button[data-view=gallery]').click();
     assert.equal(await page.locator('body').getAttribute('data-transitioning'), 'false');
     await context.setOffline(true);
@@ -189,6 +210,28 @@ const checkSpiralSpacing = async page => {
     assert.equal(await fallback.locator('.print-link').count(), collection.length);
     assert(!(await fallback.locator('.view-switch').isVisible()));
     assert(await fallback.locator('.print-link').first().getAttribute('href'));
+    const wide = await context.newPage();
+    await wide.setViewportSize({ width: 2508, height: 1300 });
+    await wide.goto(url); await ready(wide); await enter(wide);
+    await checkSpiralSpacing(wide);
+    await wide.goto(url + '?view=gallery'); await ready(wide);
+    const wideRow = await wide.locator('.print img').evaluateAll(async images => {
+      const row = images.slice(8, 12);
+      // Simulate a narrow responsive candidate arriving for the final three previews.
+      row.slice(1).forEach(image => {
+        const preview = image.srcset.split(',')[0].trim().split(' ')[0];
+        image.removeAttribute('srcset');
+        image.src = preview;
+        image.loading = 'eager';
+      });
+      await Promise.all(row.map(image => image.decode()));
+      return row.map(image => ({ width: image.clientWidth, height: image.clientHeight,
+        naturalWidth: image.naturalWidth, contain: getComputedStyle(image).objectFit === 'contain' }));
+    });
+    assert(wideRow[1].naturalWidth < wideRow[1].width, 'The regression check uses a preview smaller than its frame');
+    assert(wideRow.every(image => image.contain && image.width === wideRow[0].width && image.height === wideRow[0].height),
+      'Same-ratio Index photos keep the same display size across different source resolutions');
+    await wide.close();
     const broken = await context.newPage();
     await broken.route('**/gallery/assets/optimized/**', r => r.abort());
     await broken.goto(url + '?view=gallery'); await ready(broken); await enter(broken);
