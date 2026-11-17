@@ -109,6 +109,7 @@ const checkSpiral = async page => {
     const order = await page.locator('.print').evaluateAll(es => es.map(e => e.id));
     assert.deepEqual(order, collection.map(photo => photo.id));
     assert.equal(await page.locator('button[data-view=spiral]').getAttribute('aria-pressed'), 'true');
+    assert.equal(await page.locator('button[data-view=spiral]').textContent(), 'Wave');
     await page.screenshot({ path: path.join(output, 'combined-desktop-title.png') });
     await enter(page);
     await checkSpiral(page); await settle(page);

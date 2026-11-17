@@ -40,6 +40,11 @@ for (const [w,h] of [[1440,1000],[1920,1080],[1024,768],[768,1024],[390,844],[32
   assert(projectedY(wave[3]) > projectedY(wave[1]) && projectedY(wave[3]) > projectedY(wave[5]) &&
     projectedY(wave[0]) > projectedY(wave[1]) && projectedY(wave[6]) > projectedY(wave[5]), 'The wave dips at the center and at its ends');
   assert(wave[0].width < wave[2].width && wave[6].width < wave[4].width, 'Distant prints become thumbnails');
+  const firstPreview = spiralPose(2, 0, h, m, true);
+  const secondPreview = spiralPose(3, 1, h, m, true);
+  assert(firstPreview.y !== secondPreview.y && firstPreview.rz !== secondPreview.rz && firstPreview.width !== secondPreview.width,
+    'Individual photos vary at the same point on the wave');
+  assert.deepEqual(spiralPose(2, 0, h, m, true), firstPreview, 'Each thumbnail returns to the same pose at the same scroll position');
   const fixed = spiralPose(0, 0, h, m, false);
   const fixedScrolled = spiralPose(0, 4, h, m, false);
   assert(fixedScrolled.x === fixed.x && fixedScrolled.ry === 0 && fixedScrolled.y < fixed.y,
@@ -58,6 +63,7 @@ for (const [w,h] of [[1440,1000],[1920,1080],[1024,768],[768,1024],[390,844],[32
 }
 const html=fs.readFileSync(new URL('index.html',route),'utf8');
 assert(html.includes(exhibitionSubtitle));
+assert.match(html, /data-view="spiral" aria-pressed="true">Wave<\/button>/);
 assert.equal((html.match(/class="print-link"/g)||[]).length, photos.length);
 assert.deepEqual([...html.matchAll(/<figure class="print"[^>]*id="([^"]+)"/g)].map(m=>m[1]),photos.map(p=>p.id), 'Both views use one chronological DOM sequence');
 assert.deepEqual([...html.matchAll(/class="print-link" href="\.\.\/\.\.\/([^"]+)"/g)].map(m=>m[1]),photos.map(p=>p.original), 'Every link opens its corresponding supplied original');

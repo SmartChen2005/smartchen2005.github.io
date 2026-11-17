@@ -1,4 +1,4 @@
-import { clamp, spiralMetrics, spiralPose, spiralPortraitScale, galleryLayout, interpolatePose } from './stills-layout.mjs?rev=20261117-photo-wave';
+import { clamp, spiralMetrics, spiralPose, spiralPortraitScale, galleryLayout, interpolatePose } from './stills-layout.mjs?rev=20261117-wave-prints';
 
 const figures = [...document.querySelectorAll('.print')];
 // The semantic HTML is the collection source at runtime. No fetch or WebGL is
@@ -150,7 +150,7 @@ function switchMode(next) {
   history.replaceState(null, '', url);
   transition = motionPreference.matches ? null : { from, start: performance.now() };
   document.body.dataset.transitioning = String(Boolean(transition));
-  document.querySelector('#view-status').textContent = `${mode === 'spiral' ? 'Spiral' : 'Index'} view. ${photos.length} images.`;
+  document.querySelector('#view-status').textContent = `${mode === 'spiral' ? 'Wave' : 'Index'} view. ${photos.length} images.`;
   schedule();
 }
 

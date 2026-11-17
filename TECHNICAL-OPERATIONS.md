@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-17 — Tighten the Wave preview arrangement
+
+- Label the default photo view Wave. Bring its surrounding previews closer and vary their offsets, tilts and sizes while preserving the center print size and depth handoff.
+- Regenerate with `node tools/render-gallery.mjs`. Run site validation and the Stills checks for repeatable photo positions, thumbnail visibility and the lead-print handoff.
+
 ### 2026-11-17 — Spread the Polaroid prints across a 3D wave
 
 - Keep the center print's size and spread smaller neighbors to either side along a dipping and rising path. Maintain space between the two lead prints at the depth handoff. Edge thumbnails remain readable and open the same viewer.
