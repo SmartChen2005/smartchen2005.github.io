@@ -1,12 +1,15 @@
 /* Gallery shell and type stay canonical; only the article's image body is spatial. */
-.story--exhibition .exhibition { margin-inline: calc(-1 * var(--margin)); }
+.story--exhibition .exhibition { --index-portrait-scale: 1.22; margin-inline: calc(-1 * var(--margin)); }
 .story--exhibition .exhibition-header { position: sticky; top: var(--gallery-header-height); inset-inline: auto; height: 56px; gap: 16px; z-index: 9; }
 .story--exhibition .view-switch { margin-right: auto; }
 .story--exhibition .project-return { text-align: right; }
 .story--exhibition .installation { scroll-margin-top: calc(var(--gallery-header-height) + 56px); }
-.is-ready .story--exhibition .installation { position: sticky; inset: auto; top: var(--exhibition-top); height: var(--exhibition-height); clip-path: none; }
+.is-ready .story--exhibition .installation { position: sticky; inset: auto; top: var(--exhibition-top); height: var(--exhibition-height); clip-path: none; perspective: none; }
+.is-ready .story--exhibition .photographs { z-index: 0; transform-style: flat; }
+.is-ready .story--exhibition .print { transform-origin: 0 0; transform-style: flat; }
 .story--exhibition .exhibition-footer { position: absolute; inset: auto 0 0; z-index: 1; }
-.story--exhibition .exhibition .print-paper { aspect-ratio: var(--index-ratio); }
+.story--exhibition .exhibition .print-paper { aspect-ratio: var(--print-index-ratio, var(--index-ratio)); }
+.story--exhibition .print[data-orientation=portrait] { --print-index-ratio: calc(var(--index-ratio) / var(--index-portrait-scale)); }
 .is-ready[data-view=spiral] .story--exhibition .print-paper { aspect-ratio: var(--ratio); }
 /* The frame sets display size, including when a smaller srcset candidate loads. */
 .story--exhibition .print-paper > img { position: absolute; inset: 0; }
@@ -31,4 +34,5 @@
 }
 @media print {
   .story--exhibition .exhibition-header, .story--exhibition .exhibition-footer { display: none; }
+  .story--exhibition .print { opacity: 1 !important; }
 }

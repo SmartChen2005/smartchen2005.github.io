@@ -27,36 +27,37 @@ const clear = async page => {
     assert(a.right <= b.left + 1 || b.right <= a.left + 1 || a.bottom <= b.top + 1 || b.bottom <= a.top + 1, 'Index images/captions never overlap');
   }
 };
-const checkSpiralSpacing = async page => {
-  const largestOverlap = await page.evaluate(async () => {
+const checkSpiral = async page => {
+  const states = await page.evaluate(async () => {
     const stage = document.querySelector('.installation');
     const space = document.querySelector('.exhibition-space');
-    const prints = [...stage.querySelectorAll('.print-paper')];
+    const prints = [...stage.querySelectorAll('.print')];
     const start = scrollY;
-    let largest = 0;
-    for (let i = 0; i <= 16; i++) {
-      window.scrollTo({ top: start + space.offsetHeight * i / 16, behavior: 'instant' });
+    const results = [];
+    for (let i = 0; i < prints.length; i++) {
+      window.scrollTo({ top: start + space.getBoundingClientRect().height * i / (prints.length - 1), behavior: 'instant' });
       await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-      const bounds = stage.getBoundingClientRect();
-      const visible = prints.map(print => {
-        const r = print.getBoundingClientRect();
-        return { left: Math.max(r.left, bounds.left), right: Math.min(r.right, bounds.right),
-          top: Math.max(r.top, bounds.top), bottom: Math.min(r.bottom, bounds.bottom, innerHeight) };
-      }).filter(r => r.right > r.left && r.bottom > r.top);
-      for (const [index, a] of visible.entries()) {
-        for (const b of visible.slice(index + 1)) {
-          const width = Math.min(a.right, b.right) - Math.max(a.left, b.left);
-          const height = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
-          if (width > 0 && height > 0) {
-            largest = Math.max(largest, width * height / Math.min((a.right - a.left) * (a.bottom - a.top), (b.right - b.left) * (b.bottom - b.top)));
-          }
+      const front = prints[i];
+      const r = front.querySelector('img').getBoundingClientRect();
+      const stageBox = stage.getBoundingClientRect();
+      const pose = new DOMMatrix(front.style.transform);
+      let samples = 0;
+      for (const x of [.15, .5, .85]) {
+        for (const y of [.15, .5, .85]) {
+          const target = document.elementFromPoint(r.left + x * r.width, r.top + y * r.height);
+          if (target?.closest('.print') === front) samples++;
         }
       }
+      results.push({ index: i, facing: pose.m33, z: pose.m43, samples,
+        fits: r.left >= 0 && r.right <= innerWidth && r.top >= stageBox.top - 1 && r.bottom <= innerHeight + 1 });
     }
     window.scrollTo({ top: start, behavior: 'instant' });
-    return largest;
+    return results;
   });
-  assert(largestOverlap <= .01, `Spiral keeps prints clear at ${page.viewportSize().width}px (maximum overlap ${largestOverlap})`);
+  for (const state of states) {
+    assert(state.facing > .99 && state.z > -1 && state.fits && state.samples === 9,
+      `The centered print is fully visible and clickable at ${page.viewportSize().width}px: ${JSON.stringify(state)}`);
+  }
 };
 (async () => {
   const browser = await chromium.launch({ headless: true, channel: 'chrome', args: ['--no-proxy-server'] });
@@ -77,19 +78,19 @@ const checkSpiralSpacing = async page => {
     assert.equal(await page.locator('button[data-view=spiral]').getAttribute('aria-pressed'), 'true');
     await page.screenshot({ path: path.join(output, 'combined-desktop-title.png') });
     await enter(page);
-    await checkSpiralSpacing(page); await settle(page);
-    const portraitScales = await page.locator('.print').evaluateAll(async es => {
-      const {spiralPose} = await import('/projects/polaroid-of-yesterday/photography/stills-layout.mjs');
+    await checkSpiral(page); await settle(page);
+    const portraitScales = await page.locator('.print[data-orientation=portrait]').evaluateAll(prints => {
       const ref = Number(document.querySelector('.exhibition').dataset.referenceRatio);
-      return es.filter(e => {
-        const i = e.querySelector('img');
-        return Number(i.getAttribute('height')) > Number(i.getAttribute('width'));
-      }).map(e => {
-        const i=e.querySelector('img'), index=Number(e.dataset.index), expected=spiralPose(index,0,document.documentElement.clientWidth,document.querySelector('.installation').clientHeight,es.length).width*ref*Number(i.getAttribute('width'))/Number(i.getAttribute('height'));
-        return Math.abs(parseFloat(e.style.width)-expected)<.002;
-      });
+      const landscape = document.querySelector('.print').querySelector('img');
+      return prints.map(print => print.querySelector('img').clientHeight / (landscape.clientWidth * ref));
     });
-    assert(portraitScales.length > 0 && portraitScales.every(Boolean), 'Spiral portraits use the landscape short-edge scale');
+    assert(portraitScales.length > 0 && portraitScales.every(scale => scale > 1.29 && scale < 1.35),
+      'Spiral portrait height grows by about 32%');
+    const side = await page.locator('.print').nth(1).evaluate(print => {
+      const pose = new DOMMatrix(print.style.transform);
+      return { facing: pose.m33, z: pose.m43 };
+    });
+    assert(side.facing < .75 && side.z < -40, 'The photo next to center turns away and recedes in depth');
     const firstPrint = page.locator('.print').first();
     const before = await translation(firstPrint);
     await page.mouse.wheel(0, 650); await settle(page);
@@ -114,6 +115,10 @@ const checkSpiralSpacing = async page => {
       });
     });
     assert(fittedPrints, 'The Index fits complete photos inside equal frames');
+    const indexPortraitScale = await page.locator('.print[data-orientation=portrait] img').first().evaluate(image =>
+      image.clientHeight / document.querySelector('.print img').clientHeight);
+    assert(indexPortraitScale > 1.19 && indexPortraitScale < 1.25, 'Index reserves a taller row for portraits');
+
 
     const first = page.locator('.print-link').first();
     await page.evaluate(() => {
@@ -180,7 +185,7 @@ const checkSpiralSpacing = async page => {
       await page.screenshot({ path: path.join(output, `combined-viewer-${width}.png`) });
       await page.keyboard.press('Escape');
       await page.locator('button[data-view=spiral]').click(); await settle(page); await enter(page);
-      await checkSpiralSpacing(page); await settle(page);
+      await checkSpiral(page); await settle(page);
       await page.screenshot({ path: path.join(output, `combined-spiral-${width}.png`) });
     }
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -213,7 +218,7 @@ const checkSpiralSpacing = async page => {
     const wide = await context.newPage();
     await wide.setViewportSize({ width: 2508, height: 1300 });
     await wide.goto(url); await ready(wide); await enter(wide);
-    await checkSpiralSpacing(wide);
+    await checkSpiral(wide);
     await wide.goto(url + '?view=gallery'); await ready(wide);
     const wideRow = await wide.locator('.print img').evaluateAll(async images => {
       const row = images.slice(8, 12);
@@ -262,6 +267,6 @@ const checkSpiralSpacing = async page => {
     assert.equal(await navigation.locator('.gallery-main h2 a[href="trauma-induced-dissociative-amnesia/"]').count(), 1);
     assert.equal(await navigation.locator('.stills-feature').count(), 0);
     assert.equal(errors.length, 0, errors.join('\n'));
-    console.log('Passed: 17 chronologically ordered images; Gallery shell; native scroll helix; Spiral/Index order and responsive non-overlap; category-only viewer; ratio/arrows/Escape/focus/scroll lock; seven viewports; 44px controls; last-image keyboard access; reduced motion/forced colors/offline; footer; legacy query/hash redirect; no-JS originals; image error/retry.');
+    console.log('Passed: 17 chronologically ordered images; Gallery shell; front-facing 3D helix and unobscured central prints; larger portraits; Index order and non-overlap; category-only viewer; ratio/arrows/Escape/focus/scroll lock; eight viewport sizes; 44px controls; last-image keyboard access; reduced motion/forced colors/offline; footer; legacy query/hash redirect; no-JS originals; image error/retry.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exit(1); });

@@ -20,9 +20,9 @@ export function exhibitionCollection() {
 export function renderExhibition(collection) {
   const landscape = collection.find(photo => photo.rendition.width > photo.rendition.height)?.rendition;
   const referenceRatio = landscape ? landscape.height / landscape.width : 2 / 3;
-  const figures = collection.map((photo, index) => `<figure class="print" data-index="${index}" data-kind="${escape(photo.kind)}" id="${photo.id}">
+  const figures = collection.map((photo, index) => `<figure class="print" data-index="${index}" data-kind="${escape(photo.kind)}"${photo.rendition.height > photo.rendition.width ? ' data-orientation="portrait"' : ''} id="${photo.id}">
     <a class="print-link" href="../../${escape(photo.original)}" aria-label="View ${escape(photo.kind)} ${index + 1}" ${viewerAttributes(photo.rendition, '../../')}>
-      <span class="print-paper"><img ${renditionAttributes(photo.rendition, '../../', { sizes: 'auto, (max-width: 910px) 51vw, max(460px, 25vw)', priority: index < 9 })} alt="${escape(photo.alt)}" ${index < 3 ? 'fetchpriority="high"' : index < 9 ? '' : 'loading="lazy"'} decoding="async"><span class="print-error" hidden>Image unavailable<span>Open original image</span></span></span>
+      <span class="print-paper"><img ${renditionAttributes(photo.rendition, '../../', { sizes: 'auto, (max-width: 820px) 55vw, max(450px, 25vw)', priority: index < 9 })} alt="${escape(photo.alt)}" ${index < 3 ? 'fetchpriority="high"' : index < 9 ? '' : 'loading="lazy"'} decoding="async"><span class="print-error" hidden>Image unavailable<span>Open original image</span></span></span>
     </a></figure>`).join('\n');
   return `<section class="exhibition" data-reference-ratio="${referenceRatio}" style="--index-ratio:${1 / referenceRatio}" aria-label="Polaroid of Yesterday image exhibition">
     <header class="exhibition-header"><div class="view-switch" role="group" aria-label="Exhibition view" hidden><button type="button" data-view="spiral" aria-pressed="true">Spiral</button><span aria-hidden="true">/</span><button type="button" data-view="gallery" aria-pressed="false">Index</button></div><a class="project-return" href="../../projects/polaroid-of-yesterday/">Polaroid of Yesterday</a></header>

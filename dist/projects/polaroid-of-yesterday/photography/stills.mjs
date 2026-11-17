@@ -1,4 +1,4 @@
-import { clamp, spiralMetrics, spiralPose, galleryLayout, interpolatePose } from './stills-layout.mjs?rev=20261117-spiral-motion';
+import { clamp, spiralMetrics, spiralPose, spiralPortraitScale, galleryLayout, interpolatePose } from './stills-layout.mjs?rev=20261117-front-facing';
 
 const figures = [...document.querySelectorAll('.print')];
 // The semantic HTML is the collection source at runtime. No fetch or WebGL is
@@ -14,9 +14,11 @@ const viewer = document.querySelector('.photo-viewer');
 const viewerImage = viewer.querySelector('.viewer-image');
 const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
 const stage = document.querySelector('.installation');
+const photographs = stage.querySelector('.photographs');
 const exhibition = document.querySelector('.exhibition');
 const embedded = Boolean(exhibition);
 const referenceRatio = Number(exhibition?.dataset.referenceRatio) || 2 / 3;
+const indexPortraitScale = embedded ? Number(getComputedStyle(exhibition).getPropertyValue('--index-portrait-scale')) || 1 : 1;
 const galleryHeader = document.querySelector('.gallery-header');
 const viewerStage = viewer.querySelector('.viewer-stage');
 const viewerLoading = viewer.querySelector('.viewer-loading');
@@ -47,18 +49,21 @@ function updateViewport() {
     exhibition.style.setProperty('--exhibition-height', `${height}px`);
   }
   metrics = spiralMetrics(width, height, photos.length);
-  gallery = galleryLayout(width, height, photos, window.innerWidth, embedded ? {referenceRatio, captions: false, top: 24} : {});
-  stage.style.perspective = `${metrics.perspective}px`;
+  gallery = galleryLayout(width, height, photos, window.innerWidth,
+    embedded ? {referenceRatio, portraitScale: indexPortraitScale, captions: false, top: 24} : {});
+  const camera = embedded ? photographs : stage;
+  camera.style.perspective = `${metrics.perspective}px`;
   spacer.style.height = embedded
     ? `${mode === 'spiral' ? metrics.distance : Math.max(0, gallery.height - height)}px`
     : `${Math.max(height, (mode === 'spiral' ? metrics.distance + height : gallery.height) - intro.offsetHeight)}px`;
 }
 
-function poseAt(index, scrollPosition) {
+function poseAt(index, scrollPosition, spiralPosition) {
   if (mode === 'spiral') {
-    const pose = spiralPose(index, clamp(scrollPosition / metrics.distance), width, height, photos.length,
-      { rotate: !motionPreference.matches });
-    if (embedded && photos[index].height > photos[index].width) pose.width *= referenceRatio * photos[index].width / photos[index].height;
+    const pose = spiralPose(index, spiralPosition, height, metrics, !motionPreference.matches);
+    if (embedded && photos[index].height > photos[index].width) {
+      pose.width *= referenceRatio * spiralPortraitScale * photos[index].width / photos[index].height;
+    }
     return pose;
   }
   return { ...gallery.items[index], y: gallery.items[index].y - scrollPosition - height / 2 };
@@ -70,9 +75,10 @@ function paint(pose, index) {
   figure.style.transform = `translate3d(${pose.x.toFixed(3)}px,${pose.y.toFixed(3)}px,${pose.z.toFixed(3)}px) rotateX(${pose.rx.toFixed(3)}deg) rotateY(${pose.ry.toFixed(3)}deg) rotateZ(${pose.rz.toFixed(3)}deg)`;
   const projection = metrics.perspective / (metrics.perspective - pose.z);
   const screenY = height / 2 + pose.y * projection;
-  // Keep photographs at their original tone; depth comes from perspective.
-  const visible = screenY > (embedded ? -100 : 40) && screenY < height + 100;
-  figure.style.opacity = '1';
+  const visible = pose.opacity > .12 && screenY > (embedded ? -100 : 40) && screenY < height + 100;
+  // Keep pointer hits and paint order aligned when projected prints touch.
+  if (embedded) figure.style.zIndex = String(Math.round(pose.z));
+  figure.style.opacity = String(pose.opacity);
   figure.style.pointerEvents = visible ? 'auto' : 'none';
   figure.dataset.visible = String(visible);
   if (Math.abs(pose.y) < height * 1.2) figure.querySelector('img').loading = 'eager';
@@ -91,14 +97,14 @@ function render(time) {
     amount = clamp((time - transition.start) / 240);
     amount = 1 - (1 - amount) ** 4;
   }
+  const spiralPosition = clamp(scroll / metrics.distance) * (photos.length - 1);
   poses = photos.map((_, index) => {
-    const target = poseAt(index, scroll);
+    const target = poseAt(index, scroll, spiralPosition);
     const pose = transition ? interpolatePose(transition.from[index], target, amount) : target;
     paint(pose, index);
     return pose;
   });
-  const axisPosition = metrics.start + clamp(scroll / metrics.distance) * (metrics.end - metrics.start);
-  const nearest = mode === 'spiral' ? Math.round(axisPosition / metrics.step) : nearestPhoto();
+  const nearest = mode === 'spiral' ? Math.round(spiralPosition) : nearestPhoto();
   count.textContent = pad(nearest + 1);
   if (transition && amount >= 1) {
     transition = null;
@@ -118,8 +124,7 @@ function nearestPhoto() {
 }
 function positionForPhoto(index) {
   if (mode === 'gallery') return Math.max(0, gallery.items[index].y - height / 2);
-  const travel = metrics.end - metrics.start;
-  return travel > 0 ? clamp((index * metrics.step - metrics.start) / travel) * metrics.distance : 0;
+  return index / Math.max(1, photos.length - 1) * metrics.distance;
 }
 function reflectMode() {
   document.body.dataset.view = mode;
@@ -129,9 +134,10 @@ function reflectMode() {
 }
 function switchMode(next) {
   if (mode === next) return;
-  const anchor = currentScroll() < 10 ? 0 : nearestPhoto();
+  const position = currentScroll();
+  const anchor = mode === 'spiral' ? Math.round(clamp(position / metrics.distance) * (photos.length - 1)) : nearestPhoto();
   const from = poses.map(pose => ({ ...pose }));
-  const atStart = currentScroll() < 10;
+  const atStart = position < 10;
   const previousScroll = window.scrollY;
   mode = next;
   reflectMode();
@@ -259,7 +265,15 @@ figures.forEach((figure, index) => {
     if (openViewer(index, link)) event.preventDefault();
   });
   link.addEventListener('focus', () => {
-    if (viewer.open || transition || dismissedFromPointer || pointerDown) return;
+    if (viewer.open || dismissedFromPointer || pointerDown) return;
+    if (mode === 'spiral') {
+      transition = null;
+      document.body.dataset.transitioning = 'false';
+      scrollToPhoto(positionForPhoto(index));
+      schedule();
+      return;
+    }
+    if (transition) return;
     const rect = image.getBoundingClientRect(), bounds = stage.getBoundingClientRect();
     const top = embedded ? Math.max(bounds.top, parseFloat(exhibition.style.getPropertyValue('--exhibition-top'))) : 115;
     const bottom = embedded ? bounds.bottom - 60 : height - 85;

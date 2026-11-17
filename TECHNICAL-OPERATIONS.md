@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-17 — Bring the central Polaroid print forward in 3D
+
+- Compress vertical spacing and rotate the photos around the helix as scrolling brings them toward the front. The center print faces the reader while adjacent prints turn away and recede. Keyboard focus brings its target to the front, and reduced motion keeps the prints forward-facing.
+- Enlarge portrait prints in the spiral and reserve taller portrait rows in Index. Regenerate with `node tools/render-gallery.mjs`. Verify centered print geometry, click targets, portraits and reduced motion in Chrome.
+
 ### 2026-11-17 — Align Polaroid Index photos and animate the tighter spiral
 
 - Size Index previews from their frames so the responsive source resolution cannot change their display size. Preserve each image's aspect ratio.
