@@ -144,15 +144,14 @@ const leftBlock=galleryHome.split('<div class="photography-main">')[1].split('<d
 assert.deepEqual([...leftBlock.matchAll(/<article class="project-card[^\"]*"><a href="([^\"]+)"/g)].map(m=>m[1]),['rhythms-of-chaos/','deliberate-practice/','cathedrals-of-light/']);
 const rail=galleryHome.split('<div class="photography-rail">')[1].split('id="stills"')[0];
 assert.deepEqual([...rail.matchAll(/class="project-card editorial-compact"><a href="([^"]+)"/g)].map(m=>m[1]),['intro-to-darkroom/','analog-and-digital/','surface-of-the-moon/']);
-for(const slug of ['trauma-induced-dissociative-amnesia','rhythms-of-chaos','analog-and-digital','deliberate-practice']){
+// The Polaroid exhibition has its own ordered source and test-stills.mjs check.
+for(const slug of ['rhythms-of-chaos','analog-and-digital','deliberate-practice']){
  const page=snapshot.pages.find(p=>p.properties.Slug===slug);
  const article=fs.readFileSync(new URL(`../dist/gallery/${slug}/index.html`,import.meta.url),'utf8');
  for(const image of allImages(page.blocks?adaptNotionBlocks(page.blocks):parseNotionMarkdown(page.markdown))){
   const asset=media[image.src]||media[canonicalMediaUrl(image.src)]||media['notion-asset:'+mediaIdentity(image.src)];
-  const original=slug==='trauma-induced-dissociative-amnesia'?`../../gallery/${asset?.original}`:`../${asset?.original}`;
-  assert(asset?.original&&article.includes(`href="${original}"`),`Editorial layout must retain original photograph: ${slug}`);
+  assert(asset?.original&&article.includes(`href="../${asset.original}"`),`Editorial layout must retain original photograph: ${slug}`);
  }
- if(slug==='trauma-induced-dissociative-amnesia')assert.equal((article.match(/class="print-link"/g)||[]).length,allImages(parseNotionMarkdown(page.markdown)).length+20,'Every concept and screenshot appears once in the shared exhibition');
  if(slug==='rhythms-of-chaos')assert.equal((article.match(/class="(?:story-cover )?story-image-open"/g)||[]).length,allImages(parseNotionMarkdown(page.markdown)).length,'The opening image remains selectable once');
 }
 const practicePage=snapshot.pages.find(p=>p.properties.Slug==='deliberate-practice');

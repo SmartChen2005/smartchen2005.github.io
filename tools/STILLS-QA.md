@@ -1,4 +1,10 @@
-# Combined Gallery exhibition — 2026-11-03
+# Polaroid Gallery exhibition — 2026-11-17
+
+The current exhibition uses the 17 files listed in `polaroid-exhibition-photos.json`, ordered by the modification times recorded when the supplied folder was imported. Keep the originals in `dist/gallery/assets/polaroid-exhibition/`. Run `python tools/prepare-gallery-images.py` and `node tools/render-gallery.mjs` to regenerate the responsive copies and the page.
+
+The static checks cover the shared order, original links and larger print sizes. The Chrome suite below also samples projected print overlap throughout the spiral at each of its seven viewport sizes.
+
+# Combined Gallery exhibition — 2026-11-03 (archived)
 
 Current route: `/gallery/trauma-induced-dissociative-amnesia/`. This revision supersedes the original standalone-page instructions below.
 

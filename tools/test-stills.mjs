@@ -2,29 +2,24 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { spiralMetrics, spiralPose, galleryLayout, interpolatePose } from '../dist/projects/polaroid-of-yesterday/photography/stills-layout.mjs';
 import { exhibitionCollection, exhibitionSlug, exhibitionSubtitle } from './polaroid-exhibition.mjs';
-import { canonicalMediaUrl, mediaIdentity } from './gallery-document.mjs';
-const route = new URL('../dist/gallery/trauma-induced-dissociative-amnesia/', import.meta.url);
-const snapshot = JSON.parse(fs.readFileSync(new URL('./gallery-notion/snapshot.json', import.meta.url), 'utf8'));
-const media = JSON.parse(fs.readFileSync(new URL('./gallery-notion/media.json', import.meta.url), 'utf8'));
-const page = snapshot.pages.find(p => p.properties.Slug === exhibitionSlug);
-const resolve = url => media[url] || media[canonicalMediaUrl(url)] || media['notion-asset:' + mediaIdentity(url)];
-const photos = exhibitionCollection(page, resolve);
-assert.deepEqual(photos, exhibitionCollection(page, resolve), 'Mixing is reproducible across syncs/builds');
-const withPrivateImage = {...page, blocks: undefined, markdown: page.markdown + '\n<details>\n<summary>Website layout notes (not published)</summary>\n![](https://example.com/private-note.jpg)\n</details>'};
-assert.deepEqual(photos, exhibitionCollection(withPrivateImage, resolve), 'Images in private editor notes cannot enter the public exhibition');
-assert.equal(photos.length, 31);
-assert.equal(photos.filter(p => p.kind === 'Concept art').length, 11);
-assert.equal(photos.filter(p => p.kind === 'In-game screenshot').length, 20);
-assert(photos.slice(0, 10).some(p => p.kind === 'Concept art') && photos.slice(-10).some(p => p.kind === 'Concept art'), 'Concepts are mixed throughout');
+const route = new URL(`../dist/gallery/${exhibitionSlug}/`, import.meta.url);
+const photos = exhibitionCollection();
+assert.equal(photos.length, 17);
+assert.equal(photos[0].file, '808ff3b894762913f19f7d120b67afb4.png');
+const modified = photos.map(p => Date.parse(p.modifiedAt));
+assert(modified.every((value, i) => Number.isFinite(value) && (i === 0 || value >= modified[i - 1])),
+  'Photographs follow the recorded modification times, oldest first');
 assert.equal(new Set(photos.map(p => p.id)).size, photos.length);
 assert.equal(new Set(photos.map(p => p.original)).size, photos.length, 'No duplicated source images');
-assert(photos.every(p => ['In-game screenshot', 'Concept art'].includes(p.kind)), 'Each image uses the requested media label');
+assert(photos.every(p => ['In-game screenshot', 'Concept art', 'Image'].includes(p.kind) && p.alt), 'Each image has a media label and alt text');
 for (const photo of photos) {
   assert(fs.statSync(new URL('../../' + photo.original, route)).size > 0);
   assert(fs.statSync(new URL('../../' + photo.rendition.variants.at(-1).path, route)).size > 0);
 }
 for (const [w,h] of [[1440,1000],[1920,1080],[1024,768],[768,1024],[390,844],[320,568],[844,390]]) {
   const m = spiralMetrics(w,h,photos.length);
+  const previousWidth = Math.max(125, Math.min(290, 290 * w / 1300));
+  assert(m.printWidth > previousWidth, 'Spiral prints are larger at each supported viewport');
   for (const progress of [0,.25,.5,.75,1]) {
     const poses = photos.map((_,i) => spiralPose(i,progress,w,h,photos.length));
     for (const p of poses) {
@@ -52,7 +47,8 @@ for (const [w,h] of [[1440,1000],[1920,1080],[1024,768],[768,1024],[390,844],[32
 const html=fs.readFileSync(new URL('index.html',route),'utf8');
 assert(html.includes(exhibitionSubtitle));
 assert.equal((html.match(/class="print-link"/g)||[]).length, photos.length);
-assert.deepEqual([...html.matchAll(/<figure class="print"[^>]*id="([^"]+)"/g)].map(m=>m[1]),photos.map(p=>p.id), 'Both views use one mixed DOM sequence');
+assert.deepEqual([...html.matchAll(/<figure class="print"[^>]*id="([^"]+)"/g)].map(m=>m[1]),photos.map(p=>p.id), 'Both views use one chronological DOM sequence');
+assert.deepEqual([...html.matchAll(/class="print-link" href="\.\.\/\.\.\/([^"]+)"/g)].map(m=>m[1]),photos.map(p=>p.original), 'Every link opens its corresponding supplied original');
 assert.deepEqual([...html.matchAll(/data-kind="([^"]+)"/g)].map(m=>m[1]),photos.map(p=>p.kind),'Media categories remain available in the viewer');
 assert(!html.includes('class="print-caption"'), 'Index has no visible labels');
 assert(html.includes('Trauma-Induced Dissociative Amnesia'));

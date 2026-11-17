@@ -1,4 +1,4 @@
-import { clamp, spiralMetrics, spiralPose, galleryLayout, interpolatePose } from './stills-layout.mjs?rev=20261103-proportions';
+import { clamp, spiralMetrics, spiralPose, galleryLayout, interpolatePose } from './stills-layout.mjs?rev=20261117-spaced-spiral';
 
 const figures = [...document.querySelectorAll('.print')];
 // The semantic HTML is the collection source at runtime. No fetch or WebGL is
@@ -96,7 +96,8 @@ function render(time) {
     paint(pose, index);
     return pose;
   });
-  const nearest = mode === 'spiral' ? Math.round(clamp(scroll / metrics.distance) * (photos.length - 1)) : nearestPhoto();
+  const axisPosition = metrics.start + clamp(scroll / metrics.distance) * (metrics.end - metrics.start);
+  const nearest = mode === 'spiral' ? Math.round(axisPosition / metrics.step) : nearestPhoto();
   count.textContent = pad(nearest + 1);
   if (transition && amount >= 1) {
     transition = null;
@@ -116,7 +117,8 @@ function nearestPhoto() {
 }
 function positionForPhoto(index) {
   if (mode === 'gallery') return Math.max(0, gallery.items[index].y - height / 2);
-  return clamp((index * metrics.step - metrics.start) / (metrics.end - metrics.start)) * metrics.distance;
+  const travel = metrics.end - metrics.start;
+  return travel > 0 ? clamp((index * metrics.step - metrics.start) / travel) * metrics.distance : 0;
 }
 function reflectMode() {
   document.body.dataset.view = mode;

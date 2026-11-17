@@ -32,6 +32,23 @@
     "gallery/assets/notion/2c08f018ca4c8a3ff0cc.webp": "gallery/assets/notion/2c08f018ca4c8a3ff0cc.jpg",
     "gallery/assets/notion/2c50098b280d19867f65.jpg": "gallery/assets/notion/2c50098b280d19867f65.jpg",
     "gallery/assets/notion/2c50098b280d19867f65.webp": "gallery/assets/notion/2c50098b280d19867f65.jpg",
+    "gallery/assets/polaroid-exhibition/01e98f30a7aa1544902a02ff2d8115ba.png": "gallery/assets/polaroid-exhibition/01e98f30a7aa1544902a02ff2d8115ba.png",
+    "gallery/assets/polaroid-exhibition/34a28b3739235036c7101ec21b4a0bd8.jpg": "gallery/assets/polaroid-exhibition/34a28b3739235036c7101ec21b4a0bd8.jpg",
+    "gallery/assets/polaroid-exhibition/3542570c82c935f751c5ec9dab722d65.jpg": "gallery/assets/polaroid-exhibition/3542570c82c935f751c5ec9dab722d65.jpg",
+    "gallery/assets/polaroid-exhibition/3600967b57ab5abb0242573cc4076fe5.jpg": "gallery/assets/polaroid-exhibition/3600967b57ab5abb0242573cc4076fe5.jpg",
+    "gallery/assets/polaroid-exhibition/38715f1371cee7180c96d5a7a00e4569.png": "gallery/assets/polaroid-exhibition/38715f1371cee7180c96d5a7a00e4569.png",
+    "gallery/assets/polaroid-exhibition/3bca2f84a2313fda491ba5c02143ca71.jpg": "gallery/assets/polaroid-exhibition/3bca2f84a2313fda491ba5c02143ca71.jpg",
+    "gallery/assets/polaroid-exhibition/5161c3e04527ddde6459b8c47a6bcd45.png": "gallery/assets/polaroid-exhibition/5161c3e04527ddde6459b8c47a6bcd45.png",
+    "gallery/assets/polaroid-exhibition/74a6969b9be6904b7d6a15aef09e5c05.png": "gallery/assets/polaroid-exhibition/74a6969b9be6904b7d6a15aef09e5c05.png",
+    "gallery/assets/polaroid-exhibition/808ff3b894762913f19f7d120b67afb4.png": "gallery/assets/polaroid-exhibition/808ff3b894762913f19f7d120b67afb4.png",
+    "gallery/assets/polaroid-exhibition/9923fc5a603123ddb9e627c13de17981.jpg": "gallery/assets/polaroid-exhibition/9923fc5a603123ddb9e627c13de17981.jpg",
+    "gallery/assets/polaroid-exhibition/99824d179e0f4ccb82b9484200fba75c.jpg": "gallery/assets/polaroid-exhibition/99824d179e0f4ccb82b9484200fba75c.jpg",
+    "gallery/assets/polaroid-exhibition/9fb78aa68650bf8b36b7e07ebbc272c4.jpg": "gallery/assets/polaroid-exhibition/9fb78aa68650bf8b36b7e07ebbc272c4.jpg",
+    "gallery/assets/polaroid-exhibition/dbf1c779f16ae7f76c52248b22ed7a03.jpg": "gallery/assets/polaroid-exhibition/dbf1c779f16ae7f76c52248b22ed7a03.jpg",
+    "gallery/assets/polaroid-exhibition/e283646a800859c6335094e96352d624.jpg": "gallery/assets/polaroid-exhibition/e283646a800859c6335094e96352d624.jpg",
+    "gallery/assets/polaroid-exhibition/f38036952adec5272bda9dff99d51f26.png": "gallery/assets/polaroid-exhibition/f38036952adec5272bda9dff99d51f26.png",
+    "gallery/assets/polaroid-exhibition/f968076c4b688bf91fe859a88def4444.jpg": "gallery/assets/polaroid-exhibition/f968076c4b688bf91fe859a88def4444.jpg",
+    "gallery/assets/polaroid-exhibition/ffde772b80875cbc5d81f564d5e241d8.jpg": "gallery/assets/polaroid-exhibition/ffde772b80875cbc5d81f564d5e241d8.jpg",
     "gallery/assets/rhythms-of-chaos.jpg": "gallery/assets/rhythms-of-chaos.jpg",
     "gallery/assets/rhythms-of-chaos.webp": "gallery/assets/rhythms-of-chaos.jpg",
     "gallery/assets/rorschachs-mask.jpg": "gallery/assets/rorschachs-mask.jpg",
@@ -609,6 +626,695 @@
           "height": 683,
           "bytes": 70066,
           "sha256": "6b85cbd5b7c30ca7d44761892fb27d26126538f28bda9bdbb1e17e25b5f099c1"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/01e98f30a7aa1544902a02ff2d8115ba.png": {
+      "sha256": "53c63c21b8900bafaf8a5e518f388eb5628f1a766909f7627193b99635cca864",
+      "bytes": 4219988,
+      "width": 3840,
+      "height": 2160,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/97065ffaf614505aadc6c4c7-480x270.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 20072,
+          "sha256": "97065ffaf614505aadc6c4c72fbb57e08780f180c907bed50b87cad969616de4"
+        },
+        {
+          "path": "gallery/assets/optimized/89809855104ac81ed0eae891-960x540.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 62762,
+          "sha256": "89809855104ac81ed0eae8917719b384fa3c7bf0dca63c362b118c1dc2dd1ebb"
+        },
+        {
+          "path": "gallery/assets/optimized/a7f3f0300b593e57e001373f-1600x900.webp",
+          "width": 1600,
+          "height": 900,
+          "bytes": 147114,
+          "sha256": "a7f3f0300b593e57e001373f3d949c5419b7116b87cb42fa178a411c05270476"
+        },
+        {
+          "path": "gallery/assets/optimized/502946d8d26c1e78ad8cf60f-2400x1350.webp",
+          "width": 2400,
+          "height": 1350,
+          "bytes": 277088,
+          "sha256": "502946d8d26c1e78ad8cf60fc4492bec8c158cc90710d5baa469737eec7130fa"
+        },
+        {
+          "path": "gallery/assets/optimized/09e217ea7218e74ab858f776-3000x1688.webp",
+          "width": 3000,
+          "height": 1688,
+          "bytes": 388038,
+          "sha256": "09e217ea7218e74ab858f7769eae5a7d5e2dfbc120f37f3605f5bc23c8457c4a"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/34a28b3739235036c7101ec21b4a0bd8.jpg": {
+      "sha256": "bfcf469b40d73dde102740005607a1ac46edb857557669d99d0f92e23ae21b39",
+      "bytes": 3866321,
+      "width": 4800,
+      "height": 3200,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/2267fa7ab02499a4abe38582-480x320.webp",
+          "width": 480,
+          "height": 320,
+          "bytes": 17790,
+          "sha256": "2267fa7ab02499a4abe385821763023dc9a8140ad448243596969b83c4af4263"
+        },
+        {
+          "path": "gallery/assets/optimized/8a583324e8d813d2c9c9a13e-960x640.webp",
+          "width": 960,
+          "height": 640,
+          "bytes": 52512,
+          "sha256": "8a583324e8d813d2c9c9a13efd49fc2651965cb422fdff7d8b801318150c05ef"
+        },
+        {
+          "path": "gallery/assets/optimized/612fb116d5b803676dedb512-1600x1067.webp",
+          "width": 1600,
+          "height": 1067,
+          "bytes": 133718,
+          "sha256": "612fb116d5b803676dedb51271f36d4b28494691a49c086d5c6e5485265c7277"
+        },
+        {
+          "path": "gallery/assets/optimized/9428a622ab5c34e271adc3de-2400x1600.webp",
+          "width": 2400,
+          "height": 1600,
+          "bytes": 323634,
+          "sha256": "9428a622ab5c34e271adc3debc7523488dd94872aadb4a8667c231a543b7c616"
+        },
+        {
+          "path": "gallery/assets/optimized/258da4d0fa8a87d6b1f24278-3000x2000.webp",
+          "width": 3000,
+          "height": 2000,
+          "bytes": 555702,
+          "sha256": "258da4d0fa8a87d6b1f242785362afb5eaa69615d2afba9d08f6830b6b24e0a2"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/3542570c82c935f751c5ec9dab722d65.jpg": {
+      "sha256": "d2e1d7185f907b8bb3e3038596a712f5c52e48cd74e55b9c2f2ae044ca96b88c",
+      "bytes": 3157779,
+      "width": 3840,
+      "height": 2160,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/da910b5b6e238cac295cf310-480x270.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 15724,
+          "sha256": "da910b5b6e238cac295cf310cfa52e5314b8feb158fc8dc791499339538076a5"
+        },
+        {
+          "path": "gallery/assets/optimized/e9744bcb5cfabe3bedb581fd-960x540.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 49406,
+          "sha256": "e9744bcb5cfabe3bedb581fd35d2efd9bce2d919636d7f63e6d1184c799651f6"
+        },
+        {
+          "path": "gallery/assets/optimized/eba44dd31187885f44803bf3-1600x900.webp",
+          "width": 1600,
+          "height": 900,
+          "bytes": 111612,
+          "sha256": "eba44dd31187885f44803bf358aa504dc784beffd30a4c2498a9fdca01950671"
+        },
+        {
+          "path": "gallery/assets/optimized/7b0a119d52a699a400594776-2400x1350.webp",
+          "width": 2400,
+          "height": 1350,
+          "bytes": 211408,
+          "sha256": "7b0a119d52a699a400594776c8c51c02540bf1274413cbbf51a36ffa16a4519e"
+        },
+        {
+          "path": "gallery/assets/optimized/d1a843c2f0e93bc3632f4130-3000x1688.webp",
+          "width": 3000,
+          "height": 1688,
+          "bytes": 292552,
+          "sha256": "d1a843c2f0e93bc3632f41307e49a330e90a1bf4fa7e750f75b5656d54aad7e8"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/3600967b57ab5abb0242573cc4076fe5.jpg": {
+      "sha256": "75e64853ceaa88780b3212677882c1bc63e9bce5a8344562bcbb1a412d07d3bf",
+      "bytes": 3138104,
+      "width": 3840,
+      "height": 2160,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/74583b4b14e25605098c7122-480x270.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 37648,
+          "sha256": "74583b4b14e25605098c7122c5f25a8d1b08224ae8171df0af51158b362314b9"
+        },
+        {
+          "path": "gallery/assets/optimized/5e01fd722b2f5ca35caa2b6d-960x540.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 128646,
+          "sha256": "5e01fd722b2f5ca35caa2b6daa20f427502717e8da6802265d2d67f77f163a55"
+        },
+        {
+          "path": "gallery/assets/optimized/8a4880fdb6b596cdc05cbedd-1600x900.webp",
+          "width": 1600,
+          "height": 900,
+          "bytes": 289558,
+          "sha256": "8a4880fdb6b596cdc05cbedd87d9fc7c18cf61282e75a0c42b84f83d1d30f2fb"
+        },
+        {
+          "path": "gallery/assets/optimized/06e409c42b6f45506bb62e38-2400x1350.webp",
+          "width": 2400,
+          "height": 1350,
+          "bytes": 479690,
+          "sha256": "06e409c42b6f45506bb62e387c2e7da54c0972d97d9479f804d0aeffb448f13e"
+        },
+        {
+          "path": "gallery/assets/optimized/1003473b2a07394ec798fbfd-3000x1688.webp",
+          "width": 3000,
+          "height": 1688,
+          "bytes": 623234,
+          "sha256": "1003473b2a07394ec798fbfd7e374a91b25d600d7cd7a1ff01be723a20b99c59"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/38715f1371cee7180c96d5a7a00e4569.png": {
+      "sha256": "ae4cae67c368b20bfbf635c12a13e817b6600b85d56acbb2fe45aa051b3fe76d",
+      "bytes": 872459,
+      "width": 1720,
+      "height": 967,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/7dd6ceb9f563840eecec2bc1-480x270.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 23662,
+          "sha256": "7dd6ceb9f563840eecec2bc147f91494a817b991cf755a5abe12d22ca4874439"
+        },
+        {
+          "path": "gallery/assets/optimized/f92cd9591591df90cb1192b7-960x540.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 70912,
+          "sha256": "f92cd9591591df90cb1192b707110ed5ca7186e3f2b1a7dab7796ff22042096f"
+        },
+        {
+          "path": "gallery/assets/optimized/6cbf09aecc04032852f7effd-1600x900.webp",
+          "width": 1600,
+          "height": 900,
+          "bytes": 134624,
+          "sha256": "6cbf09aecc04032852f7effdb928f0831e9de943269c941f17916482a11738d8"
+        },
+        {
+          "path": "gallery/assets/optimized/7a2ce3b9b30ad64c6b47afae-1720x967.webp",
+          "width": 1720,
+          "height": 967,
+          "bytes": 152508,
+          "sha256": "7a2ce3b9b30ad64c6b47afaea8bb41c260e012319f57fddb7f5b65dca1e70a12"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/3bca2f84a2313fda491ba5c02143ca71.jpg": {
+      "sha256": "438840c0ed82ebdf4116b353fce0028cf03f51bd0cb73ee096a490a78dd7fee1",
+      "bytes": 4580363,
+      "width": 3840,
+      "height": 2160,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/c711182cab133cc1648b68b4-480x270.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 16132,
+          "sha256": "c711182cab133cc1648b68b4d23aef31bf9096e4a5b30cc1846aa23d31d01d24"
+        },
+        {
+          "path": "gallery/assets/optimized/f34e8093f4a0bff837bdf7c3-960x540.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 79260,
+          "sha256": "f34e8093f4a0bff837bdf7c397951bbdc9e3fabc99357fe553c377e079d66605"
+        },
+        {
+          "path": "gallery/assets/optimized/ba6f3f3dca69fd98ed7b0b23-1600x900.webp",
+          "width": 1600,
+          "height": 900,
+          "bytes": 270220,
+          "sha256": "ba6f3f3dca69fd98ed7b0b23db4891fe2a97cad294b3c3db0b38f6eada7fb2b4"
+        },
+        {
+          "path": "gallery/assets/optimized/2339468e764de7d681bd8a5e-2400x1350.webp",
+          "width": 2400,
+          "height": 1350,
+          "bytes": 506826,
+          "sha256": "2339468e764de7d681bd8a5e041ed5add11f282ec767c25950fc6491f72bdfe4"
+        },
+        {
+          "path": "gallery/assets/optimized/5ba291ac1f71cf7ed247091d-3000x1688.webp",
+          "width": 3000,
+          "height": 1688,
+          "bytes": 733036,
+          "sha256": "5ba291ac1f71cf7ed247091d0862d63ec60b4244f65f70d519f76d3f7c5eec66"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/5161c3e04527ddde6459b8c47a6bcd45.png": {
+      "sha256": "513f7d200771de8c6db102aaf44fb9228989cc8f21876a609885a15d2825a2ca",
+      "bytes": 634422,
+      "width": 1778,
+      "height": 1001,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/4bf4ba82702af372361355dc-480x270.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 11340,
+          "sha256": "4bf4ba82702af372361355dcb745d9a8b904c012dac8441c9c463acd8ed62c7d"
+        },
+        {
+          "path": "gallery/assets/optimized/d75b97ecfbc2e281cde1eccc-960x540.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 37132,
+          "sha256": "d75b97ecfbc2e281cde1eccca0d1bcff6b6a6e7590da01592509557c02c0dc5e"
+        },
+        {
+          "path": "gallery/assets/optimized/6da6664a1f996f7a94860f26-1600x901.webp",
+          "width": 1600,
+          "height": 901,
+          "bytes": 81066,
+          "sha256": "6da6664a1f996f7a94860f26de10096145ff5f3548cae023de434254157e9683"
+        },
+        {
+          "path": "gallery/assets/optimized/e8e9f6daa98e529c67a86082-1778x1001.webp",
+          "width": 1778,
+          "height": 1001,
+          "bytes": 97286,
+          "sha256": "e8e9f6daa98e529c67a8608212ad4bab50349c6b7876ffd2f15a1ad2679d9e04"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/74a6969b9be6904b7d6a15aef09e5c05.png": {
+      "sha256": "68c0e467ec62eaa0e2ba3cf53a64a68f456ec7c46b3e384412da12f82d060b74",
+      "bytes": 816545,
+      "width": 1377,
+      "height": 775,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/951b2e25203545c458efd2eb-480x270.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 20948,
+          "sha256": "951b2e25203545c458efd2eb79e9a77b0f137823180d807006af6b332fb35722"
+        },
+        {
+          "path": "gallery/assets/optimized/962ce6cdff2e29ac075b880d-960x540.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 58766,
+          "sha256": "962ce6cdff2e29ac075b880d55d93b9aa2b3b80624541786b8a6ffa07ae21d39"
+        },
+        {
+          "path": "gallery/assets/optimized/a8636e5829cf9137717c9672-1377x775.webp",
+          "width": 1377,
+          "height": 775,
+          "bytes": 94422,
+          "sha256": "a8636e5829cf9137717c9672aca6589d7bcd020a62b0bb51562a7745edf0405f"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/808ff3b894762913f19f7d120b67afb4.png": {
+      "sha256": "c8a35ad6f690beb2653ec771a52e7821308848b9404e151db9d3bdba6c21c83e",
+      "bytes": 4257853,
+      "width": 3840,
+      "height": 2160,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/36dc2e50118b1ef0d0972b3f-480x270.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 14560,
+          "sha256": "36dc2e50118b1ef0d0972b3f3905bdc80dc89a709bc9136352084b2fee65cffe"
+        },
+        {
+          "path": "gallery/assets/optimized/7fa5b6d329cb2fb3ef85a02e-960x540.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 42250,
+          "sha256": "7fa5b6d329cb2fb3ef85a02e5e23cb4f51ef88c3bb5902010b6c93def2f76231"
+        },
+        {
+          "path": "gallery/assets/optimized/38e2e2eeb8688b13a41ecf04-1600x900.webp",
+          "width": 1600,
+          "height": 900,
+          "bytes": 90848,
+          "sha256": "38e2e2eeb8688b13a41ecf045b787384bc4ef5d79049197d94a34e43b47f5994"
+        },
+        {
+          "path": "gallery/assets/optimized/164b045006cf0a31da2fa9a3-2400x1350.webp",
+          "width": 2400,
+          "height": 1350,
+          "bytes": 164530,
+          "sha256": "164b045006cf0a31da2fa9a3bf2159818c5285b1dbf421280eab8b7338d7a93d"
+        },
+        {
+          "path": "gallery/assets/optimized/fcaea2f528a566640bd2e62b-3000x1688.webp",
+          "width": 3000,
+          "height": 1688,
+          "bytes": 222596,
+          "sha256": "fcaea2f528a566640bd2e62b95cee78868182f1f7d0bd6ee5909fea0a9bf743a"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/9923fc5a603123ddb9e627c13de17981.jpg": {
+      "sha256": "4047f67af3621d3e6391266bac84a000c7eb94a3541ba22726d4be9f49555d80",
+      "bytes": 4529647,
+      "width": 3024,
+      "height": 4032,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/eba17295ec78a24068a4a9b0-360x480.webp",
+          "width": 360,
+          "height": 480,
+          "bytes": 39814,
+          "sha256": "eba17295ec78a24068a4a9b000660e8cf3eb3c1565b3b673ab30b77143fd8307"
+        },
+        {
+          "path": "gallery/assets/optimized/45e226af36512e9f16b7d10b-720x960.webp",
+          "width": 720,
+          "height": 960,
+          "bytes": 143938,
+          "sha256": "45e226af36512e9f16b7d10b31caeeadd216cf4fa88e9494a9c7de086facd477"
+        },
+        {
+          "path": "gallery/assets/optimized/8bec26bc307dc57e1ef44504-1200x1600.webp",
+          "width": 1200,
+          "height": 1600,
+          "bytes": 415868,
+          "sha256": "8bec26bc307dc57e1ef4450426569ab9a65e0a7c14e6a8287d0c0264aabe6267"
+        },
+        {
+          "path": "gallery/assets/optimized/1ac34714dfa617cd25695550-1800x2400.webp",
+          "width": 1800,
+          "height": 2400,
+          "bytes": 931356,
+          "sha256": "1ac34714dfa617cd2569555079e5bc08dee4dccb5d45a686a3ed936c255b272a"
+        },
+        {
+          "path": "gallery/assets/optimized/785183bf0f75b346c8a6de34-2250x3000.webp",
+          "width": 2250,
+          "height": 3000,
+          "bytes": 1381820,
+          "sha256": "785183bf0f75b346c8a6de34215c946d04413be00d26586dd8b70fc5729276ca"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/99824d179e0f4ccb82b9484200fba75c.jpg": {
+      "sha256": "744d93d299cfdc6847a35f508b2fdf94ba1c13079518d6bd249c6148f9f493f9",
+      "bytes": 3491583,
+      "width": 3840,
+      "height": 2160,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/1a10a6903b0f6a47db7f25e7-480x270.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 50252,
+          "sha256": "1a10a6903b0f6a47db7f25e79770beb25fd1b9472ec44f266a4b7538caee26b3"
+        },
+        {
+          "path": "gallery/assets/optimized/39f31b810048f8675fd13fc8-960x540.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 171922,
+          "sha256": "39f31b810048f8675fd13fc8d8236848a826fa3dfb54cd621f21d221582edb99"
+        },
+        {
+          "path": "gallery/assets/optimized/5b234d18f39fab8cf2ef20da-1600x900.webp",
+          "width": 1600,
+          "height": 900,
+          "bytes": 380284,
+          "sha256": "5b234d18f39fab8cf2ef20daac4b0339a3d1704b61ba725f726d19fc027e10f4"
+        },
+        {
+          "path": "gallery/assets/optimized/de4503f0c992885fa2249d4b-2400x1350.webp",
+          "width": 2400,
+          "height": 1350,
+          "bytes": 620770,
+          "sha256": "de4503f0c992885fa2249d4b4af1e42667c97050f0bf95e7fbdc79ad37c98603"
+        },
+        {
+          "path": "gallery/assets/optimized/78ace757f0ad8902e0767397-3000x1688.webp",
+          "width": 3000,
+          "height": 1688,
+          "bytes": 781394,
+          "sha256": "78ace757f0ad8902e0767397505688ac84c0f48e80f8612eb46f616f8e99e463"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/9fb78aa68650bf8b36b7e07ebbc272c4.jpg": {
+      "sha256": "2255269250d1c8db78327bab73587858f705dd22ac6874b6feb51d94f9bce3c2",
+      "bytes": 3591550,
+      "width": 3840,
+      "height": 2160,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/f7349ef5b3cbf5b56e581392-480x270.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 51594,
+          "sha256": "f7349ef5b3cbf5b56e5813922a22d16d18295f6d694391bfe03eec87352b66d7"
+        },
+        {
+          "path": "gallery/assets/optimized/ed3dd6ed420f5e5bf07df4c3-960x540.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 180282,
+          "sha256": "ed3dd6ed420f5e5bf07df4c35baeb4e6fc164d1af9afb3debc70290faf82463f"
+        },
+        {
+          "path": "gallery/assets/optimized/6de7ad5577d5b75a1f2e474e-1600x900.webp",
+          "width": 1600,
+          "height": 900,
+          "bytes": 394630,
+          "sha256": "6de7ad5577d5b75a1f2e474e61d87232c0cedcb128f5d68b9e5fe0b57630ebd7"
+        },
+        {
+          "path": "gallery/assets/optimized/0f1c6f58442cc8f63ba61923-2400x1350.webp",
+          "width": 2400,
+          "height": 1350,
+          "bytes": 644076,
+          "sha256": "0f1c6f58442cc8f63ba61923348f2ced5acb666dd34a6fbfd03eba6157786adf"
+        },
+        {
+          "path": "gallery/assets/optimized/7e5a0f19baef98bff51f1493-3000x1688.webp",
+          "width": 3000,
+          "height": 1688,
+          "bytes": 815166,
+          "sha256": "7e5a0f19baef98bff51f14930e64cbd8b3375ee80f8ab03bd0dc96aee8716868"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/dbf1c779f16ae7f76c52248b22ed7a03.jpg": {
+      "sha256": "3c209a7ba536bab1eeeda188c96cb9ac85446e99efdabc69aeac9ce043b2133f",
+      "bytes": 1599466,
+      "width": 3840,
+      "height": 2160,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/35da4b8d302b3513bdb75000-480x270.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 21570,
+          "sha256": "35da4b8d302b3513bdb75000e9e9d5540cb026f96d8b43daf08287e292155bbd"
+        },
+        {
+          "path": "gallery/assets/optimized/e0fd153c7e62feca03a6ae09-960x540.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 69456,
+          "sha256": "e0fd153c7e62feca03a6ae0915e05f29cc6d215766233bb9b7bc6456622921d7"
+        },
+        {
+          "path": "gallery/assets/optimized/41d7fea59709646af833e1f2-1600x900.webp",
+          "width": 1600,
+          "height": 900,
+          "bytes": 212526,
+          "sha256": "41d7fea59709646af833e1f2601733fc110653890be4b60a1891f2a9805b2754"
+        },
+        {
+          "path": "gallery/assets/optimized/a3b56a89c845efa12c84e343-2400x1350.webp",
+          "width": 2400,
+          "height": 1350,
+          "bytes": 512846,
+          "sha256": "a3b56a89c845efa12c84e34335bc410d48e9b8f87cac8633456c7a54c2e7d3f0"
+        },
+        {
+          "path": "gallery/assets/optimized/640483303dadb93a55dfc59c-3000x1688.webp",
+          "width": 3000,
+          "height": 1688,
+          "bytes": 770668,
+          "sha256": "640483303dadb93a55dfc59c0aa3725a4bbcee1544819744e25ad96f1f2b31c8"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/e283646a800859c6335094e96352d624.jpg": {
+      "sha256": "a311292cc24345c19debdb396ad4056869bebe20d6d8d0aa0a1e0da941bc8d8c",
+      "bytes": 2687551,
+      "width": 3840,
+      "height": 2160,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/6af4d909f390d1b6a5453455-480x270.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 6030,
+          "sha256": "6af4d909f390d1b6a5453455624d75d091279ecc3a273bb629c6da27ffcb03ad"
+        },
+        {
+          "path": "gallery/assets/optimized/6521ced44ef4696a9ea06916-960x540.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 16006,
+          "sha256": "6521ced44ef4696a9ea069166675205d2dd5b2651ab77b944b8d992778b480ce"
+        },
+        {
+          "path": "gallery/assets/optimized/71d8e93be9407f100454db2c-1600x900.webp",
+          "width": 1600,
+          "height": 900,
+          "bytes": 42234,
+          "sha256": "71d8e93be9407f100454db2ceac8624035c6e624fd7bef8f7e6d186bfb45b6b4"
+        },
+        {
+          "path": "gallery/assets/optimized/697baf9f6fcabed4359e357f-2400x1350.webp",
+          "width": 2400,
+          "height": 1350,
+          "bytes": 112176,
+          "sha256": "697baf9f6fcabed4359e357f42d2ea290e5e5f00e76ef0d529721f6a7c5906f4"
+        },
+        {
+          "path": "gallery/assets/optimized/b420800387a5461679508dad-3000x1688.webp",
+          "width": 3000,
+          "height": 1688,
+          "bytes": 204322,
+          "sha256": "b420800387a5461679508dad3a590e951fa7e8907b620c456331d749f35e57aa"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/f38036952adec5272bda9dff99d51f26.png": {
+      "sha256": "ff7712806eaeb92a4428d4042223398a89e5b2e29bb46acc56db5036d62d4455",
+      "bytes": 1410135,
+      "width": 1397,
+      "height": 786,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/29db52e6b49486d75284ffb1-480x270.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 28776,
+          "sha256": "29db52e6b49486d75284ffb157b28c7f3eb1df788f5ea90ffac9738ff9e11abb"
+        },
+        {
+          "path": "gallery/assets/optimized/e2c57fb0e6458e54a2c6c53c-960x540.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 81354,
+          "sha256": "e2c57fb0e6458e54a2c6c53c0df6f59e06553927de84b7b626c24972927afd37"
+        },
+        {
+          "path": "gallery/assets/optimized/23cb9b2f2a9bb2df9dda5e97-1397x786.webp",
+          "width": 1397,
+          "height": 786,
+          "bytes": 142632,
+          "sha256": "23cb9b2f2a9bb2df9dda5e978dcbcb88f2c240d0d51353e61680df41de498554"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/f968076c4b688bf91fe859a88def4444.jpg": {
+      "sha256": "d2798cb69776ff174febf5fb21dc6aeb399e69161f2fb5db88d3713d80a7b4b4",
+      "bytes": 25932388,
+      "width": 6048,
+      "height": 8064,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/68c3b62ea2ea1001a3e4802e-360x480.webp",
+          "width": 360,
+          "height": 480,
+          "bytes": 29810,
+          "sha256": "68c3b62ea2ea1001a3e4802e5a36797592f2ce288b80941a3aa353f00cc0856f"
+        },
+        {
+          "path": "gallery/assets/optimized/f08e50b577c9cd3ce03d4a68-720x960.webp",
+          "width": 720,
+          "height": 960,
+          "bytes": 127600,
+          "sha256": "f08e50b577c9cd3ce03d4a687c395665965ebdbe4990f4659e387a3330d673b0"
+        },
+        {
+          "path": "gallery/assets/optimized/e3f1d7e18064dfc6aa265140-1200x1600.webp",
+          "width": 1200,
+          "height": 1600,
+          "bytes": 423722,
+          "sha256": "e3f1d7e18064dfc6aa265140cd29dd6203474e48e1aea2699d3286af927053b7"
+        },
+        {
+          "path": "gallery/assets/optimized/73ca31564651283b4db9e67c-1800x2400.webp",
+          "width": 1800,
+          "height": 2400,
+          "bytes": 1205634,
+          "sha256": "73ca31564651283b4db9e67cb4de8b9a77927a9b918c0f91174b74b154878603"
+        },
+        {
+          "path": "gallery/assets/optimized/e202440396b54cc73bf5683e-2250x3000.webp",
+          "width": 2250,
+          "height": 3000,
+          "bytes": 1949280,
+          "sha256": "e202440396b54cc73bf5683ee20679a44310b4973333fe39b5fd294517d71b79"
+        }
+      ]
+    },
+    "gallery/assets/polaroid-exhibition/ffde772b80875cbc5d81f564d5e241d8.jpg": {
+      "sha256": "3c6051bea81237f00a7377510c6b8b17bd1f7831b172ee6dc06e77cfbe73275a",
+      "bytes": 5417949,
+      "width": 3840,
+      "height": 2160,
+      "variants": [
+        {
+          "path": "gallery/assets/optimized/589f7cdce92ef26f7d60e3f7-480x270.webp",
+          "width": 480,
+          "height": 270,
+          "bytes": 17746,
+          "sha256": "589f7cdce92ef26f7d60e3f7ea84d4d7c5d9da1ba20b368b7ed41b9381ebdf1f"
+        },
+        {
+          "path": "gallery/assets/optimized/41db50aae5392d1ac0c420f5-960x540.webp",
+          "width": 960,
+          "height": 540,
+          "bytes": 92172,
+          "sha256": "41db50aae5392d1ac0c420f5c772b3b98d4bcf644829a97cd9943675642f9f6b"
+        },
+        {
+          "path": "gallery/assets/optimized/c0ce73f8b93d11f0153f7c60-1600x900.webp",
+          "width": 1600,
+          "height": 900,
+          "bytes": 297028,
+          "sha256": "c0ce73f8b93d11f0153f7c60725a9d8e72308a3d14cc40d158601ca3f56a6bd8"
+        },
+        {
+          "path": "gallery/assets/optimized/5350d6a5a693095649640a6f-2400x1350.webp",
+          "width": 2400,
+          "height": 1350,
+          "bytes": 630210,
+          "sha256": "5350d6a5a693095649640a6f9dd1e8360ab212749136a987bedf6afd33a7f32d"
+        },
+        {
+          "path": "gallery/assets/optimized/8599a6023e208177b27c7b5a-3000x1688.webp",
+          "width": 3000,
+          "height": 1688,
+          "bytes": 903880,
+          "sha256": "8599a6023e208177b27c7b5a4874b22ccabd5aaba4cbe0d88384313dd33c4c35"
         }
       ]
     },

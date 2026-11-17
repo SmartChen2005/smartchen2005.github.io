@@ -1,6 +1,4 @@
 import fs from 'node:fs';
-import { createHash } from 'node:crypto';
-import { allImages, adaptNotionBlocks, parseNotionMarkdown, publicationNodes } from './gallery-document.mjs';
 import { imageRendition, renditionAttributes, viewerAttributes } from './gallery-media.mjs';
 
 export const exhibitionSlug = 'trauma-induced-dissociative-amnesia';
@@ -8,27 +6,15 @@ export const exhibitionTitle = 'Trauma-Induced Dissociative Amnesia';
 export const exhibitionSubtitle = 'Concept Photography and In-Game Screenshots for Polaroid of Yesterday';
 export const exhibitionLabel = 'Concept Photography and Game Screenshots';
 const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
-const digest = value => createHash('sha256').update(value).digest('hex');
 
-export function exhibitionCollection(page, resolveMedia) {
-  const screenshots = JSON.parse(fs.readFileSync(new URL('./stills-collection.json', import.meta.url), 'utf8')).map(photo => ({
-    ...photo,
-    original: new URL(photo.source, 'https://archive.local/projects/polaroid-of-yesterday/photography/').pathname.slice(1),
-    rendition: imageRendition(`projects/polaroid-of-yesterday/photography/assets/${photo.id}.webp`)
-  }));
-  const concepts = allImages(publicationNodes(page.blocks ? adaptNotionBlocks(page.blocks) : parseNotionMarkdown(page.markdown))).map(image => {
-    const media = resolveMedia(image.src);
-    if (!media.original?.startsWith('assets/') || media.unavailable) throw new Error('Concept art must have a cached original');
-    const original = 'gallery/' + media.original;
-    return { id: 'concept-' + digest(original).slice(0, 12), kind: 'Concept art', original,
-      alt: 'Concept art for Polaroid of Yesterday.', rendition: imageRendition(original) };
+export function exhibitionCollection() {
+  const photos = JSON.parse(fs.readFileSync(new URL('./polaroid-exhibition-photos.json', import.meta.url), 'utf8'));
+  return photos.map(photo => {
+    const original = 'gallery/assets/polaroid-exhibition/' + photo.file;
+    const rendition = imageRendition(original);
+    if (!rendition) throw new Error('Missing responsive exhibition image: ' + original);
+    return { ...photo, original, rendition };
   });
-  // Shuffle the entire combined collection once, reproducibly. Neither source
-  // sequence nor media category determines its place; both views share this order.
-  return [...screenshots, ...concepts].map(photo => {
-    if (!photo.rendition) throw new Error('Missing responsive exhibition image: ' + photo.original);
-    return { ...photo, shuffle: digest('polaroid-combined-2026-11-03:' + photo.original) };
-  }).sort((a, b) => a.shuffle.localeCompare(b.shuffle));
 }
 
 export function renderExhibition(collection) {
@@ -36,7 +22,7 @@ export function renderExhibition(collection) {
   const referenceRatio = landscape ? landscape.height / landscape.width : 2 / 3;
   const figures = collection.map((photo, index) => `<figure class="print" data-index="${index}" data-kind="${escape(photo.kind)}" id="${photo.id}">
     <a class="print-link" href="../../${escape(photo.original)}" aria-label="View ${escape(photo.kind)} ${index + 1}" ${viewerAttributes(photo.rendition, '../../')}>
-      <span class="print-paper"><img ${renditionAttributes(photo.rendition, '../../', { sizes: 'auto, (max-width: 700px) 50vw, (max-width: 1024px) 30vw, 24vw', priority: index < 9 })} alt="${escape(photo.alt)}" ${index < 3 ? 'fetchpriority="high"' : index < 9 ? '' : 'loading="lazy"'} decoding="async"><span class="print-error" hidden>Image unavailable<span>Open original image</span></span></span>
+      <span class="print-paper"><img ${renditionAttributes(photo.rendition, '../../', { sizes: 'auto, (max-width: 910px) 51vw, max(460px, 25vw)', priority: index < 9 })} alt="${escape(photo.alt)}" ${index < 3 ? 'fetchpriority="high"' : index < 9 ? '' : 'loading="lazy"'} decoding="async"><span class="print-error" hidden>Image unavailable<span>Open original image</span></span></span>
     </a></figure>`).join('\n');
   return `<section class="exhibition" data-reference-ratio="${referenceRatio}" style="--index-ratio:${1 / referenceRatio}" aria-label="Polaroid of Yesterday image exhibition">
     <header class="exhibition-header"><div class="view-switch" role="group" aria-label="Exhibition view" hidden><button type="button" data-view="spiral" aria-pressed="true">Spiral</button><span aria-hidden="true">/</span><button type="button" data-view="gallery" aria-pressed="false">Index</button></div><a class="project-return" href="../../projects/polaroid-of-yesterday/">Polaroid of Yesterday</a></header>

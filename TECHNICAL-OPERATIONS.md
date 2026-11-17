@@ -105,6 +105,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-17 — Replace the Polaroid exhibition photographs and open up the spiral
+
+- Import the 17 photographs supplied in the local `New Folder` on November 17, 2026. `tools/polaroid-exhibition-photos.json` records their modification times and order. The Gallery page renders that order in Spiral, Index and the viewer.
+- Keep the original files under `dist/gallery/assets/polaroid-exhibition/`. Run `python tools/prepare-gallery-images.py` and `node tools/render-gallery.mjs` to regenerate responsive images and the page.
+- The spiral uses larger prints and more vertical space between them. Verify with `node tools/test-stills.mjs`, `node tools/test-gallery-image-optimization.mjs` and the Chrome checks in `tools/STILLS-QA.md`.
+
 ### 2026-11-12 — Give the VR collection three illustrated settings
 
 - Replace the A3 role diagram with a low-poly forest camp and give the earlier chapters a home garage and auto parts store. The three covers use distinct palettes, native color emoji and short on-entry motion.

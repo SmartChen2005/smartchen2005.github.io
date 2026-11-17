@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs'), path = require('node:path');
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const output = path.join(__dirname, 'stills-qa');
+const collection = require('./polaroid-exhibition-photos.json');
 fs.mkdirSync(output, { recursive: true });
 const origin = process.env.STILLS_PREVIEW_URL || 'http://127.0.0.1:4173';
 const route = '/gallery/trauma-induced-dissociative-amnesia/';
@@ -22,6 +23,37 @@ const clear = async page => {
     assert(a.right <= b.left + 1 || b.right <= a.left + 1 || a.bottom <= b.top + 1 || b.bottom <= a.top + 1, 'Index images/captions never overlap');
   }
 };
+const checkSpiralSpacing = async page => {
+  const largestOverlap = await page.evaluate(async () => {
+    const stage = document.querySelector('.installation');
+    const space = document.querySelector('.exhibition-space');
+    const prints = [...stage.querySelectorAll('.print-paper')];
+    const start = scrollY;
+    let largest = 0;
+    for (let i = 0; i <= 16; i++) {
+      window.scrollTo({ top: start + space.offsetHeight * i / 16, behavior: 'instant' });
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      const bounds = stage.getBoundingClientRect();
+      const visible = prints.map(print => {
+        const r = print.getBoundingClientRect();
+        return { left: Math.max(r.left, bounds.left), right: Math.min(r.right, bounds.right),
+          top: Math.max(r.top, bounds.top), bottom: Math.min(r.bottom, bounds.bottom, innerHeight) };
+      }).filter(r => r.right > r.left && r.bottom > r.top);
+      for (const [index, a] of visible.entries()) {
+        for (const b of visible.slice(index + 1)) {
+          const width = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+          const height = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+          if (width > 0 && height > 0) {
+            largest = Math.max(largest, width * height / Math.min((a.right - a.left) * (a.bottom - a.top), (b.right - b.left) * (b.bottom - b.top)));
+          }
+        }
+      }
+    }
+    window.scrollTo({ top: start, behavior: 'instant' });
+    return largest;
+  });
+  assert(largestOverlap <= .01, `Spiral keeps prints clear at ${page.viewportSize().width}px (maximum overlap ${largestOverlap})`);
+};
 (async () => {
   const browser = await chromium.launch({ headless: true, channel: 'chrome', args: ['--no-proxy-server'] });
   const errors = [];
@@ -30,17 +62,18 @@ const clear = async page => {
     const page = await context.newPage();
     page.on('pageerror', e => errors.push(e.message));
     await page.goto(url); await ready(page); await page.evaluate(() => document.fonts.ready);
-    assert.equal(await page.locator('.print').count(), 31);
+    assert.equal(await page.locator('.print').count(), collection.length);
     assert.equal(await page.locator('h1').textContent(), 'Trauma-Induced Dissociative Amnesia');
     assert.equal(await page.locator('.gallery-header, .gallery-footer').count(), 2);
     const categories = await page.locator('.print').evaluateAll(es => es.map(e => e.dataset.kind));
     assert.equal(await page.locator('.print-caption').count(), 0, 'Index is images only');
-    assert.equal(categories.filter(s => s === 'Concept art').length, 11);
-    assert.equal(categories.filter(s => s === 'In-game screenshot').length, 20);
+    assert.deepEqual(categories, collection.map(photo => photo.kind));
     const order = await page.locator('.print').evaluateAll(es => es.map(e => e.id));
+    assert.deepEqual(order, collection.map(photo => photo.id));
     assert.equal(await page.locator('button[data-view=spiral]').getAttribute('aria-pressed'), 'true');
     await page.screenshot({ path: path.join(output, 'combined-desktop-title.png') });
     await enter(page);
+    await checkSpiralSpacing(page); await settle(page);
     const before = await page.locator('.print').first().getAttribute('style');
     await page.mouse.wheel(0, 650); await settle(page);
     assert.notEqual(await page.locator('.print').first().getAttribute('style'), before, 'Native scroll advances the helix');
@@ -58,7 +91,7 @@ const clear = async page => {
     await page.locator('button[data-view=gallery]').click(); await settle(page);
     assert(page.url().includes('view=gallery'));
     await enter(page); await clear(page);
-    assert.deepEqual(await page.locator('.print').evaluateAll(es => es.map(e => e.id)), order, 'Switching views preserves mixed order');
+    assert.deepEqual(await page.locator('.print').evaluateAll(es => es.map(e => e.id)), order, 'Switching views preserves chronological order');
     assert(await page.locator('.print').evaluateAll(es => es.every(e => e.style.opacity === '1' && /,\s*0(?:\.0+)?px\)/.test(e.style.transform))), 'Index has no depth or image tint');
     await page.screenshot({ path: path.join(output, 'combined-desktop-index.png') });
     const portraitHeights = await page.locator('.print img').evaluateAll(es => {
@@ -103,6 +136,7 @@ const clear = async page => {
     await page.mouse.wheel(0, 700);
     assert.equal(await page.evaluate(() => scrollY), scroll, 'Viewer locks the background');
     await page.keyboard.press('Escape');
+    await page.locator('body > .gallery-header').waitFor({ state: 'attached' });
     assert(await first.evaluate(e => document.activeElement === e), 'Escape restores the source focus');
     assert.equal(await page.locator('body > .gallery-header').count(), 1, 'Close restores the original shared header');
     await page.locator('.print-link').nth(categories.indexOf('Concept art')).focus();
@@ -131,6 +165,7 @@ const clear = async page => {
       await page.screenshot({ path: path.join(output, `combined-viewer-${width}.png`) });
       await page.keyboard.press('Escape');
       await page.locator('button[data-view=spiral]').click(); await settle(page); await enter(page);
+      await checkSpiralSpacing(page); await settle(page);
       await page.screenshot({ path: path.join(output, `combined-spiral-${width}.png`) });
     }
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -151,7 +186,7 @@ const clear = async page => {
     assert.equal(await legacy.locator('button[data-view=gallery]').getAttribute('aria-pressed'), 'true');
     const nojs = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
     const fallback = await nojs.newPage(); await fallback.goto(url);
-    assert.equal(await fallback.locator('.print-link').count(), 31);
+    assert.equal(await fallback.locator('.print-link').count(), collection.length);
     assert(!(await fallback.locator('.view-switch').isVisible()));
     assert(await fallback.locator('.print-link').first().getAttribute('href'));
     const broken = await context.newPage();
@@ -179,11 +214,11 @@ const clear = async page => {
     const opening = context.waitForEvent('page');
     await navigation.locator('.camera-entrance').click();
     const destination = await opening; await destination.waitForURL('**' + route); await ready(destination);
-    assert.equal(await destination.locator('.print').count(), 31, 'Projects → Polaroid → Gallery opens the combined exhibition');
+    assert.equal(await destination.locator('.print').count(), collection.length, 'Projects → Polaroid → Gallery opens the exhibition');
     await navigation.goto(origin + '/gallery/');
     assert.equal(await navigation.locator('.gallery-main h2 a[href="trauma-induced-dissociative-amnesia/"]').count(), 1);
     assert.equal(await navigation.locator('.stills-feature').count(), 0);
     assert.equal(errors.length, 0, errors.join('\n'));
-    console.log('Passed: 31 mixed images; Gallery shell; native scroll helix; Spiral/Index order and responsive non-overlap; category-only viewer; ratio/arrows/Escape/focus/scroll lock; seven viewports; 44px controls; last-image keyboard access; reduced motion/forced colors/offline; footer; legacy query/hash redirect; no-JS originals; image error/retry.');
+    console.log('Passed: 17 chronologically ordered images; Gallery shell; native scroll helix; Spiral/Index order and responsive non-overlap; category-only viewer; ratio/arrows/Escape/focus/scroll lock; seven viewports; 44px controls; last-image keyboard access; reduced motion/forced colors/offline; footer; legacy query/hash redirect; no-JS originals; image error/retry.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exit(1); });

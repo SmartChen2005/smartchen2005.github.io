@@ -4,22 +4,24 @@ export const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, va
 const sizes = [.98, .77, .91, 1.12, .81, 1.02, .88, .76, 1.06, .83];
 
 export function spiralMetrics(width, height, count) {
-  const scale = Math.min(1, width / 1300);
-  const radius = Math.min(420, width * .295);
-  const step = clamp(height * .095, 62, 108);
-  const start = height < 500 ? step * .65 : Math.min(step * 2.1, Math.max(0, (height / 2 - 250) * 1.1));
-  const end = Math.max(start, (count - 1) * step - Math.min(step * 1.5, height * .15));
-  return { radius, step, start, end, printWidth: clamp(290 * scale, 125, 290),
-    distance: Math.max(height, (end - start) * 2.6), perspective: width > 1600 ? 1800 : width <= 760 ? 1000 : 1500 };
+  const printWidth = Math.min(410, width * .45, height * 1.12);
+  const radius = Math.min(390, width * .215);
+  // Scale the vertical pitch with the prints so enlarging them leaves space
+  // between photographs, including when both project onto the same side.
+  const step = printWidth * .89 + 26;
+  const end = Math.max(0, (count - 1) * step);
+  const start = Math.min(end, step * .52, height * .13);
+  return { radius, step, start, end, printWidth,
+    distance: Math.max(height, (end - start) * 1.55), perspective: width > 1600 ? 1800 : width <= 760 ? 1000 : 1500 };
 }
 
 export function spiralPose(index, progress, width, height, count) {
   const m = spiralMetrics(width, height, count);
-  const angle = -2.05 + index * .9;
+  const angle = 1.38 + index * .99;
   return { x: Math.cos(angle) * m.radius,
-    y: index * m.step + Math.sin(index * 2.3) * m.step * .12 - (m.start + progress * (m.end - m.start)),
+    y: index * m.step - (m.start + progress * (m.end - m.start)),
     z: Math.sin(angle) * m.radius * .70,
-    rx: Math.sin(angle) * 4, ry: Math.cos(angle) * -23, rz: 0,
+    rx: Math.sin(angle) * 3, ry: Math.cos(angle) * -16, rz: 0,
     width: m.printWidth * sizes[index % sizes.length] };
 }
 
