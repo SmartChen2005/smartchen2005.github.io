@@ -18,8 +18,6 @@ const effects = [...document.querySelectorAll('[data-project-effect]')].map(elem
     effect.surface = element.querySelector('img');
   } else if (kind === 'vr') {
     effect.surface = element.querySelector('.vr-card-map');
-  } else if (kind === 'gran-turismo') {
-    effect.surface = element.querySelector('.gran-turismo-cover');
   }
   return effect;
 });
@@ -48,10 +46,6 @@ function render(effect) {
   } else if (effect.kind === 'vr') {
     effect.surface.style.transform = `translate3d(${x.value*6}px,${y.value*4-active.value*5}px,0) rotateX(${-y.value*12}deg) rotateY(${x.value*14}deg)`;
     effect.surface.style.setProperty('--vr-map-curl', `${Math.abs(x.value)*28}deg`);
-  } else if (effect.kind === 'gran-turismo') {
-    const pan = -x.value * 1.5;
-    // Enlarge only as the image moves, keeping both edges outside the crop.
-    effect.surface.style.transform = pan ? `translateX(${pan}%) scale(${1 + Math.abs(pan) * .022})` : '';
   }
 }
 function tick(time) {

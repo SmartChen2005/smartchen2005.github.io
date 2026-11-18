@@ -205,7 +205,6 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   pointer-events: none;
 }
 .gran-turismo-cover { z-index: -2; object-fit: cover; object-position: center; }
-.project-feature--gran-turismo .directory-link:focus-visible .gran-turismo-cover { transform: none !important; }
 .project-feature--gran-turismo .directory-link::before {
   content: '';
   z-index: -1;
@@ -389,7 +388,6 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   .projects-main .photo-print { transform: translate(-50%, -50%) !important; }
   .projects-main .photo-emulsion, .projects-main .photo-sheen { opacity: 0 !important; }
   .projects-main .project-card-preview--device img { transform: scale(1.18) !important; }
-  .gran-turismo-cover { transform: none !important; }
   .project-card--battlefront .battlefront-panel svg { transition: none; transform: none !important; }
 }
 @media (prefers-reduced-transparency: reduce) {
