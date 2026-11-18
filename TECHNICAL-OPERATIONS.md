@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-17 — Use the World Tree as the Gran Turismo Projects cover
+
+- Render `dist/projects/assets/gran-turismo-atlas-cover.webp` from the standalone Atlas at scroll position zero using its original models, sky and renderer. For the capture only, add 44 metres to the opening orbit radius passed to `orbitPoint`, keep the original opening azimuth, and aim 1 metre below the tree center. Capture the scene in Chrome at 1680 × 900 with scrollbars hidden and encode WebP at quality 88.
+- Regenerate the directory with `node tools/render-projects.mjs`. The featured card combines the cover with two text lines and opens the atlas in a new tab.
+
 ### 2026-11-17 — Publish the standalone Gran Turismo World Atlas
 
 - Copy the six original files from the supplied `Gran Turismo Website` folder directly into `dist/projects/gran-turismo/`. The folder is the publishable source. Shared page generators skip the atlas, and Git preserves its original bytes.

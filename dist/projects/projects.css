@@ -106,7 +106,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .projects-main .directory-link:is(:hover,:focus-visible) .directory-arrow svg { transform: translate(1px,-1px); }
 .projects-main .project-preview { aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--projects-preview-radius); background: var(--projects-preview-surface); }
 .projects-main .project-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
-/* A physical print and a quiet starfield give the featured projects their own materials. */
+/* The Polaroid preview uses a physical-print treatment. */
 .projects-main .project-preview[data-project-effect] { position: relative; perspective: 850px; pointer-events: none; }
 .projects-main .project-preview--polaroid { overflow: visible; background: transparent; }
 .projects-main .photo-print {
@@ -120,17 +120,9 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .projects-main .photo-image { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #22231f; }
 .projects-main .photo-emulsion { position: absolute; inset: 0; background: #e6e1d5; opacity: 0; }
 .projects-main .photo-sheen { position: absolute; inset: 0; overflow: hidden; opacity: 0; background: linear-gradient(115deg, transparent 12%, #fff8 38%, #fff1 54%, transparent 78%); mix-blend-mode: screen; }
-.projects-main .project-feature .directory-link:has([data-project-effect="stars"]) { position: relative; isolation: isolate; min-height: 360px; background: #000; }
-.projects-main .project-preview[data-project-effect="stars"] { position: absolute; inset: 0; width: auto; height: auto; aspect-ratio: auto; border-radius: inherit; perspective: none; background: #000; z-index: 0; }
-.projects-main .directory-link:has([data-project-effect="stars"]) > .project-copy { position: relative; z-index: 1; text-shadow: 0 1px 8px #000; }
-.projects-main .project-preview--cover { position: relative; z-index: 1; border: 1px solid var(--projects-line); background: var(--projects-preview-surface); pointer-events: none; }
-.projects-main .starfield-layer { position: absolute; inset: -24px; opacity: .78; }
-.projects-main .starfield-star { position: absolute; display: block; border-radius: 50%; background: #f0f3fa; }
-.projects-main .starfield-star:nth-child(7n) { box-shadow: 0 0 4px #dce9ff55; }
 .projects-main .directory-link:focus-visible .photo-print { transform: translate(-50%, -50%) rotate(-1deg) !important; }
 .projects-main .directory-link:focus-visible .photo-emulsion,
 .projects-main .directory-link:focus-visible .photo-sheen { opacity: 0 !important; }
-.projects-main .directory-link:focus-visible .starfield-layer { transform: none !important; opacity: .85 !important; }
 .projects-main .project-feature:has(+ .project-card) { margin-bottom: 8px; }
 .projects-main .project-card .directory-link { display: flex; flex-direction: column; align-items: stretch; gap: 14px; height: 100%; min-height: 0; padding: 20px; border-radius: var(--projects-card-radius); }
 .projects-main .project-card-preview { position: relative; flex: none; width: 100%; height: 100px; overflow: hidden; border: 1px solid var(--projects-line); border-radius: var(--projects-preview-radius); background: var(--projects-preview-surface); }
@@ -156,8 +148,6 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .projects-main .project-card--music .project-card-preview--device { height: 220px; overflow: visible; border: 0; background: transparent; z-index: 1; }
 .projects-main .project-card--music .project-card-preview--device img { object-fit: contain; }
 .project-card--music h2 { position: relative; z-index: 0; text-align: center; margin: -38px 0 0; font-size: clamp(30px, 3.6vw, 48px); font-weight: 600; line-height: .95; letter-spacing: -.055em; }
-.projects-main .project-external { white-space: nowrap; }
-.projects-main .project-card .project-external { white-space: normal; }
 .projects-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding-block: 32px 40px; margin-top: 48px; font-size: 0.8125rem; line-height: 1.4; color: var(--projects-secondary); }
 .projects-footer p { margin: 0; }
 .projects-footer a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-decoration: none; cursor: pointer; }
@@ -174,8 +164,6 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   .projects-main .directory-description { margin-top: 12px; font-size: 0.9375rem; }
   .projects-main .project-card .directory-link { padding: 18px; }
   .projects-main .project-card--music .directory-link { padding: 8px 12px 18px; }
-  .projects-main .project-feature .directory-link:has([data-project-effect="stars"]) { min-height: 280px; }
-  .projects-main .starfield-star:nth-child(n+25) { display: none; }
   .projects-main .directory-arrow { width: 32px; height: 32px; flex-basis: 32px; }
   .projects-footer { margin-top: 24px; }
 }
@@ -187,6 +175,55 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   .projects-main .project-feature .directory-link { padding: 20px; }
   .projects-main .directory-title { font-size: 1.8125rem; }
   .projects-main .project-heading { gap: 12px; }
+}
+
+.projects-main .project-feature--gran-turismo {
+  container-type: inline-size;
+  --projects-surface: #150f15;
+  --projects-surface-hover: #1d151d;
+  --projects-surface-pressed: #211821;
+  --projects-line: #443746;
+  --projects-hover-line: #9e899f;
+}
+.projects-main .project-feature--gran-turismo .directory-link {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: end;
+  gap: 0;
+  min-height: max(19rem, 53.57cqi);
+  padding: clamp(1rem, 4cqi, 2.75rem);
+  text-align: center;
+}
+.gran-turismo-cover,
+.project-feature--gran-turismo .directory-link::before {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.gran-turismo-cover { z-index: -2; object-fit: cover; object-position: center; }
+.project-feature--gran-turismo .directory-link::before {
+  content: '';
+  z-index: -1;
+  background: linear-gradient(to bottom, transparent 49%, #150f15d9 84%, #150f15 100%);
+}
+.gran-turismo-caption h2 {
+  margin: 0;
+  font-family: Gotham, system-ui, sans-serif;
+  font-size: clamp(1.75rem, 9cqi, 6.5rem);
+  font-weight: 900;
+  line-height: .98;
+  letter-spacing: -.045em;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.gran-turismo-caption p {
+  margin: .7em 0 0;
+  font-size: clamp(.8125rem, 1.5cqi, 1.0625rem);
+  line-height: 1.4;
 }
 
 .projects-main .project-card--vr {
@@ -350,7 +387,6 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   .projects-main .directory-link, .projects-main .directory-arrow svg { transform: none !important; }
   .projects-main .photo-print { transform: translate(-50%, -50%) !important; }
   .projects-main .photo-emulsion, .projects-main .photo-sheen { opacity: 0 !important; }
-  .projects-main .starfield-layer { transform: none !important; }
   .projects-main .project-card-preview--device img { transform: scale(1.18) !important; }
   .project-card--battlefront .battlefront-panel svg { transition: none; transform: none !important; }
 }
@@ -374,8 +410,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   .projects-main .project-theme--polaroid { --project-title-ink: LinkText; }
   .projects-main .project-card-preview--device img { transform: scale(1.18) !important; }
   .projects-main .photo-print { transform: translate(-50%, -50%) !important; border-color: CanvasText; box-shadow: none; }
-  .projects-main .photo-emulsion, .projects-main .photo-sheen, .projects-main .project-preview--stars { display: none !important; }
-  .projects-main .project-feature .directory-link:has([data-project-effect="stars"]) { background: Canvas; }
+  .projects-main .photo-emulsion, .projects-main .photo-sheen { display: none !important; }
   .battlefront-matchup, .vr-card-stage { display: none; }
 }
 @media print {
@@ -389,7 +424,10 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   .projects-main .project-card-preview--device img { transform: scale(1.18) !important; }
   .projects-footer a, .projects-skip { display: none; }
   .projects-main .photo-print { transform: translate(-50%, -50%) !important; box-shadow: none; }
-  .projects-main .photo-emulsion, .projects-main .photo-sheen, .projects-main .project-preview--stars { display: none !important; }
-  .projects-main .project-feature .directory-link:has([data-project-effect="stars"]) { background: none; min-height: 0; }
+  .projects-main .photo-emulsion, .projects-main .photo-sheen { display: none !important; }
   .battlefront-matchup, .vr-card-stage { display: none; }
+}
+@media (forced-colors: active), print {
+  .gran-turismo-cover, .project-feature--gran-turismo .directory-link::before { display: none; }
+  .projects-main .project-feature--gran-turismo .directory-link { min-height: 0; }
 }

@@ -23,31 +23,21 @@ const aiGameDesign = {
 };
 const projects = [
   {href:'polaroid-of-yesterday/',title:'Polaroid of Yesterday',kind:'Narrative puzzle game',description:'A first-person game about photography, memory, and the stories we construct.',tone:'light',theme:'polaroid',effect:'polaroid',image:`<img ${renditionAttributes(room,'../',{sizes:'(max-width: 700px) calc(100vw - 80px), 520px',priority:true})} alt="" decoding="async" fetchpriority="high" draggable="false">`},
-  {href:'gran-turismo/',title:'Gran Turismo',kind:'VR exploration',description:'A journey through the ruins of a lost civilization.',effect:'stars',previewImage:'assets/project-placeholder.svg',newTab:true},
+  {href:'gran-turismo/',title:'GRAN TURISMO',kind:'VR Adventure Game',layout:'gran-turismo',previewImage:'assets/gran-turismo-atlas-cover.webp'},
   {href:'figures-of-speech/',title:'Figures of Speech',tone:'light',layout:'figures'},
   {href:'vr-for-skill-learning/',title:vr.title,layout:'vr'},
   aiGameDesign,
   {href:'world-sensing-music-station/',title:'World Sensing Music Station',kind:'Physical computing',description:'A handheld instrument that turns movement and space into sound.',tone:'light',previewImage:'world-sensing-music-station/device.svg',previewWidth:1000,previewHeight:800,previewClass:'device',previewEffect:'device'},
   {href:'multiverse-all-star-battlefront/',title:'Multiverse All-Star Battlefront',tone:'light',layout:'battlefront'}
 ];
-function starfield() {
-  let seed = 4127;
-  const random = () => ((seed = (Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
-  return [{depth:.25,count:64},{depth:.55,count:56},{depth:1,count:40}].map(({depth,count})=>{
-    const stars = Array.from({length:count},()=>{
-      const x=random()*100, y=random()*100;
-      const size=.7+depth*.65+random()*.65;
-      const alpha=(.35+depth*.25+random()*.35)*(x<49 && y>22 && y<78 ? .28 : 1);
-      return `<span class="starfield-star" style="left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;width:${size.toFixed(2)}px;height:${size.toFixed(2)}px;opacity:${alpha.toFixed(3)}"></span>`;
-    }).join('');
-    return `<span class="starfield-layer" data-star-depth="${depth}">${stars}</span>`;
-  }).join('');
-}
 function preview(project) {
   const image = project.image || `<img src="${project.previewImage}" width="${project.previewWidth||960}" height="${project.previewHeight||540}" alt="" loading="lazy" decoding="async" draggable="false">`;
   if (!project.effect) return `<div class="project-card-preview${project.previewClass?` project-card-preview--${project.previewClass}`:''}"${project.previewEffect?` data-project-effect="${project.previewEffect}"`:''} aria-hidden="true">${image}</div>`;
-  if (project.effect === 'stars') return `<div class="project-preview project-preview--stars" data-project-effect="stars" aria-hidden="true">${starfield()}</div><div class="project-preview project-preview--cover" aria-hidden="true">${image}</div>`;
   return `<div class="project-preview project-preview--polaroid" data-project-effect="polaroid" aria-hidden="true"><div class="photo-print"><div class="photo-image">${image}<span class="photo-emulsion"></span></div><span class="photo-sheen"></span></div></div>`;
+}
+function granTurismoCard(project) {
+  assert(fs.existsSync(new URL(project.previewImage, output)), 'The Gran Turismo atlas cover must ship with Projects.');
+  return `<li class="project-feature project-feature--gran-turismo"><a class="directory-link" href="${project.href}" target="_blank" rel="noopener noreferrer" aria-labelledby="gran-turismo-title" aria-describedby="gran-turismo-kind gran-turismo-new-tab" draggable="false"><img class="gran-turismo-cover" src="${project.previewImage}" width="1680" height="900" alt="" loading="lazy" decoding="async" draggable="false"><div class="gran-turismo-caption"><h2 id="gran-turismo-title">${project.title}</h2><p id="gran-turismo-kind">${project.kind}</p><span id="gran-turismo-new-tab" hidden>Opens in a new tab</span></div></a></li>`;
 }
 function vrCard(project) {
   const panels = '<span class="vr-card-panel"></span>'.repeat(4);
@@ -58,20 +48,21 @@ function battlefrontCard(project) {
   return `<li class="project-card project-tone--light project-card--battlefront"><a class="directory-link" href="${project.href}" aria-labelledby="battlefront-card-title" draggable="false"><div class="battlefront-matchup" aria-hidden="true">${panels}</div><div class="battlefront-caption"><h2 id="battlefront-card-title">${project.title}</h2><span class="directory-arrow" aria-hidden="true">${northEastArrow}</span></div></a></li>`;
 }
 const entries = projects.map((p,i)=>{
+  if (p.layout === 'gran-turismo') return granTurismoCard(p);
   if (p.layout === 'vr') return vrCard(p);
   if (p.layout === 'battlefront') return battlefrontCard(p);
   if (p.previewEffect === 'device') return `<li class="project-card project-tone--light project-card--music"><a class="directory-link" href="${p.href}" aria-labelledby="music-card-title" draggable="false"><div class="project-card-preview project-card-preview--device" data-project-effect="device" aria-hidden="true"><img src="${p.previewImage}" width="1000" height="800" alt="" loading="lazy" decoding="async" draggable="false"></div><h2 id="music-card-title">World Sensing<br>Music Station</h2></a></li>`;
   if (p.layout === 'figures') return `<li class="project-card project-tone--light project-card--figures"><a class="directory-link" href="${p.href}" aria-labelledby="figures-card-title" draggable="false"><div class="figures-title-stack"><h2 id="figures-card-title">${p.title}</h2><span aria-hidden="true">${p.title}</span><span aria-hidden="true">${p.title}</span></div><div class="figures-dictionary"><div class="figures-dictionary-heading"><p class="figures-pronunciation">${figuresPronunciation}</p><span class="directory-arrow" aria-hidden="true">${northEastArrow}</span></div><p>${figuresDefinition}</p></div></a></li>`;
   const media=preview(p);
-  return `<li class="${p.effect?'project-feature':'project-card'} project-tone--${p.tone||'dark'}${p.layout?` project-card--${p.layout}`:''}${p.theme?` project-theme--${p.theme}`:''}"><a class="directory-link" href="${p.href}"${p.newTab?' target="_blank" rel="noopener noreferrer"':''} draggable="false">${p.effect?'':media}<div class="project-copy"><p class="project-kind">${p.kind}${p.newTab?' <span class="project-external">· Opens in a new tab</span>':''}</p><div class="project-heading"><h2 class="directory-title"${i===0?' id="polaroid-link-title"':''}>${p.title}</h2><span class="directory-arrow" aria-hidden="true">${northEastArrow}</span></div><p class="directory-description">${p.description}</p></div>${p.effect?media:''}</a></li>`;
+  return `<li class="${p.effect?'project-feature':'project-card'} project-tone--${p.tone||'dark'}${p.layout?` project-card--${p.layout}`:''}${p.theme?` project-theme--${p.theme}`:''}"><a class="directory-link" href="${p.href}" draggable="false">${p.effect?'':media}<div class="project-copy"><p class="project-kind">${p.kind}</p><div class="project-heading"><h2 class="directory-title"${i===0?' id="polaroid-link-title"':''}>${p.title}</h2><span class="directory-arrow" aria-hidden="true">${northEastArrow}</span></div><p class="directory-description">${p.description}</p></div>${p.effect?media:''}</a></li>`;
 }).join('\n');
 fs.writeFileSync(output, `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#061b62"><meta name="description" content="Games, tools, and experiments in interaction by Smart Chen.">
 <title>Projects — Smart Chen</title>${siteFavicon('../')}
 <link rel="preload" href="../assets/fonts/gotham/gotham-book.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261116-vr-foldout">
-${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261116-vr-foldout"></script></head>
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261117-atlas-cover">
+${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261117-atlas-cover"></script></head>
 <body class="projects-directory" id="top"><a class="projects-skip" href="#main">Skip to projects</a>
 ${header}
 <main class="projects-main" id="main"><div class="projects-intro"><h1 id="page-title">Projects</h1></div>

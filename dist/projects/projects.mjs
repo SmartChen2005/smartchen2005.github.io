@@ -9,7 +9,7 @@ let frame = 0, previous = 0;
 
 const effects = [...document.querySelectorAll('[data-project-effect]')].map(element => {
   const kind = element.dataset.projectEffect;
-  const effect = {element, kind, link:element.closest('a'), x:spring(0), y:spring(0), active:spring(0), develop:spring(0), visible:true, ready:false, layers:[]};
+  const effect = {element, kind, link:element.closest('a'), x:spring(0), y:spring(0), active:spring(0), develop:spring(0), visible:true, ready:false};
   if (kind === 'polaroid') {
     effect.surface = element.querySelector('.photo-print');
     effect.emulsion = element.querySelector('.photo-emulsion');
@@ -18,8 +18,6 @@ const effects = [...document.querySelectorAll('[data-project-effect]')].map(elem
     effect.surface = element.querySelector('img');
   } else if (kind === 'vr') {
     effect.surface = element.querySelector('.vr-card-map');
-  } else {
-    effect.layers = [...element.querySelectorAll('[data-star-depth]')].map(layer=>({element:layer,depth:Number(layer.dataset.starDepth)}));
   }
   return effect;
 });
@@ -48,11 +46,6 @@ function render(effect) {
   } else if (effect.kind === 'vr') {
     effect.surface.style.transform = `translate3d(${x.value*6}px,${y.value*4-active.value*5}px,0) rotateX(${-y.value*12}deg) rotateY(${x.value*14}deg)`;
     effect.surface.style.setProperty('--vr-map-curl', `${Math.abs(x.value)*28}deg`);
-  } else {
-    for (const layer of effect.layers) {
-      layer.element.style.transform = `translate3d(${-x.value*layer.depth*22}px,${-y.value*layer.depth*14}px,0)`;
-      layer.element.style.opacity = (.78+active.value*.22).toFixed(4);
-    }
   }
 }
 function tick(time) {
@@ -100,7 +93,7 @@ function clearEffect(effect) {
   for (const axis of [effect.x,effect.y,effect.active,effect.develop]) {
     axis.value=axis.target=axis.velocity=0;
   }
-  for (const element of [effect.surface,effect.emulsion,effect.sheen,...effect.layers.map(layer=>layer.element)]) {
+  for (const element of [effect.surface,effect.emulsion,effect.sheen]) {
     element?.style.removeProperty('transform'); element?.style.removeProperty('opacity');
   }
   if (effect.kind==='vr') effect.surface.style.removeProperty('--vr-map-curl');

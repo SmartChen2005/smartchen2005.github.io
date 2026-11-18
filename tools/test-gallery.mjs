@@ -71,6 +71,10 @@ assert(!stillsSection.includes('class="feature"'), 'The Selected hero is outside
 for (const file of pages.filter(file => file.href.startsWith(gallery.href))) assert.match(fs.readFileSync(file,'utf8'), /href="(?:\.\.\/)?#stills">Stills<\/a>/, 'Gallery Stills navigation returns to the two-entry section');
 const projectDirectory=fs.readFileSync(new URL('dist/projects/index.html',root),'utf8');
 assert.match(projectDirectory, /class="directory-link" href="gran-turismo\/" target="_blank" rel="noopener noreferrer"/);
+const atlasCard = projectDirectory.match(/class="project-feature project-feature--gran-turismo"[\s\S]*?<\/li>/)?.[0];
+assert.match(atlasCard, /<h2[^>]*>GRAN TURISMO<\/h2><p[^>]*>VR Adventure Game<\/p>/);
+const atlasCover = atlasCard.match(/<img class="gran-turismo-cover" src="([^"]+)"/)?.[1];
+assert(atlasCover && fs.existsSync(new URL(`dist/projects/${atlasCover}`, root)), 'Ship the cover locally with Projects');
 const projectPage=fs.readFileSync(new URL('dist/projects/gran-turismo/index.html',root),'utf8');
 assert(projectPage.includes('<title>Gran Turismo | World Atlas</title>'));
 assert(!/data-project-header|site\.css|site-cursor/.test(projectPage), 'Keep the imported atlas independent of the site shell');

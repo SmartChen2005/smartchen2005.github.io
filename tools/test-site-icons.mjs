@@ -23,8 +23,8 @@ const projectsHTML = fs.readFileSync('dist/projects/index.html', 'utf8');
 const projectCards = [...projectsHTML.matchAll(/<li\b[^>]*>(<a class="directory-link" href="([^"]+)"[^>]*>[\s\S]*?)<\/li>/g)];
 assert.equal(projectCards.length, 7, 'All seven native project links remain');
 for (const [, card, route] of projectCards) {
-  const artworkOnly = ['vr-for-skill-learning/', 'world-sensing-music-station/'].includes(route);
-  assert.equal((card.match(/data-site-arrow="north-east"/g) || []).length, artworkOnly ? 0 : 1, `Project arrow for ${route}`);
+  const arrowFree = ['gran-turismo/', 'vr-for-skill-learning/', 'world-sensing-music-station/'].includes(route);
+  assert.equal((card.match(/data-site-arrow="north-east"/g) || []).length, arrowFree ? 0 : 1, `Project arrow for ${route}`);
 }
 assert(northEastArrow.includes('stroke:currentColor'));
 console.log(`Passed: ${pages} maintained pages, ${arrows} font-independent SVG arrows; all seven Projects links; accessible/native links; idempotent generation.`);
