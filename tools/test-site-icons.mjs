@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { northEastArrow, normalizeSiteArrows } from './site-icons.mjs';
+import { isStandalonePage } from './site-pages.mjs';
 
 const sample = '<a href="/projects/" aria-label="Open project">Project ↗</a><p>&#8599; &#x2197; ↗️</p>';
 const normalized = normalizeSiteArrows(sample);
@@ -12,7 +13,7 @@ assert.equal(normalizeSiteArrows(normalized), normalized);
 assert.equal(normalizeSiteArrows('<script>const symbol="↗";</script><style>/* ↗ */</style>'), '<script>const symbol="↗";</script><style>/* ↗ */</style>');
 let arrows = 0, pages = 0;
 for (const relative of fs.readdirSync('dist', { recursive: true })) {
-  if (!relative.endsWith('.html') || relative.split(path.sep).some(part => ['editions', 'vendor'].includes(part))) continue;
+  if (!relative.endsWith('.html') || isStandalonePage(relative) || relative.split(path.sep).some(part => ['editions', 'vendor'].includes(part))) continue;
   const html = fs.readFileSync(path.join('dist', relative), 'utf8');
   assert.equal(normalizeSiteArrows(html), html, `Use the shared SVG arrow rather than an emoji-capable glyph: ${relative}`);
   arrows += (html.match(/data-site-arrow="north-east"/g) || []).length;

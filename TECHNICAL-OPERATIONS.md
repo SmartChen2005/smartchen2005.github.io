@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-17 — Publish the standalone Gran Turismo World Atlas
+
+- Copy the six original files from the supplied `Gran Turismo Website` folder directly into `dist/projects/gran-turismo/`. The folder is the publishable source. Shared page generators skip the atlas, and Git preserves its original bytes.
+- Generate the Projects card link with `node tools/render-projects.mjs`. The card opens the atlas in a new tab, and the Gallery retains its separate Game Screenshots route.
+
 ### 2026-11-17 — Tighten the Wave preview arrangement
 
 - Label the default photo view Wave. Bring its surrounding previews closer and vary their offsets, tilts and sizes while preserving the center print size and depth handoff.

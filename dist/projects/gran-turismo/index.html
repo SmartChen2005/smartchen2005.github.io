@@ -1,16 +1,97 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#070707"><meta name="description" content="Gran Turismo — a project by Smart Chen.">
-<title>Gran Turismo — Smart Chen</title><link rel="icon" type="image/x-icon" href="../../favicon.ico?rev=20261028-white">
-<link rel="stylesheet" href="../../site.css"><link rel="stylesheet" href="gran-turismo.css?rev=20261103-video"><link rel="stylesheet" href="../../project-header.css?v=20261027-aligned">
-  <link rel="stylesheet" href="../../gallery-entry.css?rev=20261024-shared-entry">
-  <script type="module" src="../../gallery-entry.mjs?rev=20261024-shared-entry"></script>
-  <link rel="stylesheet" href="../../site-cursor.css?rev=20261028-drag-axis">
-  <script type="module" src="../../site-cursor.mjs?rev=20261028-drag-axis"></script></head>
-<body><header class="project-header project-header--dark" data-project-header>
-    <nav class="project-header__nav" aria-label="Primary navigation">
-      <a href="../../">VegShark.com</a>
-      <a href="../">Projects</a>
-      <a class="project-header__gallery" href="../../gallery/"><span class="project-header__gallery-mark" aria-hidden="true"><img src="../../gallery/assets/mobius-outline.svg" width="164" height="55" alt="" decoding="async"></span><span>The Gallery</span></a>
-    </nav>
-  </header><div class="site-shell"><main class="site-main project-main" id="main"><h1>Gran Turismo</h1><section class="project-video" aria-label="Gran Turismo video"><iframe src="https://www.youtube-nocookie.com/embed/OFylHWSwYDY" title="Gran Turismo video" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe><a class="document-link" href="https://youtu.be/OFylHWSwYDY" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></section></main></div></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Explore the ruins of a lost home in the Gran Turismo interactive world atlas.">
+  <title>Gran Turismo | World Atlas</title>
+  <link rel="stylesheet" href="atlas.css">
+  <script src="world-data.js" defer></script>
+  <script src="field-notes.js" defer></script>
+  <script src="render.js" defer></script>
+  <script src="atlas.js" defer></script>
+</head>
+<body>
+  <main>
+    <div class="approach" id="approach" aria-hidden="true"></div>
+
+    <section class="atlas wrap" id="atlas" aria-labelledby="atlas-title">
+      <header class="atlas-heading">
+        <div><p class="eyebrow"><span class="beacon"></span> World Atlas / Exploration Archive</p><h1 id="atlas-title">Gran Turismo</h1></div>
+        <p>The Longship is your point of departure. Trace the Monoliths across the ruins, or open a contact to read its field log.</p>
+      </header>
+
+      <div class="console">
+        <div class="console-head">
+          <div><span class="beacon"></span> SURVEY MAP</div>
+          <div class="projection-options" aria-label="Map view">
+            <button type="button" data-view="orbit" aria-pressed="true" disabled>Orbit</button>
+            <button type="button" data-view="top" aria-pressed="false" disabled>Top</button>
+            <button type="button" data-view="side" aria-pressed="false" disabled>Side</button>
+          </div>
+        </div>
+
+        <div class="map-layout">
+          <div class="map-deck">
+            <div class="plot" id="plot" tabindex="0" role="region" aria-label="Interactive three-dimensional survey map" aria-describedby="map-help" data-ready="false">
+              <div class="survey-scene" id="survey-scene" aria-hidden="true">
+                <canvas id="map-sky"></canvas>
+                <canvas id="map-mesh"></canvas>
+              </div>
+              <canvas id="map-overlay" aria-hidden="true"></canvas>
+              <div id="map-markers" class="map-markers" aria-label="Map contacts"></div>
+              <p id="map-status" class="plot-status" role="status">Loading survey…</p>
+              <button type="button" id="retry-map" class="retry" hidden disabled>Retry</button>
+              <div class="plot-coordinates" aria-hidden="true"><span>LOCAL SPACE</span><span id="map-scale">50 M GRID</span></div>
+            </div>
+            <div class="map-controls" aria-label="Map movement">
+              <span id="map-help" class="map-help">Drag to orbit · Shift + drag to pan. Use arrow keys to rotate and + or − to zoom.</span>
+              <div class="map-actions">
+                <button type="button" id="drag-mode" aria-pressed="false" title="Toggle drag to pan" disabled>Pan</button>
+                <button type="button" data-turn="-1" aria-label="Rotate left" title="Rotate left" disabled>↶</button>
+                <button type="button" data-turn="1" aria-label="Rotate right" title="Rotate right" disabled>↷</button>
+                <button type="button" data-zoom="out" aria-label="Zoom out" title="Zoom out" disabled>−</button>
+                <button type="button" data-zoom="in" aria-label="Zoom in" title="Zoom in" disabled>+</button>
+                <button type="button" id="reset-map" disabled>Reset view</button>
+              </div>
+            </div>
+            <ul class="legend" aria-label="Map legend">
+              <li class="legend-monolith">◆ Monolith</li><li class="legend-portal">◇ Portal</li>
+              <li class="legend-fuel">■ Fuel</li><li class="legend-oxygen">● Oxygen</li>
+              <li class="legend-well">◎ Gravity well</li><li class="legend-star">✦ Sound star</li>
+            </ul>
+          </div>
+
+          <aside class="field-log" aria-labelledby="field-label">
+            <header class="field-head">
+              <h2 id="field-label" class="eyebrow">Field log</h2>
+              <div class="contact-picker"><label for="contact">Select a contact</label><select id="contact" disabled><option value="">Choose a contact</option></select></div>
+            </header>
+            <article id="record" hidden>
+              <div class="specimen" id="specimen">
+                <canvas id="object-render" role="img" aria-label="Isolated atlas render"></canvas>
+                <span class="scan-label" id="record-code"></span>
+                <span class="scan-label scan-type" aria-hidden="true">MODEL STUDY</span>
+              </div>
+              <div class="record-body">
+                <p class="record-category" id="record-category"></p>
+                <h3 id="record-title" tabindex="-1"></h3>
+                <dl class="record-meta" id="record-meta"></dl>
+                <h4>In the field</h4><p id="record-function"></p>
+                <h4>Archive note</h4><p id="record-lore"></p>
+                <div class="record-actions">
+                  <button type="button" id="locate" disabled>Focus on map <span aria-hidden="true">⌖</span></button>
+                  <button type="button" id="paired" hidden disabled></button>
+                </div>
+              </div>
+            </article>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer wrap"><span>GRAN TURISMO</span><a href="#approach">Back to the survey ↑</a></footer>
+  <noscript><p class="wrap">Enable JavaScript to explore the atlas and read its field logs.</p></noscript>
+</body>
+</html>

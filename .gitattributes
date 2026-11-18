@@ -5,3 +5,6 @@ dist/projects/figures-of-speech/editions/**/*.pdf -diff
 
 # Keep the live Figma resume export byte-for-byte identical to its source.
 dist/assets/hongyi-chen-resume.pdf -text -diff
+
+# Publish the supplied Gran Turismo atlas byte-for-byte.
+dist/projects/gran-turismo/** -text

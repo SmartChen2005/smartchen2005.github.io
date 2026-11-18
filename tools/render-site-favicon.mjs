@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { siteFavicon } from './site-favicon.mjs';
+import { isStandalonePage } from './site-pages.mjs';
 
 // Classic ICO with 16px and 32px opaque white BMPs, including zeroed transparency masks.
 const sizes = [16, 32];
@@ -37,6 +38,7 @@ const pages = fs.readdirSync('dist', { recursive: true })
   .map(file => path.join('dist', file));
 let updated = 0;
 for (const file of [...pages, 'index.html']) {
+  if (isStandalonePage(file)) continue;
   const original = fs.readFileSync(file, 'utf8');
   const depth = path.relative('dist', path.dirname(file)).split(path.sep).filter(Boolean).length;
   const base = file === 'index.html' ? 'dist/' : path.basename(file) === '404.html' ? '/' : '../'.repeat(depth);

@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createHash } from 'node:crypto';
+import { isStandalonePage } from './site-pages.mjs';
 
 const root = process.cwd();
 const htmlPath = path.join(root, "dist", "projects", "polaroid-of-yesterday", "game-design-document", "index.html");
@@ -216,6 +217,12 @@ const projectRoutes = [...directoryHtml.matchAll(/class="directory-link" href="(
 for (const route of ['', ...projectRoutes]) {
   const file = path.join(root, 'dist/projects', route, 'index.html');
   const page = fs.readFileSync(file, 'utf8');
+  if (isStandalonePage(file)) {
+    if (page.includes('data-project-header')) failures.push(`Unexpected shared header on standalone project: ${route}`);
+    const card = directoryHtml.match(new RegExp(`<a class="directory-link" href="${route}"[^>]*>`))?.[0];
+    if (!card?.includes('target="_blank"')) failures.push(`Standalone project card must open in a new tab: ${route}`);
+    continue;
+  }
   const header = page.match(/<header[^>]*data-project-header[^>]*>([\s\S]*?)<\/header>/)?.[1] || '';
   const links = [...header.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
   const labels = links.map(match => stripMarkup(match[2]).trim());
