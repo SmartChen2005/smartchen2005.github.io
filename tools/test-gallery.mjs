@@ -52,11 +52,11 @@ for(const p of projects.filter(p=>!publishedSlugs.has(p.id))){
 }
 assert(galleryHome.includes('trauma-induced-dissociative-amnesia/'));
 const stillsSection = galleryHome.match(/id="stills"[\s\S]*?(?=<section class="gallery-section" id="films")/)?.[0];
-assert(stillsSection?.includes('href="trauma-induced-dissociative-amnesia/"') && stillsSection.includes('href="gran-turismo/"'), 'Stills links to both independent exhibitions');
+assert(stillsSection?.includes('id="stills-title">Visual</h2>') && stillsSection.includes('href="trauma-induced-dissociative-amnesia/"') && stillsSection.includes('href="gran-turismo/"'), 'Visual links to both independent exhibitions');
 assert(stillsSection.includes('2 projects') && stillsSection.includes('Game Screenshots'));
 assert(galleryHome.indexOf('class="feature"') < galleryHome.indexOf('id="photography"'), 'Selected remains an independent feature above Photography');
-assert(galleryHome.indexOf('id="photography"') < galleryHome.indexOf('id="stills"') && galleryHome.indexOf('id="stills"') < galleryHome.indexOf('id="films"'), 'Category order is Photography, Stills, Film');
-assert.equal((stillsSection.match(/class="project-card"/g)||[]).length,2, 'Stills has two peer cards');
+assert(galleryHome.indexOf('id="photography"') < galleryHome.indexOf('id="stills"') && galleryHome.indexOf('id="stills"') < galleryHome.indexOf('id="films"'), 'Category order is Photography, Visual, Film');
+assert.equal((stillsSection.match(/class="project-card"/g)||[]).length,2, 'Visual has two peer cards');
 assert(stillsSection.indexOf('href="trauma-induced-dissociative-amnesia/"') < stillsSection.indexOf('href="gran-turismo/"'), 'TIDA is the left card and Gran Turismo the right card');
 assert(stillsSection.includes('assets/gran-turismo-placeholder.svg'), 'Gran Turismo has an explicit image placeholder');
 const statementOpening='I believe the artist is not the ultimate authority on their own art.';
@@ -67,8 +67,8 @@ const statementPage=fs.readFileSync(new URL(statementRoute,gallery),'utf8');
 assert(statementPage.includes('class="gallery-header"'));
 assert.deepEqual([...statementPage.matchAll(/<strong>([^<]*)<\/strong>/g)].map(match=>match[1]),[statementOpening]);
 assert(statementPage.includes('to become its co-storytellers.'));
-assert(!stillsSection.includes('class="feature"'), 'The Selected hero is outside Stills');
-for (const file of pages.filter(file => file.href.startsWith(gallery.href))) assert.match(fs.readFileSync(file,'utf8'), /href="(?:\.\.\/)?#stills">Stills<\/a>/, 'Gallery Stills navigation returns to the two-entry section');
+assert(!stillsSection.includes('class="feature"'), 'The Selected hero is outside Visual');
+for (const file of pages.filter(file => file.href.startsWith(gallery.href))) assert.match(fs.readFileSync(file,'utf8'), /href="(?:\.\.\/)?#stills">Visual<\/a>/, 'Gallery Visual navigation returns to the two-entry section');
 const projectDirectory=fs.readFileSync(new URL('dist/projects/index.html',root),'utf8');
 assert.match(projectDirectory, /class="directory-link" href="gran-turismo\/" target="_blank" rel="noopener noreferrer"/);
 const atlasCard = projectDirectory.match(/class="project-feature project-feature--gran-turismo"[\s\S]*?<\/li>/)?.[0];
