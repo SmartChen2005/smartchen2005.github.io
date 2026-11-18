@@ -37,7 +37,7 @@ function preview(project) {
 }
 function granTurismoCard(project) {
   assert(fs.existsSync(new URL(project.previewImage, output)), 'The Gran Turismo atlas cover must ship with Projects.');
-  return `<li class="project-feature project-feature--gran-turismo"><a class="directory-link" href="${project.href}" target="_blank" rel="noopener noreferrer" aria-labelledby="gran-turismo-title" aria-describedby="gran-turismo-kind gran-turismo-new-tab" draggable="false"><img class="gran-turismo-cover" src="${project.previewImage}" width="1680" height="900" alt="" loading="lazy" decoding="async" draggable="false"><div class="gran-turismo-caption"><h2 id="gran-turismo-title">${project.title}</h2><p id="gran-turismo-kind">${project.kind}</p><span id="gran-turismo-new-tab" hidden>Opens in a new tab</span></div></a></li>`;
+  return `<li class="project-feature project-feature--gran-turismo"><a class="directory-link" href="${project.href}" target="_blank" rel="noopener noreferrer" aria-labelledby="gran-turismo-title" aria-describedby="gran-turismo-kind gran-turismo-new-tab" data-project-effect="gran-turismo" draggable="false"><img class="gran-turismo-cover" src="${project.previewImage}" width="1680" height="900" alt="" loading="lazy" decoding="async" draggable="false"><div class="gran-turismo-caption"><h2 id="gran-turismo-title">${project.title}</h2><p id="gran-turismo-kind">${project.kind}</p><span id="gran-turismo-new-tab" hidden>Opens in a new tab</span></div></a></li>`;
 }
 function vrCard(project) {
   const panels = '<span class="vr-card-panel"></span>'.repeat(4);
@@ -61,8 +61,8 @@ fs.writeFileSync(output, `<!doctype html>
 <meta name="theme-color" content="#061b62"><meta name="description" content="Games, tools, and experiments in interaction by Smart Chen.">
 <title>Projects — Smart Chen</title>${siteFavicon('../')}
 <link rel="preload" href="../assets/fonts/gotham/gotham-book.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261117-atlas-cover">
-${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261117-atlas-cover"></script></head>
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261117-atlas-sway">
+${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261117-atlas-sway"></script></head>
 <body class="projects-directory" id="top"><a class="projects-skip" href="#main">Skip to projects</a>
 ${header}
 <main class="projects-main" id="main"><div class="projects-intro"><h1 id="page-title">Projects</h1></div>

@@ -48,6 +48,8 @@ The user approves the Figures of Speech inward-curving blue surface and requests
 
 The Gran Turismo card is a single full-width link with the Atlas opening scene as its cover. Keep the World Tree centered and set the camera farther back along the opening angle so the nearby ruins frame it. Center the large white Gotham Black `GRAN TURISMO` title in the lower portion of the cover, with `VR Adventure Game` directly below. A dark lower gradient keeps both lines readable. Use a centered crop and a flexible aspect ratio on phones. The card opens the standalone Atlas in a new tab with a screen-reader description of that behavior. Forced colors and print use the same text link without decorative artwork. This cover supersedes the Gran Turismo starfield and placeholder treatments described below.
 
+On fine-pointer hover, the World Tree image follows the horizontal pointer position with a shallow, opposing pan of up to 1.5% of the card width. The existing spring settles it back to its centered crop on exit. The title, subtitle and gradient stay in place. Touch, keyboard focus and reduced motion keep the centered image.
+
 ## Projects homepage — interactive project previews (2026-11-04)
 
 Scope is `/projects/` only. The shared Header markup, CSS, assets, navigation, desktop/phone geometry, fonts and colors are retained. Its existing `site.css` tokens remain untouched. This user request supersedes the directory watermark and earlier project ordering below. No project-detail or Gallery route is restyled.
