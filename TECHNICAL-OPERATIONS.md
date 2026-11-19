@@ -105,6 +105,10 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-18 — Replace the standalone Gran Turismo atlas with v2
+
+- Publish the supplied `Gran Turismo Website 2026-11-18 v2` folder byte-for-byte at `/projects/gran-turismo/`. This edition adds story captions and a YouTube player to the opening flythrough.
+
 ### 2026-11-17 — Use the World Tree as the Gran Turismo Projects cover
 
 - Render `dist/projects/assets/gran-turismo-atlas-cover.webp` from the standalone Atlas at scroll position zero using its original models, sky and renderer. For the capture only, add 44 metres to the opening orbit radius passed to `orbitPoint`, keep the original opening azimuth, and aim 1 metre below the tree center. Capture the scene in Chrome at 1680 × 900 with scrollbars hidden and encode WebP at quality 88.

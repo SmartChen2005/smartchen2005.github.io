@@ -5,6 +5,10 @@
   const { camera, project, dot, span, meshBatch, clearCanvas, createRenderer } = window.grandTurismoRender;
   const notes = window.grandTurismoNotes;
   const approach = $('approach'), section = $('atlas'), scene = $('survey-scene'), plot = $('plot'), picker = $('contact');
+  const flightCues = Array.from(approach.querySelectorAll('[data-cue]'), element => ({
+    element, start: Number(element.dataset.start), end: Number(element.dataset.end),
+  }));
+  const flightVideo = $('flight-video'), flightMedia = flightVideo.closest('.flight-media');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const compact = matchMedia('(max-width: 820px)');
   const markerArt = {
@@ -174,21 +178,17 @@
   }
 
   function flightCamera(progress, width, height) {
-    const treeExit = .20, portalArrival = .38, portalExit = .69, treePass = .83;
+    const treeExit = .60, portalArrival = .67, portalExit = .84, treePass = .93;
     const portrait = clamp((1 - width / height) / .55, 0, 1);
     const shipCenter = span(pointsOf(ship)).center, portal = route.at(-1);
-    const heading = Math.atan2(treeCenter[0] - shipCenter[0], treeCenter[2] - shipCenter[2]);
-    const berth = [shipCenter[0] - Math.sin(heading) * 43 + Math.cos(heading) * 10, shipCenter[1] + 11,
-      shipCenter[2] - Math.cos(heading) * 43 - Math.sin(heading) * 10];
-    const dx = berth[0] - treeCenter[0], dz = berth[2] - treeCenter[2];
-    const startRadius = 46 + portrait * 23, treeRadius = startRadius + 30;
-    const treeStart = Math.atan2(dx, dz) + Math.acos(clamp(-(startRadius + 55) / Math.hypot(dx, dz), -1, 1));
-    const treeAngle = treeStart + Math.PI;
+    const startRadius = 66 + portrait * 26, treeRadius = startRadius + 37;
+    const treeStart = .45, treeSweep = -3 * Math.PI, treeAngle = treeStart + treeSweep;
+    const startRise = 16.5, endRise = 28;
     if (progress <= treeExit) {
       const t = progress / treeExit, turn = mix(t, ease(t), .4);
-      const eye = orbitPoint(treeCenter, treeStart + Math.PI * turn, mix(startRadius, treeRadius, ease(turn)), 9 + 14 * t);
-      const aim = [treeCenter[0], treeCenter[1] + 5 * (1 - ease(t)), treeCenter[2]];
-      return flightView(eye, aim, aim, 0, treeCenter, mix(108, 202, ease(t)), height);
+      const eye = orbitPoint(treeCenter, treeStart + treeSweep * turn, mix(startRadius, treeRadius, ease(turn)), mix(startRise, endRise, t));
+      const aim = [treeCenter[0], treeCenter[1] + 2.3 * (1 - ease(t)), treeCenter[2]];
+      return flightView(eye, aim, aim, 0, treeCenter, mix(160, 218, ease(t)), height);
     }
 
     // The portal orbit starts on its ship-facing side. Its tangent points left across the route.
@@ -197,11 +197,11 @@
     const portalFront = orbitPoint(portal, portalAngle, portalRadius, 11);
     const portalVelocity = orbitVelocity(portalAngle, portalRadius * 2 * Math.PI * .62 / (portalExit - portalArrival));
     if (progress < portalArrival) {
-      const leaving = orbitPoint(treeCenter, treeAngle, treeRadius, 23);
-      const velocity = orbitVelocity(treeAngle, treeRadius * Math.PI * .6 / treeExit, 14 / treeExit);
+      const leaving = orbitPoint(treeCenter, treeAngle, treeRadius, endRise);
+      const velocity = orbitVelocity(treeAngle, treeRadius * treeSweep * .6 / treeExit, (endRise - startRise) / treeExit);
       const eye = cruise(leaving, portalFront, velocity, portalVelocity, progress, treeExit, portalArrival);
       const blend = ease((progress - treeExit) / (portalArrival - treeExit));
-      return flightView(eye, treeCenter, portal, blend, offset(treeCenter, portal, blend), mix(202, 200, blend), height, -1);
+      return flightView(eye, treeCenter, portal, blend, offset(treeCenter, portal, blend), mix(218, 200, blend), height, 1);
     }
     if (progress <= portalExit) {
       const t = (progress - portalArrival) / (portalExit - portalArrival);
@@ -221,9 +221,24 @@
       const blend = ease(t);
       return flightView(eye, portal, treeCenter, blend, offset(portal, treeCenter, blend), mix(200, 315, blend), height, 1);
     }
-    const eye = cruise(waypoint, berth, southbound, [0, 0, 0], progress, treePass, 1);
-    const t = ease((progress - treePass) / (1 - treePass));
-    return flightView(eye, treeCenter, treeCenter, 0, offset(treeCenter, eye, t * .54), mix(315, 450, t), height);
+    // Frame the sails and full hull opposite the video.
+    const narrow = clamp((1.23 - width / height) / .78, 0, 1);
+    const stacked = clamp((1.36 - width / height) / .4, 0, 1);
+    const heading = Math.atan2(treeCenter[0] - shipCenter[0], treeCenter[2] - shipCenter[2]);
+    const back = mix(56, 64, narrow), side = mix(-16, -5, narrow);
+    const berth = [shipCenter[0] - Math.sin(heading) * back + Math.cos(heading) * side, shipCenter[1] + 7,
+      shipCenter[2] - Math.cos(heading) * back - Math.sin(heading) * side];
+    const arrival = .988;
+    const eye = cruise(waypoint, berth, southbound, [0, 0, 0], Math.min(progress, arrival), treePass, arrival);
+    const t = ease(clamp((progress - treePass) / (arrival - treePass), 0, 1));
+    const aim = [treeCenter[0], treeCenter[1] - mix(24, 34, narrow) * t, treeCenter[2]];
+    const view = flightView(eye, aim, aim, 0, offset(treeCenter, eye, t * .54), mix(315, 450, t), height);
+    const zoom = mix(1.24, .89, narrow);
+    const frameX = mix(.29, .37, narrow), frameY = mix(.43, .285 + .04 * narrow, stacked);
+    view.scale *= mix(1, zoom, t);
+    view.frameX = mix(.5, frameX, t);
+    view.frameY = mix(.5, frameY, t);
+    return view;
   }
 
   function atlasCamera(width, height) {
@@ -244,6 +259,27 @@
     } else document.body.append(scene);
   }
 
+  function updateFlightMedia(opening, interactive) {
+    flightMedia.style.setProperty('--video-opening', opening);
+    flightMedia.inert = !interactive;
+    const showLink = opening < .5 || !interactive;
+    flightMedia.toggleAttribute('data-link', showLink);
+    flightVideo.inert = showLink;
+    if (showLink && flightVideo.hasAttribute('src')) flightVideo.removeAttribute('src');
+    if (!showLink && !flightVideo.hasAttribute('src')) flightVideo.setAttribute('src', flightVideo.dataset.src);
+  }
+
+  function updateFlightCopy(progress, docking) {
+    const fade = value => ease(clamp(value, 0, 1));
+    approach.style.setProperty('--flight-copy-opacity', 1 - fade(docking / .35));
+    updateFlightMedia(fade((progress - .922) / .060), docking < .35);
+    for (const { element, start, end } of flightCues) {
+      const inOpacity = start === 0 ? 1 : fade((progress - start) / .018);
+      const outOpacity = end === 1 ? 1 : fade((end - progress) / .018);
+      element.style.setProperty('--cue-opacity', Math.min(inOpacity, outOpacity));
+    }
+  }
+
   function drawSequence(time) {
     const viewportWidth = document.documentElement.clientWidth, viewportHeight = window.innerHeight;
     const bounds = plot.getBoundingClientRect();
@@ -251,6 +287,7 @@
     const finish = clamp(bounds.top - section.getBoundingClientRect().top + 8, viewportHeight * .26, viewportHeight * .64);
     const docking = clamp((start - bounds.top) / (start - finish), 0, 1);
     if (motion.matches || docking >= 1 || viewportWidth < 1 || viewportHeight < 1) {
+      updateFlightMedia(motion.matches ? 1 : 0, motion.matches);
       const changed = !docked;
       setDocked(true);
       if (changed || pendingMap) drawAtlas();
@@ -258,12 +295,13 @@
     }
     setDocked(false);
     const approachBounds = approach.getBoundingClientRect();
-    const flightEnd = Math.max(1, approach.offsetHeight - viewportHeight * .78);
+    const flightEnd = Math.max(1, approach.offsetHeight - viewportHeight * 1.22);
     const target = clamp(-approachBounds.top / flightEnd, 0, 1);
     const elapsed = Math.min(time - (lastFlightFrame ?? time - 16), 40);
     lastFlightFrame = time;
     flightProgress = mix(flightProgress ?? target, target, 1 - Math.exp(-elapsed / 78));
     if (Math.abs(flightProgress - target) < .001) flightProgress = target;
+    updateFlightCopy(flightProgress, docking);
     const blend = ease(docking);
     const width = Math.round(mix(viewportWidth, bounds.width, blend));
     const height = Math.round(mix(viewportHeight, bounds.height, blend));
@@ -272,9 +310,12 @@
     scene.style.width = `${width}px`;
     scene.style.height = `${height}px`;
     section.style.setProperty('--archive-reveal', ease(clamp((docking - .07) / .79, 0, 1)));
-    const from = flightCamera(mix(flightProgress, 1, blend), width, height);
+    const progress = mix(flightProgress, 1, blend);
+    const from = flightCamera(progress, width, height);
+    const frameX = width * (from.frameX ?? .5);
+    const frameY = height * (from.frameY ?? .5);
     if (!blend) {
-      const view = camera(from.yaw, from.elevation, from.center, from.scale, width / 2, height / 2);
+      const view = camera(from.yaw, from.elevation, from.center, from.scale, frameX, frameY);
       view.distance = from.distance;
       view.perspective = 1;
       drawSky(atlas, view, width, height);
@@ -285,7 +326,7 @@
     const targetYaw = from.yaw + Math.atan2(Math.sin(controls.yaw - from.yaw), Math.cos(controls.yaw - from.yaw));
     const view = camera(mix(from.yaw, targetYaw, blend), mix(from.elevation, controls.elevation, blend),
       offset(from.center, to.center, blend), mix(from.scale, to.scale, blend),
-      mix(width / 2, to.x, blend), mix(height / 2, to.y, blend));
+      mix(frameX, to.x, blend), mix(frameY, to.y, blend));
     view.distance = from.distance;
     view.perspective = 1 - blend;
     drawBackdrop(view, width, height, ease(clamp((blend - .32) / .68, 0, 1)));
@@ -414,6 +455,7 @@
       .sort((a, b) => a.distance - b.distance).slice(0, 30).map(entry => entry.node);
     atlas.renderer.upload(meshBatch(data.models, atlas.renderer.gpu ? contacts : fallbackContacts), meshBatch(data.models, sceneTerrain));
     document.body.style.setProperty('--sky', data.skyColor || '#150f15');
+    document.body.classList.add('has-flythrough');
 
     markers.clear(); $('map-markers').replaceChildren(); picker.replaceChildren();
     const groups = new Map();

@@ -45,7 +45,139 @@ a:hover { color: var(--signal); }
 .eyebrow { color: var(--signal); margin: 0 0 1rem; }
 .beacon { display: inline-block; width: 7px; height: 7px; margin-inline-end: 8px; background: var(--signal); vertical-align: 1px; }
 
-.approach { height: 284svh; background: #150f15; }
+.approach { background: #150f15; }
+.flight-copy {
+  position: relative;
+  display: grid;
+  gap: .8rem;
+  padding: clamp(28px, 6vh, 64px) var(--gutter);
+}
+.flight-title, .flight-caption { margin: 0; color: #fff; }
+.flight-title {
+  font: 760 clamp(2rem, 7.65vw, 12rem)/.94 var(--display);
+  letter-spacing: -.063em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.flight-caption { max-width: 38ch; font: 540 clamp(1.05rem, 2.3vw, 2.25rem)/1.27 var(--body); text-wrap: pretty; }
+.flight-media {
+  --video-width: clamp(220px, 28vw, 432px);
+  --video-height: max(200px, calc(var(--video-width) * .5625));
+  --link-width: 102px;
+  --link-height: 44px;
+  --video-opening: 0;
+  justify-self: end;
+  width: var(--video-width);
+  max-width: 100%;
+}
+.flight-player {
+  background: #150f15eb;
+  border: 1px solid #ffffff66;
+}
+.flight-media iframe {
+  display: block;
+  width: var(--video-width);
+  height: var(--video-height);
+  max-width: 100%;
+  border: 0;
+}
+.flight-media iframe:not([src]) { display: none; }
+.flight-media a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  width: var(--link-width);
+  min-height: var(--link-height);
+  color: #fff;
+  font: 600 .8rem/1 var(--mono);
+}
+.flight-player:has(a:hover) { border-color: #fff; }
+.flight-media .flight-arrival {
+  margin-top: .6rem;
+  font-size: clamp(1rem, 2vw, 1.9rem);
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .has-flythrough .approach { height: 510svh; }
+  .has-flythrough .flight-copy {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    display: block;
+    height: 100svh;
+    height: 100dvh;
+    padding: 0;
+    overflow: clip;
+    opacity: var(--flight-copy-opacity, 1);
+    pointer-events: none;
+  }
+  .has-flythrough.site-flying .flight-copy { position: fixed; inset: 0; }
+  .has-flythrough .flight-media {
+    --link-top: max(env(safe-area-inset-top), clamp(18px, 4vh, 42px));
+    --arrival-space: clamp(90px, 20svh, 178px);
+    --arrival-top: max(var(--link-top), calc(100dvh - var(--video-height) - var(--arrival-space)));
+    position: absolute;
+    top: calc(var(--link-top) + (var(--arrival-top) - var(--link-top)) * var(--video-opening));
+    right: var(--gutter);
+    width: calc(var(--link-width) + (var(--video-width) - var(--link-width)) * var(--video-opening));
+  }
+  .has-flythrough .flight-player {
+    position: relative;
+    height: calc(var(--link-height) + (var(--video-height) - var(--link-height)) * var(--video-opening));
+    overflow: hidden;
+    pointer-events: auto;
+  }
+  .has-flythrough:not(.site-flying) .flight-media { visibility: hidden; }
+  .has-flythrough .flight-media iframe {
+    position: absolute;
+    top: 0;
+    right: 0;
+    max-width: none;
+    opacity: clamp(0, 2 * var(--video-opening) - 1, 1);
+    transform: scale(calc(.35 + .65 * var(--video-opening)));
+    transform-origin: top right;
+  }
+  .has-flythrough .flight-media a {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: clamp(0, 1 - 2 * var(--video-opening), 1);
+    visibility: hidden;
+  }
+  .has-flythrough .flight-media[data-link] a { visibility: visible; }
+  .has-flythrough .flight-media a:focus-visible { outline-offset: -3px; }
+  .has-flythrough .flight-copy > [data-cue] {
+    position: absolute;
+    bottom: clamp(52px, 11svh, 155px);
+    left: var(--gutter);
+    max-width: calc(100% - 2 * var(--gutter));
+  }
+  .has-flythrough .flight-copy [data-cue] {
+    z-index: 0;
+    opacity: var(--cue-opacity, 0);
+    transform: translateY(calc((1 - var(--cue-opacity, 0)) * 9px));
+    text-shadow: 0 2px 13px #080709, 0 0 24px #080709;
+  }
+  .has-flythrough .flight-copy > .flight-caption { max-width: min(38ch, calc(100% - 2 * var(--gutter))); }
+  .has-flythrough .flight-copy .flight-title { bottom: clamp(40px, 8.5svh, 128px); }
+  .has-flythrough .flight-arrival { position: relative; }
+  .has-flythrough .flight-copy [data-cue]::before {
+    content: '';
+    position: absolute;
+    inset: -32px -75px;
+    z-index: -1;
+    background: radial-gradient(ellipse, #080709bd, #08070966 48%, transparent 76%);
+  }
+  .has-flythrough .flight-copy .flight-title::before { inset: -28px -48px; }
+}
+@media (prefers-reduced-motion: no-preference) and (max-aspect-ratio: 5/4) {
+  .has-flythrough .flight-media { --arrival-space: clamp(52px, 7svh, 96px); }
+}
+@media (min-width: 621px) and (max-aspect-ratio: 5/4) {
+  .flight-media { --video-width: clamp(220px, 25vw, 320px); }
+}
 .survey-scene {
   position: absolute;
   inset: 0;
@@ -144,13 +276,14 @@ a:hover { color: var(--signal); }
 }
 
 @media (max-width: 620px) {
+  .flight-media { --video-width: min(320px, calc(100vw - 2 * var(--gutter) - 16px)); }
+  .flight-title { font-size: clamp(1.42rem, 10vw, 3.85rem); }
   .plot { height: min(480px, 62svh); min-height: 320px; }
   .map-actions button, .projection-options button { min-height: 42px; }
   .legend { gap: 4px 10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .approach { height: 0; }
   #map-overlay, .map-markers, .plot-coordinates { transition: none; }
 }
 
