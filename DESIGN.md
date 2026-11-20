@@ -2,7 +2,7 @@
 
 ## Beyond Vibe Coding (2026-11-19)
 
-The English research study uses a technical archive layout. Cool aluminum surfaces carry the research text, cobalt marks navigation and actions, and slate consoles use cyan to show active rules and results. Anton sets major headings. Archivo carries the reading text and monospaced labels mark records and controls. The opening pairs the research question with an index of three genuine game frames. Each experiment aligns a brief evidence record with its interactive rule sketch. Keep technical detail and handbook examples in native disclosures. The original games retain their own visual styles and interaction models. The study's tokens and responsive layout live in `dist/projects/ai-game-design/study.css`.
+The English research study uses a technical archive layout with warm paper, violet labels and rules, and luminous yellow actions and results. Anton sets major headings. Archivo carries the reading text and monospaced labels mark records and controls. The title, research question, and game index share one bordered sheet. The game index uses three genuine game frames in a row on desktop and compact stacked entries on phones. Shared record labels connect each frame to its case below, pairing the evidence with an interactive rule sketch. Keep technical detail and handbook examples in native disclosures. The original games retain their own visual styles and interaction models. The study's tokens and responsive layout live in `dist/projects/ai-game-design/study.css`.
 
 ## Projects — VR and Battlefront covers (2026-11-16)
 

@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-19 — Unify the Beyond Vibe Coding game index
+
+- Restore the earlier violet and luminous yellow palette across the technical archive. Place the game frames in a full-width index within the opening sheet and repeat the case labels below. The frames stack into compact rows on phones.
+- Regenerate the project entry with `node tools/render-ai-game-design.mjs`.
+
 ### 2026-11-19 — Restyle Beyond Vibe Coding as a technical archive
 
 - Pair the cover and research question with a game-frame index. Use cobalt, cool aluminum, and slate across the evidence records, rule diagrams, and handbook. The Gran Turismo atlas informs the archive structure. Marathon's website and in-game UI inform the typography and control hierarchy.
