@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-20 — Condense the Beyond Vibe Coding study
+
+- Use one short design record for each game. Remove nested panels and set the title, method, experiments, and handbook on a shared paper surface. Keep the diagrams and expandable technical notes with their cases.
+- Regenerate the project entry with `node tools/render-ai-game-design.mjs`.
+
 ### 2026-11-19 — Unify the Beyond Vibe Coding game index
 
 - Restore the earlier violet and luminous yellow palette across the technical archive. Place the game frames in a full-width index within the opening sheet and repeat the case labels below. The frames stack into compact rows on phones.

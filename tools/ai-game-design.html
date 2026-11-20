@@ -9,7 +9,7 @@
   {{favicon}}
   <link rel="stylesheet" href="../../site.css">
   {{headerAssets}}
-  <link rel="stylesheet" href="study.css?rev=20261119-violet-index">
+  <link rel="stylesheet" href="study.css?rev=archive-edit">
   <script type="module" src="study.mjs"></script>
 </head>
 <body class="research">
@@ -27,17 +27,9 @@
             <h1>Beyond <span class="title-line">Vibe Coding</span><span class="sr-only">: Experiments in Human–AI Game Design</span></h1>
             <p class="subtitle" aria-hidden="true">Experiments in Human–AI Game Design</p>
           </div>
-          <div class="research-question">
-            <div>
-              <p class="label">Research question</p>
-              <h2>What happens to the designer’s role as AI takes on more of the design?</h2>
-              <p>Three playable games, from a finished brief to an open question.</p>
-            </div>
-            <a class="pill" href="#experiments">Explore the games <span aria-hidden="true">↓</span></a>
-          </div>
+          <p class="research-question">As AI helps make a game, which decisions stay with the designer?</p>
         </div>
-        <nav class="plate-index" aria-labelledby="index-title">
-          <h2 class="index-title" id="index-title">Experiment index</h2>
+        <nav class="plate-index" aria-label="Experiment index">
           <a href="#no-signal" class="plate">
             <span class="plate-frame"><img src="media/no-signal.webp" width="1024" height="640" alt=""></span>
             <span class="plate-copy"><small>01 / Delegation</small><strong>No Signal</strong></span>{{arrow}}
@@ -54,38 +46,26 @@
       </div>
     </div>
 
-    <section class="method" id="method" aria-labelledby="method-title">
-      <div class="sheet method-grid">
-        <div><p class="label">Method</p><h2 id="method-title">Who gets<br>to decide?</h2></div>
-        <div class="method-copy">
-          <p>I started with a fixed navigation brief, then gave Codex more say over mechanics and the concept. Design notes and Git snapshots trace how my work shifted from specifying rules to playing prototypes and deciding what to keep.</p>
-          <p class="method-limit">One designer, three different games. A controlled comparison would hold the task and time budget constant.</p>
-        </div>
-      </div>
+    <section class="sheet method" id="method" aria-labelledby="method-title">
+      <h2 class="label" id="method-title">Method</h2>
+      <p>Across three games I gave Codex more say, from implementing a brief to helping find a premise. I used design notes and Git snapshots to trace what survived my playtests.</p>
     </section>
 
     <div class="sheet experiments" id="experiments">
       <header class="section-heading">
-        <h2>Three experiments</h2>
-        <p>The games play in your browser. Use a desktop or laptop for the original controls.</p>
+        <h2>Experiments</h2>
+        <p>Best played on desktop.</p>
       </header>
 
       <article id="no-signal" class="experiment">
         <div class="case-copy">
-          <p class="label">01 / Delegation <span>·</span> Connection puzzle</p>
+          <p class="label">01 / Delegation</p>
           <h3>No Signal</h3>
-          <p class="case-lead">A laptop with a black screen. A desk full of cables. Eight levels that ask you to figure out why nothing works.</p>
-          <div class="case-links"><a class="pill" href="pages/game1.html">Play No Signal {{arrow}}</a></div>
-          <dl>
-            <div><dt>My role</dt><dd>Wrote the design brief for rules, progression, and equipment, drawing on my own desk setup.</dd></div>
-            <div><dt>Codex’s role</dt><dd>Implemented the brief, starting with one working power chain.</dd></div>
-            <div><dt>Turning point</dt><dd>The brief became testable in pieces, from device movement to cable limits and live status feedback.</dd></div>
-          </dl>
+          <p class="case-lead">I turned my desk setup into an eight-level cable puzzle and wrote the rules. Codex implemented the game one system at a time, starting with a working power chain.</p>
+          <div class="case-links"><a class="play-link" href="pages/game1.html">Play No Signal {{arrow}}</a></div>
         </div>
-        <section class="bench bench-power" aria-labelledby="power-title">
-          <p class="label">Rule sketch / Reachability</p>
+        <section class="bench" aria-labelledby="power-title">
           <h4 id="power-title">Trace the power chain</h4>
-          <p>Toggle a link. The sketch marks what the outlet can reach.</p>
           <div class="rule-controls" id="power-lab">
             <div class="power-map" aria-hidden="true">
               <span class="on" data-powered="0">Outlet</span><i class="on" data-wire="0"></i>
@@ -94,7 +74,7 @@
               <span class="on" data-powered="3">Laptop</span>
             </div>
             <fieldset disabled>
-              <legend>Connections</legend>
+              <legend class="sr-only">Toggle connections</legend>
               <label><input type="checkbox" checked> Outlet to adapter</label>
               <label><input type="checkbox" checked> Adapter to hub</label>
               <label><input type="checkbox" checked> Hub to laptop</label>
@@ -102,39 +82,31 @@
             <output role="status">The outlet reaches Adapter, Hub, and Laptop.</output>
           </div>
           <details class="technical">
-            <summary>From sketch to game engine</summary>
-            <p>AC tracing tracks visited endpoints to stop cycles. From powered adapters, the runtime adds reachable hub outputs until no new hub can be powered. Port compatibility and cable reach are checked separately.</p>
-            <p><code>isPlugEnergized()</code> and <code>getPoweredHubDevices()</code></p>
+            <summary>How power propagates</summary>
+            <p><code>isPlugEnergized()</code> tracks visited endpoints to stop cycles. <code>getPoweredHubDevices()</code> adds reachable hub outputs until no new hub gets power.</p>
           </details>
         </section>
       </article>
 
       <article id="catwalk" class="experiment">
         <div class="case-copy">
-          <p class="label">02 / Collaboration <span>·</span> Platformer and level editor</p>
+          <p class="label">02 / Collaboration</p>
           <h3>Catwalk</h3>
-          <p class="case-lead">Guide a pixel cat home while Mocha, a second cat outside the monitor, interferes with the controls.</p>
+          <p class="case-lead">My cat Mocha interrupts the controls. The obstacles in Codex’s 25 layouts rarely worked together, so I built the final route in our editor and made routes shareable as JSON.</p>
           <div class="case-links">
-            <a class="pill" href="pages/game2.html">Play Catwalk {{arrow}}</a>
+            <a class="play-link" href="pages/game2.html">Play Catwalk {{arrow}}</a>
             <a href="pages/game2-editor.html">Route Studio {{arrow}}</a>
             <a href="pages/game2-timeline.html">Playable timeline {{arrow}}</a>
           </div>
-          <dl>
-            <div><dt>My role</dt><dd>Brought Mocha’s real behavior, judged the prototypes, and authored the final route.</dd></div>
-            <div><dt>Codex’s role</dt><dd>Proposed and built trials for movement, paw interference, and level structure.</dd></div>
-            <div><dt>Turning point</dt><dd>After 25 layouts with weak interactions between obstacles, I took over level design. The editor grew into a tool for sharing routes.</dd></div>
-          </dl>
         </div>
-        <section class="bench bench-route" aria-labelledby="route-title">
-          <p class="label">Rule sketch / Level geometry</p>
+        <section class="bench" aria-labelledby="route-title">
           <h4 id="route-title">Turn gaps into ground</h4>
-          <p>Switch gaps on and off to see the solid intervals Phaser receives.</p>
           <div class="rule-controls" id="route-lab">
             <div class="route-map" aria-hidden="true"><span class="route-start">0</span><span class="route-end">100</span>
               <div class="route-track"><i style="--start:0%;--span:20%"></i><i style="--start:62%;--span:11%"></i><i style="--start:87%;--span:13%"></i></div>
             </div>
             <fieldset disabled>
-              <legend>Gaps</legend>
+              <legend>Toggle gaps</legend>
               <label><input type="checkbox" checked> 20–46</label>
               <label><input type="checkbox" checked> 38–62</label>
               <label><input type="checkbox" checked> 73–87</label>
@@ -142,79 +114,56 @@
             <output role="status">Solid ground: [0, 20], [62, 73], [87, 100].</output>
           </div>
           <details class="technical">
-            <summary>From route data to physics</summary>
-            <p>The playtest model clips gap intervals to the world, merges overlaps, and emits the remaining spans as collision geometry. The same route file carries checkpoints and Mocha’s triggers.</p>
-            <p><code>createGroundSegments()</code> and <code>buildRuntimePlan()</code></p>
+            <summary>How the terrain is built</summary>
+            <p><code>createGroundSegments()</code> clips gaps to the world, merges overlaps, then sends the remaining spans to Phaser as collision geometry.</p>
           </details>
         </section>
       </article>
 
       <article id="two-minds" class="experiment">
         <div class="case-copy">
-          <p class="label">03 / Direction <span>·</span> Tactical puzzle combat</p>
+          <p class="label">03 / Direction</p>
           <h3>Two Minds <small lang="zh">二心</small></h3>
-          <p class="case-lead">Place Sun Wukong on a 37-hex board. The traits you pass up return in the hands of his double.</p>
-          <div class="case-links"><a class="pill" href="pages/game3.html">Play Two Minds {{arrow}}</a></div>
-          <dl>
-            <div><dt>My role</dt><dd>Identified a theme through playtesting. A choice should change what happens later.</dd></div>
-            <div><dt>Codex’s role</dt><dd>Led concept discovery with questions and short possession and ritual prototypes.</dd></div>
-            <div><dt>Turning point</dt><dd>Early combat felt detached from ritual. It returned when the False Wukong could fight with the traits the player declined.</dd></div>
-          </dl>
+          <p class="case-lead">Codex led the concept interviews and built ritual prototypes. I settled on a 37-hex fight where Sun Wukong’s double uses the traits you give up.</p>
+          <div class="case-links"><a class="play-link" href="pages/game3.html">Play Two Minds {{arrow}}</a></div>
         </div>
-        <section class="bench bench-echo" aria-labelledby="echo-title">
-          <p class="label">Rule sketch / State partition</p>
-          <h4 id="echo-title">Choose what comes back</h4>
-          <p>Pick a trait. The game records both sides of the choice.</p>
+        <section class="bench" aria-labelledby="echo-title">
+          <h4 id="echo-title">Choose a trait</h4>
           <div class="rule-controls" id="echo-lab">
             <fieldset disabled>
-              <legend>Keep one trait</legend>
+              <legend class="sr-only">Keep one trait</legend>
               <label><input type="radio" name="trait" value="vigilance" checked> Vigilance</label>
               <label><input type="radio" name="trait" value="killing"> Killing Intent</label>
             </fieldset>
             <dl class="echo-result">
-              <div><dt>Sun Wukong / Chosen</dt><dd id="kept-trait">Vigilance</dd></div>
-              <div><dt>False Wukong / Discarded</dt><dd id="echoed-trait">Killing Intent</dd></div>
+              <div><dt>Sun Wukong</dt><dd id="kept-trait">Vigilance</dd></div>
+              <div><dt>False Wukong</dt><dd id="echoed-trait">Killing Intent</dd></div>
             </dl>
             <output role="status">False Wukong turns toward the weakest enemy.</output>
           </div>
           <details class="technical">
-            <summary>From choice history to combat</summary>
-            <p>The engine records chosen, discarded, and seen trait IDs. It builds the double from discarded IDs. Movement ranks unoccupied, unblocked neighbors by axial hex distance, with coordinate tie-breaks.</p>
-            <p><code>chooseTrait()</code>, <code>buildFalseWukong()</code>, and <code>nextStep()</code></p>
+            <summary>How the double is built</summary>
+            <p><code>buildFalseWukong()</code> reads the discarded trait IDs. <code>nextStep()</code> ranks legal moves by axial hex distance, then uses coordinates to break ties.</p>
           </details>
         </section>
       </article>
     </div>
 
-    <section class="handbook" id="handbook" aria-labelledby="handbook-title">
-      <div class="sheet">
-        <header class="handbook-head">
-          <div><p class="label">A field handbook</p><h2 id="handbook-title">Decide what<br>to delegate</h2></div>
-          <p>Three practical entries adapted from my <cite>Vibe Coding for Game Design</cite> notes and the games’ development records.</p>
-        </header>
-        <div class="protocols">
-          <details open>
-            <summary><span>Delegation</span> Specify an observable result</summary>
-            <div>
-              <p>Write a rule, a passing case, and a failing case.</p>
-              <blockquote>Build one power chain. A compatible cable connects within its reach. Moving beyond that reach disconnects it and updates the screen.</blockquote>
-            </div>
-          </details>
-          <details>
-            <summary><span>Collaboration</span> Test one uncertainty at a time</summary>
-            <div>
-              <p>Save the question, build, and playtest judgment together.</p>
-              <blockquote>Keep the route fixed. Vary when Mocha blocks an input. Save both versions so I can compare how fair they feel.</blockquote>
-            </div>
-          </details>
-          <details>
-            <summary><span>Direction</span> Start with questions and keep the rejections</summary>
-            <div>
-              <p>Keep rejected prototypes as design evidence.</p>
-              <blockquote>Ask one question about a choice I find interesting. Record what draws me in. Build a small test once we know what we want to learn.</blockquote>
-            </div>
-          </details>
-        </div>
+    <section class="sheet handbook" id="handbook" aria-labelledby="handbook-title">
+      <h2 id="handbook-title">Field handbook</h2>
+      <div class="protocols">
+        <details>
+          <summary><span>Delegation</span> Write a passing and a failing case</summary>
+          <p>A cable connects within reach. Move the device farther away and the cable disconnects. Ask Codex to build both cases together.</p>
+        </details>
+        <details>
+          <summary><span>Collaboration</span> Change one thing per playtest</summary>
+          <p>Keep the route fixed and change when Mocha blocks a key. Save both builds alongside your playtest notes.</p>
+        </details>
+        <details>
+          <summary><span>Direction</span> Ask a question before building</summary>
+          <p>Ask Codex to find what draws you to an idea. Name one thing you want to learn, then build the smallest test you can play.</p>
+        </details>
       </div>
     </section>
   </main>
