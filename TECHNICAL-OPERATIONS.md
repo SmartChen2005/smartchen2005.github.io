@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-19 — Restyle Beyond Vibe Coding as a technical archive
+
+- Pair the cover and research question with a game-frame index. Use cobalt, cool aluminum, and slate across the evidence records, rule diagrams, and handbook. The Gran Turismo atlas informs the archive structure. Marathon's website and in-game UI inform the typography and control hierarchy.
+- Regenerate the project entry with `node tools/render-ai-game-design.mjs`. The stylesheet and generated page own the presentation. The imported playables and timeline remain in their pinned builds.
+
 ### 2026-11-19 — Publish Beyond Vibe Coding
 
 - Build the English project study from `tools/ai-game-design.html` with `node tools/render-ai-game-design.mjs`. Its source is the Notion page **游戏 Vibe Coding 说明书** (`391abc37-a86f-80a0-a16d-dfd0d0ba4935`, version read 2026-11-19), the supplied résumé, and the games' committed code and design records. The handbook entries adapt those materials. The plotted rule sketches illustrate the implementations at reduced scale.
