@@ -1,4 +1,12 @@
 window.grandTurismoNotes = {
+  prototypeShip: ['Prototype goal', 'Reach the Longship to finish the Space Golf test course.',
+    'The earliest saved test field used the ship as the destination. The expedition would later start beside it.'],
+  prototypeTarget: ['Practice landmark', 'Use these platforms, rocks, and ring structures to test landing throws.',
+    'The test field used simple landmarks to check that throws and landings worked across different shapes and distances.'],
+  prototypePortal: ['Prototype gate', 'The two gates are paired. Use them to test crossing the field through a portal.',
+    'This pair predates the larger network built for the expedition.'],
+  prototypeWell: ['Gravity test', 'Throw near the gravity well to see how it curves the Star Stone’s flight.',
+    'The compact field placed a well close to the launch platform to make curved shots easy to try repeatedly.'],
   ship: ['Vessel', 'The expedition begins beside the Longship. Its hull offers solid surfaces for Star Stone throws.',
     'The explorer left aboard this vessel before the disaster. It has brought them back to the coordinates of home.'],
   checkpoint: ['Navigation archive', 'Activate the Monoliths in route order. Each newly activated Monolith reopens depleted supply sites, restores one split throw, and marks a recovery point.',

@@ -8,6 +8,7 @@
   <title>Gran Turismo | World Atlas</title>
   <link rel="stylesheet" href="atlas.css">
   <script src="world-data.js" defer></script>
+  <script src="atlas-history.js" defer></script>
   <script src="field-notes.js" defer></script>
   <script src="render.js" defer></script>
   <script src="atlas.js" defer></script>
@@ -24,7 +25,7 @@
         <p class="flight-caption" data-cue data-start=".67" data-end=".85">When the world you knew is gone, what does it mean to come home?</p>
         <div class="flight-media" data-link>
           <div class="flight-player">
-            <a href="https://www.youtube.com/watch?v=OFylHWSwYDY" target="_blank" rel="noopener noreferrer">YouTube <span aria-hidden="true">↗</span></a>
+            <a href="https://www.youtube.com/watch?v=OFylHWSwYDY" target="_blank" rel="noopener noreferrer">Watch Gameplay Demo <span aria-hidden="true">↗</span></a>
             <iframe id="flight-video" title="Gran Turismo video on YouTube"
               data-src="https://www.youtube.com/embed/OFylHWSwYDY?playsinline=1"
               width="432" height="243" allow="encrypted-media; fullscreen; picture-in-picture"
@@ -38,7 +39,15 @@
     <section class="atlas wrap" id="atlas" aria-labelledby="atlas-title">
       <header class="atlas-heading">
         <div><p class="eyebrow"><span class="beacon"></span> World Atlas / Exploration Archive</p><h1 id="atlas-title">Gran Turismo</h1></div>
-        <p>The Longship is your point of departure. Trace the Monoliths across the ruins, or open a contact to read its field log.</p>
+        <div class="atlas-timeline" id="atlas-timeline" hidden>
+          <div class="timeline-head">
+            <label for="map-history">Build timeline</label>
+            <time id="history-date"></time>
+          </div>
+          <input id="map-history" type="range" min="0" step="1" aria-describedby="history-summary" list="history-stops">
+          <datalist id="history-stops"></datalist>
+          <p id="history-summary" aria-live="polite"><strong id="history-title"></strong> <span id="history-note"></span></p>
+        </div>
       </header>
 
       <div class="console">
@@ -76,6 +85,7 @@
               </div>
             </div>
             <ul class="legend" aria-label="Map legend">
+              <li class="legend-target">◆ Practice landmark</li>
               <li class="legend-monolith">◆ Monolith</li><li class="legend-portal">◇ Portal</li>
               <li class="legend-fuel">■ Fuel</li><li class="legend-oxygen">● Oxygen</li>
               <li class="legend-well">◎ Gravity well</li><li class="legend-star">✦ Sound star</li>
@@ -110,7 +120,6 @@
       </div>
     </section>
   </main>
-  <footer class="site-footer wrap"><span>GRAN TURISMO</span><a href="#approach">Back to the survey ↑</a></footer>
   <noscript><p class="wrap">Enable JavaScript to explore the atlas and read its field logs.</p></noscript>
 </body>
 </html>

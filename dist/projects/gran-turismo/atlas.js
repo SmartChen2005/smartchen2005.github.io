@@ -9,12 +9,29 @@
     element, start: Number(element.dataset.start), end: Number(element.dataset.end),
   }));
   const flightVideo = $('flight-video'), flightMedia = flightVideo.closest('.flight-media');
+  const timeline = $('map-history'), history = window.GRAND_TURISMO_HISTORY;
+  const currentIndex = history?.milestones.length ?? 0;
+  const latest = {
+    date: '2026-11-19', title: 'Current survey',
+    summary: 'The World Tree, music stars, and Tavi encounters expanded the route.',
+  };
+  const blockoutNotes = {
+    checkpoint: ['Route marker', 'One of four Monoliths that divide the expedition into five legs.',
+      'These positions set the order and spacing of the route.'],
+    finish: ['Route endpoint', 'The final veil marks the end of the fifth leg.',
+      'The expedition leads from the departure point through the four Monoliths to this threshold.'],
+  };
+  const timelineDate = new Intl.DateTimeFormat('en-US', {
+    month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC',
+  });
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const compact = matchMedia('(max-width: 820px)');
   const markerArt = {
     ship: ['▰', '#d6e9ed'], checkpoint: ['◆', '#e1f4f2'], portal: ['◇', '#cfbdf2'],
     fuel: ['■', '#83bbff'], oxygen: ['●', '#9bedd7'], blackHole: ['◎', '#ea9aab'],
     finish: ['▱', '#e1f4f2'], star: ['✦', '#e1f4f2'],
+    prototypeShip: ['▰', '#d6e9ed'], prototypePortal: ['◇', '#cfbdf2'],
+    prototypeWell: ['◎', '#ea9aab'], prototypeTarget: ['◆', '#e1f4f2'],
   };
   const fallbackArt = ['+', '#c2d2d5'];
   const number = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
@@ -34,6 +51,7 @@
   let frame = 0, pendingMap = true, pendingFlight = true, pendingStudy = true, mapView, hitSurfaces = [], docked = true;
   let flightProgress, lastFlightFrame;
   let controls = resetCamera(), panMode = false, drag, ignoreClick = false, etag = '', syncing = false;
+  let currentMap = window.GRAND_TURISMO_MAP, milestoneIndex = currentIndex, historyFrame = 0;
 
   function pointsOf(node) {
     return node.bounds.length ? node.bounds : [node.p];
@@ -134,7 +152,7 @@
     atlas.renderer.draw(view, width, height, .91);
     const front = clearCanvas(atlas.overlay, width, height);
     for (const node of contacts) {
-      if (node.kind === 'blackHole') {
+      if (node.kind === 'blackHole' || node.kind === 'prototypeWell') {
         line(front, view, ring(node.p, node.influence), '#db82985c');
         if (controls.mode === 'orbit') line(front, view, ring(node.p, node.influence, true), '#db82982e');
         line(front, view, ring(node.p, node.core), '#db8298b0');
@@ -180,7 +198,8 @@
   function flightCamera(progress, width, height) {
     const treeExit = .60, portalArrival = .67, portalExit = .84, treePass = .93;
     const portrait = clamp((1 - width / height) / .55, 0, 1);
-    const shipCenter = span(pointsOf(ship)).center, portal = route.at(-1);
+    const shipCenter = ship ? span(pointsOf(ship)).center : data.spawn;
+    const portal = route.at(-1) || data.spawn;
     const startRadius = 66 + portrait * 26, treeRadius = startRadius + 37;
     const treeStart = .45, treeSweep = -3 * Math.PI, treeAngle = treeStart + treeSweep;
     const startRise = 16.5, endRise = 28;
@@ -295,6 +314,7 @@
     }
     setDocked(false);
     const approachBounds = approach.getBoundingClientRect();
+    if (milestoneIndex !== currentIndex && approachBounds.bottom > viewportHeight) showMilestone(currentIndex);
     const flightEnd = Math.max(1, approach.offsetHeight - viewportHeight * 1.22);
     const target = clamp(-approachBounds.top / flightEnd, 0, 1);
     const elapsed = Math.min(time - (lastFlightFrame ?? time - 16), 40);
@@ -366,6 +386,10 @@
     hitSurfaces.sort((a, b) => dot(mapView.depth, a.node.p) - dot(mapView.depth, b.node.p));
     const [sx, sy] = project(mapView, data.spawn);
     ctx.strokeStyle = '#fff3f5'; ctx.strokeRect(sx - 3, sy - 3, 6, 6);
+    if (data.blockout) {
+      ctx.strokeStyle = '#10191e'; ctx.lineWidth = 3; ctx.strokeText('START', sx + 10, sy - 7);
+      ctx.fillStyle = '#fff3f5'; ctx.fillText('START', sx + 10, sy - 7);
+    }
     $('map-scale').textContent = `${mapView.scale > 5 ? 10 : 50} M GRID`;
   }
 
@@ -374,7 +398,7 @@
     if (!study || width < 1 || height < 1) return;
     const box = span(study.bounds), center = box.center;
     const largest = Math.max(...box.hi.map((n, i) => n - box.lo[i]));
-    const yaw = selected.kind === 'ship' ? -1.05 : selected.kind === 'finish' ? -.28 : -.45;
+    const yaw = selected === ship ? -1.05 : selected.kind === 'finish' ? -.28 : -.45;
     const elevation = selected.veil ? .15 : selected.kind === 'star' ? .1 : .32;
     const scale = selected.veil ? Math.min(width * .76 / (box.hi[0] - box.lo[0]), height * .58 / (box.hi[1] - box.lo[1])) :
       Math.min(width * .74, height * .70) / (largest || 1);
@@ -402,7 +426,7 @@
     selected = node;
     markers.get(node.id)?.setAttribute('aria-pressed', 'true');
     picker.value = id;
-    const [category, use, lore] = notes[node.kind];
+    const [category, use, lore] = data.blockout ? blockoutNotes[node.kind] : notes[node.kind];
     $('record-code').textContent = node.code || `Contact ${node.id}`;
     $('record-category').textContent = category;
     $('record-title').textContent = node.title;
@@ -413,8 +437,11 @@
     if (node.zone) rows.push(['Sector', node.zone]);
     if (node.stage) rows.push(['Route sector', String(node.stage)]);
     if (node.dimensions) rows.push(['Size', node.dimensions.map(value => number.format(value)).join(' × ') + ' m']);
-    if (pair) rows.push(['Pair glyph', node.mark], ['Linked gate', pair.code]);
-    if (node.kind === 'blackHole') rows.push(['Core radius', meters(node.core)], ['Influence', meters(node.influence)], ['Surface pull', `${node.strength} m/s²`]);
+    if (node.mark) rows.push(['Pair glyph', node.mark]);
+    if (pair) rows.push(['Linked gate', pair.code]);
+    if (node.kind === 'blackHole' || node.kind === 'prototypeWell') {
+      rows.push(['Core radius', meters(node.core)], ['Influence', meters(node.influence)], ['Surface pull', `${node.strength} m/s²`]);
+    }
     if (node.kind === 'star') rows.push(['Music transition', `${node.fade} s`]);
     $('record-meta').replaceChildren(...rows.map(([term, value]) => {
       const row = document.createElement('div'), dt = document.createElement('dt'), dd = document.createElement('dd');
@@ -441,17 +468,20 @@
     byId = new Map(data.nodes.map(node => [node.id, node]));
     contacts = data.nodes.filter(node => node.kind !== 'debris');
     terrain = data.nodes.filter(node => node.kind === 'debris' && node.bounds.length);
-    ship = contacts.find(node => node.kind === 'ship');
-    const tree = contacts.find(node => node.kind === 'WorldTree') || ship;
+    ship = contacts.find(node => node.kind === 'ship' || node.kind === 'prototypeShip');
+    const tree = contacts.find(node => node.kind === 'WorldTree') || ship || contacts[0];
     treeCenter = span(pointsOf(tree)).center;
-    route = [data.spawn, ...data.route.map(id => byId.get(id).p), contacts.find(node => node.kind === 'finish').p];
-    worldPoints = data.nodes.flatMap(pointsOf);
+    route = data.prototype ? [] : [data.spawn, ...data.route.map(id => byId.get(id).p), contacts.find(node => node.kind === 'finish').p];
+    section.toggleAttribute('data-prototype', Boolean(data.prototype));
+    section.toggleAttribute('data-blockout', Boolean(data.blockout));
+    worldPoints = [...data.nodes.flatMap(pointsOf), ...(data.blockout ? [data.spawn] : [])];
     world = span(worldPoints);
     const scenery = terrain.filter(node => node.scenery).map(node => ({ ...node, parts: [node.scenery] }));
-    const fallbackContacts = contacts.filter(node => node === tree || node === ship || node.veil);
+    const fallbackContacts = contacts.filter(node => data.prototype || data.blockout || node === tree || node === ship || node.veil);
+    const departure = ship?.p || data.spawn;
     const sceneTerrain = atlas.renderer.gpu ? scenery : scenery.map(node => ({ node, distance: Math.min(
       Math.hypot(...node.p.map((value, i) => value - treeCenter[i])),
-      Math.hypot(...node.p.map((value, i) => value - ship.p[i]))) }))
+      Math.hypot(...node.p.map((value, i) => value - departure[i]))) }))
       .sort((a, b) => a.distance - b.distance).slice(0, 30).map(entry => entry.node);
     atlas.renderer.upload(meshBatch(data.models, atlas.renderer.gpu ? contacts : fallbackContacts), meshBatch(data.models, sceneTerrain));
     document.body.style.setProperty('--sky', data.skyColor || '#150f15');
@@ -478,8 +508,31 @@
     picker.disabled = false; plot.dataset.ready = 'true';
     document.querySelectorAll('.projection-options button, .map-actions button').forEach(button => { button.disabled = false; });
     $('map-status').hidden = true; $('retry-map').hidden = true;
-    select(byId.has(previous) && notes[byId.get(previous).kind] ? previous : ship.id);
+    select(byId.has(previous) && notes[byId.get(previous).kind] ? previous : (ship || byId.get(data.route[0])).id);
     update({ map: true, fly: true, record: true });
+  }
+
+  function describeMilestone(index, entry) {
+    timeline.value = index;
+    const label = timelineDate.format(new Date(entry.date));
+    $('history-date').dateTime = entry.date;
+    $('history-date').textContent = label;
+    $('history-title').textContent = entry.title;
+    $('history-note').textContent = entry.summary;
+    timeline.setAttribute('aria-valuetext', `${label}, ${entry.title}`);
+  }
+
+  function showMilestone(index) {
+    if (index === milestoneIndex) return;
+    const entry = index === currentIndex ? latest : history.milestones[index];
+    const next = index === currentIndex ? currentMap : {
+      ...entry.map,
+      models: Object.fromEntries(Object.entries(entry.modelKeys).map(([name, key]) => [name, history.models[key]])),
+    };
+    Object.assign(controls, { target: null, pan: [0, 0], zoom: 1 });
+    apply(next);
+    milestoneIndex = index;
+    describeMilestone(index, entry);
   }
 
   function orient(mode) {
@@ -529,12 +582,16 @@
       });
       if (response.status !== 304) {
         if (!response.ok) throw new Error('Survey unavailable');
-        apply(await response.json());
+        const updated = await response.json();
+        if (milestoneIndex === currentIndex) apply(updated);
+        currentMap = updated;
         etag = response.headers.get('ETag') || '';
       }
       $('map-status').hidden = true; $('retry-map').hidden = true;
     } catch {
-      status(data ? 'Live survey unavailable. Showing the last loaded map.' : 'Survey unavailable. Retry to reload the map.');
+      if (milestoneIndex === currentIndex) {
+        status(data ? 'Live survey unavailable. Showing the last loaded map.' : 'Survey unavailable. Retry to reload the map.');
+      }
     } finally { syncing = false; }
   }
 
@@ -549,6 +606,13 @@
     $('drag-mode').setAttribute('aria-pressed', String(panMode));
   });
   picker.addEventListener('change', () => select(picker.value));
+  timeline.addEventListener('input', () => {
+    if (historyFrame) return;
+    historyFrame = requestAnimationFrame(() => {
+      historyFrame = 0;
+      showMilestone(Number(timeline.value));
+    });
+  });
   $('locate').addEventListener('click', () => locate(selected));
   $('paired').addEventListener('click', () => { select(selected.pair); locate(selected); });
   $('retry-map').addEventListener('click', () => {
@@ -614,7 +678,15 @@
   const resize = new ResizeObserver(() => update({ map: true, fly: true, record: true }));
   for (const element of [approach, plot, specimen]) resize.observe(element);
 
-  try { apply(window.GRAND_TURISMO_MAP); }
+  try {
+    apply(currentMap);
+    if (currentIndex) {
+      timeline.max = currentIndex;
+      $('history-stops').append(...[...history.milestones, latest].map((entry, index) => new Option(entry.title, index)));
+      describeMilestone(currentIndex, latest);
+      $('atlas-timeline').hidden = false;
+    }
+  }
   catch { status('The survey data could not be opened. Reload the atlas to retry.'); }
   if (document.body.hasAttribute('data-live-map')) {
     refresh(); setInterval(refresh, 5000);
