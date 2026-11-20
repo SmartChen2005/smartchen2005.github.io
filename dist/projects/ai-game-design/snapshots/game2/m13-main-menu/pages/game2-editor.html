@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#111413">
+    <meta name="description" content="Catwalk single-route level editor.">
+    <title>Catwalk — Route Studio</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../styles/game2-editor.css?v=4">
+  </head>
+  <body>
+    <main class="editor-app">
+      <header class="editor-header">
+        <div>
+          <p>CATWALK / ROUTE STUDIO</p>
+          <h1>Route Studio</h1>
+        </div>
+        <label class="editor-level-name" for="project-name">
+          <span>Level name</span>
+          <input id="project-name" type="text" value="Catwalk Single Route" maxlength="80" autocomplete="off" spellcheck="false">
+          <small id="project-file-name">catwalk-single-route.json</small>
+        </label>
+        <nav aria-label="Editor navigation">
+          <a href="./game2.html">Main Menu</a>
+          <a href="./game2-gallery.html">Dev Gallery</a>
+          <a href="../../../../pages/game2-timeline.html" target="_top">Timeline</a>
+        </nav>
+      </header>
+
+      <section class="editor-toolbar" aria-label="Editor tools">
+        <div class="tool-group">
+          <button class="tool-button is-active" type="button" data-tool="select">Select <kbd>V</kbd></button>
+          <button class="tool-button" type="button" data-tool="pan">Pan <kbd>H</kbd></button>
+        </div>
+        <div class="tool-group">
+          <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
+          <output id="zoom-readout">100%</output>
+          <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
+          <button id="frame-all" type="button">Frame All</button>
+        </div>
+        <div class="tool-group project-actions">
+          <span id="save-status" aria-live="polite">Unsaved</span>
+          <button id="playtest-project" type="button">Playtest</button>
+          <button id="playtest-here" type="button" title="Start from the nearest checkpoint before the current editing position">Playtest Here</button>
+          <button id="new-project" type="button">New</button>
+          <button id="save-project" type="button">Save Level</button>
+          <button id="export-project" type="button">Download JSON</button>
+          <button id="import-project" type="button">Import JSON</button>
+          <input id="import-file" type="file" accept="application/json,.json" hidden>
+        </div>
+      </section>
+
+      <div class="editor-layout">
+        <aside class="editor-palette" aria-label="Placement library">
+          <div class="panel-heading">
+            <p>LIBRARY</p>
+            <h2>Place content</h2>
+          </div>
+          <div class="palette-tabs" role="tablist" aria-label="Library category">
+            <button class="is-active" type="button" role="tab" aria-selected="true" data-palette-tab="elements">Elements</button>
+            <button type="button" role="tab" aria-selected="false" data-palette-tab="modules">29 Modules</button>
+          </div>
+          <div id="element-palette" class="palette-content"></div>
+          <div id="module-palette" class="palette-content" hidden></div>
+          <div class="palette-help">
+            <strong>Place:</strong> choose an item, then click the scene.<br>
+            <strong>Select:</strong> drag empty space to box-select objects.<br>
+            <strong>Move:</strong> drag any selected object to move the group.<br>
+            <strong>Navigate:</strong> mouse wheel pans; Ctrl/⌘ + wheel zooms.
+          </div>
+        </aside>
+
+        <section class="editor-workspace" aria-label="Infinite horizontal scene">
+          <div class="workspace-meta">
+            <div>
+              <span id="project-name-label">Catwalk Single Route</span>
+              <small id="world-readout">0 objects · 4,800px world</small>
+            </div>
+            <div>
+              <span id="cursor-readout">X 0 · Y 0</span>
+              <span class="event-legend"><i></i> Cat interference</span>
+            </div>
+          </div>
+          <div id="canvas-wrap" class="canvas-wrap">
+            <canvas id="editor-canvas" aria-label="Catwalk route editor canvas"></canvas>
+            <div id="placement-hint" class="placement-hint" hidden></div>
+          </div>
+          <div class="workspace-scroll">
+            <input id="horizontal-scroll" type="range" min="0" max="4000" value="0" step="10" aria-label="Horizontal scene position">
+          </div>
+        </section>
+
+        <aside class="editor-inspector" aria-label="Selection inspector">
+          <div class="panel-heading">
+            <p>INSPECTOR</p>
+            <h2 id="selection-title">Nothing selected</h2>
+          </div>
+
+          <div id="empty-inspector" class="empty-inspector">
+            Select an object to edit its exact position, size, behavior, and trigger settings.
+          </div>
+
+          <form id="object-inspector" hidden>
+            <div class="field-grid">
+              <label>X <input data-field="x" type="number" step="10"></label>
+              <label>Y <input data-field="y" type="number" step="10"></label>
+              <label>Width <input data-field="width" type="number" min="4" step="10"></label>
+              <label>Height <input data-field="height" type="number" min="4" step="10"></label>
+            </div>
+
+            <label data-property="enemyType">
+              Threat type
+              <select data-field="enemyType">
+                <option value="mouse">Toy mouse</option>
+                <option value="pigeon">Pigeon</option>
+                <option value="dog">Guard dog</option>
+              </select>
+            </label>
+            <div class="field-grid" data-property="patrol">
+              <label>Patrol start <input data-field="patrolMinX" type="number" step="10"></label>
+              <label>Patrol end <input data-field="patrolMaxX" type="number" step="10"></label>
+            </div>
+
+            <label data-property="gameStartLives">
+              Starting lives
+              <input data-field="lives" type="number" min="1" max="99" step="1">
+              <small>Granted when the player crosses this Game Start Flag.</small>
+            </label>
+
+            <label data-property="ritualAction">
+              Cat Lock action
+              <select data-field="action">
+                <option value="scratch">J · Scratch</option>
+                <option value="jump">W / ↑ · Jump</option>
+                <option value="squeeze">K · Low</option>
+                <option value="loaf">S · Loaf</option>
+                <option value="roll">L · Roll</option>
+                <option value="climb">Space · Climb</option>
+              </select>
+            </label>
+            <div class="field-grid" data-property="ritualOrder">
+              <label>Sequence order <input data-field="order" type="number" min="1" step="1"></label>
+              <label>Sequence group <input data-field="group" type="text"></label>
+            </div>
+
+            <label data-property="textContent">
+              Visible message
+              <textarea data-field="content" rows="3" placeholder="Write the instruction players will see"></textarea>
+            </label>
+            <div class="field-grid" data-property="textStyle">
+              <label>Font size <input data-field="fontSize" type="number" min="8" max="72" step="1"></label>
+              <label>Text box width <input data-field="width" type="number" min="40" step="10"></label>
+            </div>
+            <label data-property="triggerMode">
+              Trigger condition
+              <select data-field="triggerMode">
+                <option value="position">Player position</option>
+                <option value="time">Elapsed time</option>
+                <option value="both">Position + time</option>
+              </select>
+            </label>
+            <div class="field-grid" data-property="triggerTiming">
+              <label>Trigger X <input data-field="triggerX" type="number" step="10"></label>
+              <label>Delay (seconds) <input data-field="delaySeconds" type="number" min="0" step="0.5"></label>
+              <label>Duration (0 = rest) <input data-field="durationSeconds" type="number" min="0" step="0.5"></label>
+            </div>
+            <label data-property="blockedKeys">
+              Blocked keys
+              <input data-field="blockedKeys" type="text" placeholder="w, j, k">
+            </label>
+            <label data-property="heldKeys">
+              Held keys
+              <input data-field="heldKeys" type="text" placeholder="d">
+            </label>
+            <label data-property="pawDirections">
+              Paw directions
+              <input data-field="pawDirections" type="text" placeholder="top, left, bottom, right">
+            </label>
+            <label data-property="screenEventTrigger">
+              Trigger X
+              <input data-field="triggerX" type="number" step="10">
+            </label>
+            <div data-property="screenBlockSettings">
+              <label>
+                Cat enters from
+                <select data-field="side">
+                  <option value="left">Left</option>
+                  <option value="right">Right</option>
+                </select>
+              </label>
+              <label>
+                Screen covered (%)
+                <input data-field="coveragePercent" type="number" min="10" max="90" step="5">
+              </label>
+              <label>
+                End condition
+                <select data-field="endMode">
+                  <option value="duration">After duration</option>
+                  <option value="position">At map End X</option>
+                </select>
+              </label>
+              <div class="field-grid">
+                <label>Duration (seconds) <input data-field="durationSeconds" type="number" min="0.5" step="0.5"></label>
+                <label>Map End X <input data-field="endX" type="number" step="10"></label>
+              </div>
+            </div>
+            <div data-property="screenWalkSettings">
+              <label>
+                Walk direction
+                <select data-field="walkDirection">
+                  <option value="left-to-right">Left to right</option>
+                  <option value="right-to-left">Right to left</option>
+                </select>
+              </label>
+              <label>
+                Walk duration (seconds)
+                <input data-field="durationSeconds" type="number" min="0.5" step="0.5">
+              </label>
+            </div>
+
+            <div class="inspector-actions">
+              <button id="duplicate-object" type="button">Duplicate <kbd>Ctrl D</kbd></button>
+              <button id="delete-object" class="danger" type="button">Delete <kbd>Del</kbd></button>
+            </div>
+          </form>
+
+          <section class="data-summary">
+            <h3>Single-route data</h3>
+            <dl>
+              <div><dt>Schema</dt><dd>catwalk-single-route</dd></div>
+              <div><dt>Version</dt><dd>1</dd></div>
+              <div><dt>Storage</dt><dd>Browser + JSON</dd></div>
+            </dl>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <script src="../scripts/snapshot-route.js"></script>
+    <script src="../scripts/game2-level-data.js?v=2"></script>
+    <script src="../scripts/game2-editor-model.js?v=11"></script>
+    <script src="../scripts/game2-editor.js?v=16"></script>
+  </body>
+</html>

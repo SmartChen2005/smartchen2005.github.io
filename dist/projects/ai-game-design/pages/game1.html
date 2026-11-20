@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="No Signal, a 2D puzzle game about powering and connecting desktop devices.">
+    <title>No Signal — Level 01</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../styles/game1.css">
+    <script src="../scripts/game1.js" defer></script>
+  </head>
+  <body class="no-signal-page">
+    <header class="game-header">
+      <a class="back-link" href="../index.html" aria-label="Return to game home">
+        <span aria-hidden="true">←</span>
+        <span>HOME</span>
+      </a>
+
+      <div class="game-identity" aria-label="Game title">
+        <span class="game-identity__mark" aria-hidden="true"></span>
+        <strong>NO SIGNAL</strong>
+      </div>
+
+      <p class="build-label" id="level-label">LEVEL 01 · PLAYABLE</p>
+    </header>
+
+    <main class="game-layout">
+      <aside class="side-column side-column--left" aria-label="Inventory">
+        <section class="panel inventory-panel">
+          <div class="panel__heading">
+            <div>
+              <p class="panel__eyebrow">AVAILABLE</p>
+              <h2>Inventory</h2>
+            </div>
+            <span class="panel__index" id="inventory-count" aria-label="Two available items">02</span>
+          </div>
+
+          <div class="inventory-list" id="inventory-list" aria-label="Available items"></div>
+
+          <p class="panel__note">Every cable has a length limit · Fixed leads range from 0.3m to 5m</p>
+        </section>
+
+        <section class="panel shop-panel" aria-labelledby="shop-title">
+          <div class="panel__heading">
+            <div>
+              <p class="panel__eyebrow">EQUIPMENT STORE</p>
+              <h2 id="shop-title">Shop</h2>
+            </div>
+            <span class="shop-money" id="shop-money" aria-label="30 dollars available">$30</span>
+          </div>
+          <div class="shop-list" id="shop-list" aria-label="Shop items"></div>
+          <div class="shop-actions" aria-label="Purchase controls">
+            <button class="shop-action-button" id="undo-purchase-button" type="button" disabled>
+              UNDO LAST
+            </button>
+            <button class="shop-action-button shop-action-button--reset" id="reset-purchases-button" type="button" disabled>
+              RESET PURCHASES
+            </button>
+          </div>
+          <p class="control-note">Unlimited stock · Level rewards are <strong>$10</strong>, then <strong>$15</strong> before the finale.</p>
+        </section>
+      </aside>
+
+      <section class="workspace" aria-labelledby="workspace-title">
+        <div class="workspace__header">
+          <div>
+            <p class="panel__eyebrow">WORKSPACE</p>
+            <h1 id="workspace-title">Desktop Connections</h1>
+          </div>
+          <p class="workspace__status">
+            <span aria-hidden="true"></span>
+            System test ready
+          </p>
+        </div>
+
+        <div class="scene" aria-label="Level 1 desktop scene">
+          <p class="scene__label">EQUIPMENT AREA</p>
+          <div class="scene__guide" aria-hidden="true"></div>
+          <div class="outlet-layer" id="outlet-layer" aria-label="Wall outlets"></div>
+          <div class="desk" aria-hidden="true">
+            <div class="desk__edge"></div>
+            <div class="desk__leg desk__leg--left"></div>
+            <div class="desk__leg desk__leg--right"></div>
+          </div>
+          <svg class="cable-layer" id="cable-layer" aria-label="Cable connections"></svg>
+          <div class="device-layer" id="device-layer" aria-label="Desktop devices"></div>
+          <p class="scene__hint">Click a port, fixed AC plug, or outlet to start a connection</p>
+        </div>
+      </section>
+
+      <aside class="side-column side-column--right" aria-label="Task and system test">
+        <section class="panel task-panel">
+          <div class="panel__heading">
+            <div>
+              <p class="panel__eyebrow">CURRENT TASK</p>
+              <h2>Task</h2>
+            </div>
+            <span class="status-chip status-chip--warning" id="task-status">UNPOWERED</span>
+          </div>
+
+          <div class="task-copy">
+            <span class="task-copy__number" id="task-number">01</span>
+            <div>
+              <h3 id="task-title">Power the MacBook</h3>
+              <p id="task-objective">Inspect the desktop and inventory, then build the first power path.</p>
+            </div>
+          </div>
+
+          <div class="system-message" role="status">
+            <span class="system-message__light" aria-hidden="true"></span>
+            <p>The MacBook has no power input.</p>
+          </div>
+        </section>
+
+        <section class="test-panel" aria-label="System test">
+          <p>CONNECTION CHECK</p>
+          <button class="test-button" id="test-button" type="button" data-test-state="ready">
+            <span>TEST</span>
+            <small id="test-button-state">READY</small>
+          </button>
+          <button class="next-level-button" id="next-level-button" type="button" hidden>
+            NEXT LEVEL <span aria-hidden="true">→</span>
+          </button>
+          <p class="test-panel__note">Checks all committed power and signal connections</p>
+        </section>
+      </aside>
+    </main>
+
+    <section class="ending-overlay" id="ending-overlay" role="dialog" aria-modal="true" aria-labelledby="ending-title" hidden>
+      <div class="ending-dialog">
+        <p class="ending-dialog__eyebrow">DESK COMPLETE</p>
+        <div class="ending-dialog__speech">
+          <h2 id="ending-title">Oof... I can't believe I did it.</h2>
+          <p>Every screen is alive, every battery is charging, and this little corner finally feels like home.</p>
+        </div>
+        <div class="ending-dialog__thought" aria-label="Choose what to do next">
+          <span class="ending-dialog__thought-dot ending-dialog__thought-dot--one" aria-hidden="true"></span>
+          <span class="ending-dialog__thought-dot ending-dialog__thought-dot--two" aria-hidden="true"></span>
+          <p>What should I do next?</p>
+          <div class="ending-dialog__choices">
+            <a class="ending-choice" id="ending-home-link" href="../index.html">
+              <small>BACK TO</small>
+              <strong>MAIN PAGE</strong>
+            </a>
+            <a class="ending-choice ending-choice--next" id="ending-game-two-link" href="game2.html">
+              <small>CONTINUE TO</small>
+              <strong>GAME 2</strong>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

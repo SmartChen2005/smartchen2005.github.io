@@ -1,5 +1,9 @@
 # Polaroid of Yesterday — Design Context
 
+## Beyond Vibe Coding (2026-11-19)
+
+The English research study keeps the shared Projects navigation and uses a warm paper surface, violet research notes, and lime actions. Archivo sets the body and display text. Instrument Serif supplies the display emphasis. The three images are genuine game frames. Each experiment pairs a playable build and three lines of design evidence with an interactive rule sketch. Keep technical detail and handbook examples in native disclosures. The original games retain their own visual styles and interaction models. The study's tokens and responsive layout live in `dist/projects/ai-game-design/study.css`.
+
 ## Projects — VR and Battlefront covers (2026-11-16)
 
 VR for Skill Learning follows Figures of Speech and occupies its right-hand slot in the two-column grid. Its artwork is a connected paper map of the garage, auto parts store, forest camp, and graffiti wall. Four slices of the same ImageGen illustration meet at alternating folds. The map unfolds on entry, bends and tilts with a fine pointer, and settles open when the pointer leaves. Reduced motion and no JavaScript show the complete map at rest. The collection title names the native link, and the chapter emoji remain on the collection page.

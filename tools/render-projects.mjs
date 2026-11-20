@@ -17,9 +17,11 @@ const { example: matchup } = JSON.parse(fs.readFileSync(new URL('./masb-source/e
 const aiGameDesign = {
   href: 'ai-game-design/',
   title: 'Beyond Vibe Coding: Experiments in Human–AI Game Design',
-  kind: 'Game design resource',
-  description: 'Includes the Vibe Coding Game Design Handbook.',
-  previewImage: 'assets/project-placeholder.svg'
+  kind: 'Design research',
+  description: 'Three playable games and a field handbook on creative control in human–AI collaboration.',
+  previewImage: 'ai-game-design/media/projects-cover.webp',
+  previewWidth: 1280,
+  previewHeight: 320
 };
 const projects = [
   {href:'polaroid-of-yesterday/',title:'Polaroid of Yesterday',kind:'Narrative puzzle game',description:'A first-person game about photography, memory, and the stories we construct.',tone:'light',theme:'polaroid',effect:'polaroid',image:`<img ${renditionAttributes(room,'../',{sizes:'(max-width: 700px) calc(100vw - 80px), 520px',priority:true})} alt="" decoding="async" fetchpriority="high" draggable="false">`},
@@ -68,24 +70,4 @@ ${header}
 <main class="projects-main" id="main"><div class="projects-intro"><h1 id="page-title">Projects</h1></div>
 <ol class="directory" role="list" aria-label="Portfolio projects">${entries}</ol></main>
 <footer class="projects-footer"><p>Smart Chen</p><a href="#top">Back to top</a></footer></body></html>\n`);
-const handbookUrl = 'https://handbook.vegshark.com/';
-const placeholder = new URL(aiGameDesign.href, output);
-fs.mkdirSync(placeholder, { recursive: true });
-fs.writeFileSync(new URL('index.html', placeholder), `<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#061b62">
-<meta http-equiv="refresh" content="0; url=${handbookUrl}">
-<title>${aiGameDesign.title} — Smart Chen</title>${siteFavicon('../../')}
-<link rel="stylesheet" href="../../site.css">
-<link rel="stylesheet" href="../../assets/fonts/gotham/gotham.css">
-<link rel="stylesheet" href="../projects.css?rev=20261109-tight-figures">
-${projectHeaderAssets('../../')}</head>
-<body class="projects-directory"><a class="projects-skip" href="#main">Skip to content</a>
-${projectHeader()}
-<main class="projects-main" id="main"><div class="projects-intro">
-<h1>${aiGameDesign.title}</h1>
-<p>Opening the Handbook…</p>
-<p><a class="directory-link" href="${handbookUrl}">Read the Handbook ${northEastArrow}</a></p>
-</div></main></body></html>
-`);
-console.log('Rendered Projects and the AI Game Design placeholder.');
+console.log('Rendered Projects.');

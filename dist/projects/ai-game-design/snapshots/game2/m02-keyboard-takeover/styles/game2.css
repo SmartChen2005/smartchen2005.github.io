@@ -1,0 +1,441 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #151311;
+  color: #f2eee8;
+  --monitor-width: min(880px, calc(100vw - 48px));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% 32%, rgba(113, 91, 68, 0.19), transparent 35%),
+    linear-gradient(160deg, #1e1a17 0%, #0f0e0d 72%);
+}
+
+button,
+a {
+  font: inherit;
+}
+
+.catwalk-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.prototype-header {
+  min-height: 56px;
+  padding: 10px clamp(18px, 3vw, 42px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.prototype-kicker,
+.prototype-header h1 {
+  margin: 0;
+}
+
+.prototype-kicker {
+  color: #a59b90;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.prototype-header h1 {
+  margin-top: 2px;
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.prototype-header nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.prototype-header button,
+.prototype-header a {
+  min-height: 34px;
+  padding: 7px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #eee7df;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.prototype-header button:hover,
+.prototype-header a:hover,
+.prototype-header button:focus-visible,
+.prototype-header a:focus-visible {
+  outline: none;
+  border-color: #e5b87c;
+  background: rgba(229, 184, 124, 0.12);
+}
+
+.desk {
+  position: relative;
+  min-height: 0;
+  padding: 12px 24px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.desk::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34%;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background:
+    linear-gradient(92deg, transparent 0 18%, rgba(255, 255, 255, 0.02) 18.1% 18.3%, transparent 18.4%),
+    linear-gradient(#2e231b, #1d1713);
+}
+
+.monitor {
+  position: relative;
+  width: var(--monitor-width);
+  padding: 12px;
+  border: 1px solid #45413d;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #3c3a37, #1f1e1c 65%);
+  box-shadow:
+    0 28px 65px rgba(0, 0, 0, 0.42),
+    inset 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.monitor-camera {
+  position: absolute;
+  z-index: 2;
+  top: 4px;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #080808;
+  box-shadow: 0 0 0 1px #555;
+}
+
+#catwalk-game {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #101719;
+}
+
+#catwalk-game canvas {
+  display: block;
+}
+
+.monitor-neck {
+  width: 82px;
+  height: 22px;
+  background: linear-gradient(90deg, #292724, #55514c 50%, #292724);
+  clip-path: polygon(20% 0, 80% 0, 100% 100%, 0 100%);
+}
+
+.monitor-foot {
+  width: 190px;
+  height: 8px;
+  margin-bottom: 8px;
+  border-radius: 50% 50% 3px 3px;
+  background: linear-gradient(90deg, #262421, #5c5852 50%, #262421);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35);
+}
+
+.keyboard {
+  position: relative;
+  width: min(760px, calc(100vw - 72px));
+  height: 100px;
+  display: grid;
+  grid-template-columns: 170px 1fr 170px;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 24px;
+  overflow: hidden;
+  border: 1px solid #4a4641;
+  border-radius: 13px 13px 20px 20px;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.03), transparent),
+    #24211e;
+  box-shadow:
+    0 13px 24px rgba(0, 0, 0, 0.36),
+    inset 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.keyboard-label {
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  margin: 0;
+  transform: translateX(-50%);
+  color: #706a63;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.key-zone {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 4px;
+}
+
+.key-row {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+
+.key-row-single {
+  padding-right: 0;
+}
+
+kbd,
+.decorative-keys i {
+  width: 30px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #5a554f;
+  border-bottom-width: 3px;
+  border-radius: 5px;
+  background: #35312d;
+  color: #cfc7bd;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.08);
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease,
+    opacity 180ms ease;
+}
+
+.decorative-keys {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  opacity: 0.45;
+}
+
+.decorative-keys i {
+  width: min(42px, 11%);
+}
+
+.moka {
+  position: absolute;
+  z-index: 3;
+  left: -3px;
+  bottom: -5px;
+  width: 220px;
+  height: 112px;
+  pointer-events: none;
+  transform: translateX(-115%) rotate(-4deg);
+  transform-origin: left bottom;
+  transition: transform 650ms cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+
+.moka-head {
+  position: absolute;
+  left: -25px;
+  bottom: 17px;
+  width: 91px;
+  height: 79px;
+  border-radius: 47% 52% 44% 48%;
+  background: linear-gradient(140deg, #b7a28a 0 32%, #3b2e2a 68%);
+  box-shadow: inset -8px -7px 14px rgba(0, 0, 0, 0.22);
+}
+
+.ear {
+  position: absolute;
+  top: -19px;
+  width: 34px;
+  height: 42px;
+  background: #43312c;
+  clip-path: polygon(50% 0, 100% 100%, 0 82%);
+}
+
+.ear-left {
+  left: 4px;
+  transform: rotate(-16deg);
+}
+
+.ear-right {
+  right: 2px;
+  transform: rotate(18deg) scaleX(-1);
+}
+
+.eye {
+  position: absolute;
+  top: 34px;
+  width: 10px;
+  height: 7px;
+  border-radius: 50%;
+  background: #82d9ee;
+  box-shadow: 0 0 8px rgba(130, 217, 238, 0.5);
+}
+
+.eye-left {
+  left: 48px;
+}
+
+.eye-right {
+  left: 70px;
+}
+
+.moka-leg {
+  position: absolute;
+  left: 42px;
+  bottom: 27px;
+  width: 155px;
+  height: 49px;
+  border-radius: 30px 70% 48% 30px;
+  background: linear-gradient(90deg, #9b876f, #c4ad91 58%, #5a453c 92%);
+  transform: rotate(4deg);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.moka-paw {
+  position: absolute;
+  right: 4px;
+  bottom: 24px;
+  width: 55px;
+  height: 42px;
+  border-radius: 45% 55% 48% 48%;
+  background: #493831;
+  transform: rotate(5deg);
+}
+
+.moka-paw i {
+  position: absolute;
+  top: -5px;
+  width: 17px;
+  height: 22px;
+  border-radius: 50%;
+  background: #493831;
+}
+
+.moka-paw i:nth-child(1) {
+  left: 2px;
+}
+
+.moka-paw i:nth-child(2) {
+  left: 18px;
+  top: -9px;
+}
+
+.moka-paw i:nth-child(3) {
+  right: 2px;
+}
+
+.keyboard.is-blocked .moka {
+  transform: translateX(0) rotate(-4deg);
+}
+
+.keyboard.is-blocked .key-zone-wasd kbd {
+  color: #8e6758;
+  border-color: #5c4036;
+  background: #251d1a;
+  opacity: 0.48;
+  transform: translateY(2px);
+}
+
+.keyboard.is-blocked .key-zone-arrows kbd {
+  color: #17130e;
+  border-color: #e6bc7f;
+  background: #e6bc7f;
+  animation: key-hint 1.1s ease-in-out infinite alternate;
+}
+
+.keyboard.is-complete .key-zone-arrows kbd {
+  animation: none;
+  color: #e9f3d7;
+  border-color: #8ab76b;
+  background: #3f5c32;
+}
+
+@keyframes key-hint {
+  to {
+    transform: translateY(-2px);
+    box-shadow: 0 0 18px rgba(230, 188, 127, 0.4);
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-height: 760px) {
+  :root {
+    --monitor-width: min(820px, calc(100vw - 48px), calc((100vh - 196px) * 16 / 9));
+  }
+
+  .desk {
+    justify-content: flex-start;
+    padding-top: 8px;
+  }
+
+  .keyboard {
+    height: 92px;
+  }
+}
+
+@media (max-width: 700px) {
+  .prototype-header h1 {
+    display: none;
+  }
+
+  .desk {
+    padding-inline: 10px;
+  }
+
+  .keyboard {
+    width: calc(100vw - 24px);
+    grid-template-columns: 135px 1fr 135px;
+    gap: 5px;
+    padding-inline: 8px;
+  }
+
+  .decorative-keys i:nth-child(n + 4) {
+    display: none;
+  }
+}

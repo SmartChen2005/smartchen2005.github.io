@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#151311">
+    <meta name="description" content="Play the designed, uploaded, or editor-saved Catwalk route.">
+    <title>Catwalk — Route Playtest</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../styles/game2.css?v=14">
+    <link rel="stylesheet" href="../styles/game2-playtest.css?v=21">
+  </head>
+  <body>
+    <main class="catwalk-shell">
+      <header class="prototype-header">
+        <div>
+          <p class="prototype-kicker">CATWALK / ROUTE SESSION</p>
+          <h1 id="playtest-project-name">Route Playtest</h1>
+        </div>
+        <nav aria-label="Playtest controls">
+          <button id="restart-playtest" type="button">Restart</button>
+          <a class="return-editor" href="./game2-editor.html">Return to Editor</a>
+          <a id="playtest-main-menu" href="./game2.html">Main Menu</a>
+        </nav>
+      </header>
+
+      <section class="desk playtest-desk" aria-label="Catwalk route playtest">
+        <div class="monitor" aria-label="Platform game monitor">
+          <div class="monitor-camera" aria-hidden="true"></div>
+          <div id="catwalk-game"></div>
+          <div id="screen-interference-layer" class="screen-interference-layer" aria-hidden="true"></div>
+          <a id="end-main-menu" class="end-main-menu" href="./game2.html" hidden>Return to Main Menu</a>
+          <p id="prototype-status" class="sr-only" aria-live="polite"></p>
+        </div>
+        <div class="monitor-neck" aria-hidden="true"></div>
+        <div class="monitor-foot" aria-hidden="true"></div>
+
+        <section id="prototype-keyboard" class="keyboard" aria-label="Full-size ANSI keyboard">
+          <p class="keyboard-label">LIVE INPUT · EDITOR PAW EVENTS</p>
+          <div id="full-keyboard-layout" class="full-keyboard-layout"></div>
+        </section>
+
+        <aside id="player-dialogue" class="player-dialogue" aria-live="polite" hidden>
+          <span>YOU · IN FRONT OF THE KEYBOARD</span>
+          <p id="player-dialogue-copy"></p>
+        </aside>
+
+        <div id="dynamic-paws" class="world-paws" aria-hidden="true"></div>
+        <div id="world-cat-actor" class="world-cat-actor" data-state="sleep" data-side="right" hidden aria-hidden="true">
+          <div class="world-cat-shadow"></div>
+          <div class="world-cat-current-pose">
+            <div class="world-cat-sprite"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="missing-project" class="missing-project" hidden>
+        <p id="missing-project-copy">No valid Catwalk route was found.</p>
+        <a id="missing-project-link" href="./game2.html">Return to the main menu</a>
+      </section>
+    </main>
+
+    <script src="../assets/game2/vendor/phaser.min.js"></script>
+    <script src="../scripts/game2-level-data.js?v=2"></script>
+    <script src="../scripts/game2-editor-model.js?v=11"></script>
+    <script src="../scripts/game2-playtest-model.js?v=19"></script>
+    <script src="../scripts/game2-audio.js?v=7"></script>
+    <script src="../scripts/game2-world-cat.js?v=8"></script>
+    <script src="../scripts/game2-playtest.js?v=42"></script>
+  </body>
+</html>

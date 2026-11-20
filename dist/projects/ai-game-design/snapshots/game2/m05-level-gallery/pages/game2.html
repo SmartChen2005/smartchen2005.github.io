@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#151311">
+    <title>Catwalk — Prototype 04</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../styles/game2.css?v=14">
+  </head>
+  <body>
+    <main class="catwalk-shell">
+      <header class="prototype-header">
+        <div>
+          <p class="prototype-kicker">CATWALK / PROTOTYPE 04</p>
+          <h1>29-Level Gallery</h1>
+        </div>
+        <nav aria-label="Prototype controls">
+          <button id="previous-level" type="button">Previous</button>
+          <button id="next-level" type="button">Next</button>
+          <button id="restart-prototype" type="button">Restart</button>
+          <a href="../../../../pages/game2-editor.html" target="_top">Editor</a>
+          <a href="../../../../pages/game2-timeline.html" target="_top">Timeline</a>
+          <a href="../../../../index.html" target="_top">Home</a>
+        </nav>
+      </header>
+
+      <section class="desk" aria-label="Catwalk prototype desk">
+        <div class="monitor" aria-label="Platform game monitor">
+          <div class="monitor-camera" aria-hidden="true"></div>
+          <div id="catwalk-game"></div>
+          <p id="prototype-status" class="sr-only" aria-live="polite">
+            Use WASD to move and jump.
+          </p>
+        </div>
+
+        <div class="monitor-neck" aria-hidden="true"></div>
+        <div class="monitor-foot" aria-hidden="true"></div>
+
+        <section id="prototype-keyboard" class="keyboard" aria-label="Full-size ANSI 104-key keyboard">
+          <p class="keyboard-label">FULL-SIZE ANSI KEYBOARD</p>
+          <div id="full-keyboard-layout" class="full-keyboard-layout"></div>
+
+          <div class="paw paw-from-top" data-paw="w" aria-hidden="true">
+            <span class="paw-arm"></span>
+            <i class="paw-pad"></i>
+          </div>
+          <div class="paw paw-from-left" data-paw="d" aria-hidden="true">
+            <span class="paw-arm"></span>
+            <i class="paw-pad"></i>
+          </div>
+          <div class="paw paw-from-bottom" data-paw="j" aria-hidden="true">
+            <span class="paw-arm"></span>
+            <i class="paw-pad"></i>
+          </div>
+          <div class="paw paw-from-right" data-paw="k" aria-hidden="true">
+            <span class="paw-arm"></span>
+            <i class="paw-pad"></i>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="../../shared/phaser.min.js"></script>
+    <script src="../scripts/game2-level-data.js?v=2"></script>
+    <script src="../scripts/game2.js?v=16"></script>
+  </body>
+</html>

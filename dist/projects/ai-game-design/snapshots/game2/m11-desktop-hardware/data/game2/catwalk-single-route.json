@@ -1,0 +1,789 @@
+{
+  "schema": "catwalk-single-route",
+  "version": 1,
+  "name": "Catwalk Single Route",
+  "worldHeight": 540,
+  "minWorldWidth": 4800,
+  "objects": [
+    {
+      "id": "checkpoint-ms7kn654-5wpndx",
+      "type": "checkpoint",
+      "x": 120,
+      "y": 440,
+      "width": 34,
+      "height": 56
+    },
+    {
+      "id": "exit-ms7kn654-1sdxhh",
+      "type": "exit",
+      "x": 15820,
+      "y": 420,
+      "width": 34,
+      "height": 90
+    },
+    {
+      "id": "checkpoint-ms7ngbum-7stwgc",
+      "type": "checkpoint",
+      "x": 1400,
+      "y": 440,
+      "width": 34,
+      "height": 56
+    },
+    {
+      "id": "text-ms7nm0a8-9qas6t",
+      "type": "text",
+      "x": 460,
+      "y": 240,
+      "width": 260,
+      "height": 60,
+      "content": "A / D or ← / → — Move",
+      "fontSize": 18
+    },
+    {
+      "id": "platform-ms7npboi-0pk70x",
+      "type": "platform",
+      "x": 1060,
+      "y": 460,
+      "width": 240,
+      "height": 22
+    },
+    {
+      "id": "text-ms7nqfva-5zqhy9",
+      "type": "text",
+      "x": 1040,
+      "y": 240,
+      "width": 260,
+      "height": 60,
+      "content": "W or ↑ — Jump",
+      "fontSize": 18
+    },
+    {
+      "id": "text-ms7nqpr2-sxx8a1",
+      "type": "text",
+      "x": 1680,
+      "y": 240,
+      "width": 260,
+      "height": 60,
+      "content": "J — Scratch boxes and scare small threats",
+      "fontSize": 18
+    },
+    {
+      "id": "crate-ms7nrw9n-r8zxca",
+      "type": "crate",
+      "x": 1720,
+      "y": 420,
+      "width": 48,
+      "height": 110
+    },
+    {
+      "id": "crate-ms7nrxuz-bd7ffu",
+      "type": "crate",
+      "x": 1880,
+      "y": 420,
+      "width": 48,
+      "height": 110
+    },
+    {
+      "id": "enemy-ms7nsb9f-hxge2e",
+      "type": "enemy",
+      "x": 2060,
+      "y": 460,
+      "width": 38,
+      "height": 24,
+      "enemyType": "mouse",
+      "patrolMinX": 1960,
+      "patrolMaxX": 2160
+    },
+    {
+      "id": "text-ms7nsn1j-q39eih",
+      "type": "text",
+      "x": 2500,
+      "y": 240,
+      "width": 260,
+      "height": 60,
+      "content": "K — Hold to become low and slip underneath",
+      "fontSize": 18
+    },
+    {
+      "moduleId": 7,
+      "moduleTitle": "LIQUID CAT",
+      "type": "tunnel",
+      "x": 2500,
+      "y": 400,
+      "width": 274,
+      "height": 94,
+      "id": "tunnel-ms7ntd00-0nm1wi",
+      "moduleInstanceId": "module-ms7ntd00-sexh3s"
+    },
+    {
+      "id": "text-ms7nut3g-rp8jjg",
+      "type": "text",
+      "x": 3160,
+      "y": 240,
+      "width": 260,
+      "height": 60,
+      "content": "S — Hold to loaf: stay still, resist forced movement, and calm dogs",
+      "fontSize": 18
+    },
+    {
+      "id": "enemy-ms7nvegz-k2slmv",
+      "type": "enemy",
+      "x": 3220,
+      "y": 460,
+      "width": 50,
+      "height": 38,
+      "enemyType": "dog",
+      "patrolMinX": 2980,
+      "patrolMaxX": 3530
+    },
+    {
+      "id": "checkpoint-ms7nwjhi-71arvm",
+      "type": "checkpoint",
+      "x": 2840,
+      "y": 440,
+      "width": 34,
+      "height": 56
+    },
+    {
+      "id": "enemy-ms7os9df-53voa0",
+      "type": "enemy",
+      "x": 3340,
+      "y": 460,
+      "width": 50,
+      "height": 38,
+      "enemyType": "dog",
+      "patrolMinX": 3100,
+      "patrolMaxX": 3650
+    },
+    {
+      "id": "text-ms7prle4-k8whls",
+      "type": "text",
+      "x": 4220,
+      "y": 240,
+      "width": 260,
+      "height": 60,
+      "content": "L — Move + press to perform a long, low roll",
+      "fontSize": 18
+    },
+    {
+      "id": "checkpoint-ms7ps356-wqtv18",
+      "type": "checkpoint",
+      "x": 3840,
+      "y": 440,
+      "width": 34,
+      "height": 56
+    },
+    {
+      "id": "gap-ms7psdkc-3o480d",
+      "type": "gap",
+      "x": 4200,
+      "y": 500,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "gap-ms7psewb-q7b90d",
+      "type": "gap",
+      "x": 4300,
+      "y": 500,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "text-ms7pu037-88rkzj",
+      "type": "text",
+      "x": 4760,
+      "y": 240,
+      "width": 260,
+      "height": 60,
+      "content": "SPACE — Hold while touching a wall to climb",
+      "fontSize": 18
+    },
+    {
+      "id": "wall-ms7pud3d-dcbw2x",
+      "type": "wall",
+      "x": 4960,
+      "y": 400,
+      "width": 54,
+      "height": 160
+    },
+    {
+      "id": "wall-ms7pv03t-1hzgz7",
+      "type": "wall",
+      "x": 4960,
+      "y": 260,
+      "width": 54,
+      "height": 160
+    },
+    {
+      "id": "gameStart-ms7rmd1a-5dlex5",
+      "type": "gameStart",
+      "x": 5180,
+      "y": 440,
+      "width": 42,
+      "height": 64
+    },
+    {
+      "moduleId": 4,
+      "moduleTitle": "DOUBLE HOP",
+      "type": "gap",
+      "x": 5400,
+      "y": 500,
+      "width": 85,
+      "height": 70,
+      "id": "gap-ms7rxxzx-gfugm3",
+      "moduleInstanceId": "module-ms7rxxzx-mr9qgm"
+    },
+    {
+      "moduleId": 4,
+      "moduleTitle": "DOUBLE HOP",
+      "type": "gap",
+      "x": 5680,
+      "y": 500,
+      "width": 84,
+      "height": 70,
+      "id": "gap-ms7rxxzx-9q4atv",
+      "moduleInstanceId": "module-ms7rxxzx-mr9qgm"
+    },
+    {
+      "moduleId": 4,
+      "moduleTitle": "DOUBLE HOP",
+      "type": "enemy",
+      "enemyType": "pigeon",
+      "x": 5540,
+      "y": 410,
+      "width": 38,
+      "height": 24,
+      "patrolMinX": 5270,
+      "patrolMaxX": 5660,
+      "id": "enemy-ms7rxxzx-azyuzs",
+      "moduleInstanceId": "module-ms7rxxzx-mr9qgm"
+    },
+    {
+      "moduleId": 4,
+      "moduleTitle": "DOUBLE HOP",
+      "type": "enemy",
+      "enemyType": "pigeon",
+      "x": 5720,
+      "y": 400,
+      "width": 38,
+      "height": 24,
+      "patrolMinX": 5450,
+      "patrolMaxX": 5840,
+      "id": "enemy-ms7spaxz-kzcoqe"
+    },
+    {
+      "moduleId": 5,
+      "moduleTitle": "STAIR CAT",
+      "type": "gap",
+      "x": 6320,
+      "y": 500,
+      "width": 694,
+      "height": 70,
+      "id": "gap-ms7t2cql-e4kw1m",
+      "moduleInstanceId": "module-ms7t2cql-ouqiq4"
+    },
+    {
+      "moduleId": 5,
+      "moduleTitle": "STAIR CAT",
+      "type": "platform",
+      "x": 6060,
+      "y": 430,
+      "width": 100,
+      "height": 22,
+      "id": "platform-ms7t2cql-582xc6",
+      "moduleInstanceId": "module-ms7t2cql-ouqiq4"
+    },
+    {
+      "moduleId": 5,
+      "moduleTitle": "STAIR CAT",
+      "type": "platform",
+      "x": 6190,
+      "y": 380,
+      "width": 100,
+      "height": 22,
+      "id": "platform-ms7t2cql-2mlm9r",
+      "moduleInstanceId": "module-ms7t2cql-ouqiq4"
+    },
+    {
+      "moduleId": 5,
+      "moduleTitle": "STAIR CAT",
+      "type": "platform",
+      "x": 6320,
+      "y": 330,
+      "width": 100,
+      "height": 22,
+      "id": "platform-ms7t2cql-qvbet5",
+      "moduleInstanceId": "module-ms7t2cql-ouqiq4"
+    },
+    {
+      "moduleId": 5,
+      "moduleTitle": "STAIR CAT",
+      "type": "platform",
+      "x": 6450,
+      "y": 380,
+      "width": 100,
+      "height": 22,
+      "id": "platform-ms7t2cql-qxfwdz",
+      "moduleInstanceId": "module-ms7t2cql-ouqiq4"
+    },
+    {
+      "moduleId": 5,
+      "moduleTitle": "STAIR CAT",
+      "type": "platform",
+      "x": 6580,
+      "y": 430,
+      "width": 100,
+      "height": 22,
+      "id": "platform-ms7t2cql-861e1p",
+      "moduleInstanceId": "module-ms7t2cql-ouqiq4"
+    },
+    {
+      "moduleId": 5,
+      "moduleTitle": "STAIR CAT",
+      "type": "yarn",
+      "x": 6320,
+      "y": 290,
+      "width": 30,
+      "height": 28,
+      "id": "yarn-ms7t2cql-vasxcj",
+      "moduleInstanceId": "module-ms7t2cql-ouqiq4"
+    },
+    {
+      "id": "checkpoint-ms7tew9d-0t50dd",
+      "type": "checkpoint",
+      "x": 6780,
+      "y": 440,
+      "width": 34,
+      "height": 56
+    },
+    {
+      "id": "pawStorm-ms7teyao-6q3pjs",
+      "type": "pawStorm",
+      "x": 6900,
+      "y": 460,
+      "width": 24,
+      "height": 390,
+      "triggerMode": "position",
+      "triggerX": 6900,
+      "delaySeconds": 0,
+      "durationSeconds": 0,
+      "blockedKeys": [],
+      "heldKeys": [
+        "d"
+      ],
+      "pawDirections": [
+        "top",
+        "left",
+        "bottom",
+        "right"
+      ]
+    },
+    {
+      "id": "gap-ms7tfpcd-9y2flf",
+      "type": "gap",
+      "x": 7240,
+      "y": 500,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "gap-ms7tfs3i-czl4tu",
+      "type": "gap",
+      "x": 7580,
+      "y": 500,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "gap-ms7tftt9-vhtiqa",
+      "type": "gap",
+      "x": 7940,
+      "y": 500,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "gap-ms7tfuzg-1kmtqe",
+      "type": "gap",
+      "x": 8400,
+      "y": 500,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "enemy-ms7tj21x-4i85r1",
+      "type": "enemy",
+      "x": 8160,
+      "y": 460,
+      "width": 38,
+      "height": 24,
+      "enemyType": "mouse",
+      "patrolMinX": 8010,
+      "patrolMaxX": 8290
+    },
+    {
+      "id": "gap-ms7tk35p-icmc80",
+      "type": "gap",
+      "x": 8860,
+      "y": 520,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "gap-ms7tk4g7-wax0pu",
+      "type": "gap",
+      "x": 8760,
+      "y": 540,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "playerDialogue-ms7tx5eb-bqc8xl",
+      "type": "playerDialogue",
+      "x": 7160,
+      "y": 280,
+      "width": 240,
+      "height": 70,
+      "content": "Yoo Mocha what are you doing...",
+      "displaySeconds": 4
+    },
+    {
+      "id": "pawStorm-ms7tz2w9-swh35x",
+      "type": "pawStorm",
+      "x": 6900,
+      "y": 380,
+      "width": 24,
+      "height": 390,
+      "triggerMode": "position",
+      "triggerX": 6900,
+      "delaySeconds": 0,
+      "durationSeconds": 0,
+      "blockedKeys": [],
+      "heldKeys": [
+        "d"
+      ],
+      "pawDirections": [
+        "top"
+      ]
+    },
+    {
+      "id": "pawStormEnd-ms7uhsdk-yjayy5",
+      "type": "pawStormEnd",
+      "x": 9060,
+      "y": 400,
+      "width": 24,
+      "height": 390,
+      "triggerX": 9060
+    },
+    {
+      "id": "playerDialogue-ms7uiiwu-z0tyvk",
+      "type": "playerDialogue",
+      "x": 9160,
+      "y": 220,
+      "width": 240,
+      "height": 70,
+      "content": "Thank god i made it...",
+      "displaySeconds": 4
+    },
+    {
+      "moduleId": 10,
+      "moduleTitle": "TUNNEL EXIT BOX",
+      "type": "crate",
+      "x": 10030,
+      "y": 415,
+      "width": 48,
+      "height": 110,
+      "id": "crate-ms7v06g1-qzqigb",
+      "moduleInstanceId": "module-ms7v06g1-mno1da"
+    },
+    {
+      "moduleId": 10,
+      "moduleTitle": "TUNNEL EXIT BOX",
+      "type": "tunnel",
+      "x": 9750,
+      "y": 318,
+      "width": 200,
+      "height": 264,
+      "id": "tunnel-ms7v06g1-p7t3sg",
+      "moduleInstanceId": "module-ms7v06g1-mno1da"
+    },
+    {
+      "moduleId": 10,
+      "moduleTitle": "TUNNEL EXIT BOX",
+      "type": "enemy",
+      "enemyType": "mouse",
+      "x": 9550,
+      "y": 438,
+      "width": 38,
+      "height": 24,
+      "patrolMinX": 9440,
+      "patrolMaxX": 9610,
+      "id": "enemy-ms7v06g1-4w7en7",
+      "moduleInstanceId": "module-ms7v06g1-mno1da"
+    },
+    {
+      "moduleId": 12,
+      "moduleTitle": "TALL CLAW",
+      "type": "wall",
+      "x": 10430,
+      "y": 367.5,
+      "width": 54,
+      "height": 205,
+      "id": "wall-ms7v09c6-v2m0h0",
+      "moduleInstanceId": "module-ms7v09c6-jf4q7d"
+    },
+    {
+      "moduleId": 12,
+      "moduleTitle": "TALL CLAW",
+      "type": "enemy",
+      "enemyType": "dog",
+      "x": 10190,
+      "y": 438,
+      "width": 50,
+      "height": 38,
+      "patrolMinX": 9880,
+      "patrolMaxX": 10340,
+      "id": "enemy-ms7v09c6-zqwl1c",
+      "moduleInstanceId": "module-ms7v09c6-jf4q7d"
+    },
+    {
+      "id": "checkpoint-ms7v3wew-4jtk22",
+      "type": "checkpoint",
+      "x": 9080,
+      "y": 440,
+      "width": 34,
+      "height": 56
+    },
+    {
+      "moduleId": 12,
+      "moduleTitle": "TALL CLAW",
+      "type": "enemy",
+      "enemyType": "dog",
+      "x": 10790,
+      "y": 438,
+      "width": 50,
+      "height": 38,
+      "patrolMinX": 10480,
+      "patrolMaxX": 10940,
+      "id": "enemy-ms7v54ew-f5nnqo"
+    },
+    {
+      "id": "screenBlock-ms7v5n4b-tqghak",
+      "type": "screenBlock",
+      "x": 10620,
+      "y": 420,
+      "width": 24,
+      "height": 390,
+      "triggerX": 10620,
+      "side": "right",
+      "coveragePercent": 45,
+      "endMode": "duration",
+      "durationSeconds": 4,
+      "endX": 11330
+    },
+    {
+      "id": "enemy-ms7v7zi5-xoq0xv",
+      "type": "enemy",
+      "x": 10720,
+      "y": 300,
+      "width": 45,
+      "height": 24,
+      "enemyType": "pigeon",
+      "patrolMinX": 10560,
+      "patrolMaxX": 10930
+    },
+    {
+      "id": "wall-ms7vbqdm-3sds4u",
+      "type": "wall",
+      "x": 11100,
+      "y": 360,
+      "width": 54,
+      "height": 274
+    },
+    {
+      "id": "platform-ms7veztj-gpsy82",
+      "type": "platform",
+      "x": 11430,
+      "y": 460,
+      "width": 464,
+      "height": 114
+    },
+    {
+      "id": "platform-ms7vfb7f-zm0jn7",
+      "type": "platform",
+      "x": 11430,
+      "y": 260,
+      "width": 464,
+      "height": 114
+    },
+    {
+      "id": "yarn-ms7vg084-4krssv",
+      "type": "yarn",
+      "x": 11380,
+      "y": 380,
+      "width": 30,
+      "height": 28
+    },
+    {
+      "id": "enemy-ms7vg8qc-pjvcwy",
+      "type": "enemy",
+      "x": 11480,
+      "y": 380,
+      "width": 50,
+      "height": 38,
+      "enemyType": "dog",
+      "patrolMinX": 11210,
+      "patrolMaxX": 11650
+    },
+    {
+      "id": "enemy-ms7vgnwd-buj3tt",
+      "type": "enemy",
+      "x": 11440,
+      "y": 180,
+      "width": 34,
+      "height": 24,
+      "enemyType": "mouse",
+      "patrolMinX": 11280,
+      "patrolMaxX": 11610
+    },
+    {
+      "id": "wall-ms7vjn3z-k22i3b",
+      "type": "wall",
+      "x": 11680,
+      "y": 260,
+      "width": 54,
+      "height": 424
+    },
+    {
+      "id": "platform-ms7vju5k-oy6g2f",
+      "type": "platform",
+      "x": 11930,
+      "y": 260,
+      "width": 464,
+      "height": 114
+    },
+    {
+      "id": "checkpoint-ms7vk3zk-edihxg",
+      "type": "checkpoint",
+      "x": 11840,
+      "y": 180,
+      "width": 34,
+      "height": 56
+    },
+    {
+      "id": "enemy-ms7vklh3-tnp74c",
+      "type": "enemy",
+      "x": 11820,
+      "y": 120,
+      "width": 38,
+      "height": 24,
+      "enemyType": "pigeon",
+      "patrolMinX": 11720,
+      "patrolMaxX": 11920
+    },
+    {
+      "id": "gap-ms7vpfvo-cfewv7",
+      "type": "gap",
+      "x": 12220,
+      "y": 500,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "gap-ms7vpgcz-n6umqn",
+      "type": "gap",
+      "x": 12320,
+      "y": 500,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "gap-ms7vphrp-557v0o",
+      "type": "gap",
+      "x": 12420,
+      "y": 500,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "gap-ms7vpi57-mydepa",
+      "type": "gap",
+      "x": 12480,
+      "y": 500,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "gap-ms7vpiic-31vvui",
+      "type": "gap",
+      "x": 12580,
+      "y": 500,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "gap-ms7vpiu3-juibgq",
+      "type": "gap",
+      "x": 12680,
+      "y": 500,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "gap-ms7vpj78-c4969p",
+      "type": "gap",
+      "x": 12760,
+      "y": 500,
+      "width": 100,
+      "height": 70
+    },
+    {
+      "id": "wall-ms7vpp5x-0oqatk",
+      "type": "wall",
+      "x": 12360,
+      "y": 210,
+      "width": 54,
+      "height": 214
+    },
+    {
+      "id": "platform-ms7vpst9-3owwbd",
+      "type": "platform",
+      "x": 12580,
+      "y": 120,
+      "width": 384,
+      "height": 34
+    },
+    {
+      "id": "enemy-ms7w8wih-2r2w2m",
+      "type": "enemy",
+      "x": 12560,
+      "y": 80,
+      "width": 50,
+      "height": 38,
+      "enemyType": "dog",
+      "patrolMinX": 12400,
+      "patrolMaxX": 12770
+    },
+    {
+      "id": "enemy-ms7w9ze5-tjw8bs",
+      "type": "enemy",
+      "x": 12840,
+      "y": 380,
+      "width": 38,
+      "height": 24,
+      "enemyType": "pigeon",
+      "patrolMinX": 12740,
+      "patrolMaxX": 13060
+    },
+    {
+      "id": "yarn-ms7wdo7z-th6zgl",
+      "type": "yarn",
+      "x": 12120,
+      "y": 460,
+      "width": 30,
+      "height": 28
+    }
+  ],
+  "updatedAt": "2026-07-30T19:59:12.920Z"
+}

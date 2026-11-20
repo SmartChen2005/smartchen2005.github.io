@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Two Minds (二心)</title><link rel="icon" href="data:,"><link rel="stylesheet" href="../styles/game3-prototype.css?v=20260909-names-scale"></head>
+<body>
+<main class="game-shell">
+  <header class="masthead">
+    <div class="title-lockup"><p class="eyebrow">GAME 3 · PLAYABLE CAMPAIGN · 17 COMBAT ENCOUNTERS</p><h1>Two Minds <small>二心</small></h1><p class="tagline">One journey. One body. Two minds.</p></div>
+    <div class="chapter-lockup"><span id="chapter-kicker">CHAPTER I</span><strong id="chapter-title">The Bandits</strong></div>
+    <button id="abandon-button" class="ink-button quiet">BEGIN THE JOURNEY</button>
+  </header>
+  <section class="story-strip" aria-live="polite"><span class="seal">心</span><div><strong id="story-speaker">Tang Sanzang (唐三藏)</strong><p id="story-copy">“Power reveals the road. Choice reveals the pilgrim.”</p></div><p id="objective-copy">Place Sun Wukong, then begin.</p></section>
+  <section class="play-layout">
+    <aside class="memory-panel">
+      <div class="panel-heading"><span>ACTIVE SKILLS</span><small id="active-use-rule">Each: once per Journey.<br>No refill on retry.</small></div>
+      <div id="active-skills" class="active-skills" aria-live="polite"><p class="active-empty">Choose an Active skill on the Journey.</p></div>
+      <div class="legend"><span><i class="legend-hex deploy"></i>Your deployment</span><span><i class="legend-hex enemy"></i>Enemy ground</span><span><i class="legend-hex center"></i>Open ground</span></div>
+    </aside>
+    <section class="arena-panel">
+      <div class="arena-header"><div><span id="phase-label">FORMATION</span><small id="phase-help">Drag Wukong onto a glowing hex.</small></div><div id="battle-status" class="battle-status">READY</div></div>
+      <div id="arena" class="arena" aria-label="37 hex battlefield">
+        <div class="wash wash-a"></div><div class="wash wash-b"></div>
+        <div id="hex-layer" class="hex-layer"></div><div id="unit-layer" class="unit-layer"></div>
+        <div id="mythic-landmark" class="mythic-landmark" aria-hidden="true">
+          <i class="palm-core"></i><i class="landmark-thumb"></i><i class="palm-finger finger-one"></i><i class="palm-finger finger-two"></i><i class="palm-finger finger-three"></i><i class="palm-finger finger-four"></i>
+          <svg class="mountain-art" viewBox="0 0 480 300" role="presentation">
+            <defs><linearGradient id="mountain-stone-left" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#bbb59d"/><stop offset=".48" stop-color="#7f8071"/><stop offset="1" stop-color="#505b55"/></linearGradient><linearGradient id="mountain-stone-right" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#777b6e"/><stop offset="1" stop-color="#343e3a"/></linearGradient></defs>
+            <g class="mountain-half mountain-half-left"><path class="mountain-mass-left" d="M12 284 38 244 77 224 112 160 143 181 190 86 218 112 242 24 240 284Z"/><path class="mountain-face-left" d="M32 280 91 239 138 207 180 115 215 127 237 44 235 280Z"/><path class="mountain-ridge" d="M37 249 108 229 151 195 204 187M83 266 176 239"/><path class="mountain-cave-half" d="M190 286c1-104 20-148 50-148v148Z"/><path class="mountain-cave-rim" d="M182 286c1-116 24-160 58-160"/></g>
+            <g class="mountain-half mountain-half-right"><path class="mountain-mass-right" d="M242 24 274 111 300 76 337 166 367 137 407 225 447 243 470 284 240 284Z"/><path class="mountain-face-right" d="M245 46 274 126 301 96 331 181 365 156 405 238 455 277 245 280Z"/><path class="mountain-ridge" d="M280 188 337 179 407 229 449 245M302 235 391 260"/><path class="mountain-cave-half" d="M240 138c31 0 49 44 50 148h-50Z"/><path class="mountain-cave-rim" d="M240 126c35 0 57 45 59 160"/></g>
+            <g class="stone-seals"><circle cx="86" cy="252" r="10"/><circle cx="151" cy="218" r="9"/><circle cx="240" cy="153" r="9"/><circle cx="326" cy="215" r="9"/><circle cx="394" cy="253" r="10"/></g>
+            <path class="mountain-seam" d="M242 48 226 89 245 120 226 154 245 190 229 223 241 274"/>
+          </svg>
+          <i class="mountain-peak peak-left"></i><i class="mountain-peak peak-main"></i><i class="mountain-peak peak-right"></i><i class="mountain-cave"></i><i class="mountain-strata"></i><i class="mountain-mist"></i><span class="element-seals"><em>金</em><em>木</em><em>水</em><em>火</em><em>土</em></span>
+        </div>
+        <div id="mythic-foreground" class="mythic-foreground" aria-hidden="true"><i class="foreground-rock foreground-left"></i><i class="foreground-rock foreground-right"></i></div>
+        <div id="fx-layer" class="fx-layer"></div><div class="side-caption enemy-caption">ENEMY</div><div class="side-caption player-caption">SUN WUKONG 孙悟空</div>
+      </div>
+      <div class="battle-footer"><div id="event-copy" class="event-copy" aria-live="polite">The road waits.</div><button id="primary-action" class="ink-button primary">BEGIN BATTLE</button></div>
+    </section>
+    <aside class="insight-panel">
+      <div class="panel-heading"><span>READ THE FIELD</span><small>Hover a figure</small></div>
+      <div id="unit-insight" class="unit-insight"><p class="eyebrow">SUN WUKONG · 孙悟空</p><h2>Before the Journey</h2><p><b>TECHNIQUES</b><br>Heart-Steadying Staff · Wishful Staff Throw</p><p><b>TRAITS</b><br>Plucked-Hair Decoys and other possibilities must be chosen.</p></div>
+      <div class="chronicle-heading">THE ROAD REMEMBERS</div><ol id="chronicle" class="chronicle"><li>Wukong enters the mountain pass.</li></ol>
+    </aside>
+  </section>
+</main>
+<dialog id="story-dialog"><article class="paper-dialog story-dialog-card"><p id="story-dialog-kicker" class="eyebrow">A JOURNEY WEST</p><h2 id="story-dialog-title">The mind splits before the road does.</h2><div id="story-dialog-copy" class="dialog-copy"></div><button id="story-dialog-action" class="ink-button primary">ENTER THE PASS</button></article></dialog>
+<dialog id="choice-dialog"><article class="paper-dialog choice-dialog-card"><p class="eyebrow">TWO MINDS · 二心</p><h2 id="choice-title">Which thought becomes you?</h2><p id="choice-copy" class="dialog-copy">One instinct takes root. The other disappears into ink.</p><div id="choice-options" class="choice-options"></div></article></dialog>
+<dialog id="ending-dialog"><article class="paper-dialog ending-dialog-card"><p class="eyebrow">THE ROAD REMEMBERS</p><h2 id="ending-title">“That move…”</h2><p class="recognition-line">He fights with what I left behind.</p><div id="ending-summary" class="ending-summary"></div><button id="ending-restart" class="ink-button primary">WALK THE ROAD AGAIN</button></article></dialog>
+<script src="../scripts/game3-prototype.js?v=20260909-names-scale"></script>
+</body></html>

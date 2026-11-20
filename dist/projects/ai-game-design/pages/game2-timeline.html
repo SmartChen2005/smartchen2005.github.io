@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#151311">
+    <meta name="description" content="Catwalk's major prototype milestones, player feedback, and Git saves.">
+    <title>Catwalk — Development Timeline</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../styles/game2.css?v=14">
+    <link rel="stylesheet" href="../styles/game2-timeline.css?v=4">
+  </head>
+  <body>
+    <main class="catwalk-shell timeline-shell">
+      <header class="prototype-header timeline-header">
+        <div>
+          <p class="prototype-kicker">CATWALK / DEVELOPMENT RECORD</p>
+          <h1>Update Timeline</h1>
+        </div>
+        <nav aria-label="Timeline navigation">
+          <a href="./game2.html">Main Menu</a>
+          <a href="./game2-editor.html">Editor</a>
+          <a href="../docs/game2/development-timeline.md">Markdown Document</a>
+        </nav>
+      </header>
+
+      <div class="timeline-page">
+        <section class="timeline-hero" aria-labelledby="timeline-title">
+          <p class="timeline-eyebrow">2026-07-26 — 2026-08-07</p>
+          <h2 id="timeline-title">Catwalk’s major milestones</h2>
+          <p class="timeline-lede">
+            This record is now closed. Small fixes remain folded into the milestone they belong to,
+            while each distinct playable era keeps one representative historical build.
+          </p>
+          <dl class="timeline-stats">
+            <div><dt>13</dt><dd>Major milestones</dd></div>
+            <div><dt>95</dt><dd>Covered saves</dd></div>
+            <div><dt>23</dt><dd>Exploration records</dd></div>
+            <div><dt>01</dt><dd>Continuous route</dd></div>
+          </dl>
+          <nav class="date-jump" aria-label="Jump to milestone">
+            <a href="#foundation">Foundation</a>
+            <a href="#prototype-01">Prototype 01</a>
+            <a href="#prototype-02">Prototype 02</a>
+            <a href="#prototype-03">Prototype 03</a>
+            <a href="#prototype-04">Prototype 04</a>
+            <a href="#single-route-editor">Editor</a>
+            <a href="#desktop-hardware">Hardware</a>
+            <a href="#persistent-mocha">Mocha</a>
+            <a href="#main-menu">Main Menu</a>
+            <a href="#closing-note">Closing Note</a>
+            <a href="#git-index">Git Index</a>
+          </nav>
+        </section>
+
+        <ol class="timeline-list">
+          <li id="foundation" class="timeline-entry">
+            <article>
+              <header><time datetime="2026-07-26">Jul 26–27</time><span>Milestone 01</span><h3>Foundation: concept, workflow, and Git</h3></header>
+              <div class="entry-grid">
+                <section><h4>Major update</h4><p>Named Catwalk, recorded Mocha as its Siamese-cat inspiration, defined the inside/outside computer spaces, chose experiment-first development, created dedicated records, and established the Catwalk Git branch and per-step saves.</p></section>
+                <section class="feedback"><h4>Player feedback</h4><p>Move beyond HTML/CSS/SVG limitations; let the design emerge through play; give AI room to explore; maintain separate requirements, logs, and Git history.</p></section>
+              </div>
+              <p class="commit-line"><strong>Git:</strong> <code>acde9db</code> · <code>01467c5</code></p>
+            </article>
+          </li>
+
+          <li id="prototype-01" class="timeline-entry">
+            <article>
+              <header><time datetime="2026-07-27">Jul 27</time><span>Milestone 02</span><h3>Prototype 01 — Keyboard Takeover</h3></header>
+              <div class="entry-grid">
+                <section><h4>Major update</h4><p>Built the first Phaser platform room. Mocha occupies <code>WASD</code> at a safe midpoint, requiring the player to switch to arrow keys. Added checkpoints, an exit, visible key state, and input tests.</p></section>
+                <section class="feedback"><h4>Player feedback</h4><p>Start with the smallest playable interaction that directly translates adapting controls around Mocha instead of waiting for a complete design.</p></section>
+              </div>
+              <p class="commit-line"><strong>Git:</strong> <code>fc43248</code> · <code>20bc407</code></p>
+              <details class="playable-snapshot" data-snapshot>
+                <summary><span>Play this version</span><small>Prototype 01 · 20bc407</small></summary>
+                <div class="snapshot-toolbar"><p>The first playable keyboard-takeover experiment.</p><a href="../snapshots/game2/m02-keyboard-takeover/pages/game2.html" target="_blank" rel="noopener">Open separately</a><button type="button" data-reload-snapshot>Restart snapshot</button></div>
+                <div class="snapshot-frame"><iframe title="Playable Catwalk Prototype 01" data-src="../snapshots/game2/m02-keyboard-takeover/pages/game2.html" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>
+              </details>
+            </article>
+          </li>
+
+          <li id="prototype-02" class="timeline-entry">
+            <article>
+              <header><time datetime="2026-07-27">Jul 27</time><span>Milestone 03</span><h3>Prototype 02 — Paw Storm and complete keyboard</h3></header>
+              <div class="entry-grid">
+                <section><h4>Major update</h4><p>Added <code>J/K/L</code> actions, destructible boxes, and four surreal paws that block or hold keys. Replaced the simplified keys with a complete ANSI 104-key keyboard and aligned each paw to one precise target.</p></section>
+                <section class="feedback"><h4>Player feedback</h4><p>Paws can surround the keyboard, block keys, or force keys down. Add actions beyond movement. Keep the final keyboard complete and avoid obscuring neighboring functional keys.</p></section>
+              </div>
+              <p class="commit-line"><strong>Git:</strong> <code>67af1cf</code> · <code>38d5259</code> · <code>5673a88</code> · <code>d3352d8</code></p>
+              <details class="playable-snapshot" data-snapshot>
+                <summary><span>Play this version</span><small>Paw Storm · d3352d8</small></summary>
+                <div class="snapshot-toolbar"><p>Complete keyboard, J/K/L actions, and surreal paw interference.</p><a href="../snapshots/game2/m03-paw-storm/pages/game2.html" target="_blank" rel="noopener">Open separately</a><button type="button" data-reload-snapshot>Restart snapshot</button></div>
+                <div class="snapshot-frame"><iframe title="Playable Paw Storm prototype" data-src="../snapshots/game2/m03-paw-storm/pages/game2.html" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>
+              </details>
+            </article>
+          </li>
+
+          <li id="prototype-03" class="timeline-entry is-redo">
+            <article>
+              <header><time datetime="2026-07-29">Jul 29</time><span>Milestone 04 · Rebuilt</span><h3>Prototype 03 — Distinct cat skills</h3></header>
+              <div class="entry-grid">
+                <section><h4>Major update</h4><p>Extended the world horizontally. <code>K</code> became low tunnel movement and <code>L</code> became climbing, separating them from <code>W</code>. After two failed tunnel-floor patches, the mechanic was rebuilt around a fixed body, visual roof, and conditional gates.</p></section>
+                <section class="feedback"><h4>Player feedback</h4><p><code>K/L</code> were too similar to each other and to jumping. Make the level longer and use cat-specific skills. Releasing <code>K</code> caused floor falls; the failed patches should be discarded and the mechanic rebuilt.</p></section>
+              </div>
+              <p class="commit-line"><strong>Git:</strong> <code>5be523b</code> · <code>aead858</code> · <code>237324b</code> · <code>32247b1</code> · <code>d80d086</code> · <code>44b32b7</code></p>
+              <details class="playable-snapshot" data-snapshot>
+                <summary><span>Play this version</span><small>Cat skills · d80d086</small></summary>
+                <div class="snapshot-toolbar"><p>The rebuilt long route with low-tunnel movement and climbing.</p><a href="../snapshots/game2/m04-cat-skills/pages/game2.html" target="_blank" rel="noopener">Open separately</a><button type="button" data-reload-snapshot>Restart snapshot</button></div>
+                <div class="snapshot-frame"><iframe title="Playable distinct cat skills prototype" data-src="../snapshots/game2/m04-cat-skills/pages/game2.html" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>
+              </details>
+            </article>
+          </li>
+
+          <li id="prototype-04" class="timeline-entry">
+            <article>
+              <header><time datetime="2026-07-29">Jul 29–31</time><span>Milestone 05</span><h3>Prototype 04 — 29-Level Gallery and Cat Lock</h3></header>
+              <div class="entry-grid">
+                <section><h4>Major update</h4><p>Created 24 numbered single-screen sketches, made <code>S</code> the Loaf action, repaired Level 05, and transformed Levels 17–24 into stateful Cat Lock sequences. Five deliberately extreme challenge sketches later expanded the gallery to 29 with narrow rooftops, forced movement, multi-enemy alleys, and Paw Storm input changes.</p></section>
+                <section class="feedback"><h4>Player feedback</h4><p>Give <code>S</code> a purpose; create 20+ numbered levels; fix impossible Level 05; make later levels more than basic object arrangements; restore the missing unlock behavior from Level 17 onward; then add five very hard, highly challenging levels.</p></section>
+              </div>
+              <p class="commit-line"><strong>Git:</strong> <code>3a9323b</code> · <code>80d5afe</code> · <code>af3014f</code> · <code>be0cd89</code> · <code>18610e2</code> · <code>f11bf4c</code></p>
+              <details class="playable-snapshot" data-snapshot>
+                <summary><span>Play Prototype 04</span><small>Representative Gallery · f11bf4c</small></summary>
+                <div class="snapshot-toolbar"><p>One representative build for the related Prototype 04 iterations: the expanded 29-level white-model Gallery.</p><a href="../snapshots/game2/m05-level-gallery/pages/game2.html" target="_blank" rel="noopener">Open separately</a><button type="button" data-reload-snapshot>Restart snapshot</button></div>
+                <div class="snapshot-frame"><iframe title="Playable 29-level Catwalk Gallery" data-src="../snapshots/game2/m05-level-gallery/pages/game2.html" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>
+              </details>
+            </article>
+          </li>
+
+          <li id="revised-controls" class="timeline-entry">
+            <article>
+              <header><time datetime="2026-07-29">Jul 29</time><span>Milestone 06</span><h3>Prototype 04 — Revised controls and readable hints</h3></header>
+              <div class="entry-grid">
+                <section><h4>Major update</h4><p>Moved climbing to <code>Space</code> and rebuilt <code>L</code> as a low, long roll. Updated Cat Lock controls, changed Level 19’s blocked jump to <code>Arrow Up</code>, and added explicit <code>PRESS/HOLD/MOVE +</code> instructions with progress feedback.</p></section>
+                <section class="feedback"><h4>Player feedback</h4><p>Use <code>Space</code> to climb and <code>L</code> for a lower, farther roll. Level 19 was bugged, and later levels gave no indication that <code>S</code> had to be held.</p></section>
+              </div>
+              <p class="commit-line"><strong>Git:</strong> <code>57e0bbf</code> · <code>c16293a</code> · <code>176557d</code></p>
+            </article>
+          </li>
+
+          <li id="yarn-and-mice" class="timeline-entry">
+            <article>
+              <header><time datetime="2026-07-30">Jul 30</time><span>Milestone 07</span><h3>Prototype 04 — Yarn and toy mice</h3></header>
+              <div class="entry-grid">
+                <section><h4>Major update</h4><p>Added actors to all 24 levels. Yarn began as protection from one animal contact, then evolved into protection from any one death—including an enemy hit or a fall—without automatically removing the enemy. Toy mice patrol and can be removed with <code>J</code> or <code>L</code>.</p></section>
+                <section class="feedback"><h4>Player feedback</h4><p>The current combinations were promising; add items or enemies throughout the levels. Make yarn protect one death rather than only one animal attack.</p></section>
+              </div>
+              <p class="commit-line"><strong>Git:</strong> <code>680a972</code> · <code>e6f9120</code> · <code>14ee76b</code></p>
+            </article>
+          </li>
+
+          <li id="alley-threats" class="timeline-entry">
+            <article>
+              <header><time datetime="2026-07-30">Jul 30</time><span>Milestone 08</span><h3>Prototype 04 — Alley threats</h3></header>
+              <div class="entry-grid">
+                <section><h4>Major update</h4><p>Added pigeons and guard dogs with different responses. Folded in a global visible-ground reset and corrected <code>K</code> so ducking lets pigeons continue flying instead of deleting them. The guard-dog direction is retained.</p></section>
+                <section class="feedback"><h4>Player feedback</h4><p>Add alley encounters that are not mouse reskins. Fix Level 19 falling below the floor and Level 08 pigeons disappearing after a <code>K</code> dodge. Keep the liked guard-dog design.</p></section>
+              </div>
+              <p class="commit-line"><strong>Git:</strong> <code>f60865c</code> · <code>8af4401</code> · <code>ce60657</code> · <code>cd5a726</code></p>
+            </article>
+          </li>
+
+          <li id="single-route-editor" class="timeline-entry">
+            <article>
+              <header><time datetime="2026-07-30">Jul 30</time><span>Milestone 09</span><h3>Single Route Editor — One continuous Catwalk</h3></header>
+              <div class="entry-grid">
+                <section><h4>Major update</h4><p>Turned the gallery’s pieces into a pan-and-zoom editor for one continuously growing route. Every mechanic and cat interference became placeable, editable, and directly playable. Nearby-checkpoint testing, grouped selection, readable authoring guides, durable route JSON, and returning to the same editing position established the edit–play–revise loop. Tutorial, nine-life, respawn, Loaf Zone, dog-calming, dialogue, and interference events were connected to that same route data.</p></section>
+                <section class="feedback"><h4>Player feedback</h4><p>Use one unlimited horizontal scene; make every existing element and interference authorable by place or time; let later sections be tested without replaying the beginning; keep editor state and route location on return; and make checkpoints, patrols, dialogue, multi-selection, and library objects clear enough to edit without guesswork.</p></section>
+              </div>
+              <p class="commit-line"><strong>Git:</strong> <code>57582ff</code> · <code>a81f732</code> · <code>8f240c2</code> · <code>0d11927</code> · <code>ad45bb0</code> · <code>866b015</code> · <code>39d6d47</code> · <code>59fb9f4</code> · <code>d114df2</code> · <code>c62ab70</code> · <code>a1f4e03</code> · <code>9ad43e6</code> · <code>d1356b3</code> · <code>1211c27</code> · <code>76a4a32</code> · <code>b471c7a</code> · <code>2472027</code> · <code>5814908</code> · <code>adde90e</code> · <code>ee96983</code></p>
+              <details class="playable-snapshot" data-snapshot>
+                <summary><span>Play this version</span><small>Single route · ee96983</small></summary>
+                <div class="snapshot-toolbar"><p>The saved 79-object continuous route, played with its historical white-model renderer.</p><a href="../snapshots/game2/m09-single-route-editor/pages/game2-playtest.html" target="_blank" rel="noopener">Open separately</a><button type="button" data-reload-snapshot>Restart snapshot</button></div>
+                <div class="snapshot-frame"><iframe title="Playable historical single-route Catwalk" data-src="../snapshots/game2/m09-single-route-editor/pages/game2-playtest.html" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>
+              </details>
+            </article>
+          </li>
+
+          <li id="pixel-street-art" class="timeline-entry">
+            <article>
+              <header><time datetime="2026-08-01">Aug 01</time><span>Milestone 10</span><h3>First art direction — Pixel street</h3></header>
+              <div class="entry-grid">
+                <section><h4>Major update</h4><p>Applied the first art pass only to the player-authored Playtest: a close blue-hour pixel alley, pixel characters and objects, and street equivalents for every terrain family. Scale and low-clearance readability were corrected; scrolling randomized facades, a side passage, and safe alley clutter replaced the obvious repeated backdrop.</p></section>
+                <section class="feedback"><h4>Player feedback</h4><p>Make the game inside the monitor pixel art while preserving the editor and Gallery as white models. Keep buildings close to cat scale, make boxes and low obstacles readable, scroll varied buildings with the route, and add enough depth and clutter to feel like an alley.</p></section>
+              </div>
+              <p class="commit-line"><strong>Git:</strong> <code>175b525</code> · <code>737c52c</code> · <code>24847b8</code> · <code>0155d34</code> · <code>ccc4bda</code> · <code>9c749bc</code> · <code>54194d7</code></p>
+              <details class="playable-snapshot" data-snapshot>
+                <summary><span>Play this version</span><small>Pixel street · 54194d7</small></summary>
+                <div class="snapshot-toolbar"><p>The current pixel-alley art pass, including the low-tunnel roll safety fix.</p><a href="../snapshots/game2/m10-pixel-street/pages/game2-playtest.html" target="_blank" rel="noopener">Open separately</a><button type="button" data-reload-snapshot>Restart snapshot</button></div>
+                <div class="snapshot-frame"><iframe title="Playable pixel-street Catwalk route" data-src="../snapshots/game2/m10-pixel-street/pages/game2-playtest.html" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>
+              </details>
+            </article>
+          </li>
+
+          <li id="desktop-hardware" class="timeline-entry">
+            <article>
+              <header><time datetime="2026-08-02">Aug 02</time><span>Milestone 11</span><h3>The physical setup — Monitor and mechanical keyboard</h3></header>
+              <div class="entry-grid">
+                <section><h4>Major update</h4><p>Rebuilt the world around the pixel game as a graphite desktop setup. The full ANSI 104-key mechanical keyboard gained correct spacing, a close-fitting case, individual press feedback, and distinct blocked or held states. The monitor received a substantial frame, stand, and base; the complete computer and keyboard composition was enlarged to occupy more of the browser.</p></section>
+                <section class="feedback"><h4>Player feedback</h4><p>Prioritize the keyboard over the room background. Make it dimensional and correctly laid out, keep edge keys inside the case, tighten the shell around the key field, strengthen the monitor stand, discard the wood-table and silver-color experiments, and reduce unused space around the setup.</p></section>
+              </div>
+              <p class="commit-line"><strong>Git:</strong> <code>752c0ef</code> · <code>4318377</code> · <code>b076fbe</code> · <code>2d69eb1</code> · <code>e18069d</code> · <code>55bb81a</code> · <code>13b41f4</code> · <code>0e1e393</code> · <code>5814092</code> · <code>3dcf2d4</code> · <code>08bb92c</code> · <code>a2a6b99</code> · <code>ad3c56a</code></p>
+              <details class="playable-snapshot" data-snapshot>
+                <summary><span>Play this version</span><small>Desktop hardware · ad3c56a</small></summary>
+                <div class="snapshot-toolbar"><p>The enlarged graphite monitor and mechanical keyboard before the persistent pixel Mocha arrived.</p><a href="../snapshots/game2/m11-desktop-hardware/pages/game2-playtest.html" target="_blank" rel="noopener">Open separately</a><button type="button" data-reload-snapshot>Restart snapshot</button></div>
+                <div class="snapshot-frame"><iframe title="Playable Catwalk desktop hardware milestone" data-src="../snapshots/game2/m11-desktop-hardware/pages/game2-playtest.html" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>
+              </details>
+            </article>
+          </li>
+
+          <li id="persistent-mocha" class="timeline-entry">
+            <article>
+              <header><time datetime="2026-08-03">Aug 03</time><span>Milestone 12</span><h3>Persistent Mocha — A cat with a life outside the game</h3></header>
+              <div class="entry-grid">
+                <section><h4>Major update</h4><p>Replaced isolated interference graphics with one persistent, high-detail pixel Siamese based on Mocha’s photos. A dedicated controller connects resting, grooming, stretching, walking, screen blocking, and Paw Storm through continuous approach–action–return transitions. Mocha keeps a consistent large body scale, uses at most two shorter visible paws, and now spends substantially longer asleep between activities.</p></section>
+                <section class="feedback"><h4>Player feedback</h4><p>Make the cat recognizable as Mocha, pixel-styled but detailed, and always present even when she is not interfering. Keep her size stable, make paws anatomically less strange, smooth every pose change, add grooming and stretching that return naturally to sitting or sleep, and let sleep last much longer.</p></section>
+              </div>
+              <p class="commit-line"><strong>Git:</strong> <code>925b004</code> · <code>024bb8d</code> · <code>ecaca59</code> · <code>2a88b40</code> · <code>dad6593</code> · <code>5f38860</code> · <code>68d6f95</code></p>
+              <details class="playable-snapshot" data-snapshot>
+                <summary><span>Play this version</span><small>Persistent Mocha · 68d6f95</small></summary>
+                <div class="snapshot-toolbar"><p>The current playable route with Mocha’s autonomous daily routine and connected interference animations.</p><a href="../snapshots/game2/m12-persistent-mocha/pages/game2-playtest.html" target="_blank" rel="noopener">Open separately</a><button type="button" data-reload-snapshot>Restart snapshot</button></div>
+                <div class="snapshot-frame"><iframe title="Playable Catwalk persistent Mocha milestone" data-src="../snapshots/game2/m12-persistent-mocha/pages/game2-playtest.html" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>
+              </details>
+            </article>
+          </li>
+
+          <li id="main-menu" class="timeline-entry is-final">
+            <article>
+              <header><time datetime="2026-08-07">Aug 07</time><span>Milestone 13 · Final</span><h3>A complete front door — Main menu and route sources</h3></header>
+              <div class="entry-grid">
+                <section><h4>Major update</h4><p>Turned the default Catwalk page into a true game main menu and promoted the corrected player-authored 104-object route, <em>VegShark's CATWALK</em>, to the durable Start Game campaign. The authoring tool is now named <em>Route Studio</em>, and the RPG menu frame fills the monitor screen instead of appearing as a separate window.</p></section>
+                <section class="feedback"><h4>Player feedback</h4><p>The first pass hid the keyboard and left Mocha out; after restoring them, the menu still looked too much like an editor surface. Keep the physical computer and cat relationship, but make the monitor content feel like a distinct RPG arcade title screen with a black background and four long vertical menu rows.</p></section>
+              </div>
+              <p class="commit-line"><strong>Git:</strong> <code>5dc5fa7</code> · <code>96579bc</code> · <code>c0eecbf</code> · <code>d2eb025</code> · <code>a25788b</code> · <code>eeef381</code> · <code>4a1312d</code> · <code>3adbcb1</code> · <code>1df3876</code> · <code>fd4e9fd</code> · <code>c2b5b61</code> · <code>8b2e41c</code> · <code>050c811</code> · <code>3eba80a</code> · <code>4d494b6</code> · <code>f2fb1cb</code> · <code>7656db1</code> · <code>9c8eab8</code></p>
+              <details class="playable-snapshot" data-snapshot open>
+                <summary><span>Play this version</span><small>Aligned arrows · 9c8eab8</small></summary>
+                <div class="snapshot-toolbar"><p>The complete Catwalk front door with visible hardware, persistent Mocha, and isolated campaign, upload, and editor route sources.</p><a href="../snapshots/game2/m13-main-menu/pages/game2.html" target="_blank" rel="noopener">Open separately</a><button type="button" data-reload-snapshot>Restart snapshot</button></div>
+                <div class="snapshot-frame"><iframe title="Playable Catwalk main-menu milestone" data-src="../snapshots/game2/m13-main-menu/pages/game2.html" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe></div>
+              </details>
+            </article>
+          </li>
+        </ol>
+
+        <section class="status-board" aria-labelledby="status-title">
+          <div>
+            <p class="timeline-eyebrow">FINAL READING</p>
+            <h2 id="status-title">What the major milestones leave behind</h2>
+          </div>
+          <div class="status-columns">
+            <section>
+              <h3>Retained</h3>
+              <ul>
+                <li>Experiment-first development</li>
+                <li>Complete, readable keyboard</li>
+                <li>Distinct cat-action candidates</li>
+                <li>Guard-dog encounter direction</li>
+                <li>One continuous authored route</li>
+                <li>Pixel street Playtest direction</li>
+                <li>Graphite monitor and mechanical keyboard</li>
+                <li>Persistent pixel Mocha with daily routines</li>
+              </ul>
+            </section>
+            <section>
+              <h3>Still temporary</h3>
+              <ul>
+                <li>All 24 modules and their ordering</li>
+                <li>Yarn and threat tuning</li>
+                <li>Cat Lock sequences</li>
+                <li>First-pass terrain mappings</li>
+                <li>Generated alley and Mocha sprite sheets</li>
+              </ul>
+            </section>
+            <section>
+              <h3>Known issues</h3>
+              <ul>
+                <li>Weak item-only yarn value</li>
+                <li>Temporary hit ranges and exits</li>
+                <li>Live route still needs player validation</li>
+                <li>Dynamic paws remain a temporary abstraction</li>
+              </ul>
+            </section>
+          </div>
+        </section>
+
+        <section id="closing-note" class="status-board timeline-closing" aria-labelledby="closing-title">
+          <div>
+            <p class="timeline-eyebrow">CLOSING NOTE</p>
+            <h2 id="closing-title">Who built Catwalk—and how</h2>
+          </div>
+          <div class="closing-details">
+            <section>
+              <h3>Roles and authority</h3>
+              <p>VegShark was the creative director, lead game designer, playtest lead, final route author, and final approver: VegShark supplied Mocha’s real behavior, judged fun and feel, rejected weak interpretations, and set the visual bar. Codex served as prototyping engineer, technical designer, tools/UI implementer, QA, and archivist: I proposed experiments, built them, diagnosed failures, and kept the editor, tests, Git, and timeline aligned.</p>
+            </section>
+            <section>
+              <h3>How the roles changed</h3>
+              <p>At first VegShark set the premise and gave AI room to explore, while I chose the first playable experiments. Repeated playtests then made VegShark a hands-on design director and me the rapid implementation partner. Near release, VegShark moved toward level author and art/product director; I shifted toward integration, polish, regression testing, and documentation.</p>
+            </section>
+            <section>
+              <h3>Main technology</h3>
+              <p>Phaser 3 drives the platformer’s rendering, physics, camera, enemies, and keyboard actions. Route Studio uses Canvas 2D and plain JavaScript. HTML/CSS/JS builds the physical monitor, mechanical keyboard, menu, and Mocha. JSON and localStorage power editable routes; Node tests, Git saves, and playable snapshots preserve each stage.</p>
+            </section>
+            <section>
+              <h3>Decisions that redirected the game</h3>
+              <p>Four choices changed Catwalk most: making real key interference the core; replacing separate challenge rooms with one continuous JSON-authored route; separating the pixel alley inside the monitor from the physical desk world outside; and turning Mocha from an occasional blocker into a persistent autonomous character. The in-world main menu finally unified the campaign, loaded levels, Route Studio, and this development record.</p>
+            </section>
+          </div>
+        </section>
+
+        <section id="git-index" class="git-index" aria-labelledby="git-title">
+          <p class="timeline-eyebrow">COMPLETE SAVE INDEX</p>
+            <h2 id="git-title">All 95 product saves through <code>9c8eab8</code></h2>
+          <div class="git-groups">
+            <details open>
+              <summary>July 27 · 8 saves</summary>
+              <ol>
+                <li><code>acde9db</code> establish project baseline</li>
+                <li><code>01467c5</code> record Git checkpoint</li>
+                <li><code>fc43248</code> define Keyboard Takeover</li>
+                <li><code>20bc407</code> build Keyboard Takeover</li>
+                <li><code>67af1cf</code> define Paw Storm</li>
+                <li><code>38d5259</code> build Paw Storm actions</li>
+                <li><code>5673a88</code> require full keyboard</li>
+                <li><code>d3352d8</code> render precise paw targets</li>
+              </ol>
+            </details>
+            <details>
+              <summary>July 29 · 14 saves</summary>
+              <ol>
+                <li><code>5be523b</code> define distinct skills route</li>
+                <li><code>aead858</code> build distinct skills route</li>
+                <li><code>237324b</code> first tunnel fall fix</li>
+                <li><code>32247b1</code> second tunnel stability fix</li>
+                <li><code>d80d086</code> rebuild tunnel squeeze</li>
+                <li><code>44b32b7</code> confirm tunnel playtest</li>
+                <li><code>3a9323b</code> define 24-level gallery</li>
+                <li><code>80d5afe</code> build 24-level gallery</li>
+                <li><code>af3014f</code> make Level 05 reachable</li>
+                <li><code>be0cd89</code> add Cat Lock combinations</li>
+                <li><code>18610e2</code> restore Cat Lock progression</li>
+                <li><code>57e0bbf</code> Space climb and long roll</li>
+                <li><code>c16293a</code> show Arrow Up in Level 19</li>
+                <li><code>176557d</code> clarify Cat Lock hints</li>
+              </ol>
+            </details>
+            <details>
+              <summary>July 30 · 14 saves</summary>
+              <ol>
+                <li><code>680a972</code> define actor experiment</li>
+                <li><code>e6f9120</code> add yarn and toy mice</li>
+                <li><code>f60865c</code> reset falls at visible ground</li>
+                <li><code>8af4401</code> define alley threats</li>
+                <li><code>ce60657</code> add pigeons and dogs</li>
+                <li><code>cd5a726</code> keep pigeons after ducking</li>
+                <li><code>57582ff</code> define single-route editor</li>
+                <li><code>a81f732</code> build single-route editor</li>
+                <li><code>8f240c2</code> define editor route playtest</li>
+                <li><code>0d11927</code> playtest editor routes</li>
+                <li><code>ad45bb0</code> require wall contact for climbing</li>
+                <li><code>866b015</code> add placeable instruction text</li>
+                <li><code>39d6d47</code> playtest from nearby checkpoint</li>
+                <li><code>59fb9f4</code> keep calmed dogs in the scene</li>
+              </ol>
+            </details>
+            <details>
+              <summary>July 31 · 14 saves</summary>
+              <ol>
+                <li><code>d114df2</code> turn Loaf Zones into rest checkpoints</li>
+                <li><code>c62ab70</code> add Game Start Flag and nine lives</li>
+                <li><code>a1f4e03</code> use Game Start Flag for nearby playtests</li>
+                <li><code>9ad43e6</code> improve editor icons and patrol guides</li>
+                <li><code>d1356b3</code> preserve editor position after nearby playtests</li>
+                <li><code>1211c27</code> add box multi-selection and grouped editing</li>
+                <li><code>76a4a32</code> add outside-monitor player dialogue</li>
+                <li><code>b471c7a</code> add screen interference events</li>
+                <li><code>2472027</code> respawn checkpoints on platforms</li>
+                <li><code>5814908</code> reset the physics body on respawn</li>
+                <li><code>f11bf4c</code> add five hard gallery levels</li>
+                <li><code>adde90e</code> save the current single route snapshot</li>
+                <li><code>ee96983</code> allow multiple Paw Storm key entries</li>
+                <li><code>14ee76b</code> make yarn save one death</li>
+              </ol>
+            </details>
+            <details open>
+              <summary>August 01 · 7 saves</summary>
+              <ol>
+                <li><code>175b525</code> add pixel street art to the editor-route Playtest</li>
+                <li><code>737c52c</code> refine alley scale and obstacles</li>
+                <li><code>24847b8</code> align the low pipe with authored clearance</li>
+                <li><code>0155d34</code> scroll the alley backdrop across the route</li>
+                <li><code>ccc4bda</code> add randomized building variants</li>
+                <li><code>9c749bc</code> add alley depth and safe decorative clutter</li>
+                <li><code>54194d7</code> prevent rolling inside low tunnels</li>
+              </ol>
+            </details>
+            <details open>
+              <summary>August 02 · 13 saves</summary>
+              <ol>
+                <li><code>752c0ef</code> illustrate the outer world experiment</li>
+                <li><code>4318377</code> restore the prior outer world</li>
+                <li><code>b076fbe</code> rebuild the mechanical keyboard</li>
+                <li><code>2d69eb1</code> align the keyboard shell</li>
+                <li><code>e18069d</code> tighten the keyboard case</li>
+                <li><code>55bb81a</code> extend the lower keyboard case</li>
+                <li><code>13b41f4</code> rebuild the monitor hardware</li>
+                <li><code>0e1e393</code> rebuild the monitor stand</li>
+                <li><code>5814092</code> try the long wood table</li>
+                <li><code>3dcf2d4</code> restore the prior table</li>
+                <li><code>08bb92c</code> try silver hardware</li>
+                <li><code>a2a6b99</code> restore graphite hardware</li>
+                <li><code>ad3c56a</code> enlarge the desktop composition</li>
+              </ol>
+            </details>
+            <details open>
+              <summary>August 03 · 7 saves</summary>
+              <ol>
+                <li><code>925b004</code> bring Mocha into the desk world</li>
+                <li><code>024bb8d</code> animate persistent pixel Mocha</li>
+                <li><code>ecaca59</code> keep Mocha at a consistent size</li>
+                <li><code>2a88b40</code> enlarge Mocha and isolate key feedback</li>
+                <li><code>dad6593</code> smooth Mocha pose transitions</li>
+                <li><code>5f38860</code> animate Mocha’s daily routines</li>
+                <li><code>68d6f95</code> let Mocha sleep longer</li>
+              </ol>
+            </details>
+            <details open>
+              <summary>August 07 · 18 saves</summary>
+              <ol>
+                <li><code>5dc5fa7</code> add the complete main menu flow</li>
+                <li><code>96579bc</code> restore Mocha and the keyboard to the menu</li>
+                <li><code>c0eecbf</code> keep the complete menu world visible</li>
+                <li><code>d2eb025</code> restore menu initialization dependency order</li>
+                <li><code>a25788b</code> polish the menu and enlarge Mocha</li>
+                <li><code>eeef381</code> restyle the menu as a black pixel RPG screen</li>
+                <li><code>4a1312d</code> keep one shared keyboard-and-pointer menu selection</li>
+                <li><code>3adbcb1</code> simplify the menu and clarify editor level naming</li>
+                <li><code>1df3876</code> author starting lives and remove automatic terrain hints</li>
+                <li><code>fd4e9fd</code> adopt the first supplied campaign file</li>
+                <li><code>c2b5b61</code> replace it with the corrected VegShark route and UTF-8 text</li>
+                <li><code>8b2e41c</code> rename the authoring tool Route Studio</li>
+                <li><code>050c811</code> extend the RPG menu frame across the monitor screen</li>
+                <li><code>3eba80a</code> restore compact centered menu options inside the full-screen frame</li>
+                <li><code>4d494b6</code> visibly shrink the centered menu options</li>
+                <li><code>f2fb1cb</code> place each option description below its title</li>
+                <li><code>7656db1</code> remove the unused space before each option arrow</li>
+                <li><code>9c8eab8</code> align all option arrows and remove Choose your path</li>
+              </ol>
+            </details>
+          </div>
+          <p class="source-note">
+            Canonical long-form record:
+            <a href="../docs/game2/development-timeline.md">docs/game2/development-timeline.md</a>
+            · Timeline-maintenance and repository-workflow commits are omitted from this product index.
+          </p>
+        </section>
+      </div>
+    </main>
+    <script src="../scripts/game2-audio.js?v=7"></script>
+    <script src="../scripts/game2-timeline.js?v=1"></script>
+  </body>
+</html>

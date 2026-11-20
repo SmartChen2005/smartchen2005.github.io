@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0d0e11">
+    <meta name="description" content="Catwalk main menu — start the journey, load a route, edit a level, or explore its development timeline.">
+    <title>Catwalk</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="../styles/game2.css?v=14">
+    <link rel="stylesheet" href="../styles/game2-playtest.css?v=21">
+    <link rel="stylesheet" href="../styles/game2-menu.css?v=11">
+  </head>
+  <body>
+    <main class="catwalk-shell game2-menu-shell">
+      <header class="prototype-header">
+        <div>
+          <p class="prototype-kicker">CATWALK / MAIN MENU</p>
+          <h1>Catwalk</h1>
+        </div>
+        <nav aria-label="Catwalk navigation">
+          <a href="../../../../index.html" target="_top">Home</a>
+        </nav>
+      </header>
+
+      <section class="desk playtest-desk menu-desk" aria-label="Catwalk computer desk">
+        <div class="monitor menu-monitor" aria-label="Catwalk game monitor">
+          <div class="monitor-camera" aria-hidden="true"></div>
+          <section id="catwalk-game" class="game-main-screen" aria-labelledby="menu-title">
+            <div class="game-main-vignette" aria-hidden="true"></div>
+            <div class="game-main-content">
+              <p class="game-main-kicker">MOCHA PRESENTS</p>
+              <h2 id="menu-title">CATWALK</h2>
+
+              <nav class="game-main-actions" aria-label="Catwalk main menu">
+                <a class="game-menu-action" data-menu-item href="./game2-playtest.html?source=campaign">
+                  <span class="menu-action-marker">01</span>
+                  <span class="menu-action-copy"><strong>Start Game</strong><small>Begin the journey home</small></span>
+                </a>
+                <button id="load-level" class="game-menu-action" data-menu-item type="button">
+                  <span class="menu-action-marker">02</span>
+                  <span class="menu-action-copy"><strong>Load Level</strong><small>Play an exported JSON route</small></span>
+                </button>
+                <a class="game-menu-action" data-menu-item href="./game2-editor.html">
+                  <span class="menu-action-marker">03</span>
+                  <span class="menu-action-copy"><strong>Route Studio</strong><small>Build a continuous route</small></span>
+                </a>
+                <a class="game-menu-action" data-menu-item href="../../../../pages/game2-timeline.html" target="_top">
+                  <span class="menu-action-marker">04</span>
+                  <span class="menu-action-copy"><strong>Development Timeline</strong><small>Play through Catwalk’s evolution</small></span>
+                </a>
+              </nav>
+
+              <p id="menu-status" class="game-main-status" aria-live="polite">↑ ↓ select · Enter confirm · Mouse supported</p>
+              <p class="game-main-build">NIGHT ROUTE · NINE LIVES · MOCHA NEARBY</p>
+              <input id="level-file" type="file" accept=".json,application/json" hidden>
+            </div>
+          </section>
+        </div>
+
+        <div class="monitor-neck" aria-hidden="true"></div>
+        <div class="monitor-foot" aria-hidden="true"></div>
+
+        <section id="prototype-keyboard" class="keyboard menu-keyboard" aria-label="Full-size ANSI keyboard">
+          <p class="keyboard-label">CATWALK SYSTEM · MENU INPUT</p>
+          <div id="full-keyboard-layout" class="full-keyboard-layout"></div>
+        </section>
+
+        <div id="dynamic-paws" class="world-paws" aria-hidden="true"></div>
+        <div id="world-cat-actor" class="world-cat-actor" data-state="sleep" data-side="right" hidden aria-hidden="true">
+          <div class="world-cat-shadow"></div>
+          <div class="world-cat-current-pose">
+            <div class="world-cat-sprite"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="../scripts/game2-level-data.js?v=2"></script>
+    <script src="../scripts/game2-editor-model.js?v=11"></script>
+    <script src="../scripts/game2-world-cat.js?v=8"></script>
+    <script src="../scripts/game2-menu.js?v=4"></script>
+  </body>
+</html>
