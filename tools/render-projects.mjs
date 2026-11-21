@@ -24,7 +24,7 @@ const aiGameDesign = {
 };
 const projects = [
   {href:'polaroid-of-yesterday/',title:'Polaroid of Yesterday',kind:'Narrative puzzle game',description:'A first-person game about photography, memory, and the stories we construct.',tone:'light',theme:'polaroid',effect:'polaroid',image:`<img ${renditionAttributes(room,'../',{sizes:'(max-width: 700px) calc(100vw - 80px), 520px',priority:true})} alt="" decoding="async" fetchpriority="high" draggable="false">`},
-  {href:'gran-turismo/',title:'GRAN TURISMO',kind:'VR Adventure Game',layout:'gran-turismo',previewImage:'assets/gran-turismo-atlas-cover.webp'},
+  {href:'gran-turismo/',title:'GRAN TURISMO',kind:'VR Adventure Game',layout:'gran-turismo',previewImage:'assets/gran-turismo-atlas-cover.webp?rev=20261120-opening-frame'},
   {href:'figures-of-speech/',title:'Figures of Speech',tone:'light',layout:'figures'},
   {href:'vr-for-skill-learning/',title:vr.title,layout:'vr'},
   aiGameDesign,
