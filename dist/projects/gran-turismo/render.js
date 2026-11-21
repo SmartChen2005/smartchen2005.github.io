@@ -283,11 +283,22 @@
           gl.uniform1i(uniforms.DrawVeil, 0);
           gl.enable(gl.BLEND);
           for (const effect of effects) {
-            gl.depthMask(effect.opacity === 1);
             gl.uniform1f(uniforms.Gain, effect.gain);
             gl.uniform1f(uniforms.Opacity, effect.opacity);
             gl.bufferData(gl.ARRAY_BUFFER, effect.batch.vertices, gl.DYNAMIC_DRAW);
-            gl.drawArrays(gl.TRIANGLES, 0, effect.batch.vertices.length / 6);
+            const count = effect.batch.vertices.length / 6;
+            const fadingSolid = effect.solid && effect.opacity < 1;
+            if (fadingSolid) {
+              // A fading character is one opaque surface with reduced coverage.
+              gl.depthMask(true);
+              gl.colorMask(false, false, false, false);
+              gl.drawArrays(gl.TRIANGLES, 0, count);
+              gl.colorMask(true, true, true, true);
+              gl.depthFunc(gl.EQUAL);
+            }
+            gl.depthMask(effect.opacity === 1);
+            gl.drawArrays(gl.TRIANGLES, 0, count);
+            if (fadingSolid) gl.depthFunc(gl.LESS);
           }
           gl.depthMask(true);
           gl.disable(gl.BLEND);

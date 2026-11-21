@@ -11,19 +11,20 @@
   <script src="atlas-history.js" defer></script>
   <script src="field-notes.js" defer></script>
   <script src="render.js" defer></script>
+  <script src="throw-avatar.js" defer></script>
   <script src="atlas.js" defer></script>
 </head>
 <body>
   <main>
     <section class="approach" id="approach" aria-label="Opening flythrough">
       <div class="flight-copy">
-        <p class="flight-title" data-cue data-start="0" data-end=".15">Gran Turismo</p>
-        <p class="flight-caption" data-cue data-start=".225" data-end=".335">You are an explorer returning home after years away.</p>
-        <p class="flight-caption" data-cue data-start=".335" data-end=".43">Your people have vanished. Only ruins remain.</p>
-        <p class="flight-caption" id="star-stone-cue" data-cue data-start=".43" data-end=".534">Throw a Star Stone. Teleport to where it lands.</p>
-        <p class="flight-caption" data-cue data-start=".534" data-end=".625">Use your thruster to steer. Balance oxygen and fuel to keep going.</p>
-        <p class="flight-caption" data-cue data-start=".663" data-end=".771">At the edge of the ruins, you find the gate your people crossed.</p>
-        <div class="flight-caption flight-choice" data-cue data-start=".771" data-end=".900">
+        <p class="flight-title" data-cue data-chapter="Opening" data-start="0" data-end=".15">Gran Turismo</p>
+        <p class="flight-caption" data-cue data-chapter="The Return" data-start=".225" data-end=".335">You are an explorer returning home after years away.</p>
+        <p class="flight-caption" data-cue data-chapter="The Ruins" data-start=".335" data-end=".43">Your people have vanished. Only ruins remain.</p>
+        <p class="flight-caption" id="star-stone-cue" data-cue data-chapter="Star Stone" data-stop=".447" data-start=".43" data-end=".534">Throw a Star Stone. Teleport to where it lands.</p>
+        <p class="flight-caption" data-cue data-chapter="Life Support" data-start=".534" data-end=".625">Use your thruster to steer. Balance oxygen and fuel to keep going.</p>
+        <p class="flight-caption" data-cue data-chapter="The Portal" data-start=".663" data-end=".771">At the edge of the ruins, you find the gate your people crossed.</p>
+        <div class="flight-caption flight-choice" data-cue data-chapter="The Choice" data-start=".771" data-end=".900">
           <p><strong>Now you have a choice.</strong></p>
           <p>Stay with Tavi’s people and rebuild here.</p>
           <p>Or follow your people through the gate into the unknown.</p>
@@ -36,14 +37,15 @@
               width="432" height="243" allow="encrypted-media; fullscreen; picture-in-picture"
               referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
-          <p class="flight-caption flight-arrival" data-cue data-start=".982" data-end="1">This is where you begin.</p>
+          <p class="flight-caption flight-arrival" data-cue data-chapter="The Longship" data-stop="1" data-start=".982" data-end="1">This is where you begin.</p>
         </div>
       </div>
+      <nav class="flight-chapters" id="flight-chapters" aria-label="Opening chapters" hidden><ol></ol></nav>
     </section>
 
     <section class="atlas wrap" id="atlas" aria-labelledby="atlas-title">
       <header class="atlas-heading">
-        <div><p class="eyebrow"><span class="beacon"></span> World Atlas / Exploration Archive</p><h1 id="atlas-title">Gran Turismo</h1></div>
+        <div><p class="eyebrow"><span class="beacon"></span> World Atlas / Exploration Archive</p><h1 id="atlas-title" tabindex="-1">Gran Turismo</h1></div>
         <div class="atlas-timeline" id="atlas-timeline" hidden>
           <div class="timeline-head">
             <label for="map-history">Build timeline</label>

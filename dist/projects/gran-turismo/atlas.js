@@ -3,6 +3,7 @@
 
   const $ = id => document.getElementById(id);
   const { camera, project, dot, span, pose, meshBatch, clearCanvas, createRenderer } = window.grandTurismoRender;
+  const throwAvatar = window.grandTurismoAvatar;
   const notes = window.grandTurismoNotes;
   const approach = $('approach'), section = $('atlas'), scene = $('survey-scene'), plot = $('plot'), picker = $('contact');
   const flightCues = Array.from(approach.querySelectorAll('[data-cue]'), element => ({
@@ -10,6 +11,20 @@
   }));
   const stoneCue = flightCues.find(({ element }) => element.id === 'star-stone-cue');
   const flightVideo = $('flight-video'), flightMedia = flightVideo.closest('.flight-media');
+  const chapterNav = $('flight-chapters'), atlasTitle = $('atlas-title');
+  const chapters = [...flightCues, { element: atlasTitle, start: Infinity }].map(({ element, start, end }) => {
+    const item = document.createElement('li');
+    const button = document.createElement('button');
+    const label = document.createElement('span');
+    label.textContent = element.dataset.chapter || 'Survey Map';
+    button.type = 'button';
+    button.className = 'chapter-stop';
+    button.append(label);
+    item.append(button);
+    chapterNav.querySelector('ol').append(item);
+    const stop = element.dataset.stop ?? (element === atlasTitle ? 1 : start === 0 ? 0 : (start + end) / 2);
+    return { element, start, stop: Number(stop), button };
+  });
   const timeline = $('map-history'), history = window.GRAND_TURISMO_HISTORY;
   const currentIndex = history?.milestones.length ?? 0;
   const latest = {
@@ -47,10 +62,10 @@
   const markers = new Map();
   let data, byId, contacts, terrain, route, treeCenter, ship, world, worldPoints, selected, study;
   let frame = 0, pendingMap = true, pendingFlight = true, pendingStudy = true, mapView, hitSurfaces = [], docked = true;
-  let flightProgress, lastFlightFrame;
+  let flightProgress, lastFlightFrame, activeChapter;
   let controls = resetCamera(), panMode = false, drag, ignoreClick = false, etag = '', syncing = false;
   let currentMap = window.GRAND_TURISMO_MAP, milestoneIndex = currentIndex, historyFrame = 0;
-  let stoneImpact, portal, tavi;
+  let stoneImpact, throwSetup, portal, tavi;
 
   function pointsOf(node) {
     return node.bounds.length ? node.bounds : [node.p];
@@ -223,15 +238,29 @@
     return { batch: { vertices: Float32Array.from(vertices) }, opacity, gain: 1.53 };
   }
 
-  const stoneLaunch = (stoneCue?.start ?? .43) + .004;
-  const stoneHit = (stoneCue?.start ?? .43) + .048;
+  const setupStart = stoneCue.start - .032;
+  const windupStart = stoneCue.start - .010;
+  const stoneLaunch = stoneCue.start + .031;
+  const stoneHit = stoneCue.start + .066;
+  const gestureDuration = (stoneLaunch - windupStart) / throwAvatar.release;
 
-  function stonePosition(t, width, height) {
+  function prepareThrow(width, height) {
+    if (throwSetup?.width === width && throwSetup.height === height) return throwSetup;
     const entry = flightCamera(stoneLaunch, width, height);
-    const frame = camera(entry.yaw, entry.elevation, entry.center, entry.scale, width / 2, height / 2);
+    const frame = camera(entry.yaw, entry.elevation, entry.center, entry.scale, 0, 0);
     const near = 24;
-    const from = entry.center.map((n, i) => n + frame.depth[i] * (near - entry.distance) -
-      frame.right[i] * width / height * near * .60 + frame.up[i] * near * .06);
+    const narrow = clamp((1.25 - width / height) / .8, 0, 1);
+    const eye = entry.center.map((n, i) => n - frame.depth[i] * entry.distance);
+    const from = eye.map((n, i) => n + frame.depth[i] * near -
+      frame.right[i] * width / height * near * mix(.23, -.045, narrow) + frame.up[i] * near * .29);
+    const lead = stonePosition(.01, from);
+    const throwYaw = Math.atan2(lead[0] - from[0], lead[2] - from[2]);
+    const avatar = throwAvatar.stage(from, entry.yaw, throwYaw);
+    throwSetup = { width, height, eye, aim: entry.center, direction: frame.depth, from, avatar };
+    return throwSetup;
+  }
+
+  function stonePosition(t, from) {
     const target = stoneImpact.point.map((n, i) => n + stoneImpact.normal[i] * .98);
     // Bow around the fragment to meet the marked face from the open side.
     const p = from.map((n, i) => mix(n, target[i], t) + stoneImpact.normal[i] * 12 * Math.sin(Math.PI * t));
@@ -240,14 +269,18 @@
   }
 
   function stoneShot(base, progress, width, height) {
-    if (!stoneImpact || !stoneCue || progress < stoneLaunch || progress >= stoneCue.end + .032) {
+    if (!stoneImpact || progress < setupStart || progress >= stoneCue.end + .032) {
       return { view: base, effects: [] };
     }
-    const t = clamp((progress - stoneLaunch) / (stoneHit - stoneLaunch), 0, 1);
-    const p = stonePosition(t, width, height);
-    const approach = ease(clamp((progress - stoneLaunch) / .045, 0, 1));
-    const release = 1 - ease(clamp((progress - stoneCue.end + .021) / .053, 0, 1));
-    const weight = approach * release;
+    const setup = prepareThrow(width, height);
+    const elapsed = clamp((progress - stoneLaunch) / (stoneHit - stoneLaunch), 0, 1);
+    const t = elapsed * (1 - .72 * (1 - elapsed) ** 3);
+    const p = stonePosition(t, setup.from);
+    const narrow = clamp((1.25 - width / height) / .8, 0, 1);
+    const anticipation = .010 * (1 - narrow);
+    const inFlight = ease(clamp((progress - stoneLaunch - anticipation) / (.041 - anticipation), 0, 1));
+    const dollyOut = 1 - ease(clamp((progress - stoneCue.end + .021) / .053, 0, 1));
+    const weight = inFlight * dollyOut;
     const direction = camera(base.yaw, base.elevation, base.center, base.scale, 0, 0).depth;
     const orbitEye = base.center.map((n, i) => n - direction[i] * base.distance);
     const { point, normal, right, up } = stoneImpact;
@@ -255,26 +288,44 @@
     const drift = ease(clamp((progress - stoneLaunch) / (stoneCue.end - stoneLaunch), 0, 1));
     const closeEye = point.map((n, i) => n + normal[i] * (21 + 12 * portrait) +
       right[i] * mix(-10, -3, drift) + up[i] * 4.5);
-    const eye = offset(orbitEye, closeEye, weight);
+    const cueEntry = ease(clamp((progress - setupStart) / .031, 0, 1));
+    const setupWeight = cueEntry * (1 - inFlight);
+    const creep = cueEntry * .92;
+    const forward = (point) => point.map((value, i) => value + setup.direction[i] * creep);
+    const eye = offset(offset(orbitEye, forward(setup.eye), setupWeight), closeEye, weight);
     // Lead the throw toward the surface so the camera drifts past the stone instead of locking to it.
-    const narrow = clamp((1.25 - width / height) / .8, 0, 1);
     const lead = mix(.62, .10, narrow);
     const aimWeight = 1 - (1 - weight) ** (1 + 2 * narrow);
-    const aim = offset(base.center, offset(p, point, lead), aimWeight);
+    const aim = offset(offset(base.center, forward(setup.aim), setupWeight), offset(p, point, lead), aimWeight);
     const view = flightView(eye, aim, aim, 0, base.focus, base.range, height);
-    view.frameX = mix(base.frameX ?? .5, .56, weight);
+    // Keep the drawn-back hand inside the narrow frame until the stone leaves it.
+    const portraitMargin = .16 * narrow * (1 - ease(clamp((progress - stoneLaunch) / .014, 0, 1)));
+    const windupMargin = mix(.033, .165, narrow) * (1 - ease(clamp((progress - stoneLaunch + .016) / .015, 0, 1)));
+    view.frameX = mix((base.frameX ?? .5) + setupWeight * (portraitMargin + windupMargin), .56, weight);
     view.frameY = mix(base.frameY ?? .5, .45, weight);
+    const releaseFraming = ease(clamp((progress - stoneLaunch) / .005, 0, 1)) *
+      (1 - ease(clamp((progress - stoneLaunch - .009) / .025, 0, 1)));
+    view.scale *= mix(1, .86, narrow * releaseFraming);
 
     const effects = [];
+    const shadow = Math.min(ease(clamp((progress - windupStart) / .023, 0, 1)),
+      1 - ease(clamp((progress - stoneLaunch - .012) / .032, 0, 1)));
+    const exposure = mix(1, .65, shadow);
     const age = (progress - stoneHit) / (stoneCue.end - stoneHit);
     if (age >= 0 && age < 1) effects.push(surfaceSigil(stoneImpact, age));
-    const opacity = 1 - ease(clamp((progress - stoneHit) / .006, 0, 1));
-    if (opacity <= 0) return { view, effects };
-    const spin = 1 + 5 * t, size = [12, 12, 12];
+    const avatarOpacity = Math.min(ease(clamp((progress - stoneCue.start + .002) / .009, 0, 1)),
+      1 - ease(clamp((progress - stoneLaunch - .014) / .014, 0, 1)));
+    const avatar = avatarOpacity > 0 ? setup.avatar(clamp((progress - windupStart) / gestureDuration, 0, 1)) : null;
+    if (avatar) effects.push({ batch: avatar.batch, opacity: avatarOpacity, gain: 1.19, solid: true });
+    const opacity = Math.min(1 - ease(clamp((progress - stoneHit) / .006, 0, 1)), progress < stoneLaunch ? avatarOpacity : 1);
+    if (opacity <= 0) return { view, effects, exposure };
+    const spin = 1 + 5 * t, diameter = mix(4.9, 12, ease(clamp((progress - stoneLaunch) / .019, 0, 1)));
+    const size = [diameter, diameter, diameter];
     const q = [0, .8 * Math.sin(spin), .6 * Math.sin(spin), Math.cos(spin)];
     const parts = [['StarStone', ['#d9d9d9', '#212429', '#e6080a', '#fa151b']]];
-    effects.push({ batch: meshBatch(data.models, [{ p, q, size, parts }]), opacity, gain: 1.22 });
-    return { view, effects };
+    const position = progress < stoneLaunch ? avatar.grip : p;
+    effects.push({ batch: meshBatch(data.models, [{ p: position, q, size, parts }]), opacity, gain: 1.22 });
+    return { view, effects, exposure };
   }
 
   function orbitVelocity(angle, speed, riseSpeed = 0) {
@@ -430,6 +481,27 @@
     }
   }
 
+  function flightScrollDistance(height) {
+    return Math.max(1, approach.offsetHeight - height * 1.22);
+  }
+
+  function updateChapters(progress, docking, height) {
+    const reduced = motion.matches;
+    const visible = reduced ? approach.getBoundingClientRect().bottom > height * .15 : docking < 1;
+    if (!visible && chapterNav.contains(document.activeElement)) atlasTitle.focus({ preventScroll: true });
+    chapterNav.hidden = !visible;
+    if (!visible) return;
+    const active = docking > 0 && !reduced ? chapters.length - 1 : Math.max(0, chapters.findLastIndex(chapter =>
+      reduced ? chapter.element.getBoundingClientRect().top <= height * .36 : progress >= chapter.start));
+    if (active === activeChapter) return;
+    activeChapter = active;
+    chapters.forEach(({ button }, index) => {
+      button.toggleAttribute('data-passed', index < active);
+      if (index === active) button.setAttribute('aria-current', 'step');
+      else button.removeAttribute('aria-current');
+    });
+  }
+
   function drawSequence(time) {
     const viewportWidth = document.documentElement.clientWidth, viewportHeight = window.innerHeight;
     const bounds = plot.getBoundingClientRect();
@@ -437,6 +509,7 @@
     const finish = clamp(bounds.top - section.getBoundingClientRect().top + 8, viewportHeight * .26, viewportHeight * .64);
     const docking = clamp((start - bounds.top) / (start - finish), 0, 1);
     if (motion.matches || docking >= 1 || viewportWidth < 1 || viewportHeight < 1) {
+      updateChapters(1, 1, viewportHeight);
       updateFlightMedia(motion.matches ? 1 : 0, motion.matches);
       const changed = !docked;
       setDocked(true);
@@ -446,13 +519,14 @@
     setDocked(false);
     const approachBounds = approach.getBoundingClientRect();
     if (milestoneIndex !== currentIndex && approachBounds.bottom > viewportHeight) showMilestone(currentIndex);
-    const flightEnd = Math.max(1, approach.offsetHeight - viewportHeight * 1.22);
+    const flightEnd = flightScrollDistance(viewportHeight);
     const target = clamp(-approachBounds.top / flightEnd, 0, 1);
     const elapsed = Math.min(time - (lastFlightFrame ?? time - 16), 40);
     lastFlightFrame = time;
     flightProgress = mix(flightProgress ?? target, target, 1 - Math.exp(-elapsed / 78));
     if (Math.abs(flightProgress - target) < .001) flightProgress = target;
     updateFlightCopy(flightProgress, docking);
+    updateChapters(flightProgress, docking, viewportHeight);
     const blend = ease(docking);
     const width = Math.round(mix(viewportWidth, bounds.width, blend));
     const height = Math.round(mix(viewportHeight, bounds.height, blend));
@@ -463,7 +537,7 @@
     section.style.setProperty('--archive-reveal', ease(clamp((docking - .07) / .79, 0, 1)));
     const progress = mix(flightProgress, 1, blend);
     const flight = flightCamera(progress, width, height);
-    const { view: from, effects } = blend ? { view: flight, effects: [] } : stoneShot(flight, progress, width, height);
+    const { view: from, effects, exposure = 1 } = blend ? { view: flight, effects: [] } : stoneShot(flight, progress, width, height);
     if (!blend && tavi && progress >= .60 && progress <= .91) effects.push(tavi.effect);
     const frameX = width * (from.frameX ?? .5);
     const frameY = height * (from.frameY ?? .5);
@@ -472,7 +546,7 @@
       view.distance = from.distance;
       view.perspective = 1;
       drawSky(atlas, view, width, height);
-      atlas.renderer.draw(view, width, height, 1.12, from.focus, from.range, 1, effects);
+      atlas.renderer.draw(view, width, height, 1.12 * exposure, from.focus, from.range, 1, effects);
       return flightProgress !== target;
     }
     const to = atlasCamera(width, height);
@@ -600,6 +674,7 @@
     data = next;
     byId = new Map(data.nodes.map(node => [node.id, node]));
     stoneImpact = findStoneImpact();
+    throwSetup = null;
     contacts = data.nodes.filter(node => node.kind !== 'debris');
     terrain = data.nodes.filter(node => node.kind === 'debris' && node.bounds.length);
     ship = contacts.find(node => node.kind === 'ship' || node.kind === 'prototypeShip');
@@ -815,6 +890,15 @@
     if (hit) select(hit.node.id, true);
   });
   window.addEventListener('scroll', () => update({ fly: true }), { passive: true });
+  for (const { element, stop, button } of chapters) {
+    button.addEventListener('click', () => {
+      const height = window.innerHeight;
+      const reduced = motion.matches;
+      const top = window.scrollY + (element === atlasTitle ? section.getBoundingClientRect().top : reduced ?
+        element.getBoundingClientRect().top - height * .22 : approach.getBoundingClientRect().top + stop * flightScrollDistance(height));
+      window.scrollTo({ top, behavior: reduced ? 'instant' : 'smooth' });
+    });
+  }
   motion.addEventListener('change', () => update({ fly: true }));
   const resize = new ResizeObserver(() => update({ map: true, fly: true, record: true }));
   for (const element of [approach, plot, specimen]) resize.observe(element);
