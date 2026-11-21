@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-20 — Rework the Beyond Vibe Coding experiment notes
+
+- Set the title and headings in the site's Gotham. Rewrite the three cases from the Notion handbook and pinned design notes, with a specific handoff or design decision in each case.
+- Regenerate the project entry with `node tools/render-ai-game-design.mjs`.
+
 ### 2026-11-20 — Set the Beyond Vibe Coding research masthead
 
 - List the June–August 2026 experimental period and the three games' Codex model, GPT-5.6 Sol (Medium), in the opening. Set the study in black and white with Instrument Serif headings, grayscale preview images, and more space between sections.

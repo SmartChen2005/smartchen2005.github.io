@@ -8,8 +8,9 @@
   <title>Beyond Vibe Coding: Experiments in Human–AI Game Design — Hongyi Chen</title>
   {{favicon}}
   <link rel="stylesheet" href="../../site.css">
+  <link rel="stylesheet" href="../../assets/fonts/gotham/gotham.css">
   {{headerAssets}}
-  <link rel="stylesheet" href="study.css?rev=research-masthead">
+  <link rel="stylesheet" href="study.css?rev=research-roles">
   <script type="module" src="study.mjs"></script>
 </head>
 <body class="research">
@@ -64,7 +65,10 @@
         <div class="case-copy">
           <p class="label">01 / Delegation</p>
           <h3>No Signal</h3>
-          <p class="case-lead">I turned my desk setup into an eight-level cable puzzle and wrote the rules. Codex implemented the game one system at a time, starting with a working power chain.</p>
+          <div class="case-notes">
+            <p>I designed and produced the puzzle around the constraints of my own desk, with limited ports, cable reach, and budget. I used the first level to teach power, then introduced a hub when the laptop ran out of ports.</p>
+            <p>Codex built movement, connections, and device feedback in stages. When it asked what USB-C could carry, we specified the power, video, and data rules before expanding the puzzles.</p>
+          </div>
           <div class="case-links"><a class="play-link" href="pages/game1.html">Play No Signal {{arrow}}</a></div>
         </div>
         <section class="bench" aria-labelledby="power-title">
@@ -95,7 +99,10 @@
         <div class="case-copy">
           <p class="label">02 / Collaboration</p>
           <h3>Catwalk</h3>
-          <p class="case-lead">My cat Mocha interrupts the controls. The obstacles in Codex’s 25 layouts rarely worked together, so I built the final route in our editor and made routes shareable as JSON.</p>
+          <div class="case-notes">
+            <p>I led design and playtesting, starting with my cat Mocha’s habit of stepping on the keyboard. I tried different key layouts for moves like squeezing through a gap or rolling across one.</p>
+            <p>Codex built the Phaser prototype and 25 test levels. The obstacles rarely worked together, so I asked Codex to build an editor. I authored one continuous route, and we made routes shareable as JSON.</p>
+          </div>
           <div class="case-links">
             <a class="play-link" href="pages/game2.html">Play Catwalk {{arrow}}</a>
             <a href="pages/game2-editor.html">Route Studio {{arrow}}</a>
@@ -127,7 +134,10 @@
         <div class="case-copy">
           <p class="label">03 / Direction</p>
           <h3>Two Minds <small lang="zh">二心</small></h3>
-          <p class="case-lead">Codex led the concept interviews and built ritual prototypes. I settled on a 37-hex fight where Sun Wukong’s double uses the traits you give up.</p>
+          <div class="case-notes">
+            <p>I directed the game through playtesting and made the final design calls. Codex led the concept interviews and built prototypes around possession and ritual. We cut early combat when it felt disconnected from the ritual.</p>
+            <p>I brought in the rival Wukongs from <cite>Journey to the West</cite>. Codex built an auto-battle prototype on a hex board where the double fights with the traits you give up.</p>
+          </div>
           <div class="case-links"><a class="play-link" href="pages/game3.html">Play Two Minds {{arrow}}</a></div>
         </div>
         <section class="bench" aria-labelledby="echo-title">
