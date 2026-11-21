@@ -2,7 +2,7 @@
 
 ## Beyond Vibe Coding (2026-11-19)
 
-The English research study uses warm paper, violet labels, and luminous yellow for interaction. Anton sets the main headings, Archivo carries the text, and monospaced labels identify records. The opening presents one question and three linked game frames. Each case uses one short paragraph about a design decision alongside a playable build and an interactive rule sketch. Space and horizontal rules separate sections. Technical notes and handbook examples use native disclosures. The study's tokens and responsive layout live in `dist/projects/ai-game-design/study.css`.
+The English research study uses a white surface, black type, and grayscale game previews. Instrument Serif sets the main headings, Archivo carries the text, and monospaced labels identify records. The opening lists the experimental period and Codex model above the research question. Each case pairs one short design record with a playable build and an interactive rule sketch. Generous spacing and fine horizontal rules separate sections. Technical notes and handbook examples use native disclosures. The study's tokens and responsive layout live in `dist/projects/ai-game-design/study.css`.
 
 ## Projects — VR and Battlefront covers (2026-11-16)
 

@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-20 — Set the Beyond Vibe Coding research masthead
+
+- List the June–August 2026 experimental period and the three games' Codex model, GPT-5.6 Sol (Medium), in the opening. Set the study in black and white with Instrument Serif headings, grayscale preview images, and more space between sections.
+- Regenerate the project entry with `node tools/render-ai-game-design.mjs`.
+
 ### 2026-11-20 — Condense the Beyond Vibe Coding study
 
 - Use one short design record for each game. Remove nested panels and set the title, method, experiments, and handbook on a shared paper surface. Keep the diagrams and expandable technical notes with their cases.
