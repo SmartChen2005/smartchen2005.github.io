@@ -40,8 +40,8 @@ There are no page errors or horizontal overflow in these three viewports.
   and runs actual Chrome desktop/phone/4K requests, lightly compressed 3000px portrait,
   arrival-time Three.js/motorsport requests, complete photo development,
   car hover/click/Escape and overflow/error checks. It also checks font-independent
-  SVG arrows on five affected mobile routes, including all six Projects rows and
-  Music Station's open native details/dialog. Set `PLAYWRIGHT_MODULE` to
+  all seven arrow-free Projects cards and the SVG arrows on four mobile detail routes,
+  including Music Station's open native details/dialog. Set `PLAYWRIGHT_MODULE` to
   an installed Playwright package and `HOME_QA_DIR` for screenshots/results.
   Optional `--compare` captures the HEAD homepage markup as a visual/media
   baseline; CSS and runtime use the working tree.

@@ -85,7 +85,6 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .projects-main .project-feature .directory-link { display: grid; grid-template-columns: 1fr 1.1fr; align-items: center; gap: 28px; min-height: 300px; padding: 28px 28px 28px 40px; border-radius: var(--projects-card-radius); }
 .projects-main .project-copy { min-width: 0; max-width: none; margin: 0; font: inherit; }
 .projects-main .project-kind { margin: 0 0 14px; color: var(--projects-secondary); font-size: 0.75rem; font-weight: 550; line-height: 1.4; letter-spacing: .035em; }
-.projects-main .project-heading { display: flex; align-items: center; gap: 24px; justify-content: space-between; }
 .projects-main .directory-title { display: block; color: var(--project-title-ink, var(--projects-ink)); margin: 0; font-weight: 600; font-size: clamp(1.875rem, 3.1vw, 2.75rem); letter-spacing: -.04em; line-height: 1.1; overflow-wrap: anywhere; text-wrap: balance; transition: none; }
 .projects-main .directory-link:hover .directory-title { color: var(--project-title-ink, var(--projects-ink)); }
 /* Retain the project's script, printed in the card's black-and-white palette. */
@@ -100,10 +99,6 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   padding-block: .08em .12em;
 }
 .projects-main .directory-description { display: block; max-width: 39ch; margin: 16px 0 0; color: var(--projects-secondary); font-size: 1rem; line-height: 1.5; letter-spacing: -.012em; }
-.projects-main .directory-arrow { display: grid; place-items: center; flex: 0 0 36px; width: 36px; height: 36px; border: 1px solid var(--projects-line); border-radius: var(--projects-preview-radius); color: var(--projects-ink); font-size: 1rem; line-height: 1; transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease; }
-.projects-main .directory-arrow svg { transition: transform 240ms cubic-bezier(.2,.7,.2,1); }
-.projects-main .directory-link:is(:hover,:focus-visible) .directory-arrow { background: var(--projects-ink); border-color: var(--projects-ink); color: var(--projects-surface); }
-.projects-main .directory-link:is(:hover,:focus-visible) .directory-arrow svg { transform: translate(1px,-1px); }
 .projects-main .project-preview { aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--projects-preview-radius); background: var(--projects-preview-surface); }
 .projects-main .project-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
 /* The Polaroid preview uses a physical-print treatment. */
@@ -131,18 +126,15 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .projects-main .project-card-preview--device img { object-fit: contain; transform: scale(1.18); transform-origin: 50% 55%; }
 .projects-main .directory-link:focus-visible .project-card-preview--device img { transform: scale(1.18) !important; }
 .projects-main .project-card .project-copy { display: flex; flex: 1; flex-direction: column; width: 100%; }
-.projects-main .project-card .project-heading { align-items: flex-start; gap: 16px; }
 .projects-main .project-card .directory-title { font-size: 1.5rem; line-height: 1.15; letter-spacing: -.032em; text-wrap: pretty; }
 .projects-main .project-card .directory-description { max-width: 48ch; margin-top: 10px; padding-top: 0; font-size: .9375rem; overflow-wrap: anywhere; }
 .projects-main .project-card .project-kind { margin-bottom: 6px; }
-.projects-main .project-card .directory-arrow { width: 32px; height: 32px; flex-basis: 32px; }
 .projects-main .project-card--figures .directory-link { justify-content: flex-start; gap: 8px; }
 .figures-title-stack { container-type: inline-size; width: calc(100% + 24px); margin-inline: -12px; }
 .figures-title-stack > * { display: block; margin: 0; white-space: nowrap; font: 500 clamp(28px, 3.5vw, 68px)/.86 "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 14.2cqi; letter-spacing: -.065em; }
 .figures-dictionary { font: 14px/1.5 Georgia, "Times New Roman", serif; }
 .figures-dictionary p { margin: 0; }
-.figures-dictionary-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 5px; }
-.figures-pronunciation { color: var(--projects-secondary); }
+.figures-dictionary .figures-pronunciation { margin-bottom: 5px; color: var(--projects-secondary); }
 .figures-dictionary dfn { font-style: normal; font-weight: 700; }
 .projects-main .project-card--music .directory-link { position: relative; isolation: isolate; padding: 10px 16px 18px; gap: 0; justify-content: center; overflow: hidden; }
 .projects-main .project-card--music .project-card-preview--device { height: 220px; overflow: visible; border: 0; background: transparent; z-index: 1; }
@@ -159,12 +151,10 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 @media (max-width: 700px) {
   .projects-main .project-feature .directory-link { grid-template-columns: 1fr; gap: 24px; padding: 24px; min-height: 0; }
   .projects-main .directory-title { font-size: 2rem; letter-spacing: -.04em; }
-  .projects-main .project-heading { gap: 16px; }
   .projects-main .project-kind { margin-bottom: 10px; }
   .projects-main .directory-description { margin-top: 12px; font-size: 0.9375rem; }
   .projects-main .project-card .directory-link { padding: 18px; }
   .projects-main .project-card--music .directory-link { padding: 8px 12px 18px; }
-  .projects-main .directory-arrow { width: 32px; height: 32px; flex-basis: 32px; }
   .projects-footer { margin-top: 24px; }
 }
 @media (max-width: 600px) {
@@ -174,7 +164,6 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 @media (max-width: 380px) {
   .projects-main .project-feature .directory-link { padding: 20px; }
   .projects-main .directory-title { font-size: 1.8125rem; }
-  .projects-main .project-heading { gap: 12px; }
 }
 
 .projects-main .project-feature--gran-turismo {
@@ -368,10 +357,6 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .project-card--battlefront .directory-link:is(:hover, :focus-visible) .battlefront-panel--guardian svg { transform: translate(5px, 3px) scale(1.05); }
 .project-card--battlefront .directory-link:is(:hover, :focus-visible) .battlefront-panel--duelist svg { transform: translate(-5px, 3px) scale(1.05); }
 .battlefront-caption {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
   padding: 14px clamp(14px, 2.1vw, 22px);
 }
 .battlefront-caption h2 {
@@ -383,8 +368,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .projects-main .directory-link, .projects-main .directory-arrow, .projects-main .directory-arrow svg { transition: none; }
-  .projects-main .directory-link, .projects-main .directory-arrow svg { transform: none !important; }
+  .projects-main .directory-link { transition: none; transform: none !important; }
   .projects-main .photo-print { transform: translate(-50%, -50%) !important; }
   .projects-main .photo-emulsion, .projects-main .photo-sheen { opacity: 0 !important; }
   .projects-main .project-card-preview--device img { transform: scale(1.18) !important; }
@@ -404,7 +388,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
   .projects-main, .projects-footer { color: CanvasText; --projects-ink: CanvasText; --projects-secondary: CanvasText; --projects-line: CanvasText; --projects-focus: Highlight; }
   .projects-main .directory > li { --projects-ink: LinkText; --projects-secondary: CanvasText; --projects-surface: Canvas; --projects-surface-hover: Canvas; --projects-surface-pressed: Canvas; --projects-line: LinkText; --projects-hover-line: LinkText; --projects-preview-surface: Canvas; }
   .projects-main .directory-link { forced-color-adjust: auto; }
-  .projects-main :is(.project-feature, .project-card) .directory-link, .projects-main .directory-arrow { background: Canvas; color: LinkText; border-color: LinkText; }
+  .projects-main :is(.project-feature, .project-card) .directory-link { background: Canvas; color: LinkText; border-color: LinkText; }
   .projects-main .directory-link:focus-visible { outline-color: Highlight; }
   .projects-main .directory-description, .projects-main .project-kind { color: CanvasText; }
   .projects-main .project-theme--polaroid { --project-title-ink: LinkText; }

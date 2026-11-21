@@ -88,19 +88,21 @@ const server = http.createServer((req, res) => {
         await page.locator('.technical-details').evaluate(details => { details.open = true; });
         await page.locator('.process-viewer').evaluate(dialog => dialog.showModal());
       }
-      const arrows = await page.locator('svg[data-site-arrow="north-east"]').evaluateAll(icons => icons.map(icon => {
-        const style = getComputedStyle(icon), box = icon.getBoundingClientRect();
-        return { width: box.width, height: box.height, rendered: icon.checkVisibility(), display: style.display, fill: style.fill, stroke: style.stroke, hidden: icon.getAttribute('aria-hidden'), focusable: icon.getAttribute('focusable'), length: icon.querySelector('path').getTotalLength() };
-      }));
-      assert(arrows.length > 0);
-      assert(arrows.every(icon => icon.fill === 'none' && icon.stroke !== 'none' && icon.hidden === 'true' && icon.focusable === 'false' && icon.length > 0), `${slug || 'Projects'}: invalid SVG arrow`);
-      assert(arrows.filter(icon => icon.rendered).every(icon => icon.width > 0 && icon.height > 0 && icon.display !== 'none'), `${slug || 'Projects'}: ${JSON.stringify(arrows)}`);
       if (!slug) {
-        assert.equal(arrows.length, 6);
-        assert(arrows.every(icon => icon.rendered), 'All Projects row arrows must render on mobile');
+        const cards = page.locator('.directory-link');
+        assert.equal(await cards.count(), 7);
+        assert.equal(await cards.locator('.directory-arrow, [data-site-arrow="north-east"]').count(), 0);
         assert(!await page.locator('body').evaluate(body => body.textContent.includes('\u2197')));
-        await page.screenshot({ path: path.join(output, 'projects-phone-svg-arrows.png'), fullPage: true });
-        assert.equal(await page.locator('.directory-link').first().getAttribute('href'), 'polaroid-of-yesterday/');
+        await page.screenshot({ path: path.join(output, 'projects-phone.png'), fullPage: true });
+        assert.equal(await cards.first().getAttribute('href'), 'polaroid-of-yesterday/');
+      } else {
+        const arrows = await page.locator('svg[data-site-arrow="north-east"]').evaluateAll(icons => icons.map(icon => {
+          const style = getComputedStyle(icon), box = icon.getBoundingClientRect();
+          return { width: box.width, height: box.height, rendered: icon.checkVisibility(), display: style.display, fill: style.fill, stroke: style.stroke, hidden: icon.getAttribute('aria-hidden'), focusable: icon.getAttribute('focusable'), length: icon.querySelector('path').getTotalLength() };
+        }));
+        assert(arrows.length > 0, `${slug}: expected SVG arrows`);
+        assert(arrows.every(icon => icon.fill === 'none' && icon.stroke !== 'none' && icon.hidden === 'true' && icon.focusable === 'false' && icon.length > 0), `${slug}: invalid SVG arrow`);
+        assert(arrows.filter(icon => icon.rendered).every(icon => icon.width > 0 && icon.height > 0 && icon.display !== 'none'), `${slug}: ${JSON.stringify(arrows)}`);
       }
       await page.close();
     }
@@ -108,6 +110,6 @@ const server = http.createServer((req, res) => {
     assert.deepEqual(errors, []);
     fs.writeFileSync(path.join(output, 'results.json'), JSON.stringify(results, null, 2) + '\n');
     console.log(JSON.stringify(results, null, 2));
-    console.log('Passed: desktop/phone/4K responsive film photos; requested 3000x2000 portrait; arrival-time 3D loading; photo/car interactions; SVG arrow geometry on all five affected mobile routes; no home page errors or overflow.');
+    console.log('Passed: desktop/phone/4K responsive film photos; requested 3000x2000 portrait; arrival-time 3D loading; photo/car interactions; seven arrow-free Projects cards and SVG arrows on four detail routes; no home page errors or overflow.');
   } finally { await browser.close(); await new Promise(done => server.close(done)); }
 })().catch(error => { console.error(error); server.close(); process.exitCode = 1; });
