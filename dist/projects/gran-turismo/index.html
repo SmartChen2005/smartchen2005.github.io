@@ -20,9 +20,14 @@
         <p class="flight-title" data-cue data-start="0" data-end=".15">Gran Turismo</p>
         <p class="flight-caption" data-cue data-start=".225" data-end=".335">You are an explorer returning home after years away.</p>
         <p class="flight-caption" data-cue data-start=".335" data-end=".43">Your people have vanished. Only ruins remain.</p>
-        <p class="flight-caption" data-cue data-start=".43" data-end=".515">Throw a Star Stone. Teleport to where it lands.</p>
-        <p class="flight-caption" data-cue data-start=".515" data-end=".625">Use your thruster to steer. Balance oxygen and fuel to keep going.</p>
-        <p class="flight-caption" data-cue data-start=".67" data-end=".85">When the world you knew is gone, what does it mean to come home?</p>
+        <p class="flight-caption" id="star-stone-cue" data-cue data-start=".43" data-end=".534">Throw a Star Stone. Teleport to where it lands.</p>
+        <p class="flight-caption" data-cue data-start=".534" data-end=".625">Use your thruster to steer. Balance oxygen and fuel to keep going.</p>
+        <p class="flight-caption" data-cue data-start=".663" data-end=".771">At the edge of the ruins, you find the gate your people crossed.</p>
+        <div class="flight-caption flight-choice" data-cue data-start=".771" data-end=".900">
+          <p><strong>Now you have a choice.</strong></p>
+          <p>Stay with Tavi’s people and rebuild here.</p>
+          <p>Or follow your people through the gate into the unknown.</p>
+        </div>
         <div class="flight-media" data-link>
           <div class="flight-player">
             <a href="https://www.youtube.com/watch?v=OFylHWSwYDY" target="_blank" rel="noopener noreferrer">Watch Gameplay Demo <span aria-hidden="true">↗</span></a>
@@ -42,7 +47,6 @@
         <div class="atlas-timeline" id="atlas-timeline" hidden>
           <div class="timeline-head">
             <label for="map-history">Build timeline</label>
-            <time id="history-date"></time>
           </div>
           <input id="map-history" type="range" min="0" step="1" aria-describedby="history-summary" list="history-stops">
           <datalist id="history-stops"></datalist>

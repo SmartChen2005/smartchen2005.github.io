@@ -2,17 +2,18 @@
   'use strict';
 
   const $ = id => document.getElementById(id);
-  const { camera, project, dot, span, meshBatch, clearCanvas, createRenderer } = window.grandTurismoRender;
+  const { camera, project, dot, span, pose, meshBatch, clearCanvas, createRenderer } = window.grandTurismoRender;
   const notes = window.grandTurismoNotes;
   const approach = $('approach'), section = $('atlas'), scene = $('survey-scene'), plot = $('plot'), picker = $('contact');
   const flightCues = Array.from(approach.querySelectorAll('[data-cue]'), element => ({
     element, start: Number(element.dataset.start), end: Number(element.dataset.end),
   }));
+  const stoneCue = flightCues.find(({ element }) => element.id === 'star-stone-cue');
   const flightVideo = $('flight-video'), flightMedia = flightVideo.closest('.flight-media');
   const timeline = $('map-history'), history = window.GRAND_TURISMO_HISTORY;
   const currentIndex = history?.milestones.length ?? 0;
   const latest = {
-    date: '2026-11-19', title: 'Current survey',
+    title: 'Current survey',
     summary: 'The World Tree, music stars, and Tavi encounters expanded the route.',
   };
   const blockoutNotes = {
@@ -21,9 +22,6 @@
     finish: ['Route endpoint', 'The final veil marks the end of the fifth leg.',
       'The expedition leads from the departure point through the four Monoliths to this threshold.'],
   };
-  const timelineDate = new Intl.DateTimeFormat('en-US', {
-    month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC',
-  });
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const compact = matchMedia('(max-width: 820px)');
   const markerArt = {
@@ -52,6 +50,7 @@
   let flightProgress, lastFlightFrame;
   let controls = resetCamera(), panMode = false, drag, ignoreClick = false, etag = '', syncing = false;
   let currentMap = window.GRAND_TURISMO_MAP, milestoneIndex = currentIndex, historyFrame = 0;
+  let stoneImpact, portal, tavi;
 
   function pointsOf(node) {
     return node.bounds.length ? node.bounds : [node.p];
@@ -167,6 +166,117 @@
     return [center[0] - Math.sin(angle) * radius, center[1] + rise, center[2] - Math.cos(angle) * radius];
   }
 
+  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  const normalize = p => p.map(n => n / (Math.hypot(...p) || 1));
+
+  function findStoneImpact() {
+    const fragment = byId.get('2027100');
+    const name = fragment?.scenery?.[0];
+    if (!data.models.StarStone || name !== 'Fragments/AncientRuins/MonolithCrown') return null;
+    const [points, faces] = data.models[name];
+    // Center the impact on the outward face of this archived crown fragment.
+    const [a, b, c] = faces.slice(6, 9).map(i => pose(...points.slice(i * 3, i * 3 + 3), fragment));
+    const right = normalize(b.map((n, i) => n - a[i]));
+    const normal = normalize(cross(right, c.map((n, i) => n - a[i])));
+    return { point: a.map((n, i) => (n + b[i] + c[i]) / 3), right, up: cross(normal, right), normal };
+  }
+
+  function sigilStrokes() {
+    const strokes = [];
+    const polar = (a, r) => [Math.cos(a) * r, Math.sin(a) * r];
+    for (let i = 0; i < 24; i++) {
+      const a = i * Math.PI / 12, b = (i + 1) * Math.PI / 12;
+      strokes.push([polar(a, .84), polar(b, .84), .050, true]);
+      if (i % 6 !== 5) strokes.push([polar(a, 1), polar(b - .035, 1), .061, true]);
+    }
+    for (let i = 0; i < 6; i++) {
+      const a = i * Math.PI / 3, center = polar(a, .71);
+      const diamond = Array.from({ length: 4 }, (_, j) => polar(a + j * Math.PI / 2, j % 2 ? .034 : .065)
+        .map((n, k) => n + center[k]));
+      for (let j = 0; j < 4; j++) strokes.push([diamond[j], diamond[(j + 1) % 4], .036, false]);
+      strokes.push([polar(a, .56), polar(a + Math.PI / 3, .56), .047, false]);
+      strokes.push([polar(a, .34), polar(a, .47), .046, false]);
+    }
+    for (let i = 0; i < 4; i++) strokes.push([polar(i * Math.PI / 2, .035), polar(i * Math.PI / 2, .15), .04, false]);
+    return strokes;
+  }
+
+  const runeStrokes = sigilStrokes();
+
+  function surfaceSigil(impact, age) {
+    const { point, right, up, normal } = impact;
+    const pulse = Math.sin(Math.PI * clamp(age / .52, 0, 1));
+    const vertices = [];
+    for (const [a, b, width, outer] of runeStrokes) {
+      const reveal = ease(clamp((age - (outer ? 0 : .13)) / .43, 0, 1));
+      const radius = 1.68 * reveal * (1 + .07 * pulse);
+      const tangent = normalize([b[0] - a[0], b[1] - a[1]]);
+      const dx = -tangent[1] * width * .64, dy = tangent[0] * width * .64;
+      const corners = [[a[0]-dx, a[1]-dy], [a[0]+dx, a[1]+dy], [b[0]+dx, b[1]+dy], [b[0]-dx, b[1]-dy]];
+      for (const i of [0, 1, 2, 0, 2, 3]) {
+        const [x, y] = corners[i];
+        vertices.push(...point.map((n, k) => n + normal[k] * .026 + radius * (right[k] * x + up[k] * y)),
+          1, .16 + pulse * .09, .14);
+      }
+    }
+    const opacity = .96 * (1 - ease(clamp((age - .68) / .32, 0, 1)));
+    return { batch: { vertices: Float32Array.from(vertices) }, opacity, gain: 1.53 };
+  }
+
+  const stoneLaunch = (stoneCue?.start ?? .43) + .004;
+  const stoneHit = (stoneCue?.start ?? .43) + .048;
+
+  function stonePosition(t, width, height) {
+    const entry = flightCamera(stoneLaunch, width, height);
+    const frame = camera(entry.yaw, entry.elevation, entry.center, entry.scale, width / 2, height / 2);
+    const near = 24;
+    const from = entry.center.map((n, i) => n + frame.depth[i] * (near - entry.distance) -
+      frame.right[i] * width / height * near * .60 + frame.up[i] * near * .06);
+    const target = stoneImpact.point.map((n, i) => n + stoneImpact.normal[i] * .98);
+    // Bow around the fragment to meet the marked face from the open side.
+    const p = from.map((n, i) => mix(n, target[i], t) + stoneImpact.normal[i] * 12 * Math.sin(Math.PI * t));
+    p[1] += 14 * t * (1 - t);
+    return p;
+  }
+
+  function stoneShot(base, progress, width, height) {
+    if (!stoneImpact || !stoneCue || progress < stoneLaunch || progress >= stoneCue.end + .032) {
+      return { view: base, effects: [] };
+    }
+    const t = clamp((progress - stoneLaunch) / (stoneHit - stoneLaunch), 0, 1);
+    const p = stonePosition(t, width, height);
+    const approach = ease(clamp((progress - stoneLaunch) / .045, 0, 1));
+    const release = 1 - ease(clamp((progress - stoneCue.end + .021) / .053, 0, 1));
+    const weight = approach * release;
+    const direction = camera(base.yaw, base.elevation, base.center, base.scale, 0, 0).depth;
+    const orbitEye = base.center.map((n, i) => n - direction[i] * base.distance);
+    const { point, normal, right, up } = stoneImpact;
+    const portrait = clamp(1 - width / height, 0, 1);
+    const drift = ease(clamp((progress - stoneLaunch) / (stoneCue.end - stoneLaunch), 0, 1));
+    const closeEye = point.map((n, i) => n + normal[i] * (21 + 12 * portrait) +
+      right[i] * mix(-10, -3, drift) + up[i] * 4.5);
+    const eye = offset(orbitEye, closeEye, weight);
+    // Lead the throw toward the surface so the camera drifts past the stone instead of locking to it.
+    const narrow = clamp((1.25 - width / height) / .8, 0, 1);
+    const lead = mix(.62, .10, narrow);
+    const aimWeight = 1 - (1 - weight) ** (1 + 2 * narrow);
+    const aim = offset(base.center, offset(p, point, lead), aimWeight);
+    const view = flightView(eye, aim, aim, 0, base.focus, base.range, height);
+    view.frameX = mix(base.frameX ?? .5, .56, weight);
+    view.frameY = mix(base.frameY ?? .5, .45, weight);
+
+    const effects = [];
+    const age = (progress - stoneHit) / (stoneCue.end - stoneHit);
+    if (age >= 0 && age < 1) effects.push(surfaceSigil(stoneImpact, age));
+    const opacity = 1 - ease(clamp((progress - stoneHit) / .006, 0, 1));
+    if (opacity <= 0) return { view, effects };
+    const spin = 1 + 5 * t, size = [12, 12, 12];
+    const q = [0, .8 * Math.sin(spin), .6 * Math.sin(spin), Math.cos(spin)];
+    const parts = [['StarStone', ['#d9d9d9', '#212429', '#e6080a', '#fa151b']]];
+    effects.push({ batch: meshBatch(data.models, [{ p, q, size, parts }]), opacity, gain: 1.22 });
+    return { view, effects };
+  }
+
   function orbitVelocity(angle, speed, riseSpeed = 0) {
     return [-Math.cos(angle) * speed, riseSpeed, Math.sin(angle) * speed];
   }
@@ -196,10 +306,10 @@
   }
 
   function flightCamera(progress, width, height) {
-    const treeExit = .60, portalArrival = .67, portalExit = .84, treePass = .93;
+    const treeExit = .60, portalArrival = .665, taviArrival = .761, portalExit = .857, treePass = .93;
     const portrait = clamp((1 - width / height) / .55, 0, 1);
     const shipCenter = ship ? span(pointsOf(ship)).center : data.spawn;
-    const portal = route.at(-1) || data.spawn;
+    const veil = portal?.p || data.spawn;
     const startRadius = 66 + portrait * 26, treeRadius = startRadius + 37;
     const treeStart = .45, treeSweep = -3 * Math.PI, treeAngle = treeStart + treeSweep;
     const startRise = 16.5, endRise = 28;
@@ -211,22 +321,38 @@
     }
 
     // The portal orbit starts on its ship-facing side. Its tangent points left across the route.
-    const portalAngle = Math.atan2(portal[0] - shipCenter[0], portal[2] - shipCenter[2]);
+    const portalAngle = Math.atan2(veil[0] - shipCenter[0], veil[2] - shipCenter[2]);
     const portalRadius = 52 + portrait * 32;
-    const portalFront = orbitPoint(portal, portalAngle, portalRadius, 11);
-    const portalVelocity = orbitVelocity(portalAngle, portalRadius * 2 * Math.PI * .62 / (portalExit - portalArrival));
+    const portalFront = orbitPoint(veil, portalAngle, portalRadius, 11);
+    const angularSpeed = Math.PI * 2 * .62 / (taviArrival - portalArrival);
+    const portalVelocity = orbitVelocity(portalAngle, portalRadius * angularSpeed);
     if (progress < portalArrival) {
       const leaving = orbitPoint(treeCenter, treeAngle, treeRadius, endRise);
       const velocity = orbitVelocity(treeAngle, treeRadius * treeSweep * .6 / treeExit, (endRise - startRise) / treeExit);
       const eye = cruise(leaving, portalFront, velocity, portalVelocity, progress, treeExit, portalArrival);
       const blend = ease((progress - treeExit) / (portalArrival - treeExit));
-      return flightView(eye, treeCenter, portal, blend, offset(treeCenter, portal, blend), mix(218, 200, blend), height, 1);
+      return flightView(eye, treeCenter, veil, blend, offset(treeCenter, veil, blend), mix(218, 200, blend), height, 1);
+    }
+    const companion = tavi?.p || veil;
+    const companionRadius = tavi ? 4.8 + portrait * 1.8 : portalRadius;
+    const companionRise = tavi ? 1.2 : 11;
+    const companionFrameX = tavi ? mix(.57, .51, portrait) : .5;
+    const companionFrameY = tavi ? .41 : .5;
+    const arcAngle = t => portalAngle + 2 * Math.PI * mix(t, ease(t), .38);
+    if (progress < taviArrival) {
+      const t = (progress - portalArrival) / (taviArrival - portalArrival);
+      const eye = orbitPoint(veil, arcAngle(t), portalRadius, 11);
+      return flightView(eye, veil, veil, 0, veil, 200, height);
     }
     if (progress <= portalExit) {
-      const t = (progress - portalArrival) / (portalExit - portalArrival);
-      const angle = portalAngle + 2 * Math.PI * mix(t, ease(t), .38);
-      const eye = orbitPoint(portal, angle, portalRadius, 11);
-      return flightView(eye, portal, portal, 0, portal, 200, height);
+      const t = (progress - taviArrival) / (portalExit - taviArrival);
+      const drift = ease(clamp(t / .46, 0, 1));
+      const aim = offset(veil, companion, drift);
+      const eye = orbitPoint(aim, arcAngle(t), mix(portalRadius, companionRadius, drift), mix(11, companionRise, drift));
+      const view = flightView(eye, aim, aim, 0, aim, 200, height);
+      view.frameX = mix(.5, companionFrameX, drift);
+      view.frameY = mix(.5, companionFrameY, drift);
+      return view;
     }
 
     // Left is relative to travel from the ship toward the portal.
@@ -236,9 +362,14 @@
     const southbound = [-Math.sin(portalAngle) * 1500, 0, -Math.cos(portalAngle) * 1500];
     if (progress < treePass) {
       const t = (progress - portalExit) / (treePass - portalExit);
-      const eye = cruise(portalFront, waypoint, portalVelocity, southbound, progress, portalExit, treePass);
+      const leaving = orbitPoint(companion, portalAngle, companionRadius, companionRise);
+      const velocity = orbitVelocity(portalAngle, companionRadius * angularSpeed);
+      const eye = cruise(leaving, waypoint, velocity, southbound, progress, portalExit, treePass);
       const blend = ease(t);
-      return flightView(eye, portal, treeCenter, blend, offset(portal, treeCenter, blend), mix(200, 315, blend), height, 1);
+      const view = flightView(eye, companion, treeCenter, blend, offset(companion, treeCenter, blend), mix(200, 315, blend), height);
+      view.frameX = mix(companionFrameX, .5, blend);
+      view.frameY = mix(companionFrameY, .5, blend);
+      return view;
     }
     // Frame the sails and full hull opposite the video.
     const narrow = clamp((1.23 - width / height) / .78, 0, 1);
@@ -331,7 +462,9 @@
     scene.style.height = `${height}px`;
     section.style.setProperty('--archive-reveal', ease(clamp((docking - .07) / .79, 0, 1)));
     const progress = mix(flightProgress, 1, blend);
-    const from = flightCamera(progress, width, height);
+    const flight = flightCamera(progress, width, height);
+    const { view: from, effects } = blend ? { view: flight, effects: [] } : stoneShot(flight, progress, width, height);
+    if (!blend && tavi && progress >= .60 && progress <= .91) effects.push(tavi.effect);
     const frameX = width * (from.frameX ?? .5);
     const frameY = height * (from.frameY ?? .5);
     if (!blend) {
@@ -339,7 +472,7 @@
       view.distance = from.distance;
       view.perspective = 1;
       drawSky(atlas, view, width, height);
-      atlas.renderer.draw(view, width, height, 1.12, from.focus, from.range, 1);
+      atlas.renderer.draw(view, width, height, 1.12, from.focus, from.range, 1, effects);
       return flightProgress !== target;
     }
     const to = atlasCamera(width, height);
@@ -466,12 +599,23 @@
     const previous = selected?.id;
     data = next;
     byId = new Map(data.nodes.map(node => [node.id, node]));
+    stoneImpact = findStoneImpact();
     contacts = data.nodes.filter(node => node.kind !== 'debris');
     terrain = data.nodes.filter(node => node.kind === 'debris' && node.bounds.length);
     ship = contacts.find(node => node.kind === 'ship' || node.kind === 'prototypeShip');
     const tree = contacts.find(node => node.kind === 'WorldTree') || ship || contacts[0];
     treeCenter = span(pointsOf(tree)).center;
-    route = data.prototype ? [] : [data.spawn, ...data.route.map(id => byId.get(id).p), contacts.find(node => node.kind === 'finish').p];
+    portal = contacts.find(node => node.kind === 'finish');
+    route = data.prototype ? [] : [data.spawn, ...data.route.map(id => byId.get(id).p), portal.p];
+    tavi = null;
+    if (portal?.veil && data.flightTavi && data.models.TaviSphere) {
+      // Stage Tavi beside the wall, outside both its aperture and the close orbit.
+      const p = pose(-portal.dimensions[0] / 2 - 8, 1.5, -12, portal);
+      const diameter = data.flightTavi.diameter * 2.1;
+      const parts = [['TaviSphere', [data.flightTavi.color, '#ffedba', '#dcaa63']]];
+      const batch = meshBatch(data.models, [{ p, q: portal.q, size: [diameter, diameter, diameter], parts }]);
+      tavi = { p, effect: { batch, opacity: 1, gain: 1.45 } };
+    }
     section.toggleAttribute('data-prototype', Boolean(data.prototype));
     section.toggleAttribute('data-blockout', Boolean(data.blockout));
     worldPoints = [...data.nodes.flatMap(pointsOf), ...(data.blockout ? [data.spawn] : [])];
@@ -514,12 +658,9 @@
 
   function describeMilestone(index, entry) {
     timeline.value = index;
-    const label = timelineDate.format(new Date(entry.date));
-    $('history-date').dateTime = entry.date;
-    $('history-date').textContent = label;
     $('history-title').textContent = entry.title;
     $('history-note').textContent = entry.summary;
-    timeline.setAttribute('aria-valuetext', `${label}, ${entry.title}`);
+    timeline.setAttribute('aria-valuetext', entry.title);
   }
 
   function showMilestone(index) {

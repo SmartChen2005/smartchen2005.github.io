@@ -141,6 +141,10 @@ At the time this standard was added, the repository contains the complete curren
 - `node tools/import-ai-game-design.mjs [path to Vibe Coding for Games]` imports playables from pinned commits `cac95cb` (No Signal, Catwalk, and Catwalk's nine timeline builds) and `56e65d8` (Two Minds). The archive uses the original builds and excludes the original project menu. The Home links in No Signal and Catwalk return to the study. The shared HTML rewrite tools skip the imported builds.
 - The game plates are captures of No Signal's first level, Catwalk's campaign route, and the False Water Curtain formation in Two Minds (source capture `docs/game3/audits/2026-09-09-false-water-curtain-formation.png` in `56e65d8`). The Projects cover combines the three captures. Update the directory with `node tools/render-projects.mjs`.
 
+### 2026-11-20 — Publish the Gran Turismo Tavi Choice atlas
+
+- Publish the seven webpage files from `Gran Turismo Website 2026-11-20 v3` at `/projects/gran-turismo/`. The files match the `gran-turismo-sites-tavi-choice-deployment.tar` export for `archive/2026-11-20-atlas-tavi-choice` and add Tavi's choice to the opening flythrough.
+
 ### 2026-11-19 — Replace the standalone Gran Turismo atlas with v4
 
 - Publish the supplied `Gran Turismo Website 2026-11-19 v4` folder byte-for-byte at `/projects/gran-turismo/`. This edition adds the interactive map history and its bundled milestone data.

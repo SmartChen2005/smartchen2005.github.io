@@ -156,11 +156,12 @@
       return {
         gpu: false,
         upload(data, surroundings) { batch = data; scenery = surroundings; },
-        draw(view, width, height, gain, focus = view.center, range = 2000, opacity = 0) {
+        draw(view, width, height, gain, focus = view.center, range = 2000, opacity = 0, effects = []) {
           const ctx = clearCanvas(canvas, width, height);
           if (scenery && opacity) paintBatch(ctx, view, scenery, gain, focus, range, opacity);
           if (batch) paintBatch(ctx, view, batch, gain, focus, range, 1);
           if (batch?.veil) paintVeil(ctx, view, batch.veil, focus, range);
+          for (const effect of effects) paintBatch(ctx, view, effect.batch, effect.gain, focus, range, effect.opacity);
         },
       };
     }
@@ -211,12 +212,13 @@
     const uniforms = Object.fromEntries(['Center', 'Right', 'Up', 'Depth', 'Scale', 'Offset', 'LensDistance', 'Perspective', 'Gain', 'Focus', 'Distance', 'Opacity', 'DrawVeil', 'Veil'].map(name => [name, gl.getUniformLocation(program, `u${name}`)]));
     const buffer = gl.createBuffer();
     gl.useProgram(program);
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    for (const [name, offset] of [['aPosition', 0], ['aColor', 12]]) {
-      const attribute = gl.getAttribLocation(program, name);
-      gl.enableVertexAttribArray(attribute);
-      gl.vertexAttribPointer(attribute, 3, gl.FLOAT, false, 24, offset);
+    const attributes = ['aPosition', 'aColor'].map(name => gl.getAttribLocation(program, name));
+    for (const attribute of attributes) gl.enableVertexAttribArray(attribute);
+    function bindMeshBuffer(source) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, source);
+      attributes.forEach((attribute, i) => gl.vertexAttribPointer(attribute, 3, gl.FLOAT, false, 24, i * 12));
     }
+    bindMeshBuffer(buffer);
     gl.enable(gl.DEPTH_TEST);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
@@ -227,7 +229,7 @@
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
     gl.uniform1i(uniforms.Veil, 0);
     let count = 0, sceneryCount = 0, veilCount = 0;
-    let uploadedVeil;
+    let uploadedVeil, effectsBuffer;
     return {
       gpu: true,
       upload(batch, scenery) {
@@ -246,7 +248,7 @@
           }
         }
       },
-      draw(view, width, height, gain, focus = view.center, distance = 2000, opacity = 0) {
+      draw(view, width, height, gain, focus = view.center, distance = 2000, opacity = 0, effects = []) {
         sizeCanvas(canvas, width, height);
         gl.viewport(0, 0, canvas.width, canvas.height);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -275,9 +277,25 @@
           gl.drawArrays(gl.TRIANGLES, count + sceneryCount, veilCount);
           gl.disable(gl.BLEND);
         }
+        if (effects.length) {
+          effectsBuffer ??= gl.createBuffer();
+          bindMeshBuffer(effectsBuffer);
+          gl.uniform1i(uniforms.DrawVeil, 0);
+          gl.enable(gl.BLEND);
+          for (const effect of effects) {
+            gl.depthMask(effect.opacity === 1);
+            gl.uniform1f(uniforms.Gain, effect.gain);
+            gl.uniform1f(uniforms.Opacity, effect.opacity);
+            gl.bufferData(gl.ARRAY_BUFFER, effect.batch.vertices, gl.DYNAMIC_DRAW);
+            gl.drawArrays(gl.TRIANGLES, 0, effect.batch.vertices.length / 6);
+          }
+          gl.depthMask(true);
+          gl.disable(gl.BLEND);
+          bindMeshBuffer(buffer);
+        }
       },
     };
   }
 
-  window.grandTurismoRender = { camera, project, dot, span, meshBatch, clearCanvas, createRenderer };
+  window.grandTurismoRender = { camera, project, dot, span, pose, meshBatch, clearCanvas, createRenderer };
 })();

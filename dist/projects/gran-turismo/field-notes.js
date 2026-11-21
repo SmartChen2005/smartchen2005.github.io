@@ -20,7 +20,7 @@ window.grandTurismoNotes = {
   blackHole: ['Gravity anomaly', 'Gravity bends a Star Stone in free flight. Read its pull before throwing near the well. Outer debris can offer a landing surface.',
     'The wells remained after the catastrophe. Some are surrounded by fragments that still follow their gravity.'],
   finish: ['Dimensional threshold', 'Activate all four Monoliths, then aim a Star Stone at the bright center of the veil.',
-    'The civilization committed its remaining resources to a crossing. The records lead here. The fate of those who reached it remains unknown.'],
+    'Your people crossed here. Tavi’s people offer to help rebuild among the ruins. The world beyond the veil remains unknown.'],
   star: ['Sound star', 'Sound stars appear after Monolith {unlock}. Touch one with your hand or body to collect it and bring its track into the soundtrack.',
     'A small iridescent object holding a piece of music. Collected stars sit along the right side of the explorer’s belt.'],
   WorldTree: ['Travellers’ Garden', 'A major landmark between Monoliths 2 and 3. The trunk, roots, and surrounding ruin surfaces offer footholds for Star Stone travel.',
