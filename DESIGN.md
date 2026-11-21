@@ -2,7 +2,7 @@
 
 ## Beyond Vibe Coding (2026-11-19)
 
-The English research study uses a white surface, black type, and grayscale game previews. Gotham sets the main headings, Archivo carries the text, and monospaced labels identify records. The opening lists the experimental period and Codex model above the research question. Each case uses two short paragraphs to explain the creator's responsibilities, what Codex built, and a decision that came out of their collaboration. Generous spacing and fine horizontal rules separate sections. Technical notes and handbook examples use native disclosures. The study's tokens and responsive layout live in `dist/projects/ai-game-design/study.css`.
+The English research study uses a white surface, black type, and grayscale game previews. Gotham sets the main headings, Archivo carries the text, and monospaced labels identify records. The opening lists the experimental period and Codex model above the research question. Each case condenses the original design notes and shows a different part of the work. No Signal explains the wiring rules, Catwalk has a small editor and test jump, and Two Minds records how the creator and GPT found the concept. Generous spacing and fine horizontal rules separate sections. Technical notes and handbook examples use native disclosures. The study's tokens and responsive layout live in `dist/projects/ai-game-design/study.css`.
 
 ## Projects — VR and Battlefront covers (2026-11-16)
 

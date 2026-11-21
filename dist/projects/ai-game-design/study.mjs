@@ -1,65 +1,134 @@
 import './scripts/game2-playtest-model.js';
 
-const power = document.querySelector('#power-lab');
-const powerNodes = [...power.querySelectorAll('[data-powered]')];
-const powerWires = [...power.querySelectorAll('[data-wire]')];
-const powerInputs = [...power.querySelectorAll('input')];
-const list = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
+const connections = document.querySelector('#connection-study');
+const ac = connections.querySelector('[name="ac"]');
+const usb = connections.querySelector('[name="usb"]');
+const distance = connections.querySelector('[name="distance"]');
+const connectionResult = connections.querySelector('output');
 
-function renderPower() {
-  let energized = true;
-  powerNodes[0].classList.add('on');
-  powerInputs.forEach((input, index) => {
-    energized = energized && input.checked;
-    powerNodes[index + 1].classList.toggle('on', energized);
-    powerWires[index].classList.toggle('on', energized);
-  });
-  const reached = powerNodes.slice(1).filter(node => node.classList.contains('on'));
-  power.querySelector('output').textContent = reached.length
-    ? `The outlet reaches ${list.format(reached.map(node => node.textContent))}.`
-    : 'Only the outlet is powered.';
+function renderConnections() {
+  const span = distance.valueAsNumber;
+  const canReach = span <= 2;
+  const hasPicture = ac.checked && usb.checked && canReach;
+
+  connections.querySelector('[data-distance]').textContent = span + ' m';
+  connections.querySelector('[data-wire="ac"]').classList.toggle('on', ac.checked);
+  connections.querySelector('[data-wire="power"]').classList.toggle('on', hasPicture);
+  connections.querySelector('[data-wire="video"]').classList.toggle('on', hasPicture);
+
+  if (!ac.checked) connectionResult.textContent = 'The monitor needs AC power.';
+  else if (!usb.checked) connectionResult.textContent = 'The monitor has power. Connect USB-C for video.';
+  else if (!canReach) connectionResult.textContent = 'The 2 m USB-C cable cannot reach the monitor.';
+  else connectionResult.textContent = 'Picture on. Power and video reach their destinations.';
 }
 
-const route = document.querySelector('#route-lab');
-const routeInputs = [...route.querySelectorAll('input')];
-const routeTrack = route.querySelector('.route-track');
-const worldWidth = 100;
-const gaps = [[20, 46], [38, 62], [73, 87]].map(([start, end]) => ({
-  x: (start + end) / 2,
-  width: end - start,
-}));
+const route = document.querySelector('#route-editor');
+const gap = route.querySelector('[name="gap"]');
+const ledge = route.querySelector('[name="ledge"]');
+const ledgeDrawing = route.querySelector('.route-ledge');
+const groundDrawing = route.querySelector('.route-ground');
+const cat = route.querySelector('.route-cat');
+const jump = route.querySelector('[data-test-jump]');
+const routeResult = route.querySelector('output');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+const worldWidth = 480;
+const gapStart = 136;
+const floor = 74;
+const jumpReach = 144;
+const apex = 41;
+const ledgeRise = 13;
+const ledgeStart = gapStart + 107;
+const ledgeWidth = 44;
+let ground = [];
+let flight;
+
+function percentX(x) {
+  return (x / worldWidth * 100) + '%';
+}
+
+function placeCat(x, y) {
+  cat.style.left = percentX(x);
+  cat.style.top = y + '%';
+}
+
+function cancelJump() {
+  flight?.cancel();
+  flight = undefined;
+}
 
 function renderRoute() {
-  const activeGaps = gaps.filter((_, index) => routeInputs[index].checked);
-  const ground = globalThis.CATWALK_PLAYTEST_MODEL.createGroundSegments(worldWidth, activeGaps);
-  const intervals = ground.map(segment => [segment.x - segment.width / 2, segment.x + segment.width / 2]);
-  routeTrack.replaceChildren(...intervals.map(([start, end]) => {
-    const segment = document.createElement('i');
-    segment.style.setProperty('--start', `${start}%`);
-    segment.style.setProperty('--span', `${end - start}%`);
-    return segment;
+  cancelJump();
+  const gapWidth = gap.valueAsNumber;
+  ground = globalThis.CATWALK_PLAYTEST_MODEL.createGroundSegments(worldWidth, [
+    { x: gapStart + gapWidth / 2, width: gapWidth },
+  ]);
+  groundDrawing.replaceChildren(...ground.map(segment => {
+    const block = document.createElement('i');
+    block.style.left = percentX(segment.x - segment.width / 2);
+    block.style.width = percentX(segment.width);
+    return block;
   }));
-  route.querySelector('output').textContent = `Solid ground: ${intervals.map(([start, end]) => `[${start}, ${end}]`).join(', ')}.`;
+  ledgeDrawing.hidden = !ledge.checked;
+  route.querySelector('[data-gap]').textContent = gapWidth + ' px';
+  placeCat(gapStart, floor);
+  routeResult.textContent = '';
 }
 
-const echo = document.querySelector('#echo-lab');
-const traits = {
-  vigilance: ['Vigilance', 'False Wukong marks a distant attacker when hit from range.'],
-  killing: ['Killing Intent', 'False Wukong turns toward the weakest enemy.'],
-};
+function testJump() {
+  cancelJump();
 
-function renderEcho() {
-  const chosen = echo.querySelector('input:checked').value;
-  const discarded = Object.keys(traits).find(trait => trait !== chosen);
-  echo.querySelector('#kept-trait').textContent = traits[chosen][0];
-  echo.querySelector('#echoed-trait').textContent = traits[discarded][0];
-  echo.querySelector('output').textContent = traits[discarded][1];
+  // Check the descending side of the arc at the ledge's height.
+  const ledgeTime = (1 + Math.sqrt(1 - ledgeRise / apex)) / 2;
+  const ledgeX = gapStart + jumpReach * ledgeTime;
+  const landsOnLedge = ledge.checked && ledgeX >= ledgeStart && ledgeX <= ledgeStart + ledgeWidth;
+  const floorX = gapStart + jumpReach;
+  const landsOnFloor = ground.some(segment => Math.abs(floorX - segment.x) <= segment.width / 2);
+  const falls = !landsOnLedge && !landsOnFloor;
+  const endTime = landsOnLedge ? ledgeTime : 1;
+  const endX = landsOnLedge ? ledgeX : floorX;
+  const endY = landsOnLedge ? floor - ledgeRise : falls ? 101 : floor;
+
+  function finish() {
+    placeCat(endX, endY);
+    if (landsOnLedge) routeResult.textContent = 'The ledge catches the landing.';
+    else if (falls) routeResult.textContent = 'The gap is too wide. Try a ledge.';
+    else routeResult.textContent = 'The cat clears the gap.';
+  }
+
+  if (reducedMotion.matches || typeof cat.animate !== 'function') {
+    finish();
+    return;
+  }
+
+  const frames = Array.from({ length: 21 }, (_, index) => {
+    const t = endTime * index / 20;
+    return {
+      left: percentX(gapStart + jumpReach * t),
+      top: (floor - 4 * apex * t * (1 - t)) + '%',
+    };
+  });
+  if (falls) frames.push({ left: percentX(endX), top: endY + '%' });
+
+  routeResult.textContent = 'Testing the jump…';
+  const animation = cat.animate(frames, { duration: falls ? 750 : 650, easing: 'linear' });
+  flight = animation;
+  animation.onfinish = () => {
+    if (flight !== animation) return;
+    flight = undefined;
+    finish();
+  };
 }
 
-const sketches = [[power, renderPower], [route, renderRoute], [echo, renderEcho]];
-for (const [controls, render] of sketches) {
+route.style.setProperty('--floor', floor + '%');
+ledgeDrawing.style.left = percentX(ledgeStart);
+ledgeDrawing.style.width = percentX(ledgeWidth);
+ledgeDrawing.style.top = (floor - ledgeRise) + '%';
+
+for (const [controls, render] of [[connections, renderConnections], [route, renderRoute]]) {
   render();
   controls.querySelector('fieldset').disabled = false;
-  controls.addEventListener('change', render);
+  controls.addEventListener('input', render);
+  window.addEventListener('pageshow', render);
 }
-window.addEventListener('pageshow', () => sketches.forEach(([, render]) => render()));
+jump.addEventListener('click', testJump);

@@ -10,8 +10,8 @@
   <link rel="stylesheet" href="../../site.css">
   <link rel="stylesheet" href="../../assets/fonts/gotham/gotham.css">
   {{headerAssets}}
-  <link rel="stylesheet" href="study.css?rev=research-roles">
-  <script type="module" src="study.mjs"></script>
+  <link rel="stylesheet" href="study.css?rev=experiment-notes">
+  <script type="module" src="study.mjs?rev=experiment-notes"></script>
 </head>
 <body class="research">
   <a class="skip" href="#main">Skip to content</a>
@@ -66,31 +66,30 @@
           <p class="label">01 / Delegation</p>
           <h3>No Signal</h3>
           <div class="case-notes">
-            <p>I designed and produced the puzzle around the constraints of my own desk, with limited ports, cable reach, and budget. I used the first level to teach power, then introduced a hub when the laptop ran out of ports.</p>
-            <p>Codex built movement, connections, and device feedback in stages. When it asked what USB-C could carry, we specified the power, video, and data rules before expanding the puzzles.</p>
+            <p>I designed and produced a puzzle based on wiring my own desk. I set limits on ports, cable reach, and budget, then planned levels where each new device could upset a wiring plan that had worked before.</p>
+            <p>I handed a complete design brief to Codex. Its questions exposed gaps in the brief, including what USB-C could carry. We clarified those rules and tested movement, wiring, and device feedback in stages as Codex built them.</p>
           </div>
           <div class="case-links"><a class="play-link" href="pages/game1.html">Play No Signal {{arrow}}</a></div>
         </div>
-        <section class="bench" aria-labelledby="power-title">
-          <h4 id="power-title">Trace the power chain</h4>
-          <div class="rule-controls" id="power-lab">
-            <div class="power-map" aria-hidden="true">
-              <span class="on" data-powered="0">Outlet</span><i class="on" data-wire="0"></i>
-              <span class="on" data-powered="1">Adapter</span><i class="on" data-wire="1"></i>
-              <span class="on" data-powered="2">Hub</span><i class="on" data-wire="2"></i>
-              <span class="on" data-powered="3">Laptop</span>
+        <section class="bench" aria-labelledby="connection-title">
+          <h4 id="connection-title">How the connections work</h4>
+          <p class="bench-intro">Plan the wiring, test it, and trace any failure. On this desk, USB-C carries power to the laptop and video back to the monitor.</p>
+          <div class="rule-controls" id="connection-study">
+            <div class="wiring" role="img" aria-label="The power path goes from the outlet through the monitor to the laptop. The video path goes from the laptop to the monitor.">
+              <div><small>Power</small><span>Outlet</span><i class="on" data-wire="ac"></i><span>Monitor</span><i class="on" data-wire="power"></i><span>Laptop</span></div>
+              <div><small>Video</small><span>Laptop</span><i class="on" data-wire="video"></i><span>Monitor</span></div>
             </div>
             <fieldset disabled>
-              <legend class="sr-only">Toggle connections</legend>
-              <label><input type="checkbox" checked> Outlet to adapter</label>
-              <label><input type="checkbox" checked> Adapter to hub</label>
-              <label><input type="checkbox" checked> Hub to laptop</label>
+              <legend class="sr-only">Edit the connections</legend>
+              <label><input type="checkbox" name="ac" checked> Monitor plugged in</label>
+              <label><input type="checkbox" name="usb" checked> 2 m USB-C attached</label>
+              <label class="range-control"><span>Distance</span><input type="range" name="distance" min="1" max="3" step=".25" value="1.5"><span data-distance>1.5 m</span></label>
             </fieldset>
-            <output role="status">The outlet reaches Adapter, Hub, and Laptop.</output>
+            <output role="status">Picture on. Power and video reach their destinations.</output>
           </div>
           <details class="technical">
-            <summary>How power propagates</summary>
-            <p><code>isPlugEnergized()</code> tracks visited endpoints to stop cycles. <code>getPoweredHubDevices()</code> adds reachable hub outputs until no new hub gets power.</p>
+            <summary>What the game checks</summary>
+            <p>Each link needs matching ports, a free socket, and a cable long enough to reach. The game then checks where power, video, audio, and data can go. Later puzzles add hubs and a budget for buying equipment.</p>
           </details>
         </section>
       </article>
@@ -100,8 +99,8 @@
           <p class="label">02 / Collaboration</p>
           <h3>Catwalk</h3>
           <div class="case-notes">
-            <p>I led design and playtesting, starting with my cat Mocha’s habit of stepping on the keyboard. I tried different key layouts for moves like squeezing through a gap or rolling across one.</p>
-            <p>Codex built the Phaser prototype and 25 test levels. The obstacles rarely worked together, so I asked Codex to build an editor. I authored one continuous route, and we made routes shareable as JSON.</p>
+            <p>My cat Mocha used to step on my keyboard while I worked. I gave Codex that premise and asked it to choose the first prototype. It built the platformer in Phaser. I playtested moves and key layouts while Mocha interfered with the controls.</p>
+            <p>In Codex’s 25 rooms, obstacles rarely worked together. I asked it to turn the rooms into templates and build an editor. I used it to design one continuous route. The JSON format opened the same build, playtest, and share loop to players.</p>
           </div>
           <div class="case-links">
             <a class="play-link" href="pages/game2.html">Play Catwalk {{arrow}}</a>
@@ -110,22 +109,26 @@
           </div>
         </div>
         <section class="bench" aria-labelledby="route-title">
-          <h4 id="route-title">Turn gaps into ground</h4>
-          <div class="rule-controls" id="route-lab">
-            <div class="route-map" aria-hidden="true"><span class="route-start">0</span><span class="route-end">100</span>
-              <div class="route-track"><i style="--start:0%;--span:20%"></i><i style="--start:62%;--span:11%"></i><i style="--start:87%;--span:13%"></i></div>
+          <h4 id="route-title">Mini level editor</h4>
+          <p class="bench-intro">Resize the gap or add a ledge, then test the jump.</p>
+          <div class="rule-controls" id="route-editor">
+            <div class="route-scene" aria-hidden="true">
+              <div class="route-ground"><i style="left:0;width:28.3333%"></i><i style="left:53.3333%;width:46.6667%"></i></div>
+              <i class="route-ledge" hidden></i>
+              <span class="route-cat"></span>
+              <span class="route-exit">Exit</span>
             </div>
             <fieldset disabled>
-              <legend>Toggle gaps</legend>
-              <label><input type="checkbox" checked> 20–46</label>
-              <label><input type="checkbox" checked> 38–62</label>
-              <label><input type="checkbox" checked> 73–87</label>
+              <legend class="sr-only">Edit the route</legend>
+              <label class="range-control"><span>Gap width</span><input type="range" name="gap" min="80" max="180" step="20" value="120"><span data-gap>120 px</span></label>
+              <label><input type="checkbox" name="ledge"> Add a ledge</label>
+              <button type="button" data-test-jump>Test jump</button>
             </fieldset>
-            <output role="status">Solid ground: [0, 20], [62, 73], [87, 100].</output>
+            <output role="status"></output>
           </div>
           <details class="technical">
-            <summary>How the terrain is built</summary>
-            <p><code>createGroundSegments()</code> clips gaps to the world, merges overlaps, then sends the remaining spans to Phaser as collision geometry.</p>
+            <summary>From editor to playtest</summary>
+            <p>The full editor saves positions, sizes, and events as JSON. Its playtest builds a Phaser level from that data. This sketch uses the game’s ground generator and a simplified jump.</p>
           </details>
         </section>
       </article>
@@ -135,29 +138,22 @@
           <p class="label">03 / Direction</p>
           <h3>Two Minds <small lang="zh">二心</small></h3>
           <div class="case-notes">
-            <p>I directed the game through playtesting and made the final design calls. Codex led the concept interviews and built prototypes around possession and ritual. We cut early combat when it felt disconnected from the ritual.</p>
-            <p>I brought in the rival Wukongs from <cite>Journey to the West</cite>. Codex built an auto-battle prototype on a hex board where the double fights with the traits you give up.</p>
+            <p>I started with no genre or premise. I asked GPT, through Codex, to lead the search for a game I wanted to make. My job was to react to the proposals, play the prototypes, and decide what to keep.</p>
+            <p>The rule I kept coming back to was that a choice should change what you encounter later. In <cite>Journey to the West</cite>, the two Wukongs gave me a way to make that rule the game.</p>
           </div>
           <div class="case-links"><a class="play-link" href="pages/game3.html">Play Two Minds {{arrow}}</a></div>
         </div>
-        <section class="bench" aria-labelledby="echo-title">
-          <h4 id="echo-title">Choose a trait</h4>
-          <div class="rule-controls" id="echo-lab">
-            <fieldset disabled>
-              <legend class="sr-only">Keep one trait</legend>
-              <label><input type="radio" name="trait" value="vigilance" checked> Vigilance</label>
-              <label><input type="radio" name="trait" value="killing"> Killing Intent</label>
-            </fieldset>
-            <dl class="echo-result">
-              <div><dt>Sun Wukong</dt><dd id="kept-trait">Vigilance</dd></div>
-              <div><dt>False Wukong</dt><dd id="echoed-trait">Killing Intent</dd></div>
-            </dl>
-            <output role="status">False Wukong turns toward the weakest enemy.</output>
-          </div>
-          <details class="technical">
-            <summary>How the double is built</summary>
-            <p><code>buildFalseWukong()</code> reads the discarded trait IDs. <code>nextStep()</code> ranks legal moves by axial hex distance, then uses coordinates to break ties.</p>
-          </details>
+        <section class="bench" aria-labelledby="collaboration-title">
+          <h4 id="collaboration-title">How we found the concept</h4>
+          <ol class="collaboration-log">
+            <li><strong>Open with questions</strong><p>GPT explored one design tension at a time and recorded what I was drawn to, what I rejected, and what I was unsure about.</p></li>
+            <li><strong>Cut combat and inventory</strong><p>The possession and ritual prototypes accumulated combat, loot, and an inventory. I found the combat got in the way, so we cut that loop.</p></li>
+            <li><strong>Build the rival Wukong</strong><p>I brought in a new design based on the rival Wukongs. Codex built the hex-board auto-battle test, where the double inherits the traits you give up.</p></li>
+          </ol>
+          <figure class="design-quote">
+            <blockquote>“The decisions you make and the changes you leave in the world become part of future encounters.”</blockquote>
+            <figcaption>My design notes, translated</figcaption>
+          </figure>
         </section>
       </article>
     </div>

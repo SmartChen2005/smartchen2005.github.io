@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-20 — Fit the research exhibits to the three experiments
+
+- Draw the No Signal example from the pinned monitor level. Catwalk's mini editor uses its shipped ground generator and a standalone jump preview. Replace the Two Minds trait selector with a short collaboration record and a translated excerpt from the original Notion notes.
+- Regenerate the project entry with `node tools/render-ai-game-design.mjs`.
+
 ### 2026-11-20 — Rework the Beyond Vibe Coding experiment notes
 
 - Set the title and headings in the site's Gotham. Rewrite the three cases from the Notion handbook and pinned design notes, with a specific handoff or design decision in each case.
