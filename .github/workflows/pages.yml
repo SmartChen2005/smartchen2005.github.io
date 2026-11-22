@@ -27,6 +27,7 @@ jobs:
       - name: Validate static site
         run: |
           node tools/validate-site.mjs
+          node tools/test-site-analytics.mjs
           node tools/test-stills.mjs
           node tools/test-site-cursor.mjs
           node tools/test-site-icons.mjs
@@ -64,8 +65,14 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
+      - name: Prepare website analytics
+        run: node tools/prepare-site-analytics.mjs
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:

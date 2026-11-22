@@ -58,6 +58,9 @@ jobs:
           node tools/validate-site.mjs
       - uses: actions/configure-pages@v5
         if: steps.configured.outputs.ready == 'true'
+      - name: Prepare website analytics
+        if: steps.configured.outputs.ready == 'true'
+        run: node tools/prepare-site-analytics.mjs
       - uses: actions/upload-pages-artifact@v3
         if: steps.configured.outputs.ready == 'true'
         with:

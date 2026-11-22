@@ -93,7 +93,7 @@ If an asset is replaced, keep it beside the document or page that owns it, updat
 - Expected public URL: `https://smartchen2005.github.io/`
 - Confirm that the public URL returns the current, working update. Check the workflow result when readily available; do not prolong the task with repeated deployment polling. Report pending or failed publication accurately.
 
-The workflow intentionally deploys the existing `dist/` directory as-is. This keeps the repository's source and generated output layout stable while making the GitHub Pages publication explicit and repeatable.
+The workflows deploy the existing `dist/` directory. Before uploading the artifact, both run `node tools/prepare-site-analytics.mjs` to add the shared GA4 script to live HTML pages. The checked-in HTML stays compatible with its page renderers and pinned imports. The 404 page and the archived editions and game snapshots are excluded. The script reports only top-level visits on the portfolio's production domains and honors Global Privacy Control and Do Not Track. It sends page paths without URL queries or fragments, and disables Google signals and advertising personalization.
 
 Pages push publication and Gallery Notion synchronization use workflow-specific concurrency groups (`github.workflow` + `github.ref`), so a scheduled synchronization cannot cancel a normal website update. Their publishing jobs share `pages-deploy` with `cancel-in-progress: false` and `queue: max`: publication stays serial and waiting jobs are retained. The Gallery job still skips export and deployment when its Notion connection is not configured.
 
@@ -104,6 +104,11 @@ Both publishing jobs name their artifact `github-pages-${{ github.run_id }}-${{ 
 At the time this standard was added, the repository contains the complete current static archive, its local image assets, the Notion source, the renderer, the validator, and the design context. The baseline is published by the commit that adds this document and the Pages workflow.
 
 ## Change log
+
+### 2026-11-21 — Measure portfolio visits with GA4
+
+- Use the existing VegShark web stream for visitor and pageview counts, approximate geography, referrals, and active engagement time.
+- Apply the analytics tag in both Pages publishing workflows. Run `node tools/test-site-analytics.mjs` to verify tag placement, exclusions, and the browser configuration.
 
 ### 2026-11-20 — Fit the research exhibits to the three experiments
 
