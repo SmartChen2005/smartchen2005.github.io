@@ -70,7 +70,10 @@ fs.writeFileSync(output, `<!doctype html>
 <title>Projects — Smart Chen</title>${siteFavicon('../')}
 <link rel="preload" href="../assets/fonts/gotham/gotham-book.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261125-figures-pause">
-${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261117-atlas-cover"></script></head>
+${projectHeaderAssets('../')}
+<link rel="stylesheet" href="polaroid-entry.css?rev=20261125-room">
+<script type="module" blocking="render" src="polaroid-entry.mjs?rev=20261125-room"></script>
+<script type="module" src="projects.mjs?rev=20261117-atlas-cover"></script></head>
 <body class="projects-directory" id="top"><a class="projects-skip" href="#main">Skip to projects</a>
 ${header}
 <main class="projects-main" id="main"><div class="projects-intro"><h1 id="page-title">{Projects}</h1></div>

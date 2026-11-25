@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-25 — Connect the Polaroid card to its room
+
+- The native transition from Projects carries the script title to the wall and expands the print's photograph to the room's uncropped image. The paper links and navigation fade in as the photograph settles.
+- `dist/projects/polaroid-entry.css` and `polaroid-entry.mjs` are shared by the generated directory and the room. The room keeps its original photograph and uses an existing WebP rendition while the original loads during the transition. Direct visits, history, reduced motion and forced colors use normal navigation.
+
 ### 2026-11-25 — Deploy Pages after the upload job finishes
 
 - Both attempts to deploy `decc0b4` passed upload, then immediately failed to find their artifact. The Actions API subsequently listed both artifacts by the expected names.
