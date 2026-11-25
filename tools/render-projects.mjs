@@ -76,7 +76,7 @@ ${projectHeaderAssets('../')}
 <script type="module" src="projects.mjs?rev=20261117-atlas-cover"></script></head>
 <body class="projects-directory" id="top"><a class="projects-skip" href="#main">Skip to projects</a>
 ${header}
-<main class="projects-main" id="main"><div class="projects-intro"><h1 id="page-title">{Projects}</h1></div>
+<main class="projects-main" id="main"><div class="projects-intro"><h1 id="page-title">{ Projects }</h1></div>
 <ol class="directory" role="list" aria-label="Portfolio projects">${entries}</ol></main>
 <footer class="projects-footer"><p>Smart Chen</p><a href="#top">Back to top</a></footer></body></html>\n`);
 console.log('Rendered Projects.');
