@@ -105,6 +105,10 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-25 — Match the Projects curl to the drifting objects
+
+- End recycling on click and carry the visible objects offscreen on their current diagonal paths. Peel from the upper right toward the lower left after the last object exits. Check both directions with `node tools/test-game-entrance.mjs`.
+
 ### 2026-11-25 — Add photographed objects and a paper curl to the Projects entrance
 
 - Isolate the MINI key, green wallet, folded pocketknife, black MINI and silver BMW Z4 from five photos supplied by the owner on 2026-11-25. Publish trimmed transparent WebP copies in `dist/assets/game-objects/` with photo metadata removed.

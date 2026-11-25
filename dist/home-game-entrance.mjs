@@ -2,7 +2,7 @@ const SPRITES = [
   ['mini-key', .82], ['green-wallet', .88], ['pocketknife', .96],
   ['mini-cooper', 1.23], ['bmw-z4', 1.25],
 ];
-export const DRAIN_DURATION = 1.16;
+const MAX_EXIT_DURATION = 1.16;
 export const PEEL_DURATION = .94;
 const EDGE_PADDING = 64;
 const SLOPE = .9;
@@ -44,36 +44,41 @@ export function driftObjects(objects, width, height, dt, sprites, random = Math.
   }
 }
 
-export function collectObjects(objects, width, height, random = Math.random) {
-  return objects.filter(({ x, y, size }) => x + size / 2 > 0 && y + size / 2 > 0 &&
-    x - size / 2 < width && y - size / 2 < height).map(item => {
-    const endX = 10 + random() * Math.min(70, width * .12);
-    const endY = height - 7 - random() * Math.min(42, height * .08);
-    const distance = Math.hypot(item.x - endX, item.y - endY) / Math.hypot(width, height);
-    const duration = .38 + Math.sqrt(distance) * .58 + random() * .08;
-    return { ...item, endX, endY, duration, endAngle: item.angle + mix(-1.05, .85, random()) };
-  });
+export function prepareObjectExit(objects, width, height) {
+  const items = [];
+  let travelTime = 0;
+  for (const item of objects) {
+    const { x, y, vx, vy, angle, size, sprite } = item;
+    const halfWidth = size * sprite.widthRatio / 2, halfHeight = size * sprite.heightRatio / 2;
+    const c = Math.abs(Math.cos(angle)), s = Math.abs(Math.sin(angle));
+    const rx = c * halfWidth + s * halfHeight, ry = s * halfWidth + c * halfHeight;
+    if (x + rx <= 0 || y + ry <= 0 || x - rx >= width || y - ry >= height) continue;
+
+    // The half-diagonal keeps the object moving until it is clear at any rotation.
+    const radius = Math.hypot(halfWidth, halfHeight);
+    const leavesAt = Math.min((x + radius) / -vx, (height + radius - y) / vy);
+    items.push({ ...item, leavesAt });
+    travelTime = Math.max(travelTime, leavesAt);
+  }
+  return { items, travelTime, duration: Math.min(travelTime, MAX_EXIT_DURATION) };
 }
 
-export function landingPose(item, elapsed) {
-  const progress = clamp(elapsed / item.duration, 0, 1);
-  const accelerate = (start, velocity, end) =>
-    start + velocity * item.duration * progress * (1 - progress) + (end - start) * progress ** 2;
-  const bounce = Math.sin(Math.PI * clamp((elapsed - item.duration) / .14, 0, 1));
-  return {
-    x: accelerate(item.x, item.vx, item.endX),
-    y: accelerate(item.y, item.vy, item.endY) - bounce * 7,
-    angle: accelerate(item.angle, item.spin, item.endAngle),
-    size: item.size * mix(1, .56, progress ** 3),
-  };
+export function objectExitFrame({ items, travelTime, duration }, elapsed) {
+  if (elapsed >= duration) return [];
+  // A shared clock starts at the hover speed and accelerates along the same paths.
+  const travel = elapsed + (travelTime - duration) * (elapsed / duration) ** 2;
+  return items.filter(item => travel < item.leavesAt).map(item => ({
+    ...item, x: item.x + item.vx * travel, y: item.y + item.vy * travel, angle: item.angle + item.spin * travel,
+  }));
 }
 
 export function paperPeelFrame(width, height, progress) {
   const corners = [[0, 0], [width, 0], [width, height], [0, height]];
-  const angle = Math.atan2(width, height * 1.13);
+  const angle = Math.atan2(-SLOPE, 1);
   const nx = Math.cos(angle), ny = Math.sin(angle);
   const t = clamp(progress, 0, 1);
-  const edge = (width * nx + height * ny) * (1 - t * t * (3 - 2 * t));
+  const eased = t * t * (3 - 2 * t);
+  const edge = width * nx * (1 - eased) + height * ny * eased;
   const paper = [], crossing = [];
   corners.forEach((point, index) => {
     const next = corners[(index + 1) % corners.length];
@@ -99,13 +104,11 @@ function prepareCanvas(canvas, context, width, height) {
 }
 
 function drawObject(context, sprite, { x, y, angle, size }) {
-  const { image } = sprite;
-  const scale = size / Math.max(image.naturalWidth, image.naturalHeight);
-  const w = image.naturalWidth * scale, h = image.naturalHeight * scale;
+  const w = size * sprite.widthRatio, h = size * sprite.heightRatio;
   context.save();
   context.translate(x, y);
   context.rotate(angle);
-  context.drawImage(image, -w / 2, -h / 2, w, h);
+  context.drawImage(sprite.image, -w / 2, -h / 2, w, h);
   context.restore();
 }
 
@@ -146,7 +149,7 @@ export function installGameEntrance(link, canvas, { begin, reset, blocked }) {
   let sprites = [], objects = [], width = 0, height = 0;
   let frame = 0, timer = 0, last = 0, started = 0;
   let previewing = false, phase = '', navigating = false, ready = false;
-  let destinationFrame, paper, curl, curlContext, paperColor;
+  let destinationFrame, paper, curl, curlContext, paperColor, exit;
 
   function prepare() {
     if (!context || forced.matches || reduce.matches || destination.origin !== location.origin) return;
@@ -166,9 +169,9 @@ export function installGameEntrance(link, canvas, { begin, reset, blocked }) {
     }
   }
 
-  function paint() {
+  function paint(items = objects) {
     context.clearRect(0, 0, width, height);
-    for (const item of objects) drawObject(context, item.sprite, item);
+    for (const item of items) drawObject(context, item.sprite, item);
   }
 
   function measure() {
@@ -214,7 +217,7 @@ export function installGameEntrance(link, canvas, { begin, reset, blocked }) {
     if (width) context.clearRect(0, 0, width, height);
     paper?.remove();
     curl?.remove();
-    paper = curl = curlContext = null;
+    paper = curl = curlContext = exit = null;
     delete body.dataset.gameTransition;
     root.style.removeProperty('--game-paper-edge');
     root.style.removeProperty('--game-heading-edge');
@@ -227,33 +230,21 @@ export function installGameEntrance(link, canvas, { begin, reset, blocked }) {
     root.style.setProperty('--game-paper-edge', clip(0));
     root.style.setProperty('--game-heading-edge', clip(window.scrollY));
     curlContext.clearRect(0, 0, width, height);
-    if (geometry.paper.length >= 3) {
-      curlContext.save();
-      curlContext.beginPath();
-      curlContext.moveTo(...geometry.paper[0]);
-      for (const corner of geometry.paper.slice(1)) curlContext.lineTo(...corner);
-      curlContext.closePath();
-      curlContext.clip();
-      for (const item of objects) drawObject(curlContext, item.sprite, item);
-      curlContext.restore();
-    }
     drawCurl(curlContext, geometry, paperColor);
   }
 
   function tick(now) {
     if (phase === 'drain') {
       const elapsed = (now - started) / 1000;
-      context.clearRect(0, 0, width, height);
-      if (elapsed < DRAIN_DURATION) {
-        for (const item of objects) drawObject(context, item.sprite, landingPose(item, elapsed));
-      } else {
-        objects = objects.map(item => ({ ...landingPose(item, DRAIN_DURATION), sprite: item.sprite }));
+      paint(objectExitFrame(exit, elapsed));
+      if (elapsed >= exit.duration) {
+        started += exit.duration * 1000;
         phase = body.dataset.gameTransition = 'peel';
         body.append(paper, curl);
-        peel(elapsed - DRAIN_DURATION);
+        peel((now - started) / 1000);
       }
     } else if (phase === 'peel') {
-      const elapsed = (now - started) / 1000 - DRAIN_DURATION;
+      const elapsed = (now - started) / 1000;
       peel(elapsed);
       if (elapsed >= PEEL_DURATION) { navigate(); return; }
     } else {
@@ -276,7 +267,8 @@ export function installGameEntrance(link, canvas, { begin, reset, blocked }) {
     begin();
     cancelAnimationFrame(frame);
     if (!objects.length) measure();
-    objects = collectObjects(objects, width, height);
+    exit = prepareObjectExit(objects, width, height);
+    objects = [];
     phase = body.dataset.gameTransition = 'drain';
     curl.className = 'game-curl';
     curl.setAttribute('aria-hidden', 'true');
@@ -288,15 +280,18 @@ export function installGameEntrance(link, canvas, { begin, reset, blocked }) {
     started = performance.now();
     schedule();
     // Timers and navigation still complete when a browser interrupts the animation.
-    timer = setTimeout(navigate, (DRAIN_DURATION + PEEL_DURATION) * 1000 + 260);
+    timer = setTimeout(navigate, (exit.duration + PEEL_DURATION) * 1000 + 260);
   }
 
   if (context) {
     Promise.all(SPRITES.map(async ([name, scale]) => {
       const image = new Image();
       image.src = new URL(`assets/game-objects/${name}.webp`, import.meta.url).href;
-      try { await image.decode(); return { image, scale }; }
-      catch { return null; }
+      try {
+        await image.decode();
+        const longest = Math.max(image.naturalWidth, image.naturalHeight);
+        return { image, scale, widthRatio: image.naturalWidth / longest, heightRatio: image.naturalHeight / longest };
+      } catch { return null; }
     })).then(loaded => { sprites = loaded.filter(Boolean); syncPreview(); });
   }
   link.addEventListener('click', play);

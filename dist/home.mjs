@@ -1,6 +1,6 @@
 import { createMotorsport } from './home-motorsport.mjs?rev=20261027-restored';
 import { createExhibition } from './home-exhibition.mjs';
-import { installGameEntrance } from './home-game-entrance.mjs';
+import { installGameEntrance } from './home-game-entrance.mjs?rev=20261125-diagonal';
 import { installPhotoTransition } from './home-photo-transition.mjs?rev=20261024-shared-entry';
 import { createBusinessCard } from './home-business-card.mjs';
 
