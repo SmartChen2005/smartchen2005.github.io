@@ -97,13 +97,18 @@ The workflows deploy the existing `dist/` directory. Before uploading the artifa
 
 Pages push publication and Gallery Notion synchronization use workflow-specific concurrency groups (`github.workflow` + `github.ref`), so a scheduled synchronization cannot cancel a normal website update. Their publishing jobs share `pages-deploy` with `cancel-in-progress: false` and `queue: max`: publication stays serial and waiting jobs are retained. The Gallery job still skips export and deployment when its Notion connection is not configured.
 
-Both publishing jobs name their artifact `github-pages-${{ github.run_id }}-${{ github.run_attempt }}` via `PAGES_ARTIFACT_NAME`, and pass that same value to upload `name` and deploy `artifact_name`. Re-running a failed deployment may leave earlier artifacts in the workflow run; attempt-specific names prevent `deploy-pages` from finding several indistinguishable `github-pages` artifacts. A Pages service timeout can be retried without changing the validated website or deleting earlier artifacts.
+Both workflows name their artifact `github-pages-${{ github.run_id }}-${{ github.run_attempt }}`. For a push to `master`, the `validate` job uploads the artifact and passes its name to `deploy` as a job output. The deployment starts after the upload job finishes, giving Actions time to index the artifact. A deploy-only retry takes the name from the successful upload job. The Gallery workflow passes the same job-level name to its upload and deploy steps. Attempt-specific names distinguish artifacts if an upload is repeated.
 
 ## Current baseline
 
 At the time this standard was added, the repository contains the complete current static archive, its local image assets, the Notion source, the renderer, the validator, and the design context. The baseline is published by the commit that adds this document and the Pages workflow.
 
 ## Change log
+
+### 2026-11-25 — Deploy Pages after the upload job finishes
+
+- Both attempts to deploy `decc0b4` passed upload, then immediately failed to find their artifact. The Actions API subsequently listed both artifacts by the expected names.
+- Upload from the validation job and pass the exact artifact name to the separate deploy job. Keep the shared Pages deployment queue and the validated site files intact.
 
 ### 2026-11-25 — Publish DRIVEFRAME
 

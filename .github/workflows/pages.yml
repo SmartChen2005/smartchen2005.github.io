@@ -17,6 +17,10 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    env:
+      PAGES_ARTIFACT_NAME: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+    outputs:
+      pages_artifact_name: ${{ steps.prepare.outputs.artifact_name }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -49,12 +53,22 @@ jobs:
           node tools/test-masb.mjs
           node tools/test-vr.mjs
           node tools/test-construction-space.mjs
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Prepare website analytics
+        id: prepare
+        run: |
+          node tools/prepare-site-analytics.mjs
+          printf 'artifact_name=%s\n' "$PAGES_ARTIFACT_NAME" >> "$GITHUB_OUTPUT"
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: ${{ env.PAGES_ARTIFACT_NAME }}
+          path: dist
 
   deploy:
     needs: validate
     runs-on: ubuntu-latest
-    env:
-      PAGES_ARTIFACT_NAME: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
     concurrency:
       group: pages-deploy
       cancel-in-progress: false
@@ -63,23 +77,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
-      - name: Prepare website analytics
-        run: node tools/prepare-site-analytics.mjs
-      - name: Upload site artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          name: ${{ env.PAGES_ARTIFACT_NAME }}
-          path: dist
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
         with:
-          artifact_name: ${{ env.PAGES_ARTIFACT_NAME }}
+          artifact_name: ${{ needs.validate.outputs.pages_artifact_name }}
