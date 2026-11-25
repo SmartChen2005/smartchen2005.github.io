@@ -87,8 +87,12 @@ body[data-motor-playing] .sentence { visibility: hidden; pointer-events: none; }
 
 /* Decorative background worlds never capture input. */
 .world-stage { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-.kinetic-scene { position: absolute; inset: 0; width: 100%; height: 100%; visibility: hidden; }
-body[data-world='games'] .kinetic-scene { visibility: visible; }
+.game-objects { position: absolute; inset: 0; width: 100%; height: 100%; visibility: hidden; }
+body[data-world='games'] .game-objects { visibility: visible; }
+body[data-world='games'] .sentence {
+  text-shadow: 0 0 3px var(--paper), 0 0 7px var(--paper), 0 0 12px var(--paper);
+}
+body[data-world='games'] .identity { text-shadow: inherit; }
 .motor-scene {
   position: absolute; inset: 0; width: 100%; height: 100%; visibility: hidden; opacity: 0;
   background-color: var(--motor-ink);
@@ -185,16 +189,19 @@ body[data-world='cars'] { --game-underline: var(--motor-accent); }
   transition-delay: 0s;
 }
 .portrait[hidden] { display: none; }
-/* Created only for the game link. No resting or hover layout changes. */
-.game-destination, .game-collapse { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none; }
+/* The paper and native heading share the same moving edge above the Projects preview. */
+.game-destination, .game-paper, .game-curl {
+  position: fixed; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none;
+}
 .game-destination { z-index: 4; visibility: hidden; }
-.game-destination.is-revealed { visibility: visible; }
-.game-collapse { z-index: 5; }
 body[data-game-transition] { overflow: hidden; }
-body[data-game-transition] .world-stage, body[data-game-transition] .portrait { display: none; }
-body[data-game-transition] .homepage { clip-path: inset(var(--game-inset-y, 0px) var(--game-inset-x, 0px)); pointer-events: none; }
-body[data-game-transition] .identity:focus-visible { outline: none; }
-body[data-game-transition='point'] .homepage { visibility: hidden; }
+body[data-game-transition] .homepage { pointer-events: none; }
+body[data-game-transition='peel'] .game-destination { visibility: visible; }
+.game-paper { z-index: 5; background: var(--paper); clip-path: var(--game-paper-edge); }
+body[data-game-transition='peel'] .homepage {
+  position: relative; z-index: 6; clip-path: var(--game-heading-edge);
+}
+.game-curl { z-index: 7; }
 body[data-photo-transition] .business-card-dock { visibility: hidden; }
 body[data-photo-transition] .identity-photo::before, body[data-photo-transition] .identity-photo::after { visibility: hidden; }
 @media (max-width: 700px) and (pointer: coarse) {
@@ -216,5 +223,6 @@ body[data-photo-transition] .identity-photo::before, body[data-photo-transition]
   :root { scrollbar-color: auto; }
   .world-stage, .motor-foreground { display: none; }
   body[data-world='cars']:not([data-motor-fallback]) .sentence { color: CanvasText; text-shadow: none; }
+  body[data-world='games'] .sentence { text-shadow: none; }
   .identity:focus-visible { outline-color: Highlight; }
 }

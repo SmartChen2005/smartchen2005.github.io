@@ -47,6 +47,7 @@ jobs:
           node tools/test-home-loading.mjs
           node tools/test-motor-race.mjs
           node tools/test-home-state.mjs
+          node tools/test-game-entrance.mjs
           node tools/test-photo-transition.mjs
           node tools/test-music-station.mjs
           node tools/test-music-firmware.mjs

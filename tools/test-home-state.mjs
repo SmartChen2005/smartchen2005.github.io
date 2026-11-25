@@ -25,7 +25,7 @@ const sentence = { getBoundingClientRect: () => ({ top: 330, bottom: 390 }) };
 const nodes = { '.identity-cars': cars, '.composition': composition, '.portrait-full': portrait, '.identity-name': name,
   '.identity-games': games, '.identity-photo': photo, '.business-card-dock': dock, '.sentence': sentence };
 let cardOpen = false, keyboardEntries = 0, navigate, navigatePhoto, photoBlocksGame, playback,plays=0;
-const gameController = { active: false }, photoController = { active: false };
+const gameController = { active: false, setPreview(value) { this.previewing = value; } }, photoController = { active: false };
 const sandbox = {
   URLSearchParams, location: { search: '' },
   document: { body: { dataset: {} }, documentElement: { style: style() }, fonts: { ready: { then() {} } },
@@ -36,12 +36,21 @@ const sandbox = {
   getComputedStyle: () => ({ width: '282px' }), innerWidth: 1280, innerHeight: 720,
   clearTimeout() {}, setTimeout: () => 1,
   ResizeObserver: class { observe() {} },
-  createScenes: (_,options) => {playback=options.onMotorPlayback;return {setWorld(){},resize(){},point(){},playCars(){plays++;playback(true,'start');},stopCars(){playback(false,'cancel');}};},
+  createMotorsport: (_, { onPlayback }) => {
+    playback = onPlayback;
+    return { setActive() {}, resize() {}, point() {},
+      play() { plays++; playback(true, 'start'); }, stop() { playback(false, 'cancel'); } };
+  },
+  createExhibition: () => ({ resize() {} }),
   createBusinessCard: () => ({ show(keyboard) {
     if (!cardOpen && keyboard) keyboardEntries++;
     cardOpen = true; dock.hidden = false;
   }, hide() { cardOpen = false; dock.hidden = true; }, place() {}, activateMotion() {} }),
-  installGameTransition: (_, __, clear) => { navigate = clear; return gameController; },
+  installGameEntrance: (link, _, { reset }) => {
+    assert.equal(link, games, 'The entrance must attach to the native Projects link');
+    navigate = reset;
+    return gameController;
+  },
   installPhotoTransition: (link, clear, otherActive) => {
     assert.equal(link, photo, 'The Gallery transition must attach to the native Photographer link');
     navigatePhoto = clear; photoBlocksGame = otherActive; return photoController;
@@ -54,8 +63,8 @@ const world = () => composition.dataset.active;
 
 assert.equal(world(), 'name'); assert(!dock.hidden, 'Arrival must show both portrait and card');
 assert(portrait.isConnected); assert.equal(name.attributes['aria-pressed'], 'true');
-dispatch(games, 'pointerenter'); assert(dock.hidden);
-dispatch(games, 'pointerleave'); assert(!dock.hidden, 'The initial expanded selection must survive a temporary preview');
+dispatch(games, 'pointerenter'); assert(dock.hidden); assert(gameController.previewing);
+dispatch(games, 'pointerleave'); assert(!gameController.previewing); assert(!dock.hidden, 'The initial expanded selection must survive a temporary preview');
 dispatch(name, 'click'); assert(dock.hidden); assert.equal(world(), '', 'The first click closes the initial composition');
 
 dispatch(name, 'pointerenter');

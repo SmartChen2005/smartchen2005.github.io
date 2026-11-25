@@ -67,6 +67,7 @@ if (!lightPortrait || !home.includes(`src="${lightPortrait.path}?rev=20261029-30
 if (/\.identity::(?:after|before)/.test(homeCss)) failures.push('Persistent identity underline decorations must not return');
 if (!fs.existsSync(path.join(root, 'dist/home-scenes.mjs'))) failures.push('Homepage scenery module is missing');
 if (!fs.existsSync(path.join(root, 'dist/home-game-transition.mjs'))) failures.push('Game click transition module is missing');
+if (!fs.existsSync(path.join(root, 'dist/home-game-entrance.mjs'))) failures.push('Projects homepage entrance module is missing');
 if (!fs.existsSync(path.join(root, 'dist/home-photo-transition.mjs'))) failures.push('Photographer click transition module is missing');
 if (!fs.existsSync(path.join(root, 'dist/home-gallery-architecture.mjs'))) failures.push('Gallery entry architecture module is missing');
 const cardText = home.match(/<div class="card-print">([\s\S]*?)\n        <\/div>/)?.[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();

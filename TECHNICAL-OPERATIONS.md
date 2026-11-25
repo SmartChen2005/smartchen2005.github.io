@@ -105,6 +105,11 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-25 — Add photographed objects and a paper curl to the Projects entrance
+
+- Isolate the MINI key, green wallet, folded pocketknife, black MINI and silver BMW Z4 from five photos supplied by the owner on 2026-11-25. Publish trimmed transparent WebP copies in `dist/assets/game-objects/` with photo metadata removed.
+- Keep the diagonal preview, final lower-left landings and lower-right paper curl in `dist/home-game-entrance.mjs`. The homepage files are maintained directly. Run `node tools/test-game-entrance.mjs` alongside the homepage and site checks.
+
 ### 2026-11-25 — Connect the Polaroid card to its room
 
 - The native transition from Projects carries the script title to the wall and expands the print's photograph to the room's uncropped image. The paper links and navigation fade in as the photograph settles.

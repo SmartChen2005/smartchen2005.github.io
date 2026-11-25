@@ -1,5 +1,6 @@
-import { createScenes } from './home-scenes.mjs?rev=20261028-film-only';
-import { installGameTransition } from './home-game-transition.mjs';
+import { createMotorsport } from './home-motorsport.mjs?rev=20261027-restored';
+import { createExhibition } from './home-exhibition.mjs';
+import { installGameEntrance } from './home-game-entrance.mjs';
 import { installPhotoTransition } from './home-photo-transition.mjs?rev=20261024-shared-entry';
 import { createBusinessCard } from './home-business-card.mjs';
 
@@ -46,10 +47,10 @@ function motorPlayback(next,reason){
     if(motorKeyboard)carTrigger.focus({preventScroll:true});motorKeyboard=false;
   }
 }
-const scenes = createScenes(document.querySelector('.kinetic-scene'), {
-  motor: document.querySelector('.motor-scene'), exhibition: document.querySelector('.photo-scene'),
-  foreground: document.querySelector('.motor-foreground'), onMotorPlayback: motorPlayback,
+const motor = createMotorsport(document.querySelector('.motor-scene'), {
+  foreground: document.querySelector('.motor-foreground'), onPlayback: motorPlayback,
 });
+const gallery = createExhibition(document.querySelector('.photo-scene'));
 let pinned = 'name', hovered = null, focused = null;
 let nameCardOpen = true, cardKeyboard = false;
 const nameTrigger = document.querySelector('.identity-name');
@@ -57,17 +58,25 @@ const cardDock = document.querySelector('.business-card-dock');
 nameTrigger.setAttribute('aria-controls', 'business-card');
 nameTrigger.setAttribute('aria-expanded', 'false');
 const businessCard = createBusinessCard(cardDock, portrait, document.querySelector('.sentence'), nameTrigger);
-const gameTransition = installGameTransition(document.querySelector('.identity-games'), scenes, () => { clear(); measure(); });
+const gameTransition = installGameEntrance(document.querySelector('.identity-games'), document.querySelector('.game-objects'), {
+  begin() { hovered = 'games'; render(); },
+  reset() { clear(); measure(); },
+  blocked: () => photoTransition.active,
+});
 const photoTransition = installPhotoTransition(document.querySelector('.identity-photo'), () => { clear(); measure(); }, () => gameTransition.active);
 const transitioning = () => gameTransition.active || photoTransition.active;
 
 function render() {
   if (transitioning()) return;
   const active = motorPlaying?'cars':hovered ?? focused ?? pinned ?? '';
+  const previous = document.body.dataset.world;
+  if (active !== previous) {
+    motor.setActive(active === 'cars', previous === 'cars' && active === '');
+    gameTransition.setPreview(active === 'games');
+  }
   setPortrait(active === 'name');
   composition.dataset.active = active;
   document.body.dataset.world = active;
-  scenes.setWorld(active);
   if (active === 'name' && nameCardOpen) {
     businessCard.show(cardKeyboard);
     cardKeyboard = false;
@@ -82,8 +91,9 @@ for (const identity of identities) {
   });
   identity.addEventListener('pointerleave', () => { hovered = null; render(); });
   identity.addEventListener('pointermove', (event) => {
+    if (document.body.dataset.world !== 'cars') return;
     const rect = identity.getBoundingClientRect();
-    scenes.point((event.clientX - rect.left) / rect.width, (event.clientY - rect.top) / rect.height);
+    motor.point(Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width)));
   });
   identity.addEventListener('focus', () => {
     if (!identity.matches(':focus-visible')) return;
@@ -93,6 +103,7 @@ for (const identity of identities) {
   identity.addEventListener('blur', () => { focused = null; render(); });
   if (identity.tagName !== 'BUTTON') continue;
   identity.addEventListener('click', (event) => {
+    if (transitioning()) return;
     if (identity.dataset.identity === 'name') {
       nameCardOpen = !nameCardOpen;
       cardKeyboard = event.detail === 0;
@@ -105,7 +116,7 @@ for (const identity of identities) {
     nameCardOpen = false;
     cardKeyboard = false;
     if(identity.dataset.identity==='cars'){
-      pinned='cars';hovered=null;focused=null;motorKeyboard=event.detail===0;render();scenes.playCars();return;
+      pinned='cars';hovered=null;focused=null;motorKeyboard=event.detail===0;render();motor.play();return;
     }
     pinned = pinned === identity.dataset.identity ? null : identity.dataset.identity;
     hovered = null;
@@ -113,9 +124,9 @@ for (const identity of identities) {
     render();
   });
 }
-function clear() { scenes.stopCars(); nameCardOpen = false; pinned = null; hovered = null; focused = null; render(); }
+function clear() { motor.stop(); nameCardOpen = false; pinned = null; hovered = null; focused = null; render(); }
 document.addEventListener('keydown', (event) => {
-  if (event.key !== 'Escape') return;
+  if (event.key !== 'Escape' || transitioning()) return;
   const fromCard = cardDock.contains(document.activeElement), fromMotor=motorPlaying&&motorKeyboard;
   clear();
   if(fromMotor)carTrigger.focus({preventScroll:true});
@@ -123,7 +134,7 @@ document.addEventListener('keydown', (event) => {
 });
 document.addEventListener('pointerdown', (event) => { if (!event.target.closest('.identity, .business-card-dock')) clear(); });
 document.addEventListener('pointermove', (event) => {
-  if (pinned && !event.target.closest('.identity')) scenes.point(event.clientX / innerWidth, event.clientY / innerHeight);
+  if (pinned && document.body.dataset.world === 'cars' && !event.target.closest('.identity')) motor.point(event.clientX / innerWidth);
 });
 window.addEventListener('blur', () => { hovered = null; focused = null; render(); });
 
@@ -144,7 +155,8 @@ function measure() {
   const band = { top: sentence.top - padding, bottom: sentence.bottom + padding };
   document.documentElement.style.setProperty('--sentence-top', `${band.top}px`);
   document.documentElement.style.setProperty('--sentence-height', `${band.bottom - band.top}px`);
-  scenes.resize(band);
+  motor.resize(innerWidth, innerHeight, band);
+  gallery.resize(innerWidth, innerHeight, band);
   businessCard.place();
 }
 new ResizeObserver(measure).observe(composition);
