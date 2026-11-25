@@ -129,6 +129,15 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .projects-main .project-card .directory-title { font-size: 1.5rem; line-height: 1.15; letter-spacing: -.032em; text-wrap: pretty; }
 .projects-main .project-card .directory-description { max-width: 48ch; margin-top: 10px; padding-top: 0; font-size: .9375rem; overflow-wrap: anywhere; }
 .projects-main .project-card .project-kind { margin-bottom: 6px; }
+.projects-main .project-card--driveframe :is(.project-card-preview, .project-copy) {
+  max-width: 26.5rem;
+  align-self: center;
+}
+.projects-main .project-card--driveframe .project-card-preview {
+  height: auto;
+  aspect-ratio: 32 / 15;
+}
+.projects-main .project-card--driveframe .project-card-preview img { object-fit: contain; }
 .projects-main .project-card--figures .directory-link { justify-content: flex-start; gap: 8px; }
 .figures-title-stack { container-type: inline-size; width: calc(100% + 24px); margin-inline: -12px; }
 .figures-title-stack > * { display: block; margin: 0; white-space: nowrap; font: 500 clamp(28px, 3.5vw, 68px)/.86 "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 14.2cqi; letter-spacing: -.065em; }
@@ -160,6 +169,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 @media (max-width: 600px) {
   .projects-main .directory { grid-template-columns: 1fr; }
   .projects-main .project-card .directory-link { min-height: 0; }
+  .projects-main .project-card--driveframe :is(.project-card-preview, .project-copy) { max-width: 19rem; }
 }
 @media (max-width: 380px) {
   .projects-main .project-feature .directory-link { padding: 20px; }

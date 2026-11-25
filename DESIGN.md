@@ -54,7 +54,7 @@ The Gran Turismo card is a single full-width link with a still of the first Atla
 
 ## DRIVEFRAME (2026-11-25)
 
-Add DRIVEFRAME as the eighth Projects link, using the compact dark card and the supplied dashboard still. The detail page keeps the shared Header and uses the dashboard’s Gotham typography, near-black ground, steel rules and blue focus color. Lead with a full-width recording of the original dashboard’s Demo mode. Use the native player and its poster, pause autoplay when the player leaves view, and respect reduced motion. Follow with the in-car photographs, a side-by-side design note and four feature screenshots. Photographs and screenshots link to their web-size files for closer inspection. The detail route stacks the headings and image pairs on phones while retaining the authored media proportions.
+Place DRIVEFRAME just after Beyond Vibe Coding in the compact Projects grid. Show the whole dashboard still at its original aspect ratio, with the title and a short description beneath it. The detail page keeps the shared Header and uses the dashboard’s Gotham typography, near-black ground, steel rules and blue focus color. Lead with a full-width recording of the original dashboard’s Demo mode. Use the native player and its poster, pause autoplay when the player leaves view, and respect reduced motion. Follow with the in-car photographs, a side-by-side design note and four feature screenshots. Photographs and screenshots link to their web-size files for closer inspection. The detail route stacks the headings and image pairs on phones while retaining the authored media proportions.
 
 ## Projects homepage — interactive project previews (2026-11-04)
 

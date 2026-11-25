@@ -28,9 +28,9 @@ const projects = [
   {href:'figures-of-speech/',title:'Figures of Speech',tone:'light',layout:'figures'},
   {href:'vr-for-skill-learning/',title:vr.title,layout:'vr'},
   aiGameDesign,
+  {href:'driveframe/',title:'DRIVEFRAME',description:'Track &amp; mountain drive tracker.',tone:'dark',layout:'driveframe',previewImage:'driveframe/media/dashboard.webp',previewWidth:1280,previewHeight:600},
   {href:'world-sensing-music-station/',title:'World Sensing Music Station',kind:'Physical computing',description:'A handheld instrument that turns movement and space into sound.',tone:'light',previewImage:'world-sensing-music-station/device.svg',previewWidth:1000,previewHeight:800,previewClass:'device',previewEffect:'device'},
-  {href:'multiverse-all-star-battlefront/',title:'Multiverse All-Star Battlefront',tone:'light',layout:'battlefront'},
-  {href:'driveframe/',title:'DRIVEFRAME',kind:'Automotive interface',description:'A driving dashboard and data tracker for track days and mountain roads.',tone:'dark',previewImage:'driveframe/media/dashboard.webp',previewWidth:1280,previewHeight:600}
+  {href:'multiverse-all-star-battlefront/',title:'Multiverse All-Star Battlefront',tone:'light',layout:'battlefront'}
 ];
 function preview(project) {
   const image = project.image || `<img src="${project.previewImage}" width="${project.previewWidth||960}" height="${project.previewHeight||540}" alt="" loading="lazy" decoding="async" draggable="false">`;
@@ -56,14 +56,15 @@ const entries = projects.map((p,i)=>{
   if (p.previewEffect === 'device') return `<li class="project-card project-tone--light project-card--music"><a class="directory-link" href="${p.href}" aria-labelledby="music-card-title" draggable="false"><div class="project-card-preview project-card-preview--device" data-project-effect="device" aria-hidden="true"><img src="${p.previewImage}" width="1000" height="800" alt="" loading="lazy" decoding="async" draggable="false"></div><h2 id="music-card-title">World Sensing<br>Music Station</h2></a></li>`;
   if (p.layout === 'figures') return `<li class="project-card project-tone--light project-card--figures"><a class="directory-link" href="${p.href}" aria-labelledby="figures-card-title" draggable="false"><div class="figures-title-stack"><h2 id="figures-card-title">${p.title}</h2><span aria-hidden="true">${p.title}</span><span aria-hidden="true">${p.title}</span></div><div class="figures-dictionary"><p class="figures-pronunciation">${figuresPronunciation}</p><p>${figuresDefinition}</p></div></a></li>`;
   const media=preview(p);
-  return `<li class="${p.effect?'project-feature':'project-card'} project-tone--${p.tone||'dark'}${p.layout?` project-card--${p.layout}`:''}${p.theme?` project-theme--${p.theme}`:''}"><a class="directory-link" href="${p.href}" draggable="false">${p.effect?'':media}<div class="project-copy"><p class="project-kind">${p.kind}</p><h2 class="directory-title"${i===0?' id="polaroid-link-title"':''}>${p.title}</h2><p class="directory-description">${p.description}</p></div>${p.effect?media:''}</a></li>`;
+  const kind = p.kind ? `<p class="project-kind">${p.kind}</p>` : '';
+  return `<li class="${p.effect?'project-feature':'project-card'} project-tone--${p.tone||'dark'}${p.layout?` project-card--${p.layout}`:''}${p.theme?` project-theme--${p.theme}`:''}"><a class="directory-link" href="${p.href}" draggable="false">${p.effect?'':media}<div class="project-copy">${kind}<h2 class="directory-title"${i===0?' id="polaroid-link-title"':''}>${p.title}</h2><p class="directory-description">${p.description}</p></div>${p.effect?media:''}</a></li>`;
 }).join('\n');
 fs.writeFileSync(output, `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#061b62"><meta name="description" content="Games, tools, and experiments in interaction by Smart Chen.">
 <title>Projects — Smart Chen</title>${siteFavicon('../')}
 <link rel="preload" href="../assets/fonts/gotham/gotham-book.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261120-card-arrows">
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261125-driveframe-cover">
 ${projectHeaderAssets('../')}<script type="module" src="projects.mjs?rev=20261117-atlas-cover"></script></head>
 <body class="projects-directory" id="top"><a class="projects-skip" href="#main">Skip to projects</a>
 ${header}
