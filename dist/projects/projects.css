@@ -143,10 +143,11 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .figures-title-row > span { min-inline-size: 100cqi; padding-inline-end: .25em; }
 .figures-title-row > span + span { display: none; }
 @media screen and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) and (forced-colors: none) {
-  .project-card--figures .directory-link:hover .figures-title-row { animation: figures-title-scroll 3.6s linear infinite; }
-  .project-card--figures .directory-link:hover .figures-title-row:nth-child(2) { animation-duration: 4.2s; }
-  .project-card--figures .directory-link:hover .figures-title-row:nth-child(3) { animation-duration: 4.8s; }
-  .project-card--figures .directory-link:hover .figures-title-row > span + span { display: block; }
+  .figures-title-row { animation: figures-title-scroll 3.6s linear infinite paused; }
+  .figures-title-row:nth-child(2) { animation-duration: 4.2s; }
+  .figures-title-row:nth-child(3) { animation-duration: 4.8s; }
+  .figures-title-row > span + span { display: block; }
+  .project-card--figures .directory-link:hover .figures-title-row { animation-play-state: running; }
 }
 @keyframes figures-title-scroll {
   to { transform: translateX(-50%); }
