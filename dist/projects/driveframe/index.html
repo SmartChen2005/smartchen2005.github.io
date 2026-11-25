@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0c0f">
+  <meta name="description" content="DRIVEFRAME is a driving dashboard and trip tracker for track days and mountain roads. Built in a manual MINI Cooper S, it adapts to other cars with a compatible Wi-Fi OBD reader.">
+  <title>DRIVEFRAME — Smart Chen</title>
+  <link rel="icon" type="image/x-icon" href="../../favicon.ico?rev=20261028-white">
+  <link rel="stylesheet" href="../../site.css">
+  <link rel="stylesheet" href="../../assets/fonts/gotham/gotham.css">
+  <link rel="stylesheet" href="driveframe.css">
+  <link rel="stylesheet" href="../../project-header.css?v=20261027-aligned">
+  <link rel="stylesheet" href="../../gallery-entry.css?rev=20261024-shared-entry">
+  <script type="module" src="../../gallery-entry.mjs?rev=20261024-shared-entry"></script>
+  <link rel="stylesheet" href="../../site-cursor.css?rev=20261028-drag-axis">
+  <script type="module" src="../../site-cursor.mjs?rev=20261028-drag-axis"></script>
+  <script type="module" src="driveframe.mjs"></script>
+</head>
+<body class="driveframe">
+  <a class="drive-skip" href="#main">Skip to project</a>
+  <header class="project-header project-header--dark" data-project-header>
+    <nav class="project-header__nav" aria-label="Primary navigation">
+      <a href="../../">VegShark.com</a>
+      <a href="../">Projects</a>
+      <a class="project-header__gallery" href="../../gallery/"><span class="project-header__gallery-mark" aria-hidden="true"><img src="../../gallery/assets/mobius-outline.svg" width="164" height="55" alt="" decoding="async"></span><span>The Gallery</span></a>
+    </nav>
+  </header>
+  <main class="drive-main" id="main">
+    <section class="drive-hero" aria-labelledby="drive-title">
+      <div class="drive-masthead">
+        <h1 id="drive-title">DRIVEFRAME</h1>
+        <p>A dashboard and trip tracker for the joy of driving, from track days to mountain roads.</p>
+      </div>
+      <figure>
+        <video id="drive-demo" aria-label="DRIVEFRAME dashboard demo" aria-describedby="drive-demo-caption" width="1280" height="600" controls muted loop playsinline preload="metadata" poster="media/dashboard.webp">
+          <source src="media/dashboard-demo.mp4" type="video/mp4">
+          <img src="media/dashboard.webp" width="1280" height="600" alt="Dashboard with a red speed readout, an RPM and gear display, and a blue G-force plot.">
+        </video>
+        <figcaption id="drive-demo-caption">Demo mode. Simulated speed, RPM and G-force drive the gauges and shift lights.</figcaption>
+      </figure>
+    </section>
+
+    <section class="drive-section" aria-labelledby="drive-field-test">
+      <div class="drive-section-heading">
+        <h2 id="drive-field-test">In the MINI</h2>
+        <div class="drive-text">
+          <p>I built and tested DRIVEFRAME on the Android head unit in my six-speed MINI Cooper S F55. With a compatible Wi-Fi OBD reader, it can also display the telemetry available from other cars.</p>
+          <p>In this test, a mounted iPhone shared motion and GPS readings over the same local network for trip review on the dash.</p>
+        </div>
+      </div>
+      <div class="drive-plates">
+        <figure>
+          <a href="media/phone-link.webp" aria-label="View the in-car phone link photo at full size"><img src="media/phone-link.webp" width="960" height="1200" loading="lazy" decoding="async" alt="A mounted iPhone shows its connection and sensor readings beside the MINI’s center display."></a>
+          <figcaption>The iPhone sensor page and the MINI head unit during testing.</figcaption>
+        </figure>
+        <figure>
+          <a href="media/head-unit.webp" aria-label="View the MINI head unit photo at full size"><img src="media/head-unit.webp" width="960" height="1200" loading="lazy" decoding="async" alt="The center console shows a recorded trip with telemetry traces, a G-force plot and the GPS route."></a>
+          <figcaption>Trip replay on the center display, with the iPhone identified as the motion source.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="drive-section drive-section-heading" aria-labelledby="drive-inspiration">
+      <h2 id="drive-inspiration">Design inspiration</h2>
+      <div class="drive-text">
+        <p>The MINI Cooper is a driver’s car. I wanted the dash to capture the anticipation of a shift and give me a way to relive a run afterward. Motorsport shift lights inspired the row of lamps that fills as the revs rise. Large speed and RPM readouts and a blue G-force target give the rest of the display its rhythm.</p>
+        <p>After a run, I can scrub one timeline to move through the telemetry traces, G-force plot and GPS route together. I can revisit a corner and see what the car was doing at that moment.</p>
+      </div>
+    </section>
+
+    <section class="drive-section" aria-labelledby="drive-screens">
+      <h2 id="drive-screens">Feature screenshots</h2>
+      <div class="drive-plates">
+        <figure>
+          <a href="media/recording.webp" aria-label="View the trip recording screenshot at full size"><img src="media/recording.webp" width="1280" height="600" loading="lazy" decoding="async" alt="The dashboard shows active shift lights, a SHIFT cue and a running trip timer."></a>
+          <figcaption><strong>Trip recording.</strong> The timer and End trip control change to red while recording.</figcaption>
+        </figure>
+        <figure>
+          <a href="media/settings.webp" aria-label="View the settings screenshot at full size"><img src="media/settings.webp" width="1280" height="600" loading="lazy" decoding="async" alt="Settings shows recent trips, the current data connection, shift RPM thresholds and tire circumference."></a>
+          <figcaption><strong>Settings.</strong> Choose a data source and adjust shift thresholds and tire size.</figcaption>
+        </figure>
+        <figure>
+          <a href="media/trip-history.webp" aria-label="View the trip history screenshot at full size"><img src="media/trip-history.webp" width="1280" height="600" loading="lazy" decoding="async" alt="A list of saved trips with date, elapsed time, distance, top speed and peak G-force."></a>
+          <figcaption><strong>Trip history.</strong> Open any trip saved locally on the head unit.</figcaption>
+        </figure>
+        <figure>
+          <a href="media/trip-review.webp" aria-label="View the trip replay screenshot at full size"><img src="media/trip-review.webp" width="1280" height="600" loading="lazy" decoding="async" alt="Trip summary with a timeline above speed, RPM, gear and G-force traces, a G-force plot and a GPS route."></a>
+          <figcaption><strong>Trip replay.</strong> Scrub the run or jump directly to peak G-force.</figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

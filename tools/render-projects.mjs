@@ -29,7 +29,8 @@ const projects = [
   {href:'vr-for-skill-learning/',title:vr.title,layout:'vr'},
   aiGameDesign,
   {href:'world-sensing-music-station/',title:'World Sensing Music Station',kind:'Physical computing',description:'A handheld instrument that turns movement and space into sound.',tone:'light',previewImage:'world-sensing-music-station/device.svg',previewWidth:1000,previewHeight:800,previewClass:'device',previewEffect:'device'},
-  {href:'multiverse-all-star-battlefront/',title:'Multiverse All-Star Battlefront',tone:'light',layout:'battlefront'}
+  {href:'multiverse-all-star-battlefront/',title:'Multiverse All-Star Battlefront',tone:'light',layout:'battlefront'},
+  {href:'driveframe/',title:'DRIVEFRAME',kind:'Automotive interface',description:'A driving dashboard and data tracker for track days and mountain roads.',tone:'dark',previewImage:'driveframe/media/dashboard.webp',previewWidth:1280,previewHeight:600}
 ];
 function preview(project) {
   const image = project.image || `<img src="${project.previewImage}" width="${project.previewWidth||960}" height="${project.previewHeight||540}" alt="" loading="lazy" decoding="async" draggable="false">`;

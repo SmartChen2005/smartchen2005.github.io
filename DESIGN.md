@@ -52,6 +52,10 @@ The user approves the Figures of Speech inward-curving blue surface and requests
 
 The Gran Turismo card is a single full-width link with a still of the first Atlas frame as its cover. Capture the original opening camera at scroll position zero and hide the opening text and controls during capture. Center the large white Gotham Black `GRAN TURISMO` title in the lower portion of the cover, with `VR Adventure Game` directly below. A dark lower gradient keeps both lines readable. Use a centered crop and a flexible aspect ratio on phones. The card opens the standalone Atlas in a new tab with a screen-reader description of that behavior. Forced colors and print use the same text link without decorative artwork. This cover supersedes the Gran Turismo starfield and placeholder treatments described below.
 
+## DRIVEFRAME (2026-11-25)
+
+Add DRIVEFRAME as the eighth Projects link, using the compact dark card and the supplied dashboard still. The detail page keeps the shared Header and uses the dashboard’s Gotham typography, near-black ground, steel rules and blue focus color. Lead with a full-width recording of the original dashboard’s Demo mode. Use the native player and its poster, pause autoplay when the player leaves view, and respect reduced motion. Follow with the in-car photographs, a side-by-side design note and four feature screenshots. Photographs and screenshots link to their web-size files for closer inspection. The detail route stacks the headings and image pairs on phones while retaining the authored media proportions.
+
 ## Projects homepage — interactive project previews (2026-11-04)
 
 Scope is `/projects/` only. The shared Header markup, CSS, assets, navigation, desktop/phone geometry, fonts and colors are retained. Its existing `site.css` tokens remain untouched. This user request supersedes the directory watermark and earlier project ordering below. No project-detail or Gallery route is restyled.

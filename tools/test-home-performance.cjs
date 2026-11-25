@@ -90,7 +90,7 @@ const server = http.createServer((req, res) => {
       }
       if (!slug) {
         const cards = page.locator('.directory-link');
-        assert.equal(await cards.count(), 7);
+        assert.equal(await cards.count(), 8);
         assert.equal(await cards.locator('.directory-arrow, [data-site-arrow="north-east"]').count(), 0);
         assert(!await page.locator('body').evaluate(body => body.textContent.includes('\u2197')));
         await page.screenshot({ path: path.join(output, 'projects-phone.png'), fullPage: true });
@@ -110,6 +110,6 @@ const server = http.createServer((req, res) => {
     assert.deepEqual(errors, []);
     fs.writeFileSync(path.join(output, 'results.json'), JSON.stringify(results, null, 2) + '\n');
     console.log(JSON.stringify(results, null, 2));
-    console.log('Passed: desktop/phone/4K responsive film photos; requested 3000x2000 portrait; arrival-time 3D loading; photo/car interactions; seven arrow-free Projects cards and SVG arrows on four detail routes; no home page errors or overflow.');
+    console.log('Passed: desktop/phone/4K responsive film photos; requested 3000x2000 portrait; arrival-time 3D loading; photo/car interactions; eight arrow-free Projects cards and SVG arrows on four detail routes; no home page errors or overflow.');
   } finally { await browser.close(); await new Promise(done => server.close(done)); }
 })().catch(error => { console.error(error); server.close(); process.exitCode = 1; });

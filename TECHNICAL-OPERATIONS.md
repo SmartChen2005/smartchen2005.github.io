@@ -105,6 +105,12 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-25 — Publish DRIVEFRAME
+
+- Add the DRIVEFRAME card and project page. Regenerate them with `node tools/render-projects.mjs` and `node tools/render-driveframe.mjs`.
+- The project description uses the owner's brief on driving enjoyment, track days and mountain roads, with technical details from the Extended Dashboard README and design notes. Record the 0.8.3 dashboard’s original browser Demo with its simulated telemetry and the site's Gotham fonts at 1280 × 600, 20 fps for 16 seconds. The recording is a silent H.264 MP4.
+- Use the five dashboard captures and two in-car photos supplied on 2026-11-25. Ship WebP derivatives, remove image metadata, and cover exact GPS coordinates in the trip replay images. The two photographs are cropped to show the devices in context.
+
 ### 2026-11-21 — Measure portfolio visits with GA4
 
 - Use the existing VegShark web stream for visitor and pageview counts, approximate geography, referrals, and active engagement time.

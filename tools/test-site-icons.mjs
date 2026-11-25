@@ -21,9 +21,10 @@ for (const relative of fs.readdirSync('dist', { recursive: true })) {
 }
 const projectsHTML = fs.readFileSync('dist/projects/index.html', 'utf8');
 const projectCards = [...projectsHTML.matchAll(/<li\b[^>]*>(<a class="directory-link" href="([^"]+)"[^>]*>[\s\S]*?)<\/li>/g)];
-assert.equal(projectCards.length, 7, 'All seven native project links remain');
+assert.equal(projectCards.length, 8, 'All eight native project links remain');
+assert(projectCards.some(([, , route]) => route === 'driveframe/'), 'Projects includes the DRIVEFRAME link');
 for (const [, card, route] of projectCards) {
   assert.doesNotMatch(card, /directory-arrow|data-site-arrow="north-east"/, `Project card should have no arrow: ${route}`);
 }
 assert(northEastArrow.includes('stroke:currentColor'));
-console.log(`Passed: ${pages} maintained pages, ${arrows} font-independent SVG arrows; all seven Projects links; accessible/native links; idempotent generation.`);
+console.log(`Passed: ${pages} maintained pages, ${arrows} font-independent SVG arrows; all eight Projects links; accessible/native links; idempotent generation.`);
