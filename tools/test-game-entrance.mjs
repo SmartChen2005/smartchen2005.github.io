@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
-  scatterObjects, driftObjects, prepareObjectExit, objectExitFrame, paperPeelFrame,
+  scatterObjects, driftObjects, prepareObjectExit, objectExitFrame,
 } from '../dist/home-game-entrance.mjs';
+import { paperPeelFrame } from '../dist/home-paper.mjs';
 
 const names = ['mini-key', 'green-wallet', 'pocketknife', 'mini-cooper', 'bmw-z4'];
 const sprites = names.map(name => ({ name, scale: 1, widthRatio: .8, heightRatio: 1 }));

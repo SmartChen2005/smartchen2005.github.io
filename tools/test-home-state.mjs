@@ -57,6 +57,7 @@ const sandbox = {
   },
 };
 vm.createContext(sandbox);
+sandbox.window.top = sandbox.window;
 vm.runInContext(fs.readFileSync(new URL('../dist/home.mjs', import.meta.url), 'utf8').replace(/^import .*;\r?\n/gm, ''), sandbox);
 const dispatch = (element, type, detail = 1) => element.handlers[type]({ detail });
 const world = () => composition.dataset.active;

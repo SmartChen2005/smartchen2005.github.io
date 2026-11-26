@@ -9,11 +9,21 @@ html:has(.projects-directory) {
   isolation: isolate;
   background-color: var(--projects-canvas);
 }
+/* The homepage is the same paper surface, unrolled over the Projects directory. */
+html:has(.projects-directory[data-projects-home-return]) { overflow: hidden; }
+.projects-directory[data-projects-home-return] { padding-inline-end: var(--projects-home-scrollbar); }
+.projects-home-preview, .projects-home-curl {
+  position: fixed; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none;
+}
+.projects-home-preview { z-index: 30; visibility: hidden; }
+[data-projects-home-return] .projects-home-preview { visibility: visible; }
+.projects-home-curl { z-index: 31; }
 /* Keep the approved shallow arc fitted to the viewport as the cards scroll. */
 .projects-directory::before {
   content: "";
   position: fixed;
   inset: 0;
+  inset-inline-end: var(--projects-home-scrollbar, 0px);
   z-index: -1;
   pointer-events: none;
   background: var(--projects-canvas) url("assets/blue-concave-sky.svg") center / 100% 100% no-repeat;

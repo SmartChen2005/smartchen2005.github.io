@@ -69,10 +69,11 @@ fs.writeFileSync(output, `<!doctype html>
 <meta name="theme-color" content="#061b62"><meta name="description" content="Games, tools, and experiments in interaction by Smart Chen.">
 <title>Projects — Smart Chen</title>${siteFavicon('../')}
 <link rel="preload" href="../assets/fonts/gotham/gotham-book.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261125-figures-pause">
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261125-paper-return">
 ${projectHeaderAssets('../')}
 <link rel="stylesheet" href="polaroid-entry.css?rev=20261125-return">
 <script type="module" blocking="render" src="polaroid-entry.mjs?rev=20261125-return"></script>
+<script type="module" src="home-return.mjs"></script>
 <script type="module" src="projects.mjs?rev=20261117-atlas-cover"></script></head>
 <body class="projects-directory" id="top"><a class="projects-skip" href="#main">Skip to projects</a>
 ${header}

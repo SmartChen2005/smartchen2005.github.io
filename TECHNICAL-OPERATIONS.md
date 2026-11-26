@@ -105,6 +105,10 @@ At the time this standard was added, the repository contains the complete curren
 
 ## Change log
 
+### 2026-11-25 — Unroll the homepage when returning from Projects
+
+- Play the homepage entrance's paper curl in reverse from the Projects directory's VegShark.com link. Share the curl geometry and shading in `dist/home-paper.mjs`. Regenerate the Projects directory with `node tools/render-projects.mjs`.
+
 ### 2026-11-25 — Match the Projects curl to the drifting objects
 
 - End recycling on click and carry the visible objects offscreen on their current diagonal paths. Peel from the upper right toward the lower left after the last object exits. Check both directions with `node tools/test-game-entrance.mjs`.

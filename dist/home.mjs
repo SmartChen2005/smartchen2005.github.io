@@ -1,6 +1,6 @@
 import { createMotorsport } from './home-motorsport.mjs?rev=20261027-restored';
 import { createExhibition } from './home-exhibition.mjs';
-import { installGameEntrance } from './home-game-entrance.mjs?rev=20261125-diagonal';
+import { installGameEntrance } from './home-game-entrance.mjs?rev=20261125-paper-return';
 import { installPhotoTransition } from './home-photo-transition.mjs?rev=20261024-shared-entry';
 import { createBusinessCard } from './home-business-card.mjs';
 
@@ -58,12 +58,16 @@ const cardDock = document.querySelector('.business-card-dock');
 nameTrigger.setAttribute('aria-controls', 'business-card');
 nameTrigger.setAttribute('aria-expanded', 'false');
 const businessCard = createBusinessCard(cardDock, portrait, document.querySelector('.sentence'), nameTrigger);
-const gameTransition = installGameEntrance(document.querySelector('.identity-games'), document.querySelector('.game-objects'), {
+// The Projects return shows this composition inside an inert frame without nested destination previews.
+const topLevel = window.top === window;
+const gameTransition = topLevel ? installGameEntrance(document.querySelector('.identity-games'), document.querySelector('.game-objects'), {
   begin() { hovered = 'games'; render(); },
   reset() { clear(); measure(); },
   blocked: () => photoTransition.active,
-});
-const photoTransition = installPhotoTransition(document.querySelector('.identity-photo'), () => { clear(); measure(); }, () => gameTransition.active);
+}) : { active: false, setPreview() {} };
+const photoTransition = topLevel
+  ? installPhotoTransition(document.querySelector('.identity-photo'), () => { clear(); measure(); }, () => gameTransition.active)
+  : { active: false };
 const transitioning = () => gameTransition.active || photoTransition.active;
 
 function render() {

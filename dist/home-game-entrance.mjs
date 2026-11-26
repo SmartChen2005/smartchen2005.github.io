@@ -1,11 +1,11 @@
+import { createPaperCurl, paperClipPath, PAPER_SLOPE, PEEL_DURATION, prepareCanvas } from './home-paper.mjs';
+
 const SPRITES = [
   ['mini-key', .82], ['green-wallet', .88], ['pocketknife', .96],
   ['mini-cooper', 1.23], ['bmw-z4', 1.25],
 ];
 const MAX_EXIT_DURATION = 1.16;
-export const PEEL_DURATION = .94;
 const EDGE_PADDING = 64;
-const SLOPE = .9;
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const mix = (start, end, progress) => start + (end - start) * progress;
 
@@ -23,7 +23,7 @@ export function scatterObjects(width, height, sprites, random = Math.random) {
       sprite, size: size * sprite.scale * mix(.72, 1.08, random()),
       x: (index % columns + mix(.1, .9, random())) * width / columns,
       y: (Math.floor(index / columns) + mix(.1, .9, random())) * height / rows,
-      vx: -speed, vy: speed * SLOPE,
+      vx: -speed, vy: speed * PAPER_SLOPE,
       angle: mix(-.6, .6, random()), spin: mix(-.45, .45, random()),
     };
   });
@@ -36,9 +36,9 @@ export function driftObjects(objects, width, height, dt, sprites, random = Math.
     item.angle += item.spin * dt;
     if (item.x > -EDGE_PADDING && item.y < height + EDGE_PADDING) continue;
     // The same diagonal continues from the opposite edge, entirely offscreen.
-    const lane = item.y + item.x * SLOPE;
-    item.x = Math.min(width + EDGE_PADDING, (lane + EDGE_PADDING) / SLOPE);
-    item.y = lane - item.x * SLOPE;
+    const lane = item.y + item.x * PAPER_SLOPE;
+    item.x = Math.min(width + EDGE_PADDING, (lane + EDGE_PADDING) / PAPER_SLOPE);
+    item.y = lane - item.x * PAPER_SLOPE;
     item.sprite = sprites[Math.floor(random() * sprites.length)];
     item.angle = mix(-.6, .6, random());
   }
@@ -72,70 +72,12 @@ export function objectExitFrame({ items, travelTime, duration }, elapsed) {
   }));
 }
 
-export function paperPeelFrame(width, height, progress) {
-  const corners = [[0, 0], [width, 0], [width, height], [0, height]];
-  const angle = Math.atan2(-SLOPE, 1);
-  const nx = Math.cos(angle), ny = Math.sin(angle);
-  const t = clamp(progress, 0, 1);
-  const eased = t * t * (3 - 2 * t);
-  const edge = width * nx * (1 - eased) + height * ny * eased;
-  const paper = [], crossing = [];
-  corners.forEach((point, index) => {
-    const next = corners[(index + 1) % corners.length];
-    const distance = point[0] * nx + point[1] * ny - edge;
-    const nextDistance = next[0] * nx + next[1] * ny - edge;
-    if (distance <= 0) paper.push(point);
-    if ((distance <= 0) === (nextDistance <= 0)) return;
-    const ratio = distance / (distance - nextDistance);
-    const intersection = [mix(point[0], next[0], ratio), mix(point[1], next[1], ratio)];
-    paper.push(intersection);
-    crossing.push(intersection[0] * -ny + intersection[1] * nx);
-  });
-  const depth = Math.sin(Math.PI * t) ** .43 * clamp(Math.min(width, height) * .071, 23, 70);
-  const [a = 0, b = 0] = crossing;
-  return { paper, angle, edge, depth, start: Math.min(a, b), end: Math.max(a, b) };
-}
-
-function prepareCanvas(canvas, context, width, height) {
-  const ratio = Math.min(devicePixelRatio || 1, 2, Math.sqrt(3_200_000 / (width * height)));
-  canvas.width = Math.round(width * ratio);
-  canvas.height = Math.round(height * ratio);
-  context.setTransform(canvas.width / width, 0, 0, canvas.height / height, 0, 0);
-}
-
 function drawObject(context, sprite, { x, y, angle, size }) {
   const w = size * sprite.widthRatio, h = size * sprite.heightRatio;
   context.save();
   context.translate(x, y);
   context.rotate(angle);
   context.drawImage(sprite.image, -w / 2, -h / 2, w, h);
-  context.restore();
-}
-
-function drawCurl(context, { angle, edge, depth, start, end }, paper) {
-  if (depth < .5 || end - start < 1) return;
-  context.save();
-  context.rotate(angle);
-  context.translate(edge, 0);
-  const shadow = context.createLinearGradient(0, 0, depth * 1.4, 0);
-  shadow.addColorStop(0, '#211d1955');
-  shadow.addColorStop(.44, '#211d1926');
-  shadow.addColorStop(1, '#211d1900');
-  context.fillStyle = shadow;
-  context.fillRect(0, start - depth, depth * 1.4, end - start + depth * 2);
-
-  // The fold's cross section rolls from the sheet into a lit crest, then doubles underneath.
-  const face = context.createLinearGradient(-depth, 0, depth * .44, 0);
-  face.addColorStop(0, paper);
-  face.addColorStop(.21, '#e2e0da');
-  face.addColorStop(.49, '#fffefa');
-  face.addColorStop(.67, '#f4f1e9');
-  face.addColorStop(.90, '#c4c0b5');
-  face.addColorStop(1, '#8e897d');
-  context.fillStyle = face;
-  context.beginPath();
-  context.roundRect(-depth, start - depth * .78, depth * 1.44, end - start + depth * 1.56, depth * .46);
-  context.fill();
   context.restore();
 }
 
@@ -149,7 +91,7 @@ export function installGameEntrance(link, canvas, { begin, reset, blocked }) {
   let sprites = [], objects = [], width = 0, height = 0;
   let frame = 0, timer = 0, last = 0, started = 0;
   let previewing = false, phase = '', navigating = false, ready = false;
-  let destinationFrame, paper, curl, curlContext, paperColor, exit;
+  let destinationFrame, paper, curl, exit;
 
   function prepare() {
     if (!context || forced.matches || reduce.matches || destination.origin !== location.origin) return;
@@ -216,8 +158,8 @@ export function installGameEntrance(link, canvas, { begin, reset, blocked }) {
     objects = [];
     if (width) context.clearRect(0, 0, width, height);
     paper?.remove();
-    curl?.remove();
-    paper = curl = curlContext = exit = null;
+    curl?.canvas.remove();
+    paper = curl = exit = null;
     delete body.dataset.gameTransition;
     root.style.removeProperty('--game-paper-edge');
     root.style.removeProperty('--game-heading-edge');
@@ -225,12 +167,9 @@ export function installGameEntrance(link, canvas, { begin, reset, blocked }) {
   }
 
   function peel(elapsed) {
-    const geometry = paperPeelFrame(width, height, elapsed / PEEL_DURATION);
-    const clip = (offsetY) => `polygon(${geometry.paper.map(([x, y]) => `${x}px ${y + offsetY}px`).join(',')})`;
-    root.style.setProperty('--game-paper-edge', clip(0));
-    root.style.setProperty('--game-heading-edge', clip(window.scrollY));
-    curlContext.clearRect(0, 0, width, height);
-    drawCurl(curlContext, geometry, paperColor);
+    const points = curl.paint(elapsed / PEEL_DURATION);
+    root.style.setProperty('--game-paper-edge', paperClipPath(points));
+    root.style.setProperty('--game-heading-edge', paperClipPath(points, window.scrollY));
   }
 
   function tick(now) {
@@ -240,7 +179,7 @@ export function installGameEntrance(link, canvas, { begin, reset, blocked }) {
       if (elapsed >= exit.duration) {
         started += exit.duration * 1000;
         phase = body.dataset.gameTransition = 'peel';
-        body.append(paper, curl);
+        body.append(paper, curl.canvas);
         peel((now - started) / 1000);
       }
     } else if (phase === 'peel') {
@@ -260,22 +199,19 @@ export function installGameEntrance(link, canvas, { begin, reset, blocked }) {
       link.hasAttribute('download') || (link.target && link.target !== '_self')) return;
     if (phase || blocked()) { event.preventDefault(); return; }
     if (!ready || !sprites.length || reduce.matches || forced.matches) return;
-    curl = document.createElement('canvas');
-    curlContext = curl.getContext('2d');
-    if (!curlContext) return;
+    if (!objects.length) measure();
+    const color = getComputedStyle(root).getPropertyValue('--paper').trim();
+    curl = createPaperCurl(width, height, color);
+    if (!curl) return;
     event.preventDefault();
     begin();
     cancelAnimationFrame(frame);
-    if (!objects.length) measure();
     exit = prepareObjectExit(objects, width, height);
     objects = [];
     phase = body.dataset.gameTransition = 'drain';
-    curl.className = 'game-curl';
-    curl.setAttribute('aria-hidden', 'true');
-    prepareCanvas(curl, curlContext, width, height);
+    curl.canvas.className = 'game-curl';
     paper = document.createElement('div');
     paper.className = 'game-paper';
-    paperColor = getComputedStyle(root).getPropertyValue('--paper').trim();
     paper.setAttribute('aria-hidden', 'true');
     started = performance.now();
     schedule();
