@@ -69,7 +69,7 @@ fs.writeFileSync(output, `<!doctype html>
 <meta name="theme-color" content="#061b62"><meta name="description" content="Games, tools, and experiments in interaction by Smart Chen.">
 <title>Projects — Smart Chen</title>${siteFavicon('../')}
 <link rel="preload" href="../assets/fonts/gotham/gotham-book.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261125-paper-return">
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261126-related-links">
 ${projectHeaderAssets('../')}
 <link rel="stylesheet" href="polaroid-entry.css?rev=20261125-return">
 <script type="module" blocking="render" src="polaroid-entry.mjs?rev=20261125-return"></script>
@@ -78,6 +78,10 @@ ${projectHeaderAssets('../')}
 <body class="projects-directory" id="top"><a class="projects-skip" href="#main">Skip to projects</a>
 ${header}
 <main class="projects-main" id="main"><div class="projects-intro"><h1 id="page-title">{ Projects }</h1></div>
-<ol class="directory" role="list" aria-label="Portfolio projects">${entries}</ol></main>
-<footer class="projects-footer"><p>Smart Chen</p><a href="#top">Back to top</a></footer></body></html>\n`);
+<ol class="directory" role="list" aria-label="Portfolio projects">${entries}</ol>
+<nav class="projects-related" aria-label="Related links">
+<a href="https://slides.vegshark.com/">Presentations</a>
+<a href="https://x.com/VegShark3" aria-label="X (@VegShark3)">X</a>
+</nav></main>
+<footer class="projects-footer"><a href="#top">Back to top</a></footer></body></html>\n`);
 console.log('Rendered Projects.');
