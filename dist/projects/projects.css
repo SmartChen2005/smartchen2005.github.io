@@ -170,7 +170,7 @@ html:has(.projects-directory)::-webkit-scrollbar-track { background: var(--proje
 .projects-main .project-card--music .project-card-preview--device { height: 220px; overflow: visible; border: 0; background: transparent; z-index: 1; }
 .projects-main .project-card--music .project-card-preview--device img { object-fit: contain; }
 .project-card--music h2 { position: relative; z-index: 0; text-align: center; margin: -38px 0 0; font-size: clamp(30px, 3.6vw, 48px); font-weight: 600; line-height: .95; letter-spacing: -.055em; }
-.projects-related { display: flex; flex-wrap: wrap; gap: 0 clamp(1.25rem, 3vw, 2rem); margin-top: clamp(24px, 4vw, 44px); font-size: .875rem; font-weight: 650; line-height: 1.5; }
+.projects-related { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 clamp(1.25rem, 3vw, 2rem); margin-top: clamp(24px, 4vw, 44px); font-size: .875rem; font-weight: 650; line-height: 1.5; }
 .projects-related a { display: inline-flex; align-items: center; gap: .5em; padding-block: .75rem; color: var(--projects-ink); text-decoration: none; cursor: pointer; }
 .projects-related svg { width: 1em; height: 1em; flex: none; }
 .projects-related a:hover, .projects-related a:active { color: var(--projects-focus); }

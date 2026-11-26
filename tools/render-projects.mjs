@@ -69,7 +69,7 @@ fs.writeFileSync(output, `<!doctype html>
 <meta name="theme-color" content="#061b62"><meta name="description" content="Games, tools, and experiments in interaction by Smart Chen.">
 <title>Projects — Smart Chen</title>${siteFavicon('../')}
 <link rel="preload" href="../assets/fonts/gotham/gotham-book.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261126-link-icons">
+<link rel="stylesheet" href="../site.css"><link rel="stylesheet" href="../assets/fonts/gotham/gotham.css"><link rel="stylesheet" href="projects.css?rev=20261126-centered-links">
 ${projectHeaderAssets('../')}
 <link rel="stylesheet" href="polaroid-entry.css?rev=20261125-return">
 <script type="module" blocking="render" src="polaroid-entry.mjs?rev=20261125-return"></script>
@@ -80,14 +80,15 @@ ${header}
 <main class="projects-main" id="main"><div class="projects-intro"><h1 id="page-title">{ Projects }</h1></div>
 <ol class="directory" role="list" aria-label="Portfolio projects">${entries}</ol>
 <nav class="projects-related" aria-label="Related links">
-<a href="https://slides.vegshark.com/">
+<a href="https://slides.vegshark.com/" target="_blank" rel="noopener noreferrer" aria-describedby="projects-related-new-tab">
   slides.vegshark.com
   <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 12 4M4 4h8v8"/></svg>
 </a>
-<a href="https://x.com/VegShark3" aria-label="@VegShark3 on X">
+<a href="https://x.com/VegShark3" target="_blank" rel="noopener noreferrer" aria-label="@VegShark3 on X" aria-describedby="projects-related-new-tab">
   <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.64 7.584H.469l8.6-9.835L0 1.154h7.594l5.243 6.932 6.064-6.933Zm-1.29 19.492h2.039L6.488 3.24H4.3Z"/></svg>
   @VegShark3
 </a>
+<span id="projects-related-new-tab" hidden>Opens in a new tab</span>
 </nav></main>
 <footer class="projects-footer"><a href="#top">Back to top</a></footer></body></html>\n`);
 console.log('Rendered Projects.');
