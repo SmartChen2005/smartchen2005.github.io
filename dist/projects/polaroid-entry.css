@@ -1,49 +1,70 @@
-:root:active-view-transition-type(polaroid-project-entry) {
-  --polaroid-entry-time: 650ms;
+:root:active-view-transition-type(polaroid-project-transition) {
+  --polaroid-transition-time: 650ms;
 }
 
-:root:active-view-transition-type(polaroid-project-entry) :is(#polaroid-link-title, .wall-title) {
+:root:active-view-transition-type(polaroid-project-transition) :is(#polaroid-link-title, .wall-title) {
   width: fit-content;
   view-transition-name: polaroid-title;
 }
-:root:active-view-transition-type(polaroid-project-entry) :is(.project-theme--polaroid .photo-image, .room-photograph) {
+:root:active-view-transition-type(polaroid-project-transition) :is(.project-theme--polaroid .photo-image, .room-photograph) {
   view-transition-name: polaroid-photo;
 }
-:root:active-view-transition-type(polaroid-project-entry) .room { view-transition-name: polaroid-room; }
-:root:active-view-transition-type(polaroid-project-entry) .project-header--room { view-transition-name: polaroid-header; }
+:root:active-view-transition-type(polaroid-project-transition) .room { view-transition-name: polaroid-room; }
+:root:active-view-transition-type(polaroid-project-transition) .project-header--room { view-transition-name: polaroid-header; }
 
-.room-photograph.has-entry-preview {
+.project-theme--polaroid .photo-image.has-transition-preview {
+  background: url("polaroid-of-yesterday/assets/room.jpg") center / 100% 100% no-repeat;
+}
+.room-photograph.has-transition-preview {
   background: url("../gallery/assets/optimized/1535d64cc66f6a5f4445c77d-960x540.webp") center / 100% 100% no-repeat;
 }
 @media (max-width: 600px) and (max-resolution: 1dppx) {
-  .room-photograph.has-entry-preview {
+  .room-photograph.has-transition-preview {
     background-image: url("../gallery/assets/optimized/b8d60dd954f5a81f326d8c67-480x270.webp");
   }
 }
 
-:root:active-view-transition-type(polaroid-project-entry)::view-transition-group(*) {
-  animation-duration: var(--polaroid-entry-time);
+:root:active-view-transition-type(polaroid-project-transition)::view-transition-group(*) {
+  animation-duration: var(--polaroid-transition-time);
   animation-timing-function: cubic-bezier(.22, .72, .25, 1);
 }
-:root:active-view-transition-type(polaroid-project-entry)::view-transition-group(polaroid-photo) { z-index: 1; }
-:root:active-view-transition-type(polaroid-project-entry)::view-transition-group(polaroid-room) { z-index: 2; }
-:root:active-view-transition-type(polaroid-project-entry)::view-transition-group(polaroid-title) { z-index: 3; }
-:root:active-view-transition-type(polaroid-project-entry)::view-transition-group(polaroid-header) { z-index: 4; }
+:root:active-view-transition-type(polaroid-project-transition)::view-transition-group(polaroid-photo) { z-index: 1; }
+:root:active-view-transition-type(polaroid-project-transition)::view-transition-group(polaroid-room) { z-index: 2; }
+:root:active-view-transition-type(polaroid-project-transition)::view-transition-group(polaroid-title) { z-index: 3; }
+:root:active-view-transition-type(polaroid-project-transition)::view-transition-group(polaroid-header) { z-index: 4; }
 
-:root:active-view-transition-type(polaroid-project-entry)::view-transition-new(root) {
-  animation: polaroid-entry-page var(--polaroid-entry-time) linear both;
-}
-:root:active-view-transition-type(polaroid-project-entry)::view-transition-old(polaroid-photo) {
+:root:active-view-transition-type(polaroid-project-transition)::view-transition-old(polaroid-photo),
+:root:active-view-transition-type(polaroid-project-transition)::view-transition-new(polaroid-photo) {
   animation: none;
   mix-blend-mode: normal;
 }
+
+:root:active-view-transition-type(polaroid-project-entry)::view-transition-new(root) {
+  animation: polaroid-entry-page var(--polaroid-transition-time) linear both;
+}
 :root:active-view-transition-type(polaroid-project-entry)::view-transition-new(polaroid-photo) {
-  animation: polaroid-entry-photo var(--polaroid-entry-time) linear both;
-  mix-blend-mode: normal;
+  animation: polaroid-entry-photo var(--polaroid-transition-time) linear both;
 }
 :root:active-view-transition-type(polaroid-project-entry)::view-transition-new(polaroid-room),
 :root:active-view-transition-type(polaroid-project-entry)::view-transition-new(polaroid-header) {
-  animation: polaroid-entry-details var(--polaroid-entry-time) linear both;
+  animation: polaroid-entry-details var(--polaroid-transition-time) linear both;
+}
+
+:root:active-view-transition-type(polaroid-project-return)::view-transition-group(*) {
+  animation-timing-function: cubic-bezier(.55, .02, .72, 1);
+}
+:root:active-view-transition-type(polaroid-project-return)::view-transition-new(root) { animation: none; }
+:root:active-view-transition-type(polaroid-project-return)::view-transition-old(root) {
+  z-index: 1;
+  animation: polaroid-entry-page var(--polaroid-transition-time) linear reverse both;
+}
+:root:active-view-transition-type(polaroid-project-return)::view-transition-old(polaroid-photo) {
+  z-index: 1;
+  animation: polaroid-entry-photo var(--polaroid-transition-time) linear reverse both;
+}
+:root:active-view-transition-type(polaroid-project-return)::view-transition-old(polaroid-room),
+:root:active-view-transition-type(polaroid-project-return)::view-transition-old(polaroid-header) {
+  animation: polaroid-entry-details var(--polaroid-transition-time) linear reverse both;
 }
 
 @keyframes polaroid-entry-page {

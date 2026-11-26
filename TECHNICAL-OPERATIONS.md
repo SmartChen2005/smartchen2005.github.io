@@ -117,6 +117,7 @@ At the time this standard was added, the repository contains the complete curren
 ### 2026-11-25 — Connect the Polaroid card to its room
 
 - The native transition from Projects carries the script title to the wall and expands the print's photograph to the room's uncropped image. The paper links and navigation fade in as the photograph settles.
+- The room's Projects link reverses the same handoff. The room controls fade out, the title settles back into the card, and the photograph shrinks into the print. The loaded room photograph can fill the print while its smaller rendition loads.
 - `dist/projects/polaroid-entry.css` and `polaroid-entry.mjs` are shared by the generated directory and the room. The room keeps its original photograph and uses an existing WebP rendition while the original loads during the transition. Direct visits, history, reduced motion and forced colors use normal navigation.
 
 ### 2026-11-25 — Deploy Pages after the upload job finishes
