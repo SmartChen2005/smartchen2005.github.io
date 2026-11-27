@@ -64,6 +64,18 @@ const entries = projects.map((p,i)=>{
   const kind = p.kind ? `<p class="project-kind">${p.kind}</p>` : '';
   return `<li class="${p.effect?'project-feature':'project-card'} project-tone--${p.tone||'dark'}${p.layout?` project-card--${p.layout}`:''}${p.theme?` project-theme--${p.theme}`:''}"><a class="directory-link" href="${p.href}" draggable="false">${p.effect?'':media}<div class="project-copy">${kind}<h2 class="directory-title"${i===0?' id="polaroid-link-title"':''}>${p.title}</h2><p class="directory-description">${p.description}</p></div>${p.effect?media:''}</a></li>`;
 }).join('\n');
+const relatedLinks = [
+  `<a href="https://slides.vegshark.com/" target="_blank" rel="noopener noreferrer" aria-describedby="projects-related-new-tab">
+  slides.vegshark.com
+  <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 12 4M4 4h8v8"/></svg>
+</a>`,
+  /* Temporarily hide the X profile link.
+  `<a href="https://x.com/VegShark3" target="_blank" rel="noopener noreferrer" aria-label="@VegShark3 on X" aria-describedby="projects-related-new-tab">
+  <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.64 7.584H.469l8.6-9.835L0 1.154h7.594l5.243 6.932 6.064-6.933Zm-1.29 19.492h2.039L6.488 3.24H4.3Z"/></svg>
+  @VegShark3
+</a>`,
+  */
+].join('\n');
 fs.writeFileSync(output, `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#061b62"><meta name="description" content="Games, tools, and experiments in interaction by Smart Chen.">
@@ -80,14 +92,7 @@ ${header}
 <main class="projects-main" id="main"><div class="projects-intro"><h1 id="page-title">{ Projects }</h1></div>
 <ol class="directory" role="list" aria-label="Portfolio projects">${entries}</ol>
 <nav class="projects-related" aria-label="Related links">
-<a href="https://slides.vegshark.com/" target="_blank" rel="noopener noreferrer" aria-describedby="projects-related-new-tab">
-  slides.vegshark.com
-  <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 12 4M4 4h8v8"/></svg>
-</a>
-<a href="https://x.com/VegShark3" target="_blank" rel="noopener noreferrer" aria-label="@VegShark3 on X" aria-describedby="projects-related-new-tab">
-  <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.64 7.584H.469l8.6-9.835L0 1.154h7.594l5.243 6.932 6.064-6.933Zm-1.29 19.492h2.039L6.488 3.24H4.3Z"/></svg>
-  @VegShark3
-</a>
+${relatedLinks}
 <span id="projects-related-new-tab" hidden>Opens in a new tab</span>
 </nav></main>
 <footer class="projects-footer"><a href="#top">Back to top</a></footer></body></html>\n`);
