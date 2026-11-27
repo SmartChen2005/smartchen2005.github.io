@@ -9,13 +9,13 @@ const content = require('./vr-source/content.json');
 if (output) fs.mkdirSync(output, { recursive: true });
 
 (async () => {
-  const browser = await chromium.launch({ headless: true, channel: 'chrome', args: ['--no-proxy-server', '--enable-unsafe-swiftshader'] });
+  const browser = await chromium.launch({ headless: true, channel: 'chrome', args: ['--no-proxy-server'] });
   const errors = [];
   try {
     const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
     const page = await context.newPage();
     page.on('pageerror', e => errors.push(e.message));
-    await page.goto(origin + route + '?view=reading', { waitUntil: 'domcontentloaded' });
+    await page.goto(origin + route, { waitUntil: 'domcontentloaded' });
     await page.evaluate(() => document.fonts.ready);
     await page.locator('[data-step-button="0"]').waitFor({ state: 'visible' });
     assert.equal(await page.locator('button:disabled').count(), 0, 'Client enhancement loads');
@@ -161,10 +161,8 @@ if (output) fs.mkdirSync(output, { recursive: true });
     assert.deepEqual(errors, []);
     console.log('Passed: four procedure actions and three preparation stages; real wheel progression/reversal at desktop/phone widths; larger drawings and slower reading distance; sticky placement; manual override and idle stability; keyboard access; PDF responses; five viewport widths; reduced motion; forced colors; no-JS content; zero page exceptions.');
     // External playback is evidence rather than an unconditional test: network/account restrictions are reported honestly.
+    await page.goto(origin + route, { waitUntil: 'domcontentloaded' });
     for (const a of content.assignments) {
-      await page.goto('about:blank');
-      await page.goto(origin + route + '#' + a.id, { waitUntil: 'domcontentloaded' });
-      await page.locator(`[data-exhibit="${a.id}"][data-exhibit-active]`).waitFor({ state: 'visible' });
       const frame = page.frameLocator(`iframe[src*="${a.video}"]`);
       try {
         await frame.getByRole('button', { name: /^Play( video)?$/ }).first().click({ timeout: 15000 });

@@ -32,7 +32,7 @@ const scenes = {
 
 function sceneCover(a) {
   const { backdrop, props } = scenes[a.theme];
-  return `<div class="scene-cover" data-exhibit-cover="${a.id}">
+  return `<div class="scene-cover">
     <div class="scene-copy"><p class="scene-setting">A${Number(a.number)} <span aria-hidden="true">·</span> ${e(a.setting)}</p><h2 id="${a.id}-title">${e(a.title)}</h2><p class="scene-topic">${e(a.topic)}</p></div>
     <div class="scene-art" aria-hidden="true">${backdrop}${props.map(([name, emoji]) => `<span class="scene-prop prop-${name}">${emoji}</span>`).join('')}</div>
   </div>`;
@@ -43,7 +43,7 @@ function interaction(a) {
   const procedure = Boolean(a.steps);
   const items = procedure ? a.steps : a.journey;
   const caption = procedure ? 'procedure-caption' : 'space-caption';
-  return `<div class="study exhibit-panel ${procedure ? 'procedure' : 'navigation-study'}" data-exhibit="${a.id}-study" ${procedure ? 'data-procedure data-step="0"' : 'data-navigation data-space="garage"'}>
+  return `<div class="study ${procedure ? 'procedure' : 'navigation-study'}" ${procedure ? 'data-procedure data-step="0"' : 'data-navigation data-space="garage"'}>
     <div class="study-top"><h3>${procedure ? 'One action leads to the next.' : 'Two spaces. One preparation loop.'}</h3></div>
     <div class="study-stage"><div class="study-visual"><div class="diagram-figure">${procedure ? wheel : map}<span class="utility diagram-label">${procedure ? 'Interaction study / Sequence, tools &amp; feedback' : 'Interaction study / Linked scenes &amp; persistent inventory'}</span></div><div class="study-progress" aria-hidden="true"><span></span></div><p class="study-caption" id="${caption}" aria-live="off">${e(items[0].title)}</p></div>
     <div class="story-stops" role="group" aria-label="${procedure ? 'Explore the wheel removal sequence' : 'Explore the preparation loop'}">${items.map((item,i)=>`<div class="story-stop" data-scroll-stop><button type="button" disabled ${procedure ? 'data-step-button' : 'data-journey-button'}="${i}" aria-pressed="${i===0}" aria-controls="${caption}"><span class="step-index">${String(i+1).padStart(2,'0')}</span><span>${e(item.title)}</span><span class="step-arrow" aria-hidden="true">&#8599;</span></button>${item.space ? `<span class="utility scene-name">${item.space === 'garage' ? 'Home Garage' : 'Auto Parts Store'}</span>` : ''}<p>${e(item.description)}</p></div>`).join('')}</div></div>
@@ -54,12 +54,11 @@ function assignment(a) {
   const study = interaction(a);
   return `<section class="assignment" data-theme="${a.theme}" id="${a.id}" aria-labelledby="${a.id}-title"><div class="wrap">
     ${sceneCover(a)}${study ? `\n    ${study}` : ''}
-    <div class="exhibit-panel" data-exhibit="${a.id}">
     <p class="description">${e(a.description)}</p>
     <div class="project-body"><div class="project-media"><figure class="video"><iframe width="960" height="540" src="https://www.youtube-nocookie.com/embed/${a.video}?start=${a.start}&amp;rel=0" title="${e(a.title)} — demonstration" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowfullscreen></iframe><figcaption><span class="utility">${a.number} / Project demonstration</span><a href="https://www.youtube.com/watch?v=${a.video}&amp;t=${a.start}s" target="_blank" rel="noopener noreferrer">Watch on YouTube <span aria-hidden="true">↗</span></a></figcaption></figure>
     </div><aside class="project-notes"><div class="focus-note"><p class="utility">The learning focus</p><h3>${e(a.focus)}</h3><p>${e(a.note)}</p></div>
     <a class="document-link" href="files/${a.pdf}" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 32 40" aria-hidden="true"><path d="M3 1H21L29 9V39H3ZM21 1V10H29M9 20H23M9 26H23M9 32H18"/></svg><span><span class="utility">A${Number(a.number)} / Design document</span><span>Read the original <span aria-hidden="true">↗</span></span><small>PDF · ${a.pages} ${a.pages===1?'page':'pages'} · opens in a new tab</small></span></a>
-    <details><summary>${e(a.detailTitle)}</summary><p>${e(a.detail)}</p></details></aside></div></div>
+    <details><summary>${e(a.detailTitle)}</summary><p>${e(a.detail)}</p></details></aside></div>
   </div></section>`;
 }
 
@@ -85,7 +84,6 @@ const html = `<!doctype html>
   <link rel="canonical" href="https://smartchen2005.github.io/projects/vr-for-skill-learning/">
   <link rel="stylesheet" href="vr.css?v=stereo-entry">
   <link rel="stylesheet" href="vr-scenes.css?v=3">
-  <link rel="stylesheet" href="exhibition.css">
   ${projectHeaderAssets('../../')}
   <script>
     window.addEventListener('pagereveal', ({ viewTransition }) => {
@@ -100,38 +98,25 @@ const html = `<!doctype html>
       }
     });
   </script>
-  <script type="module" src="vr.mjs?v=exhibition"></script>
-  <script type="module" src="exhibition.mjs"></script>
+  <script type="module" src="vr.mjs?v=chapter-scenes"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   ${projectHeader({ theme: 'light' })}
-  <div class="exhibition" data-exhibition hidden aria-hidden="true">
-    <canvas data-exhibition-canvas></canvas><div class="exhibition-vignette" data-exhibition-vignette></div>
-  </div>
-  <button class="exhibition-toggle" data-vr-toggle hidden type="button">Reading view</button>
   <main id="main">
-    <div class="exhibition-track" data-exhibition-track hidden aria-hidden="true"></div>
-    <section class="hero wrap exhibit-panel" data-exhibit="entrance" aria-labelledby="page-title">
+    <section class="hero wrap" aria-labelledby="page-title">
       <div class="hero-top utility"><span>VR / Interaction Design</span><span>${e(content.year)}</span></div>
       <div class="hero-composition"><h1 id="page-title"><span>VR for</span> <span>Skill Learning.</span></h1><p>${e(content.subtitle)}</p></div>
       <nav class="chapter-links" aria-label="Project chapters">${directory.map(chapterLink).join('')}</nav>
-      <p class="exhibition-scroll" aria-hidden="true">Scroll to enter <span>↓</span></p>
     </section>
     ${content.assignments.map(assignment).join('\n')}
     <section class="assignment concept-chapter" data-theme="tag" id="${concept.id}" aria-labelledby="${concept.id}-title"><div class="wrap">
-      <div class="concept-panel exhibit-panel" data-exhibit="${concept.id}">
+      <div class="concept-panel">
         <div><p class="scene-setting">${e(concept.topic)}</p><h2 id="${concept.id}-title">${e(concept.title)}</h2><p>${e(concept.description)}</p></div>
         <a class="concept-link" href="${e(concept.presentation)}">Open concept presentation <span aria-hidden="true">↗</span></a>
       </div>
     </div></section>
-    <section class="closing wrap exhibit-panel" data-exhibit="exit" aria-labelledby="closing-title"><h2 id="closing-title">${e(content.closing)}</h2><div><p>${e(content.reflection)}</p><a class="return-link" href="../">All projects <span aria-hidden="true">↗</span></a></div></section>
-    <nav class="exhibition-navigation" aria-label="Exhibition chapters" data-exhibition-navigation hidden>
-      <details><summary>Chapters <span aria-hidden="true">+</span></summary>
-      <div class="exhibition-chapter-list"><a href="#main">Entrance</a>${directory.map(({ id, title }) => `<a href="#${id}">${e(title)}</a>`).join('')}</div>
-      </details>
-      <button class="exhibition-next" data-exhibition-next type="button">Next exhibit <span aria-hidden="true">↓</span></button>
-    </nav>
+    <section class="closing wrap" aria-labelledby="closing-title"><h2 id="closing-title">${e(content.closing)}</h2><div><p>${e(content.reflection)}</p><a class="return-link" href="../">All projects <span aria-hidden="true">↗</span></a></div></section>
   </main>
   <footer class="footer wrap"><a href="../../">Smart Chen</a><span>VR for Skill Learning</span><a href="#main">Back to top ↑</a></footer>
 </body>
