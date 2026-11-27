@@ -233,6 +233,11 @@ At the time this standard was added, the repository contains the complete curren
 - Keep the original files under `dist/gallery/assets/polaroid-exhibition/`. Run `python tools/prepare-gallery-images.py` and `node tools/render-gallery.mjs` to regenerate responsive images and the page.
 - The spiral uses larger prints and more vertical space between them. Verify with `node tools/test-stills.mjs`, `node tools/test-gallery-image-optimization.mjs` and the Chrome checks in `tools/STILLS-QA.md`.
 
+### 2026-11-27 — Walk through the VR collection in 3D
+
+- The route's `exhibition-scene.mjs` owns the procedural Three.js geometry, fixtures and wall poses. `exhibition.mjs` owns scroll timing, projection of the real HTML exhibit panels, motion-responsive edge shading and the reading view. The renderer still owns the complete content and keeps one copy of each player and SVG.
+- Regenerate with `node tools/render-vr.mjs`. Run `node tools/test-vr.mjs`, `node tools/validate-site.mjs`, and `node tools/test-vr-exhibition.cjs` with the bundled Playwright package available. The separate reading-view browser suite is `node tools/test-vr-browser.cjs`.
+
 ### 2026-11-12 — Give the VR collection three illustrated settings
 
 - Replace the A3 role diagram with a low-poly forest camp and give the earlier chapters a home garage and auto parts store. The three covers use distinct palettes, native color emoji and short on-entry motion.

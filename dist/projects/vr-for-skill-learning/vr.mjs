@@ -111,7 +111,9 @@ function connectStudy(root, selector, items, endpoints, render) {
         : (index + (['ArrowRight', 'ArrowDown'].includes(event.key) ? 1 : -1) + buttons.length) % buttons.length;
       // Finish keyboard navigation before recording the manual scroll position;
       // a smooth focus scroll must not be mistaken for the reader resuming scroll.
-      buttons[next].scrollIntoView({ block: 'center', behavior: 'instant' });
+      if (document.documentElement.dataset.vrMode !== 'exhibition') {
+        buttons[next].scrollIntoView({ block: 'center', behavior: 'instant' });
+      }
       buttons[next].focus({ preventScroll: true });
       select(next, true);
     });
@@ -119,9 +121,17 @@ function connectStudy(root, selector, items, endpoints, render) {
   root.classList.add('is-enhanced');
   select(0);
   motion(0);
+  root.addEventListener('exhibition-study-progress', ({ detail }) => {
+    if (manualY !== null && Math.abs(scrollY - manualY) < 2) return;
+    manualY = null;
+    target = detail;
+    select(endpoints.reduce((best, value, index) =>
+      Math.abs(value - target) < Math.abs(endpoints[best] - target) ? index : best, 0));
+    schedule();
+  });
   studies.push({
     sync() {
-      if (reduced.matches || forced.matches) return;
+      if (reduced.matches || forced.matches || document.documentElement.dataset.vrMode === 'exhibition') return;
       if (manualY !== null && Math.abs(scrollY - manualY) < 2) return;
       manualY = null;
       const bounds = root.getBoundingClientRect();
